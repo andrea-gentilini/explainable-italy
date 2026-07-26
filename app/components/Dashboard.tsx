@@ -6,6 +6,7 @@ import {
   useState,
   useSyncExternalStore,
   type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
 } from "react";
 
 type Locale = "it" | "en";
@@ -105,28 +106,41 @@ const copy = {
   it: {
     skip: "Vai al contenuto",
     subtitle: "L’Italia, i dati ufficiali per tutti.",
-    navData: "I dati",
+    navData: "Esplora",
     navMethod: "Metodo",
     navSources: "Fonti",
     navAbout: "About",
     navContribute: "Contribuisci",
-    landingEyebrow: "Dati pubblici, finalmente leggibili",
-    landingTitle: "Capire l’Italia senza perdersi nei portali statistici",
-    landingBody:
-      "Explainable Italy organizza i dati ufficiali in un percorso semplice: prima il numero essenziale, poi il confronto europeo, infine definizione, andamento e fonte.",
-    exploreTitle: "Scegli da dove iniziare",
+    snapshotEyebrow: "Italia in quattro numeri",
+    snapshotTitle: "L’Italia, in breve",
+    snapshotBody:
+      "Economia, età, salute e lavoro. Apri un numero per vedere andamento, confronto europeo e fonte.",
+    snapshotWhy: "Perché proprio questi quattro?",
+    snapshotWhyBody:
+      "Sono quattro misure diverse e complementari: quanto produce il Paese, la struttura per età, la salute e la partecipazione al lavoro.",
+    snapshotGdp: "PIL per abitante",
+    snapshotGdpUnit: "Indice: UE = 100",
+    snapshotMedianAge: "Età mediana",
+    snapshotLifeExpectancy: "Speranza di vita",
+    snapshotEmployment: "Tasso di occupazione",
+    snapshotOpen: "Vedi andamento",
+    exploreTitle: "Approfondisci, quando vuoi",
     exploreBody:
-      "Ogni area ha una pagina dedicata. Puoi consultare il quadro generale oppure approfondire un singolo indicatore.",
+      "Scegli un tema, leggi il metodo oppure verifica direttamente una fonte.",
     openPage: "Apri la pagina",
     openIndicator: "Apri la scheda completa",
     backToData: "Torna a tutti i dati",
     searchLabel: "Cerca un indicatore",
     searchPlaceholder: "Prova pensioni, lavoro, scuola",
-    allSections: "Tutti",
-    heroEyebrow: "Italia · {year}",
-    heroTitle: "Dove vanno 100 € di spesa pubblica?",
+    allSections: "Tutti i 39",
+    topicOverview: "Temi",
+    topicIndicators: "indicatori",
+    topicExamples: "Dentro trovi",
+    topicOpen: "Apri il tema",
+    heroEyebrow: "Spesa pubblica · Italia · {year}",
+    heroTitle: "Come si spendono 100 €?",
     heroBody:
-      "Immagina tutta la spesa di Stato, enti locali e previdenza divisa in 100 €. Qui vedi dove va.",
+      "Riduciamo a 100 € tutta la spesa pubblica italiana: pensioni, sanità, scuola, stipendi, investimenti e interessi.",
     heroYear: "Anno dei dati",
     heroLatest:
       "Ultimo disponibile per l’Italia; il {nextYear} non è ancora pubblicato",
@@ -134,7 +148,7 @@ const copy = {
     heroSource: "Fonte ufficiale",
     heroSourceName: "Eurostat",
     heroSourceUpdated: "aggiornata il {date}",
-    heroOpenSource: "Vedi fonti e dati",
+    heroOpenSource: "Verifica dati e calcolo",
     heroMethodSummary: "Come sono create queste categorie?",
     heroMethodBody:
       "COFOG significa “Classification of the Functions of Government”: classificazione delle funzioni della Pubblica amministrazione. È il sistema usato da Eurostat per dividere la spesa in dieci categorie confrontabili.",
@@ -142,6 +156,9 @@ const copy = {
       "Il totale comprende tutta la Pubblica amministrazione italiana, non soltanto lo Stato.",
     heroMethodLink: "Leggi il metodo",
     heroCardLabel: "equivalgono al 100% della spesa del {year}",
+    spendingInteract:
+      "Passa sulle voci per leggere il grafico. Clicca per approfondire.",
+    spendingDonutLabel: "Grafico della spesa pubblica; apre la voce selezionata",
     socialProtectionHero: "Protezione sociale (incluse pensioni)",
     socialDetailEyebrow: "Dentro la protezione sociale",
     socialDetailTitle: "Quanta parte riguarda le pensioni?",
@@ -174,8 +191,7 @@ const copy = {
       "{year} · tutte le pensioni · quota del PIL · dato provvisorio",
     selectionUsed: "Selezione usata",
     verifyNumber: "Verifica fonte e calcolo",
-    readBreakdown: "Esplora tutte le voci",
-    keyNumbers: "Quattro numeri per orientarsi",
+    readBreakdown: "Esplora tutti i temi",
     definitive: "ultimo dato non stimato",
     estimate: "Dato più recente",
     provisional: "provvisorio o stimato",
@@ -186,9 +202,9 @@ const copy = {
     officialAggregate: "aggregato ufficiale Eurostat",
     countryMean: "media aritmetica dei Paesi",
     compareExplainer: "Come leggere media e mediana",
-    dataSectionTitle: "L’Italia in 39 indicatori",
+    dataSectionTitle: "Scegli un tema",
     dataSectionBody:
-      "Ogni numero ha una definizione, una serie storica, il confronto europeo e il collegamento alla fonte.",
+      "Non serve vedere tutto insieme. Parti da una domanda: ogni indicatore conserva definizione, serie storica, confronto europeo e fonte.",
     noResults: "Nessun indicatore corrisponde alla ricerca.",
     understand: "Capire il dato",
     simpleDefinition: "In parole semplici",
@@ -314,28 +330,41 @@ const copy = {
   en: {
     skip: "Skip to content",
     subtitle: "Italy, official data for everyone.",
-    navData: "Data",
+    navData: "Explore",
     navMethod: "Method",
     navSources: "Sources",
     navAbout: "About",
     navContribute: "Contribute",
-    landingEyebrow: "Public data, finally readable",
-    landingTitle: "Understand Italy without getting lost in statistical portals",
-    landingBody:
-      "Explainable Italy organises official data into a simple path: the essential number first, then the European comparison, followed by definition, trend and source.",
-    exploreTitle: "Choose where to begin",
+    snapshotEyebrow: "Italy in four numbers",
+    snapshotTitle: "Italy, at a glance",
+    snapshotBody:
+      "Economy, age, health and work. Open a number for its trend, European comparison and source.",
+    snapshotWhy: "Why these four?",
+    snapshotWhyBody:
+      "They are four distinct, complementary measures: what the country produces, its age structure, health and participation in work.",
+    snapshotGdp: "GDP per person",
+    snapshotGdpUnit: "Index: EU = 100",
+    snapshotMedianAge: "Median age",
+    snapshotLifeExpectancy: "Life expectancy",
+    snapshotEmployment: "Employment rate",
+    snapshotOpen: "See trend",
+    exploreTitle: "Go deeper when you want",
     exploreBody:
-      "Every area has its own page. Browse the overall picture or open a single indicator for the full detail.",
+      "Choose a topic, read the method or verify a source directly.",
     openPage: "Open page",
     openIndicator: "Open the full indicator",
     backToData: "Back to all data",
     searchLabel: "Search indicators",
     searchPlaceholder: "Try pensions, work, education",
-    allSections: "All",
-    heroEyebrow: "Italy · {year}",
-    heroTitle: "Where does €100 of public spending go?",
+    allSections: "All 39",
+    topicOverview: "Topics",
+    topicIndicators: "indicators",
+    topicExamples: "Includes",
+    topicOpen: "Open topic",
+    heroEyebrow: "Public spending · Italy · {year}",
+    heroTitle: "How is €100 spent?",
     heroBody:
-      "Imagine all spending by the Italian state, local authorities and social security as €100. Here is where it goes.",
+      "We scale all Italian public spending down to €100: pensions, health, education, pay, investment and interest.",
     heroYear: "Data year",
     heroLatest:
       "Latest available for Italy; {nextYear} has not been published yet",
@@ -343,7 +372,7 @@ const copy = {
     heroSource: "Official source",
     heroSourceName: "Eurostat",
     heroSourceUpdated: "updated {date}",
-    heroOpenSource: "See sources and data",
+    heroOpenSource: "Verify data and calculation",
     heroMethodSummary: "How are these categories created?",
     heroMethodBody:
       "COFOG stands for “Classification of the Functions of Government”. It is the system Eurostat uses to split spending into ten comparable categories.",
@@ -351,6 +380,9 @@ const copy = {
       "The total covers all Italian public bodies, not only central government.",
     heroMethodLink: "Read the method",
     heroCardLabel: "represent 100% of {year} spending",
+    spendingInteract:
+      "Hover over a category to read the chart. Click to explore it.",
+    spendingDonutLabel: "Public spending chart; opens the selected category",
     socialProtectionHero: "Social protection (including pensions)",
     socialDetailEyebrow: "Inside social protection",
     socialDetailTitle: "How much relates to pensions?",
@@ -383,8 +415,7 @@ const copy = {
       "{year} · all pensions · share of GDP · provisional data",
     selectionUsed: "Selection used",
     verifyNumber: "Verify source and calculation",
-    readBreakdown: "Explore every category",
-    keyNumbers: "Four numbers for orientation",
+    readBreakdown: "Explore all topics",
     definitive: "latest non estimated value",
     estimate: "More recent value",
     provisional: "provisional or estimated",
@@ -395,9 +426,9 @@ const copy = {
     officialAggregate: "official Eurostat aggregate",
     countryMean: "arithmetic country mean",
     compareExplainer: "How to read average and median",
-    dataSectionTitle: "Italy in 39 indicators",
+    dataSectionTitle: "Choose a topic",
     dataSectionBody:
-      "Every number has a definition, a historical series, a European comparison and a direct source.",
+      "You do not need to see everything at once. Start with a question: every indicator retains its definition, historical series, European comparison and source.",
     noResults: "No indicators match this search.",
     understand: "Understand this indicator",
     simpleDefinition: "In plain language",
@@ -1352,7 +1383,8 @@ export function Dashboard({
   selectedIndicatorId,
 }: DashboardProps) {
   const labels = copy[locale];
-  const [activeSection, setActiveSection] = useState("all");
+  const [activeSection, setActiveSection] = useState("overview");
+  const [activeSpendingId, setActiveSpendingId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const darkMode = useSyncExternalStore(
     subscribeToTheme,
@@ -1413,22 +1445,81 @@ export function Dashboard({
       maximumFractionDigits: 1,
     },
   );
-  const featuredIds = [
-    "public-debt",
-    "budget-balance",
-    "employment-rate",
+  const snapshotIds = [
+    "gdp-per-capita-pps",
+    "median-age",
     "life-expectancy",
+    "employment-rate",
   ];
-  const featured = featuredIds
+  const snapshotIndicators = snapshotIds
     .map((id) => data.indicators.find((indicator) => indicator.id === id))
     .filter(Boolean) as Indicator[];
+  const snapshotTitles: Record<string, string> = {
+    "gdp-per-capita-pps": labels.snapshotGdp,
+    "median-age": labels.snapshotMedianAge,
+    "life-expectancy": labels.snapshotLifeExpectancy,
+    "employment-rate": labels.snapshotEmployment,
+  };
+  const activeSpending =
+    spendingBreakdown.find((indicator) => indicator.id === activeSpendingId) ??
+    spendingBreakdown[0];
+  const activeSpendingIndex = Math.max(
+    0,
+    spendingBreakdown.findIndex(
+      (indicator) => indicator.id === activeSpending?.id,
+    ),
+  );
+  const spendingBoundaries = spendingBreakdown.map((_, index) =>
+    spendingBreakdown
+      .slice(0, index + 1)
+      .reduce((total, item) => total + item.latest.italy, 0),
+  );
+  const spendingGradient = `conic-gradient(${spendingBreakdown
+    .map((indicator, index) => {
+      const start = index === 0 ? 0 : spendingBoundaries[index - 1];
+      const end =
+        index === spendingBreakdown.length - 1
+          ? 100
+          : spendingBoundaries[index];
+      return `var(--chart-${index + 1}) ${start}% ${end}%`;
+    })
+    .join(", ")})`;
+  const selectSpendingSlice = (
+    event: ReactPointerEvent<HTMLAnchorElement>,
+  ) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - (bounds.left + bounds.width / 2);
+    const y = event.clientY - (bounds.top + bounds.height / 2);
+    const distanceFromCenter = Math.hypot(x, y);
+
+    if (distanceFromCenter < bounds.width * 0.36) {
+      return;
+    }
+
+    const angle = (Math.atan2(y, x) * 180) / Math.PI;
+    const share = ((angle + 450) % 360) / 3.6;
+    const selectedIndex = spendingBoundaries.findIndex(
+      (boundary) => share <= boundary,
+    );
+    const selected = spendingBreakdown[selectedIndex];
+
+    if (selected) {
+      event.currentTarget.href = pageHref(
+        locale,
+        `data/${selected.id}`,
+      );
+      setActiveSpendingId(selected.id);
+    }
+  };
 
   const filteredIndicators = useMemo(() => {
     const normalizedSearch = search.trim().toLocaleLowerCase(locale);
 
     return data.indicators.filter((indicator) => {
       const matchesSection =
-        activeSection === "all" || indicator.section === activeSection;
+        activeSection === "all" ||
+        (activeSection !== "overview" &&
+          indicator.section === activeSection);
       const searchableText = [
         indicator.title[locale],
         indicator.plain[locale],
@@ -1496,18 +1587,6 @@ export function Dashboard({
       eyebrow: `${sources.length} ${labels.sourceCount}`,
       title: labels.sourcesTitle,
       body: labels.sourcesBody,
-    },
-    {
-      path: "about",
-      eyebrow: labels.aboutEyebrow,
-      title: labels.aboutTitle,
-      body: labels.aboutBody,
-    },
-    {
-      path: "contribute",
-      eyebrow: labels.contributeEyebrow,
-      title: labels.contributeTitle,
-      body: labels.contributeBody,
     },
   ];
 
@@ -1588,137 +1667,196 @@ export function Dashboard({
       <main id="main">
         {view === "home" ? (
           <>
-            <section className="hero">
-          <div className="hero-copy">
-            <p className="eyebrow">{heroEyebrow}</p>
-            <h1>{labels.heroTitle}</h1>
-            <p className="hero-intro">{labels.heroBody}</p>
-            <div className="hero-facts">
-              <div>
-                <span>{labels.heroYear}</span>
-                <strong>{spendingYear}</strong>
-                <small>
-                  {heroLatest} · {labels.heroProvisional}
-                </small>
+            <section
+              className="country-snapshot"
+              aria-labelledby="country-snapshot-title"
+            >
+              <div className="snapshot-heading">
+                <div>
+                  <p className="eyebrow">{labels.snapshotEyebrow}</p>
+                  <h1 id="country-snapshot-title">{labels.snapshotTitle}</h1>
+                  <p>{labels.snapshotBody}</p>
+                </div>
+                <details className="snapshot-method">
+                  <summary>
+                    <span className="info-badge" aria-hidden="true">
+                      i
+                    </span>
+                    {labels.snapshotWhy}
+                  </summary>
+                  <p>{labels.snapshotWhyBody}</p>
+                </details>
               </div>
-              <div>
-                <span>{labels.heroSource}</span>
-                <strong>{labels.heroSourceName}</strong>
-                <small>{heroSourceUpdated}</small>
-                {spendingSource ? (
-                  <div className="hero-source-links">
-                    <a href={pageHref(locale, "sources")}>
-                      {labels.heroOpenSource}{" "}
+
+              <div className="snapshot-grid">
+                {snapshotIndicators.map((indicator) => (
+                  <a
+                    href={pageHref(locale, `data/${indicator.id}`)}
+                    key={indicator.id}
+                  >
+                    <span>{snapshotTitles[indicator.id]}</span>
+                    <strong>
+                      {formatValue(
+                        indicator.latest.italy,
+                        indicator.unitKey,
+                        indicator.precision,
+                        locale,
+                      )}
+                    </strong>
+                    <small>
+                      {indicator.latest.year} ·{" "}
+                      {indicator.id === "gdp-per-capita-pps"
+                        ? labels.snapshotGdpUnit
+                        : `${labels.eu}: ${formatValue(
+                            indicator.latest.eu,
+                            indicator.unitKey,
+                            indicator.precision,
+                            locale,
+                          )}`}
+                    </small>
+                    <em>
+                      {labels.snapshotOpen} <span aria-hidden="true">→</span>
+                    </em>
+                  </a>
+                ))}
+              </div>
+            </section>
+
+            <section className="hero">
+              <div className="hero-copy">
+                <p className="eyebrow">{heroEyebrow}</p>
+                <h2>{labels.heroTitle}</h2>
+                <p className="hero-intro">{labels.heroBody}</p>
+                <div className="hero-facts">
+                  <div>
+                    <span>{labels.heroYear}</span>
+                    <strong>{spendingYear}</strong>
+                    <small>
+                      {heroLatest} · {labels.heroProvisional}
+                    </small>
+                  </div>
+                  <div>
+                    <span>{labels.heroSource}</span>
+                    <strong>{labels.heroSourceName} · COFOG</strong>
+                    <small>{heroSourceUpdated}</small>
+                    {spendingSource && activeSpending ? (
+                      <div className="hero-source-links">
+                        <a
+                          href={pageHref(
+                            locale,
+                            `data/${activeSpending.id}/source`,
+                          )}
+                        >
+                          {labels.heroOpenSource}{" "}
+                          <span aria-hidden="true">→</span>
+                        </a>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+                <details className="hero-method">
+                  <summary>
+                    <span className="info-badge" aria-hidden="true">
+                      i
+                    </span>
+                    {labels.heroMethodSummary}
+                  </summary>
+                  <div>
+                    <p>{labels.heroMethodBody}</p>
+                    <p>{labels.heroBudgetNote}</p>
+                    <a href={pageHref(locale, "method")}>
+                      {labels.heroMethodLink}{" "}
                       <span aria-hidden="true">→</span>
                     </a>
                   </div>
-                ) : null}
-              </div>
-            </div>
-            <details className="hero-method">
-              <summary>
-                <span className="info-badge" aria-hidden="true">
-                  i
-                </span>
-                {labels.heroMethodSummary}
-              </summary>
-              <div>
-                <p>{labels.heroMethodBody}</p>
-                <p>{labels.heroBudgetNote}</p>
-                <a href={pageHref(locale, "method")}>
-                  {labels.heroMethodLink} <span aria-hidden="true">→</span>
+                </details>
+                <a className="primary-link" href={pageHref(locale, "data")}>
+                  {labels.readBreakdown} <span aria-hidden="true">→</span>
                 </a>
               </div>
-            </details>
-            <a className="primary-link" href={pageHref(locale, "data")}>
-              {labels.readBreakdown} <span aria-hidden="true">↓</span>
-            </a>
-          </div>
 
-          <div className="hundred-euro-card">
-            <div className="hundred-euro-heading">
-              <span>100 €</span>
-              <small>{heroCardLabel}</small>
-            </div>
-            <div
-              className="spending-stack"
-              role="img"
-              aria-label={labels.heroTitle}
-            >
-              {spendingBreakdown.map((indicator, index) => (
-                <span
-                  key={indicator.id}
-                  style={{
-                    width: `${indicator.latest.italy}%`,
-                    background: `var(--chart-${index + 1})`,
-                  }}
-                  title={`${indicator.title[locale]}: ${formatValue(
-                    indicator.latest.italy,
-                    indicator.unitKey,
-                    indicator.precision,
-                    locale,
-                  )}`}
-                />
-              ))}
-            </div>
-            <div className="spending-list">
-              {spendingBreakdown.map((indicator, index) => (
-                <a
-                  href={pageHref(locale, `data/${indicator.id}`)}
-                  key={indicator.id}
-                >
-                  <span
-                    className="legend-dot"
-                    style={{ background: `var(--chart-${index + 1})` }}
-                  />
-                  <span>
-                    {indicator.id === "spending-social-protection"
-                      ? labels.socialProtectionHero
-                      : indicator.title[locale]}
-                  </span>
-                  <strong>
-                    {spendingNumberFormatter.format(indicator.latest.italy)}
-                    €
-                  </strong>
-                </a>
-              ))}
-            </div>
-              </div>
-            </section>
-
-            <section
-              className="featured-section"
-              aria-labelledby="key-numbers"
-            >
-          <h2 id="key-numbers">{labels.keyNumbers}</h2>
-          <div className="featured-grid">
-            {featured.map((indicator) => (
-              <a
-                href={pageHref(locale, `data/${indicator.id}`)}
-                key={indicator.id}
+              <div
+                className="hundred-euro-card"
+                onMouseLeave={() => setActiveSpendingId(null)}
               >
-                <span>{indicator.title[locale]}</span>
-                <strong>
-                  {formatValue(
-                    indicator.latest.italy,
-                    indicator.unitKey,
-                    indicator.precision,
-                    locale,
-                  )}
-                </strong>
-                <small>
-                  {indicator.latest.year} · {labels.italy}
-                </small>
-              </a>
-            ))}
-              </div>
-            </section>
+                <div className="hundred-euro-heading">
+                  <span>100 €</span>
+                  <small>{heroCardLabel}</small>
+                </div>
 
-            <section className="landing-intro">
-              <p className="eyebrow">{labels.landingEyebrow}</p>
-              <div>
-                <h2>{labels.landingTitle}</h2>
-                <p>{labels.landingBody}</p>
+                <div className="spending-visual">
+                  {activeSpending ? (
+                    <a
+                      className="spending-donut"
+                      href={pageHref(locale, `data/${activeSpending.id}`)}
+                      aria-label={`${labels.spendingDonutLabel}: ${
+                        activeSpending.id === "spending-social-protection"
+                          ? labels.socialProtectionHero
+                          : activeSpending.title[locale]
+                      }`}
+                      onPointerMove={selectSpendingSlice}
+                      onPointerDown={selectSpendingSlice}
+                      style={
+                        {
+                          background: spendingGradient,
+                          "--active-chart-color": `var(--chart-${
+                            activeSpendingIndex + 1
+                          })`,
+                        } as CSSProperties
+                      }
+                    >
+                      <span className="spending-donut-center">
+                        <strong>
+                          {spendingNumberFormatter.format(
+                            activeSpending.latest.italy,
+                          )}
+                          €
+                        </strong>
+                        <small>
+                          {activeSpending.id ===
+                          "spending-social-protection"
+                            ? labels.socialProtectionHero
+                            : activeSpending.title[locale]}
+                        </small>
+                      </span>
+                    </a>
+                  ) : null}
+
+                  <div className="spending-list">
+                    {spendingBreakdown.map((indicator, index) => (
+                      <a
+                        href={pageHref(locale, `data/${indicator.id}`)}
+                        key={indicator.id}
+                        data-active={indicator.id === activeSpending?.id}
+                        onMouseEnter={() =>
+                          setActiveSpendingId(indicator.id)
+                        }
+                        onFocus={() => setActiveSpendingId(indicator.id)}
+                      >
+                        <span
+                          className="legend-dot"
+                          style={{
+                            background: `var(--chart-${index + 1})`,
+                          }}
+                        />
+                        <span>
+                          {indicator.id === "spending-social-protection"
+                            ? labels.socialProtectionHero
+                            : indicator.title[locale]}
+                        </span>
+                        <strong>
+                          {spendingNumberFormatter.format(
+                            indicator.latest.italy,
+                          )}
+                          €
+                        </strong>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+                <p className="spending-interaction">
+                  {labels.spendingInteract}
+                </p>
               </div>
             </section>
 
@@ -1793,13 +1931,30 @@ export function Dashboard({
               <input
                 type="search"
                 value={search}
-                onChange={(event) => setSearch(event.target.value)}
+                onChange={(event) => {
+                  const nextSearch = event.target.value;
+                  setSearch(nextSearch);
+                  if (nextSearch.trim()) {
+                    setActiveSection("all");
+                  }
+                }}
                 placeholder={labels.searchPlaceholder}
               />
             </label>
           </div>
 
           <div className="section-filters" aria-label={labels.navData}>
+            <button
+              type="button"
+              className={activeSection === "overview" ? "active" : ""}
+              onClick={() => {
+                setActiveSection("overview");
+                setSearch("");
+              }}
+            >
+              {labels.topicOverview}
+              <span>{data.sections.length}</span>
+            </button>
             <button
               type="button"
               className={activeSection === "all" ? "active" : ""}
@@ -1825,28 +1980,69 @@ export function Dashboard({
                 </span>
               </button>
             ))}
-            <p className="results-count" aria-live="polite">
-              <strong>{filteredIndicators.length}</strong> /{" "}
-              {data.indicators.length} {labels.results}
-            </p>
+            {activeSection !== "overview" ? (
+              <p className="results-count" aria-live="polite">
+                <strong>{filteredIndicators.length}</strong> /{" "}
+                {data.indicators.length} {labels.results}
+              </p>
+            ) : null}
           </div>
 
-          <div className="indicator-grid">
-            {filteredIndicators.map((indicator) => (
-              <IndicatorCard
-                indicator={indicator}
-                locale={locale}
-                sectionTitle={
-                  data.sections.find(
-                    (section) => section.id === indicator.section,
-                  )?.title[locale] ?? ""
-                }
-                key={indicator.id}
-              />
-            ))}
-          </div>
+          {activeSection === "overview" ? (
+            <div className="topic-grid">
+              {data.sections.map((section) => {
+                const sectionIndicators = data.indicators.filter(
+                  (indicator) => indicator.section === section.id,
+                );
 
-          {filteredIndicators.length === 0 ? (
+                return (
+                  <button
+                    type="button"
+                    onClick={() => setActiveSection(section.id)}
+                    key={section.id}
+                    style={
+                      {
+                        "--topic-color": sectionColors[section.id],
+                      } as CSSProperties
+                    }
+                  >
+                    <span className="topic-count">
+                      {sectionIndicators.length} {labels.topicIndicators}
+                    </span>
+                    <h3>{section.title[locale]}</h3>
+                    <p>{section.description[locale]}</p>
+                    <small>{labels.topicExamples}</small>
+                    <ul>
+                      {sectionIndicators.slice(0, 3).map((indicator) => (
+                        <li key={indicator.id}>{indicator.title[locale]}</li>
+                      ))}
+                    </ul>
+                    <strong>
+                      {labels.topicOpen} <span aria-hidden="true">→</span>
+                    </strong>
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="indicator-grid">
+              {filteredIndicators.map((indicator) => (
+                <IndicatorCard
+                  indicator={indicator}
+                  locale={locale}
+                  sectionTitle={
+                    data.sections.find(
+                      (section) => section.id === indicator.section,
+                    )?.title[locale] ?? ""
+                  }
+                  key={indicator.id}
+                />
+              ))}
+            </div>
+          )}
+
+          {activeSection !== "overview" &&
+          filteredIndicators.length === 0 ? (
             <p className="empty-state">{labels.noResults}</p>
           ) : null}
           </section>
