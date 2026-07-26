@@ -2,7 +2,7 @@
 
 > L’Italia, i dati ufficiali per tutti.
 
-Explainable Italy è una dashboard bilingue che rende leggibili alcuni dati essenziali sull’Italia. Ogni indicatore mostra la fonte ufficiale, la definizione semplice, la definizione tecnica, la serie storica e un confronto con Unione europea e mediana dei 27 Paesi.
+Explainable Italy è una dashboard bilingue che rende leggibili alcuni dati essenziali sull’Italia senza interpretarli. Ogni indicatore mostra la fonte ufficiale, la definizione ufficiale in forma accessibile e tecnica, la serie storica e un confronto con Unione europea e mediana dei 27 Paesi.
 
 Il progetto è un prototipo privato. Non è ancora pubblicato online.
 
@@ -26,7 +26,7 @@ Tutti i dati provengono da Eurostat. Il sito usa l’aggregato UE ufficiale quan
 3. Il dato definitivo è quello principale.
 4. Stime e valori provvisori sono separati e segnalati.
 5. Le serie iniziano dall’anno comune disponibile, mai prima del 2000.
-6. Ogni voce tecnica ha una spiegazione comprensibile.
+6. Le definizioni ufficiali sono attribuite alla fonte e presentate anche in linguaggio accessibile, senza interpretazioni.
 7. Le trasformazioni sono documentate e verificabili.
 8. Nessun tracciamento, profilazione o cookie.
 

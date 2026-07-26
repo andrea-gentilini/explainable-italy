@@ -45,6 +45,14 @@ test("contains the bilingual multi-page editorial experience", async () => {
   assert.match(dashboard, /Scegli un tema/);
   assert.match(dashboard, /il \{nextYear\} non è ancora pubblicato/);
   assert.match(dashboard, /Classification of the Functions of Government/);
+  assert.match(dashboard, /Accessibilità, non interpretazione/);
+  assert.match(
+    dashboard,
+    /Riportiamo dati pubblici in un formato leggibile, senza interpretarli/,
+  );
+  assert.match(dashboard, /Verifica definizione e fonte/);
+  assert.doesNotMatch(dashboard, /Spiegazioni, non giudizi/);
+  assert.doesNotMatch(dashboard, /Definiamo cosa misura un indicatore/);
   assert.match(dashboard, /href=\{indicator\.source\.apiUrl\}/);
   assert.match(dashboard, /data\/\$\{indicator\.id\}\/source/);
   assert.match(dashboard, /Come sono create queste categorie/);

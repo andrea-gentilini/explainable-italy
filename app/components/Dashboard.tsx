@@ -206,9 +206,12 @@ const copy = {
     dataSectionBody:
       "Non serve vedere tutto insieme. Parti da una domanda: ogni indicatore conserva definizione, serie storica, confronto europeo e fonte.",
     noResults: "Nessun indicatore corrisponde alla ricerca.",
-    understand: "Capire il dato",
-    simpleDefinition: "In parole semplici",
-    technicalDefinition: "Definizione tecnica",
+    understand: "Definizione e perimetro",
+    simpleDefinition: "In linguaggio accessibile",
+    technicalDefinition: "Perimetro tecnico",
+    definitionAttribution:
+      "Il testo accessibile rende leggibile la definizione ufficiale senza aggiungere interpretazioni.",
+    definitionSource: "Verifica definizione e fonte",
     trend: "Andamento dell’Italia",
     from: "dal",
     source: "Fonte",
@@ -264,8 +267,8 @@ const copy = {
         body: "Nella repository conserviamo le sole serie usate, il collegamento originale, la data di acquisizione e l’impronta digitale del file.",
       },
       {
-        title: "Spiegazioni, non giudizi",
-        body: "Definiamo cosa misura un indicatore e cosa non misura. Non assegniamo voti e non suggeriamo conclusioni politiche.",
+        title: "Accessibilità, non interpretazione",
+        body: "Riportiamo dati pubblici in un formato leggibile, senza interpretarli. Quando riportiamo una definizione, usiamo quella ufficiale, ne indichiamo la fonte e la rendiamo accessibile senza cambiarne il significato.",
       },
       {
         title: "Stesso intervallo quando possibile",
@@ -430,9 +433,12 @@ const copy = {
     dataSectionBody:
       "You do not need to see everything at once. Start with a question: every indicator retains its definition, historical series, European comparison and source.",
     noResults: "No indicators match this search.",
-    understand: "Understand this indicator",
-    simpleDefinition: "In plain language",
-    technicalDefinition: "Technical definition",
+    understand: "Definition and scope",
+    simpleDefinition: "Accessible language",
+    technicalDefinition: "Technical scope",
+    definitionAttribution:
+      "The accessible text makes the official definition readable without adding interpretation.",
+    definitionSource: "Verify definition and source",
     trend: "Italy over time",
     from: "from",
     source: "Source",
@@ -488,8 +494,8 @@ const copy = {
         body: "The repository stores only the series used, the original link, acquisition date and digital fingerprint of each file.",
       },
       {
-        title: "Explanations, not judgements",
-        body: "We define what an indicator measures and what it does not measure. We do not grade countries or suggest political conclusions.",
+        title: "Accessibility, not interpretation",
+        body: "We present public data in a readable format without interpreting it. When we include a definition, we use the official one, cite its source and make it accessible without changing its meaning.",
       },
       {
         title: "The same range where possible",
@@ -967,6 +973,13 @@ function IndicatorCard({
                 <p>{indicator.technical[locale]}</p>
               </div>
             </div>
+            <p className="definition-attribution">
+              {labels.definitionAttribution}{" "}
+              <a href={pageHref(locale, `data/${indicator.id}/source`)}>
+                {labels.definitionSource}{" "}
+                <span aria-hidden="true">→</span>
+              </a>
+            </p>
 
             {isBreak ? (
               <p className="status-note">{labels.dataStatusBreak}</p>

@@ -550,6 +550,26 @@ h1 {
   font-size: 0.72rem;
 }
 
+.definition-attribution {
+  margin: 1rem 0 0;
+  padding: 0.8rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.66rem;
+}
+
+.definition-attribution a {
+  color: var(--accent);
+  font-weight: 760;
+  text-decoration: none;
+}
+
+.definition-attribution a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
 .trend-chart {
   height: 6.5rem;
 }
