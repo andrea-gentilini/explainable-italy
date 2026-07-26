@@ -1,0 +1,44 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import dashboardData from "../../../data/processed/dashboard.json";
+import { Dashboard, type DashboardData } from "../../components/Dashboard";
+
+const data = dashboardData as DashboardData;
+
+type IndicatorPageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export function generateStaticParams() {
+  return data.indicators.map((indicator) => ({ id: indicator.id }));
+}
+
+export async function generateMetadata({
+  params,
+}: IndicatorPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const indicator = data.indicators.find((entry) => entry.id === id);
+
+  return {
+    title: indicator?.title.it ?? "Indicatore",
+    description: indicator?.plain.it,
+  };
+}
+
+export default async function IndicatorPage({ params }: IndicatorPageProps) {
+  const { id } = await params;
+  const indicator = data.indicators.find((entry) => entry.id === id);
+
+  if (!indicator) {
+    notFound();
+  }
+
+  return (
+    <Dashboard
+      data={{ ...data, indicators: [indicator] }}
+      locale="it"
+      view="indicator"
+      selectedIndicatorId={id}
+    />
+  );
+}

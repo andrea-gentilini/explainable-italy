@@ -8,5 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default function EnglishHome() {
-  return <Dashboard data={dashboardData as DashboardData} locale="en" />;
+  return (
+    <Dashboard data={dashboardData as DashboardData} locale="en" view="home" />
+  );
 }

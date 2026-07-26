@@ -66,7 +66,18 @@ export type DashboardData = {
 type DashboardProps = {
   data: DashboardData;
   locale: Locale;
+  view?: DashboardView;
+  selectedIndicatorId?: string;
 };
+
+export type DashboardView =
+  | "home"
+  | "data"
+  | "method"
+  | "sources"
+  | "about"
+  | "contribute"
+  | "indicator";
 
 const themeStorageKey = "explainable-italy-theme";
 
@@ -84,6 +95,11 @@ function getThemeSnapshot() {
   return document.documentElement.dataset.theme === "dark";
 }
 
+function pageHref(locale: Locale, path = "") {
+  const localeRoot = locale === "en" ? `${basePath}/en` : basePath;
+  return `${localeRoot}${path ? `/${path}` : ""}/`;
+}
+
 const copy = {
   it: {
     skip: "Vai al contenuto",
@@ -93,6 +109,16 @@ const copy = {
     navSources: "Fonti",
     navAbout: "About",
     navContribute: "Contribuisci",
+    landingEyebrow: "Dati pubblici, finalmente leggibili",
+    landingTitle: "Capire l’Italia senza perdersi nei portali statistici",
+    landingBody:
+      "Explainable Italy organizza i dati ufficiali in un percorso semplice: prima il numero essenziale, poi il confronto europeo, infine definizione, andamento e fonte.",
+    exploreTitle: "Scegli da dove iniziare",
+    exploreBody:
+      "Ogni area ha una pagina dedicata. Puoi consultare il quadro generale oppure approfondire un singolo indicatore.",
+    openPage: "Apri la pagina",
+    openIndicator: "Apri la scheda completa",
+    backToData: "Torna a tutti i dati",
     searchLabel: "Cerca un indicatore",
     searchPlaceholder: "Prova pensioni, lavoro, scuola",
     allSections: "Tutti",
@@ -225,6 +251,16 @@ const copy = {
     navSources: "Sources",
     navAbout: "About",
     navContribute: "Contribute",
+    landingEyebrow: "Public data, finally readable",
+    landingTitle: "Understand Italy without getting lost in statistical portals",
+    landingBody:
+      "Explainable Italy organises official data into a simple path: the essential number first, then the European comparison, followed by definition, trend and source.",
+    exploreTitle: "Choose where to begin",
+    exploreBody:
+      "Every area has its own page. Browse the overall picture or open a single indicator for the full detail.",
+    openPage: "Open page",
+    openIndicator: "Open the full indicator",
+    backToData: "Back to all data",
     searchLabel: "Search indicators",
     searchPlaceholder: "Try pensions, work, education",
     allSections: "All",
@@ -578,10 +614,12 @@ function IndicatorCard({
   indicator,
   locale,
   sectionTitle,
+  expanded = false,
 }: {
   indicator: Indicator;
   locale: Locale;
   sectionTitle: string;
+  expanded?: boolean;
 }) {
   const labels = copy[locale];
   const isBreak = indicator.latest.status?.includes("b");
@@ -636,73 +674,91 @@ function IndicatorCard({
 
       <ComparisonPlot indicator={indicator} locale={locale} />
 
-      <details className="indicator-details">
-        <summary>{labels.understand}</summary>
-        <div className="indicator-details-body">
-          <div className="definition-grid">
-            <div>
-              <h4>{labels.simpleDefinition}</h4>
-              <p>{indicator.plain[locale]}</p>
+      {expanded ? (
+        <details className="indicator-details" open>
+          <summary>{labels.understand}</summary>
+          <div className="indicator-details-body">
+            <div className="definition-grid">
+              <div>
+                <h4>{labels.simpleDefinition}</h4>
+                <p>{indicator.plain[locale]}</p>
+              </div>
+              <div>
+                <h4>{labels.technicalDefinition}</h4>
+                <p>{indicator.technical[locale]}</p>
+              </div>
             </div>
-            <div>
-              <h4>{labels.technicalDefinition}</h4>
-              <p>{indicator.technical[locale]}</p>
-            </div>
-          </div>
 
-          {isBreak ? <p className="status-note">{labels.dataStatusBreak}</p> : null}
+            {isBreak ? (
+              <p className="status-note">{labels.dataStatusBreak}</p>
+            ) : null}
 
-          <div className="trend-block">
-            <div className="trend-heading">
-              <h4>{labels.trend}</h4>
-              <span>
-                {labels.from} {indicator.startYear}
-              </span>
+            <div className="trend-block">
+              <div className="trend-heading">
+                <h4>{labels.trend}</h4>
+                <span>
+                  {labels.from} {indicator.startYear}
+                </span>
+              </div>
+              <TrendBars indicator={indicator} locale={locale} />
             </div>
-            <TrendBars indicator={indicator} locale={locale} />
-          </div>
 
-          <div className="source-box">
-            <div>
-              <span>{labels.source}</span>
-              <strong>
-                {indicator.source.institution}, {indicator.source.datasetCode}
-              </strong>
+            <div className="source-box">
+              <div>
+                <span>{labels.source}</span>
+                <strong>
+                  {indicator.source.institution}, {indicator.source.datasetCode}
+                </strong>
+              </div>
+              <div>
+                <span>{labels.sourceUpdated}</span>
+                <strong>
+                  {formatDate(indicator.source.sourceUpdatedAt, locale)}
+                </strong>
+              </div>
             </div>
-            <div>
-              <span>{labels.sourceUpdated}</span>
-              <strong>{formatDate(indicator.source.sourceUpdatedAt, locale)}</strong>
-            </div>
-          </div>
 
-          <div className="card-actions">
-            <a
-              href={indicator.source.dataBrowserUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {labels.openData} <span aria-hidden="true">↗</span>
-            </a>
-            {indicator.source.metadataUrl ? (
+            <div className="card-actions">
               <a
-                href={indicator.source.metadataUrl}
+                href={indicator.source.dataBrowserUrl}
                 target="_blank"
                 rel="noreferrer"
               >
-                {labels.openMetadata} <span aria-hidden="true">↗</span>
+                {labels.openData} <span aria-hidden="true">↗</span>
               </a>
-            ) : null}
-            <button type="button" onClick={() => downloadIndicator(indicator)}>
-              {labels.downloadIndicator}
-            </button>
+              {indicator.source.metadataUrl ? (
+                <a
+                  href={indicator.source.metadataUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {labels.openMetadata} <span aria-hidden="true">↗</span>
+                </a>
+              ) : null}
+              <button type="button" onClick={() => downloadIndicator(indicator)}>
+                {labels.downloadIndicator}
+              </button>
+            </div>
           </div>
-        </div>
-      </details>
+        </details>
+      ) : (
+        <a
+          className="indicator-page-link"
+          href={pageHref(locale, `data/${indicator.id}`)}
+        >
+          {labels.openIndicator} <span aria-hidden="true">→</span>
+        </a>
+      )}
     </article>
   );
 }
 
-export function Dashboard({ data, locale }: DashboardProps) {
+export function Dashboard({
+  data,
+  locale,
+  view = "home",
+  selectedIndicatorId,
+}: DashboardProps) {
   const labels = copy[locale];
   const [activeSection, setActiveSection] = useState("all");
   const [search, setSearch] = useState("");
@@ -713,11 +769,22 @@ export function Dashboard({ data, locale }: DashboardProps) {
   );
 
   useEffect(() => {
-    const stored = window.localStorage.getItem(themeStorageKey);
-    const shouldUseDark =
-      stored === "dark" ||
-      (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
-    document.documentElement.dataset.theme = shouldUseDark ? "dark" : "light";
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+    const applyTheme = () => {
+      const stored = window.localStorage.getItem(themeStorageKey);
+      const shouldUseDark =
+        stored === "dark" || (!stored && systemTheme.matches);
+      document.documentElement.dataset.theme = shouldUseDark ? "dark" : "light";
+    };
+
+    applyTheme();
+    systemTheme.addEventListener("change", applyTheme);
+    window.addEventListener("storage", applyTheme);
+
+    return () => {
+      systemTheme.removeEventListener("change", applyTheme);
+      window.removeEventListener("storage", applyTheme);
+    };
   }, []);
 
   const toggleTheme = () => {
@@ -794,6 +861,50 @@ export function Dashboard({ data, locale }: DashboardProps) {
       )
     : "";
 
+  const selectedIndicator = selectedIndicatorId
+    ? data.indicators.find((indicator) => indicator.id === selectedIndicatorId)
+    : undefined;
+
+  const pageCards = [
+    {
+      path: "data",
+      eyebrow: `${data.indicators.length} ${labels.results}`,
+      title: labels.dataSectionTitle,
+      body: labels.dataSectionBody,
+    },
+    {
+      path: "method",
+      eyebrow: labels.methodEyebrow,
+      title: labels.methodTitle,
+      body: labels.methodBody,
+    },
+    {
+      path: "sources",
+      eyebrow: `${sources.length} ${labels.sourceCount}`,
+      title: labels.sourcesTitle,
+      body: labels.sourcesBody,
+    },
+    {
+      path: "about",
+      eyebrow: labels.aboutEyebrow,
+      title: labels.aboutTitle,
+      body: labels.aboutBody,
+    },
+    {
+      path: "contribute",
+      eyebrow: labels.contributeEyebrow,
+      title: labels.contributeTitle,
+      body: labels.contributeBody,
+    },
+  ];
+
+  const currentPath =
+    view === "home"
+      ? ""
+      : view === "indicator"
+        ? `data/${selectedIndicatorId ?? ""}`
+        : view;
+
   return (
     <div className="site-shell" lang={locale}>
       <a className="skip-link" href="#main">
@@ -801,13 +912,7 @@ export function Dashboard({ data, locale }: DashboardProps) {
       </a>
 
       <header className="site-header">
-        <a
-          className="brand"
-          href={locale === "it" ? `${basePath}/` : `${basePath}/en/`}
-        >
-          <span className="brand-mark" aria-hidden="true">
-            ei
-          </span>
+        <a className="brand" href={pageHref(locale)}>
           <span>
             <strong>Explainable Italy</strong>
             <small>{labels.subtitle}</small>
@@ -815,15 +920,38 @@ export function Dashboard({ data, locale }: DashboardProps) {
         </a>
 
         <nav aria-label="Primary">
-          <a href="#data">{labels.navData}</a>
-          <a href="#method">{labels.navMethod}</a>
-          <a href="#about">{labels.navAbout}</a>
+          <a
+            href={pageHref(locale, "data")}
+            aria-current={
+              view === "data" || view === "indicator" ? "page" : undefined
+            }
+          >
+            {labels.navData}
+          </a>
+          <a
+            href={pageHref(locale, "method")}
+            aria-current={view === "method" ? "page" : undefined}
+          >
+            {labels.navMethod}
+          </a>
+          <a
+            href={pageHref(locale, "sources")}
+            aria-current={view === "sources" ? "page" : undefined}
+          >
+            {labels.navSources}
+          </a>
+          <a
+            href={pageHref(locale, "about")}
+            aria-current={view === "about" ? "page" : undefined}
+          >
+            {labels.navAbout}
+          </a>
         </nav>
 
         <div className="header-actions">
           <a
             className="language-link"
-            href={locale === "it" ? `${basePath}/en/` : `${basePath}/`}
+            href={pageHref(locale === "it" ? "en" : "it", currentPath)}
           >
             {labels.language}
           </a>
@@ -840,7 +968,9 @@ export function Dashboard({ data, locale }: DashboardProps) {
       </header>
 
       <main id="main">
-        <section className="hero">
+        {view === "home" ? (
+          <>
+            <section className="hero">
           <div className="hero-copy">
             <p className="eyebrow">{labels.heroEyebrow}</p>
             <h1>{labels.heroTitle}</h1>
@@ -851,7 +981,7 @@ export function Dashboard({ data, locale }: DashboardProps) {
               </span>
               <span>Eurostat · COFOG</span>
             </div>
-            <a className="primary-link" href="#data">
+            <a className="primary-link" href={pageHref(locale, "data")}>
               {labels.readBreakdown} <span aria-hidden="true">↓</span>
             </a>
           </div>
@@ -884,7 +1014,10 @@ export function Dashboard({ data, locale }: DashboardProps) {
             </div>
             <div className="spending-list">
               {spendingBreakdown.map((indicator, index) => (
-                <a href={`#${indicator.id}`} key={indicator.id}>
+                <a
+                  href={pageHref(locale, `data/${indicator.id}`)}
+                  key={indicator.id}
+                >
                   <span
                     className="legend-dot"
                     style={{ background: `var(--chart-${index + 1})` }}
@@ -909,14 +1042,20 @@ export function Dashboard({ data, locale }: DashboardProps) {
                 <p>{labels.oldAgeCaveat}</p>
               </div>
             ) : null}
-          </div>
-        </section>
+              </div>
+            </section>
 
-        <section className="featured-section" aria-labelledby="key-numbers">
+            <section
+              className="featured-section"
+              aria-labelledby="key-numbers"
+            >
           <h2 id="key-numbers">{labels.keyNumbers}</h2>
           <div className="featured-grid">
             {featured.map((indicator) => (
-              <a href={`#${indicator.id}`} key={indicator.id}>
+              <a
+                href={pageHref(locale, `data/${indicator.id}`)}
+                key={indicator.id}
+              >
                 <span>{indicator.title[locale]}</span>
                 <strong>
                   {formatValue(
@@ -931,10 +1070,58 @@ export function Dashboard({ data, locale }: DashboardProps) {
                 </small>
               </a>
             ))}
-          </div>
-        </section>
+              </div>
+            </section>
 
-        <section className="data-section" id="data">
+            <section className="landing-intro">
+              <p className="eyebrow">{labels.landingEyebrow}</p>
+              <div>
+                <h2>{labels.landingTitle}</h2>
+                <p>{labels.landingBody}</p>
+              </div>
+            </section>
+
+            <section className="landing-directory">
+              <div className="landing-directory-heading">
+                <h2>{labels.exploreTitle}</h2>
+                <p>{labels.exploreBody}</p>
+              </div>
+              <div className="landing-page-grid">
+                {pageCards.map((page) => (
+                  <a href={pageHref(locale, page.path)} key={page.path}>
+                    <span>{page.eyebrow}</span>
+                    <h3>{page.title}</h3>
+                    <p>{page.body}</p>
+                    <strong>
+                      {labels.openPage} <span aria-hidden="true">→</span>
+                    </strong>
+                  </a>
+                ))}
+              </div>
+            </section>
+          </>
+        ) : null}
+
+        {view === "indicator" && selectedIndicator ? (
+          <section className="indicator-page-shell">
+            <a className="back-link" href={pageHref(locale, "data")}>
+              <span aria-hidden="true">←</span> {labels.backToData}
+            </a>
+            <IndicatorCard
+              indicator={selectedIndicator}
+              locale={locale}
+              sectionTitle={
+                data.sections.find(
+                  (section) => section.id === selectedIndicator.section,
+                )?.title[locale] ?? ""
+              }
+              expanded
+            />
+          </section>
+        ) : null}
+
+        {view === "data" ? (
+          <section className="data-section" id="data">
           <div className="section-heading">
             <div>
               <p className="eyebrow">{labels.navData}</p>
@@ -1002,9 +1189,11 @@ export function Dashboard({ data, locale }: DashboardProps) {
           {filteredIndicators.length === 0 ? (
             <p className="empty-state">{labels.noResults}</p>
           ) : null}
-        </section>
+          </section>
+        ) : null}
 
-        <section className="method-section" id="method">
+        {view === "method" ? (
+          <section className="method-section" id="method">
           <div className="method-intro">
             <p className="eyebrow">{labels.methodEyebrow}</p>
             <h2>{labels.methodTitle}</h2>
@@ -1023,9 +1212,11 @@ export function Dashboard({ data, locale }: DashboardProps) {
             <summary>{labels.medianTitle}</summary>
             <p>{data.comparison[locale]}</p>
           </details>
-        </section>
+          </section>
+        ) : null}
 
-        <section className="sources-section" id="sources">
+        {view === "sources" ? (
+          <section className="sources-section" id="sources">
           <div className="section-heading">
             <div>
               <p className="eyebrow">{labels.sourcesEyebrow}</p>
@@ -1072,9 +1263,11 @@ export function Dashboard({ data, locale }: DashboardProps) {
               ))}
             </div>
           </details>
-        </section>
+          </section>
+        ) : null}
 
-        <section className="about-section" id="about">
+        {view === "about" ? (
+          <section className="about-section" id="about">
           <div className="about-main">
             <p className="eyebrow">{labels.aboutEyebrow}</p>
             <h2>{labels.aboutTitle}</h2>
@@ -1100,9 +1293,11 @@ export function Dashboard({ data, locale }: DashboardProps) {
               ))}
             </ol>
           </details>
-        </section>
+          </section>
+        ) : null}
 
-        <section className="contribute-section" id="contribute">
+        {view === "contribute" ? (
+          <section className="contribute-section" id="contribute">
           <div>
             <p className="eyebrow">{labels.contributeEyebrow}</p>
             <h2>{labels.contributeTitle}</h2>
@@ -1119,14 +1314,12 @@ export function Dashboard({ data, locale }: DashboardProps) {
               </li>
             ))}
           </ol>
-        </section>
+          </section>
+        ) : null}
       </main>
 
       <footer>
         <div className="brand footer-brand">
-          <span className="brand-mark" aria-hidden="true">
-            ei
-          </span>
           <span>
             <strong>Explainable Italy</strong>
             <small>{labels.footer}</small>

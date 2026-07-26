@@ -4,11 +4,24 @@ import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
 
-test("contains the bilingual editorial experience", async () => {
-  const [dashboard, italianPage, englishPage, layout] = await Promise.all([
+test("contains the bilingual multi-page editorial experience", async () => {
+  const [
+    dashboard,
+    italianPage,
+    englishPage,
+    italianDataPage,
+    englishDataPage,
+    italianIndicatorPage,
+    englishIndicatorPage,
+    layout,
+  ] = await Promise.all([
     readFile(new URL("app/components/Dashboard.tsx", projectRoot), "utf8"),
     readFile(new URL("app/page.tsx", projectRoot), "utf8"),
     readFile(new URL("app/en/page.tsx", projectRoot), "utf8"),
+    readFile(new URL("app/data/page.tsx", projectRoot), "utf8"),
+    readFile(new URL("app/en/data/page.tsx", projectRoot), "utf8"),
+    readFile(new URL("app/data/[id]/page.tsx", projectRoot), "utf8"),
+    readFile(new URL("app/en/data/[id]/page.tsx", projectRoot), "utf8"),
     readFile(new URL("app/layout.tsx", projectRoot), "utf8"),
   ]);
 
@@ -22,15 +35,34 @@ test("contains the bilingual editorial experience", async () => {
   assert.match(dashboard, /id="contribute"/);
   assert.match(dashboard, /downloadIndicator/);
   assert.match(dashboard, /localStorage/);
+  assert.match(dashboard, /prefers-color-scheme: dark/);
+  assert.doesNotMatch(dashboard, />\s*ei\s*</);
   assert.doesNotMatch(dashboard, /\bAI\b/);
   assert.doesNotMatch(
     dashboard,
     /gtag|googletagmanager|plausible\.io|posthog/i,
   );
-  assert.match(italianPage, /locale="it"/);
-  assert.match(englishPage, /locale="en"/);
+  assert.match(italianPage, /locale="it" view="home"/);
+  assert.match(englishPage, /locale="en" view="home"/);
+  assert.match(italianDataPage, /locale="it" view="data"/);
+  assert.match(englishDataPage, /locale="en" view="data"/);
+  assert.match(italianIndicatorPage, /generateStaticParams/);
+  assert.match(englishIndicatorPage, /generateStaticParams/);
   assert.match(layout, /Andrea Gentilini/);
   assert.match(layout, /social-preview-v2\.jpg/);
+
+  await Promise.all(
+    [
+      "app/method/page.tsx",
+      "app/sources/page.tsx",
+      "app/about/page.tsx",
+      "app/contribute/page.tsx",
+      "app/en/method/page.tsx",
+      "app/en/sources/page.tsx",
+      "app/en/about/page.tsx",
+      "app/en/contribute/page.tsx",
+    ].map((path) => access(new URL(path, projectRoot))),
+  );
 });
 
 test("has no starter preview left", async () => {

@@ -8,5 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  return <Dashboard data={dashboardData as DashboardData} locale="it" />;
+  return (
+    <Dashboard data={dashboardData as DashboardData} locale="it" view="home" />
+  );
 }
