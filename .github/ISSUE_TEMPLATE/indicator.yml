@@ -1,0 +1,34 @@
+name: Proponi un indicatore
+description: Suggerisci un nuovo dato ufficiale
+title: "[Indicatore] "
+labels:
+  - data
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Domanda
+      description: Quale domanda concreta dovrebbe aiutare a capire?
+    validations:
+      required: true
+  - type: input
+    id: dataset
+    attributes:
+      label: Dataset ufficiale
+      description: Collegamento diretto al dataset
+    validations:
+      required: true
+  - type: input
+    id: metadata
+    attributes:
+      label: Metadati
+      description: Collegamento a definizioni e metodologia
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Note
+      description: Unità, anni, geografie, revisioni e limiti noti
+    validations:
+      required: true

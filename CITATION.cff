@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "Se usi Explainable Italy, cita il progetto e i dataset originali indicati nel manifest."
+title: "Explainable Italy"
+type: software
+authors:
+  - family-names: "Gentilini"
+    given-names: "Andrea"
+license: MIT
+repository-code: "https://github.com/andrea-gentilini/explainable-italy"
+url: "https://andrea-gentilini.github.io/explainable-italy/"
+version: 0.1.0
+date-released: 2026-07-26

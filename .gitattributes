@@ -1,0 +1,4 @@
+* text=auto eol=lf
+data/raw/** linguist-generated=true
+data/processed/** linguist-generated=true
+public/data/** linguist-generated=true
