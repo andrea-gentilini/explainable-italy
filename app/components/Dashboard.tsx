@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+} from "react";
 
 type Locale = "it" | "en";
 type LocalizedText = Record<Locale, string>;
@@ -61,6 +67,22 @@ type DashboardProps = {
   data: DashboardData;
   locale: Locale;
 };
+
+const themeStorageKey = "explainable-italy-theme";
+
+function subscribeToTheme(onStoreChange: () => void) {
+  const observer = new MutationObserver(onStoreChange);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+
+  return () => observer.disconnect();
+}
+
+function getThemeSnapshot() {
+  return document.documentElement.dataset.theme === "dark";
+}
 
 const copy = {
   it: {
@@ -672,25 +694,24 @@ export function Dashboard({ data, locale }: DashboardProps) {
   const labels = copy[locale];
   const [activeSection, setActiveSection] = useState("all");
   const [search, setSearch] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
+  const darkMode = useSyncExternalStore(
+    subscribeToTheme,
+    getThemeSnapshot,
+    () => false,
+  );
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("explainable-italy-theme");
+    const stored = window.localStorage.getItem(themeStorageKey);
     const shouldUseDark =
       stored === "dark" ||
       (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
-    setDarkMode(shouldUseDark);
     document.documentElement.dataset.theme = shouldUseDark ? "dark" : "light";
   }, []);
 
   const toggleTheme = () => {
-    const next = !darkMode;
-    setDarkMode(next);
+    const next = document.documentElement.dataset.theme !== "dark";
     document.documentElement.dataset.theme = next ? "dark" : "light";
-    window.localStorage.setItem(
-      "explainable-italy-theme",
-      next ? "dark" : "light",
-    );
+    window.localStorage.setItem(themeStorageKey, next ? "dark" : "light");
   };
 
   const spendingBreakdown = useMemo(
