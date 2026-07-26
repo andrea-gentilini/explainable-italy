@@ -1200,7 +1200,7 @@ h1 {
   color: var(--accent-strong);
 }
 
-.contribute-section ol {
+.contribute-section .contribution-ways {
   margin: 0;
   padding: 0;
   list-style: none;

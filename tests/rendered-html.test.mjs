@@ -43,6 +43,10 @@ test("contains the bilingual multi-page editorial experience", async () => {
   assert.match(dashboard, /activeSection === "overview"/);
   assert.match(dashboard, /className="topic-grid"/);
   assert.match(dashboard, /Scegli un tema/);
+  assert.match(dashboard, /Aperto a chi vuole dare una mano/);
+  assert.match(dashboard, /progetto open source nato per aiutare le persone/);
+  assert.doesNotMatch(dashboard, /Un progetto aperto, con regole chiare/);
+  assert.doesNotMatch(dashboard, /contributionRules/);
   assert.match(dashboard, /il \{nextYear\} non è ancora pubblicato/);
   assert.match(dashboard, /Classification of the Functions of Government/);
   assert.match(dashboard, /Accessibilità, non interpretazione/);
@@ -111,15 +115,21 @@ test("has no starter preview left", async () => {
   await assert.rejects(
     access(new URL("app/_sites-preview/SkeletonPreview.tsx", projectRoot)),
   );
+  await assert.rejects(
+    access(new URL("CODE_OF_CONDUCT.md", projectRoot)),
+  );
 
-  const [packageJson, readme] = await Promise.all([
+  const [packageJson, readme, contributing] = await Promise.all([
     readFile(new URL("package.json", projectRoot), "utf8"),
     readFile(new URL("README.md", projectRoot), "utf8"),
+    readFile(new URL("CONTRIBUTING.md", projectRoot), "utf8"),
   ]);
 
   assert.doesNotMatch(packageJson, /site-creator-vinext-starter/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.doesNotMatch(readme, /Your site is taking shape/);
+  assert.match(contributing, /Ogni contributo è benvenuto/);
+  assert.doesNotMatch(contributing, /Codice di condotta/);
 });
 
 test("links every indicator to its exact Eurostat query", async () => {

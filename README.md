@@ -78,6 +78,6 @@ La pubblicazione non è attiva. Prima di renderla pubblica vanno completati una 
 
 ## Contribuire
 
-Le regole per proposte, fonti e revisioni sono in [CONTRIBUTING.md](CONTRIBUTING.md). Il progetto usa la licenza [MIT](LICENSE).
+Explainable Italy è open source e ogni contributo è benvenuto: segnalazioni, nuove fonti pubbliche, testi, traduzioni, accessibilità o codice. Le informazioni essenziali sono in [CONTRIBUTING.md](CONTRIBUTING.md). Il progetto usa la licenza [MIT](LICENSE).
 
-Responsabile del progetto: Andrea Gentilini.
+Creato da Andrea Gentilini.

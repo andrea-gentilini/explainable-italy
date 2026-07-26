@@ -3,8 +3,9 @@ import dashboardData from "../../data/processed/dashboard.json";
 import { Dashboard, type DashboardData } from "../components/Dashboard";
 
 export const metadata: Metadata = {
-  title: "Contribuisci",
-  description: "Proponi dati e miglioramenti con regole chiare e verificabili.",
+  title: "Open source",
+  description:
+    "Un progetto aperto nato per aiutare le persone a leggere i dati pubblici.",
 };
 
 export default function ContributePage() {

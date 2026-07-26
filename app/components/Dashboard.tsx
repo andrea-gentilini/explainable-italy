@@ -308,20 +308,16 @@ const copy = {
       "Casa, affitti, mutui e costi dell’abitare",
       "Commercio estero, dipendenza energetica e materie prime",
     ],
-    contributeEyebrow: "Contributions",
-    contributeTitle: "Un progetto aperto, con regole chiare",
+    contributeEyebrow: "Open source",
+    contributeTitle: "Aperto a chi vuole dare una mano",
     contributeBody:
-      "Le proposte passano da issue e pull request. Una nuova voce deve essere comprensibile, riproducibile e basata su una fonte ufficiale.",
-    contributionRules: [
-      "Indicare l’istituzione, il dataset, la definizione e la licenza.",
-      "Spiegare perché l’indicatore è rilevante per un cittadino non specialista.",
-      "Fornire la formula di ogni trasformazione e un controllo indipendente.",
-      "Aggiungere italiano e inglese con lo stesso significato.",
-      "Non usare titoli sensazionalistici o interpretazioni causali non supportate.",
-      "Aggiornare test, registro delle fonti e note sulle revisioni.",
-      "Rispettare accessibilità, privacy e licenza MIT del codice.",
+      "Explainable Italy è un progetto open source nato per aiutare le persone a leggere i dati pubblici. Se noti un errore o vuoi migliorare qualcosa, il tuo contributo è benvenuto.",
+    contributionWays: [
+      "Segnala un dato o un collegamento che non funziona.",
+      "Proponi una fonte pubblica che potrebbe essere utile.",
+      "Migliora testi, traduzioni, accessibilità o codice.",
     ],
-    contributionLink: "Leggi la guida completa nella repository",
+    contributionLink: "Visita il progetto su GitHub",
     footer:
       "Dati ufficiali. Elaborazioni trasparenti. Nessun tracciamento.",
     themeLight: "Usa tema chiaro",
@@ -535,20 +531,16 @@ const copy = {
       "Housing, rents, mortgages and the cost of living",
       "Foreign trade, energy dependence and raw materials",
     ],
-    contributeEyebrow: "Contributions",
-    contributeTitle: "An open project with clear rules",
+    contributeEyebrow: "Open source",
+    contributeTitle: "Open to anyone who wants to help",
     contributeBody:
-      "Proposals start with issues and pull requests. A new indicator must be understandable, reproducible and based on an official source.",
-    contributionRules: [
-      "State the institution, dataset, definition and licence.",
-      "Explain why the indicator matters to a non specialist citizen.",
-      "Provide the formula for every transformation and an independent check.",
-      "Add Italian and English text with the same meaning.",
-      "Avoid sensational headlines and unsupported causal interpretations.",
-      "Update tests, the source register and revision notes.",
-      "Respect accessibility, privacy and the MIT licence for code.",
+      "Explainable Italy is an open-source project created to help people read public data. If you spot an error or want to improve something, your contribution is welcome.",
+    contributionWays: [
+      "Report a figure or link that does not work.",
+      "Suggest a public source that could be useful.",
+      "Improve the copy, translations, accessibility or code.",
     ],
-    contributionLink: "Read the full guide in the repository",
+    contributionLink: "Visit the project on GitHub",
     footer: "Official data. Transparent calculations. No tracking.",
     themeLight: "Use light theme",
     themeDark: "Use dark theme",
@@ -2171,18 +2163,18 @@ export function Dashboard({
             <p className="eyebrow">{labels.contributeEyebrow}</p>
             <h2>{labels.contributeTitle}</h2>
             <p>{labels.contributeBody}</p>
-            <a href="https://github.com/andrea-gentilini/explainable-italy/blob/main/CONTRIBUTING.md">
+            <a href="https://github.com/andrea-gentilini/explainable-italy">
               {labels.contributionLink} <span aria-hidden="true">↗</span>
             </a>
           </div>
-          <ol>
-            {labels.contributionRules.map((rule, index) => (
-              <li key={rule}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <p>{rule}</p>
+          <ul className="contribution-ways">
+            {labels.contributionWays.map((way) => (
+              <li key={way}>
+                <span aria-hidden="true">→</span>
+                <p>{way}</p>
               </li>
             ))}
-          </ol>
+          </ul>
           </section>
         ) : null}
       </main>
