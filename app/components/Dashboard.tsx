@@ -125,29 +125,41 @@ const copy = {
     heroEyebrow: "Italia · {year}",
     heroTitle: "Dove vanno 100 € di spesa pubblica?",
     heroBody:
-      "Per spesa pubblica intendiamo tutto ciò che spendono Stato, Regioni, Comuni ed enti previdenziali: servizi, stipendi, pensioni, investimenti e interessi. Non sono 100 € a persona: abbiamo ridotto il totale a 100 €.",
+      "Immagina tutta la spesa di Stato, enti locali e previdenza divisa in 100 €. Qui vedi dove va.",
     heroYear: "Anno dei dati",
     heroLatest:
       "Ultimo disponibile per l’Italia; il {nextYear} non è ancora pubblicato",
     heroProvisional: "dato provvisorio",
     heroSource: "Fonte ufficiale",
-    heroSourceName: "Eurostat, dati trasmessi da Istat",
+    heroSourceName: "Eurostat",
     heroSourceUpdated: "aggiornata il {date}",
-    heroOpenSource: "Apri la tabella Eurostat",
-    heroOpenIstat: "Apri la scheda Istat",
+    heroOpenSource: "Vedi fonti e dati",
     heroMethodSummary: "Come sono create queste categorie?",
     heroMethodBody:
-      "Eurostat divide la spesa in dieci funzioni comuni ai Paesi europei. Il nome tecnico è COFOG: serve a confrontare le stesse voci tra Paesi diversi.",
+      "COFOG significa “Classification of the Functions of Government”: classificazione delle funzioni della Pubblica amministrazione. È il sistema usato da Eurostat per dividere la spesa in dieci categorie confrontabili.",
     heroBudgetNote:
-      "Non colleghiamo il solo bilancio dello Stato perché lascerebbe fuori Regioni, Comuni ed enti previdenziali. Qui usiamo i conti consolidati dell’intera Pubblica amministrazione.",
+      "Il totale comprende tutta la Pubblica amministrazione italiana, non soltanto lo Stato.",
     heroMethodLink: "Leggi il metodo",
     heroCardLabel: "equivalgono al 100% della spesa del {year}",
     socialProtectionHero: "Protezione sociale (incluse pensioni)",
-    oldAgeNote:
-      "Le pensioni sono qui: dei {social} € di protezione sociale, {value} € riguardano la vecchiaia.",
-    oldAgeCaveat:
-      "È una sotto-voce dei {social} €, non una spesa aggiuntiva. Comprende soprattutto pensioni di vecchiaia; altre pensioni possono rientrare, per esempio, in invalidità o superstiti.",
-    oldAgeLink: "Capire pensioni e vecchiaia",
+    socialDetailEyebrow: "Dentro la protezione sociale",
+    socialDetailTitle: "Quanta parte riguarda le pensioni?",
+    socialDetailBody:
+      "La voce “Protezione sociale” include le pensioni, ma non le isola. Per rispondere servono due statistiche diverse.",
+    oldAgeMeasure: "Nella ripartizione dei 100 €",
+    oldAgeMeasureTitle: "Vecchiaia",
+    oldAgeMeasureBody:
+      "Comprende soprattutto pensioni di vecchiaia, ma anche servizi e altre prestazioni. Non è il totale esatto di tutte le pensioni.",
+    oldAgeFilter:
+      "{year} · vecchiaia (GF1002) · quota della spesa pubblica",
+    pensionMeasure: "Dato pensionistico dedicato",
+    pensionMeasureTitle: "Tutte le pensioni",
+    pensionMeasureBody:
+      "Eurostat usa la statistica europea sulla protezione sociale, ESSPROS. Il valore più recente è provvisorio e usa il PIL come riferimento: non va sommato ai 100 € della landing.",
+    pensionFilter:
+      "{year} · tutte le pensioni · quota del PIL · dato provvisorio",
+    selectionUsed: "Selezione usata",
+    openExactData: "Apri la query esatta su Eurostat",
     readBreakdown: "Esplora tutte le voci",
     keyNumbers: "Quattro numeri per orientarsi",
     definitive: "ultimo dato non stimato",
@@ -172,7 +184,7 @@ const copy = {
     source: "Fonte",
     sourceUpdated: "Fonte aggiornata",
     dataset: "Dataset",
-    openData: "Apri i dati ufficiali",
+    openData: "Apri la query esatta",
     openMetadata: "Leggi la metodologia Eurostat",
     downloadIndicator: "Scarica questo indicatore",
     dataStatusBreak: "La serie segnala una discontinuità metodologica nell’ultimo anno.",
@@ -285,29 +297,41 @@ const copy = {
     heroEyebrow: "Italy · {year}",
     heroTitle: "Where does €100 of public spending go?",
     heroBody:
-      "Public spending means everything spent by central government, regions, municipalities and social security funds: services, pay, pensions, investment and interest. This is not €100 per person: we scale the total down to €100.",
+      "Imagine all spending by the Italian state, local authorities and social security as €100. Here is where it goes.",
     heroYear: "Data year",
     heroLatest:
       "Latest available for Italy; {nextYear} has not been published yet",
     heroProvisional: "provisional data",
     heroSource: "Official source",
-    heroSourceName: "Eurostat, data transmitted by Istat",
+    heroSourceName: "Eurostat",
     heroSourceUpdated: "updated {date}",
-    heroOpenSource: "Open the Eurostat table",
-    heroOpenIstat: "Open the Istat record",
+    heroOpenSource: "See sources and data",
     heroMethodSummary: "How are these categories created?",
     heroMethodBody:
-      "Eurostat divides spending into ten functions shared by European countries. The technical name is COFOG: it makes equivalent categories comparable across countries.",
+      "COFOG stands for “Classification of the Functions of Government”. It is the system Eurostat uses to split spending into ten comparable categories.",
     heroBudgetNote:
-      "We do not link only to the central government budget because that would exclude regions, municipalities and social security funds. These are consolidated accounts for the whole of general government.",
+      "The total covers all Italian public bodies, not only central government.",
     heroMethodLink: "Read the method",
     heroCardLabel: "represent 100% of {year} spending",
     socialProtectionHero: "Social protection (including pensions)",
-    oldAgeNote:
-      "Pensions are here: of the €{social} for social protection, €{value} relates to old age.",
-    oldAgeCaveat:
-      "This is a subcategory of the €{social}, not extra spending. It mainly includes old-age pensions; other pensions may fall under disability or survivors, for example.",
-    oldAgeLink: "Understand pensions and old age",
+    socialDetailEyebrow: "Inside social protection",
+    socialDetailTitle: "How much relates to pensions?",
+    socialDetailBody:
+      "“Social protection” includes pensions, but does not isolate them. Answering this needs two different statistics.",
+    oldAgeMeasure: "In the €100 breakdown",
+    oldAgeMeasureTitle: "Old age",
+    oldAgeMeasureBody:
+      "This mainly includes old-age pensions, but also services and other benefits. It is not the exact total for all pensions.",
+    oldAgeFilter:
+      "{year} · old age (GF1002) · share of public spending",
+    pensionMeasure: "Dedicated pension measure",
+    pensionMeasureTitle: "All pensions",
+    pensionMeasureBody:
+      "Eurostat uses the European social protection statistics, ESSPROS. The latest value is provisional and uses GDP as its reference, so it must not be added to the landing page’s €100.",
+    pensionFilter:
+      "{year} · all pensions · share of GDP · provisional data",
+    selectionUsed: "Selection used",
+    openExactData: "Open the exact Eurostat query",
     readBreakdown: "Explore every category",
     keyNumbers: "Four numbers for orientation",
     definitive: "latest non estimated value",
@@ -332,7 +356,7 @@ const copy = {
     source: "Source",
     sourceUpdated: "Source updated",
     dataset: "Dataset",
-    openData: "Open official data",
+    openData: "Open the exact query",
     openMetadata: "Read Eurostat methodology",
     downloadIndicator: "Download this indicator",
     dataStatusBreak: "The series marks a methodological break in its latest year.",
@@ -756,7 +780,7 @@ function IndicatorCard({
 
             <div className="card-actions">
               <a
-                href={indicator.source.dataBrowserUrl}
+                href={indicator.source.apiUrl}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -786,6 +810,104 @@ function IndicatorCard({
         </a>
       )}
     </article>
+  );
+}
+
+function SocialProtectionDetail({
+  oldAge,
+  pensionExpenditure,
+  locale,
+}: {
+  oldAge: Indicator;
+  pensionExpenditure: Indicator;
+  locale: Locale;
+}) {
+  const labels = copy[locale];
+  const pensionPoint =
+    pensionExpenditure.newerEstimate ?? pensionExpenditure.latest;
+  const pensionComparison = {
+    ...pensionExpenditure,
+    latest: pensionPoint,
+  };
+  const oldAgeFilter = labels.oldAgeFilter.replace(
+    "{year}",
+    String(oldAge.latest.year),
+  );
+  const pensionFilter = labels.pensionFilter.replace(
+    "{year}",
+    String(pensionPoint.year),
+  );
+
+  return (
+    <section className="social-protection-detail">
+      <div className="related-detail-heading">
+        <p className="eyebrow">{labels.socialDetailEyebrow}</p>
+        <h2>{labels.socialDetailTitle}</h2>
+        <p>{labels.socialDetailBody}</p>
+      </div>
+
+      <div className="related-detail-grid">
+        <article>
+          <p className="indicator-kicker">{labels.oldAgeMeasure}</p>
+          <h3>{labels.oldAgeMeasureTitle}</h3>
+          <p className="related-detail-value">
+            {new Intl.NumberFormat(locale === "it" ? "it-IT" : "en-GB", {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            }).format(oldAge.latest.italy)}
+            €
+            <small>
+              {locale === "it" ? "su 100" : "out of 100"} ·{" "}
+              {oldAge.latest.year}
+            </small>
+          </p>
+          <p className="related-detail-copy">{labels.oldAgeMeasureBody}</p>
+          <ComparisonPlot indicator={oldAge} locale={locale} />
+          <div className="related-source">
+            <span>{labels.selectionUsed}</span>
+            <strong>Eurostat · gov_10a_exp</strong>
+            <small>{oldAgeFilter}</small>
+            <a
+              href={oldAge.source.apiUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {labels.openExactData} <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+
+        <article>
+          <p className="indicator-kicker">{labels.pensionMeasure}</p>
+          <h3>{labels.pensionMeasureTitle}</h3>
+          <p className="related-detail-value">
+            {formatValue(
+              pensionPoint.italy,
+              pensionExpenditure.unitKey,
+              pensionExpenditure.precision,
+              locale,
+            )}
+            <small>
+              {pensionPoint.year} · {labels.provisional}
+            </small>
+          </p>
+          <p className="related-detail-copy">{labels.pensionMeasureBody}</p>
+          <ComparisonPlot indicator={pensionComparison} locale={locale} />
+          <div className="related-source">
+            <span>{labels.selectionUsed}</span>
+            <strong>Eurostat · spr_exp_pens · ESSPROS</strong>
+            <small>{pensionFilter}</small>
+            <a
+              href={pensionExpenditure.source.apiUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {labels.openExactData} <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
   );
 }
 
@@ -845,8 +967,8 @@ export function Dashboard({
   const oldAge = data.indicators.find(
     (indicator) => indicator.id === "spending-old-age",
   );
-  const socialProtection = data.indicators.find(
-    (indicator) => indicator.id === "spending-social-protection",
+  const pensionExpenditure = data.indicators.find(
+    (indicator) => indicator.id === "pension-expenditure",
   );
   const spendingSource = spendingBreakdown[0]?.source;
   const spendingYear = spendingBreakdown[0]?.latest.year;
@@ -899,18 +1021,6 @@ export function Dashboard({
     );
   }, [data.indicators]);
 
-  const socialProtectionValue = socialProtection
-    ? spendingNumberFormatter.format(socialProtection.latest.italy)
-    : "";
-  const oldAgeSentence = oldAge
-    ? labels.oldAgeNote
-        .replace("{value}", spendingNumberFormatter.format(oldAge.latest.italy))
-        .replace("{social}", socialProtectionValue)
-    : "";
-  const oldAgeCaveat = labels.oldAgeCaveat.replace(
-    "{social}",
-    socialProtectionValue,
-  );
   const heroEyebrow = labels.heroEyebrow.replace(
     "{year}",
     String(spendingYear ?? ""),
@@ -1058,21 +1168,9 @@ export function Dashboard({
                 <small>{heroSourceUpdated}</small>
                 {spendingSource ? (
                   <div className="hero-source-links">
-                    <a
-                      href={spendingSource.dataBrowserUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
+                    <a href={pageHref(locale, "sources")}>
                       {labels.heroOpenSource}{" "}
-                      <span aria-hidden="true">↗</span>
-                    </a>
-                    <a
-                      href="https://www.istat.it/scheda-qualita/spese-della-pubblica-amministrazione-per-funzione/"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {labels.heroOpenIstat}{" "}
-                      <span aria-hidden="true">↗</span>
+                      <span aria-hidden="true">→</span>
                     </a>
                   </div>
                 ) : null}
@@ -1146,15 +1244,6 @@ export function Dashboard({
                 </a>
               ))}
             </div>
-            {oldAge ? (
-              <div className="old-age-note">
-                <strong>{oldAgeSentence}</strong>
-                <p>{oldAgeCaveat}</p>
-                <a href={pageHref(locale, "data/spending-old-age")}>
-                  {labels.oldAgeLink} <span aria-hidden="true">→</span>
-                </a>
-              </div>
-            ) : null}
               </div>
             </section>
 
@@ -1216,7 +1305,13 @@ export function Dashboard({
         ) : null}
 
         {view === "indicator" && selectedIndicator ? (
-          <section className="indicator-page-shell">
+          <section
+            className={`indicator-page-shell ${
+              selectedIndicator.id === "spending-social-protection"
+                ? "has-related-detail"
+                : ""
+            }`}
+          >
             <a className="back-link" href={pageHref(locale, "data")}>
               <span aria-hidden="true">←</span> {labels.backToData}
             </a>
@@ -1230,6 +1325,15 @@ export function Dashboard({
               }
               expanded
             />
+            {selectedIndicator.id === "spending-social-protection" &&
+            oldAge &&
+            pensionExpenditure ? (
+              <SocialProtectionDetail
+                oldAge={oldAge}
+                pensionExpenditure={pensionExpenditure}
+                locale={locale}
+              />
+            ) : null}
           </section>
         ) : null}
 

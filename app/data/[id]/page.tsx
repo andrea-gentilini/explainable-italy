@@ -33,9 +33,20 @@ export default async function IndicatorPage({ params }: IndicatorPageProps) {
     notFound();
   }
 
+  const pageIndicators =
+    id === "spending-social-protection"
+      ? data.indicators.filter((entry) =>
+          [
+            "spending-social-protection",
+            "spending-old-age",
+            "pension-expenditure",
+          ].includes(entry.id),
+        )
+      : [indicator];
+
   return (
     <Dashboard
-      data={{ ...data, indicators: [indicator] }}
+      data={{ ...data, indicators: pageIndicators }}
       locale="it"
       view="indicator"
       selectedIndicatorId={id}

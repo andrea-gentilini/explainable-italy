@@ -797,14 +797,24 @@ const datasetSpecs = [
   },
 ];
 
-function buildApiUrl(specification) {
+function buildApiUrl(specification, selector = {}) {
   const url = new URL(
     `https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/${specification.id}`,
   );
   url.searchParams.set("lang", "en");
   url.searchParams.set("sinceTimePeriod", "2000");
 
-  for (const [dimension, values] of Object.entries(specification.filters)) {
+  const dimensions = new Set([
+    ...Object.keys(specification.filters),
+    ...Object.keys(selector),
+  ]);
+
+  for (const dimension of dimensions) {
+    const values =
+      dimension in selector
+        ? [selector[dimension]]
+        : specification.filters[dimension];
+
     for (const value of values) {
       url.searchParams.append(dimension, value);
     }
@@ -940,8 +950,15 @@ await Promise.all([
   mkdir(publicDataDirectory, { recursive: true }),
 ]);
 
+const offline = process.argv.includes("--offline");
+const previousManifest = offline
+  ? JSON.parse(
+      await readFile(join(projectRoot, "data", "manifest.json"), "utf8"),
+    )
+  : null;
+
 const manifest = {
-  generatedAt: new Date().toISOString(),
+  generatedAt: previousManifest?.generatedAt ?? new Date().toISOString(),
   policy: {
     it: "Ogni file contiene solo le serie usate dal sito. I dati grezzi restano invariati. Le mediane sono calcolate sui 27 Paesi UE con almeno 24 valori disponibili. Se Eurostat non pubblica l’aggregato UE per una certa unità, il sito calcola la media aritmetica dei Paesi disponibili.",
     en: "Each file contains only the series used by the site. Raw data remain unchanged. Medians are calculated across the 27 EU countries when at least 24 values are available. When Eurostat does not publish an EU aggregate for a unit, the site calculates the arithmetic mean of the available countries.",
@@ -954,7 +971,6 @@ const manifest = {
 };
 
 const indicators = [];
-const offline = process.argv.includes("--offline");
 
 for (const specification of datasetSpecs) {
   const apiUrl = buildApiUrl(specification);
@@ -1013,6 +1029,13 @@ for (const specification of datasetSpecs) {
 
   for (const indicatorDefinition of specification.indicators) {
     const series = buildSeries(records, indicatorDefinition.selector);
+    const indicatorSource = {
+      ...source,
+      apiUrl: buildApiUrl(
+        specification,
+        indicatorDefinition.selector,
+      ).toString(),
+    };
 
     if (series.length === 0) {
       throw new Error(
@@ -1043,7 +1066,7 @@ for (const specification of datasetSpecs) {
       latest,
       newerEstimate,
       series,
-      source,
+      source: indicatorSource,
     });
   }
 }

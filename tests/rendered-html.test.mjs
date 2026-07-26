@@ -29,14 +29,16 @@ test("contains the bilingual multi-page editorial experience", async () => {
   assert.match(dashboard, /Italy, official data for everyone\./);
   assert.match(dashboard, /Italia, UE e mediana dei Paesi/);
   assert.match(dashboard, /Italy, EU and country median/);
-  assert.match(dashboard, /Non sono 100 € a persona/);
+  assert.match(dashboard, /Immagina tutta la spesa di Stato/);
   assert.match(dashboard, /il \{nextYear\} non è ancora pubblicato/);
-  assert.match(dashboard, /Eurostat, dati trasmessi da Istat/);
-  assert.match(dashboard, /spendingSource\.dataBrowserUrl/);
+  assert.match(dashboard, /Classification of the Functions of Government/);
+  assert.match(dashboard, /href=\{indicator\.source\.apiUrl\}/);
   assert.match(dashboard, /Come sono create queste categorie/);
   assert.match(dashboard, /Protezione sociale \(incluse pensioni\)/);
-  assert.match(dashboard, /Le pensioni sono qui/);
-  assert.match(dashboard, /data\/spending-old-age/);
+  assert.match(dashboard, /function SocialProtectionDetail/);
+  assert.match(dashboard, /Quanta parte riguarda le pensioni/);
+  assert.doesNotMatch(dashboard, /className="old-age-note"/);
+  assert.doesNotMatch(dashboard, /www\.istat\.it/);
   assert.match(dashboard, /id="method"/);
   assert.match(dashboard, /id="sources"/);
   assert.match(dashboard, /id="about"/);
@@ -56,6 +58,10 @@ test("contains the bilingual multi-page editorial experience", async () => {
   assert.match(englishDataPage, /locale="en" view="data"/);
   assert.match(italianIndicatorPage, /generateStaticParams/);
   assert.match(englishIndicatorPage, /generateStaticParams/);
+  assert.match(italianIndicatorPage, /spending-old-age/);
+  assert.match(italianIndicatorPage, /pension-expenditure/);
+  assert.match(englishIndicatorPage, /spending-old-age/);
+  assert.match(englishIndicatorPage, /pension-expenditure/);
   assert.match(layout, /Andrea Gentilini/);
   assert.match(layout, /social-preview-v2\.jpg/);
 
@@ -86,4 +92,27 @@ test("has no starter preview left", async () => {
   assert.doesNotMatch(packageJson, /site-creator-vinext-starter/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.doesNotMatch(readme, /Your site is taking shape/);
+});
+
+test("links every indicator to its exact Eurostat query", async () => {
+  const data = JSON.parse(
+    await readFile(
+      new URL("data/processed/dashboard.json", projectRoot),
+      "utf8",
+    ),
+  );
+  const defence = data.indicators.find(
+    (indicator) => indicator.id === "spending-defence",
+  );
+  const health = data.indicators.find(
+    (indicator) => indicator.id === "spending-health",
+  );
+  const oldAge = data.indicators.find(
+    (indicator) => indicator.id === "spending-old-age",
+  );
+
+  assert.notEqual(defence.source.apiUrl, health.source.apiUrl);
+  assert.match(defence.source.apiUrl, /cofog99=GF02/);
+  assert.match(health.source.apiUrl, /cofog99=GF07/);
+  assert.match(oldAge.source.apiUrl, /cofog99=GF1002/);
 });
