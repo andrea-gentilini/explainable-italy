@@ -149,6 +149,21 @@ const cofogIndicators = [
 const datasetSpecs = [
   {
     id: "gov_10a_exp",
+    statusOverrides: {
+      2024: "p",
+    },
+    notes: [
+      {
+        type: "provisional",
+        year: 2024,
+        text: {
+          it: "Eurostat indica come provvisoria la ripartizione per funzione dell’Italia relativa al 2024.",
+          en: "Eurostat marks Italy’s 2024 distribution by function as provisional.",
+        },
+        sourceUrl:
+          "https://webgate.ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
+      },
+    ],
     filters: {
       freq: ["A"],
       unit: ["PC_TOT"],
@@ -421,7 +436,10 @@ const datasetSpecs = [
         id: "employment-rate",
         section: "economy",
         selector: {},
-        title: { it: "Tasso di occupazione", en: "Employment rate" },
+        title: {
+          it: "Tasso di occupazione, 20–64 anni",
+          en: "Employment rate, ages 20–64",
+        },
         plain: {
           it: "La quota delle persone tra 20 e 64 anni che ha un lavoro.",
           en: "The share of people aged 20 to 64 who have a job.",
@@ -451,12 +469,12 @@ const datasetSpecs = [
         selector: { age: "Y15-74" },
         title: { it: "Tasso di disoccupazione", en: "Unemployment rate" },
         plain: {
-          it: "La quota delle persone attive che non ha un lavoro, lo cerca ed è disponibile a iniziare.",
-          en: "The share of the labour force without a job who are seeking work and available to start.",
+          it: "La quota delle persone attive che non ha un lavoro, lo ha cercato nelle quattro settimane precedenti ed è disponibile a iniziare entro due settimane.",
+          en: "The share of the labour force without a job who sought work during the previous four weeks and can start within two weeks.",
         },
         technical: {
-          it: "Disoccupati tra 15 e 74 anni divisi per la forza lavoro della stessa età. Chi non cerca lavoro non è contato tra i disoccupati.",
-          en: "Unemployed people aged 15 to 74 divided by the labour force of the same age. People not seeking work are not counted as unemployed.",
+          it: "Disoccupati tra 15 e 74 anni secondo la definizione ILO divisi per la forza lavoro della stessa età. Chi non cerca attivamente lavoro non è contato tra i disoccupati.",
+          en: "Unemployed people aged 15 to 74 under the ILO definition divided by the labour force of the same age. People not actively seeking work are not counted as unemployed.",
         },
         unitKey: "percent",
         precision: 1,
@@ -467,8 +485,8 @@ const datasetSpecs = [
         selector: { age: "Y15-24" },
         title: { it: "Disoccupazione giovanile", en: "Youth unemployment" },
         plain: {
-          it: "La quota dei giovani attivi tra 15 e 24 anni che non ha un lavoro, lo cerca ed è disponibile a iniziare.",
-          en: "The share of active young people aged 15 to 24 without a job who are seeking work and available to start.",
+          it: "La quota dei giovani attivi tra 15 e 24 anni che non ha un lavoro, lo ha cercato nelle quattro settimane precedenti ed è disponibile a iniziare entro due settimane.",
+          en: "The share of active young people aged 15 to 24 without a job who sought work during the previous four weeks and can start within two weeks.",
         },
         technical: {
           it: "Disoccupati tra 15 e 24 anni divisi per la forza lavoro della stessa età. Non è la percentuale di tutti i giovani.",
@@ -558,8 +576,8 @@ const datasetSpecs = [
           en: "The share of people living in at least one of three conditions: low income, severe material and social deprivation, or very low work intensity.",
         },
         technical: {
-          it: "Indicatore AROPE secondo la definizione Europa 2030, calcolato sulla popolazione totale.",
-          en: "AROPE indicator under the Europe 2030 definition, calculated for the total population.",
+          it: "Indicatore AROPE secondo la definizione Europa 2030, calcolato con EU-SILC sulle persone che vivono in famiglie private. Per la componente reddituale, l’anno di riferimento del reddito è normalmente quello precedente all’indagine.",
+          en: "AROPE indicator under the Europe 2030 definition, calculated from EU-SILC for people living in private households. For the income component, the income reference year is normally the year before the survey.",
         },
         unitKey: "percent",
         precision: 1,
@@ -604,12 +622,12 @@ const datasetSpecs = [
         selector: {},
         title: { it: "Anni di vita in buona salute", en: "Healthy life years" },
         plain: {
-          it: "Gli anni che una persona può aspettarsi di vivere senza limitazioni nelle attività quotidiane.",
-          en: "The years a person can expect to live without limitations in everyday activities.",
+          it: "Gli anni che una persona può aspettarsi di vivere senza limitazioni di lunga durata nelle attività abituali, secondo quanto dichiarato nell’indagine.",
+          en: "The years a person can expect to live without long-standing limitations in usual activities, based on survey responses.",
         },
         technical: {
-          it: "Indicatore HLY alla nascita per il totale della popolazione. Combina mortalità e limitazioni dichiarate nell’indagine EU SILC.",
-          en: "Healthy life years at birth for the total population. It combines mortality with self reported activity limitations from EU SILC.",
+          it: "Indicatore HLY alla nascita per il totale della popolazione. Combina tavole di mortalità e la domanda GALI di EU-SILC sulle limitazioni durate almeno sei mesi. Le persone in istituzioni non rientrano normalmente nel campione EU-SILC.",
+          en: "Healthy life years at birth for the total population. It combines life tables with the EU-SILC GALI question on limitations lasting at least six months. People living in institutions are normally outside the EU-SILC sample.",
         },
         unitKey: "years",
         precision: 1,
@@ -665,8 +683,8 @@ const datasetSpecs = [
           en: "The share of young people aged 18 to 24 with at most lower secondary education who are not in education or training.",
         },
         technical: {
-          it: "Indicatore europeo degli early leavers per la popolazione tra 18 e 24 anni.",
-          en: "European early leavers indicator for the population aged 18 to 24.",
+          it: "Persone tra 18 e 24 anni con al massimo un titolo ISCED 0–2 che non hanno partecipato a istruzione o formazione nelle quattro settimane precedenti l’indagine.",
+          en: "People aged 18 to 24 with at most ISCED levels 0–2 who did not participate in education or training during the four weeks before the survey.",
         },
         unitKey: "percent",
         precision: 1,
@@ -761,8 +779,8 @@ const datasetSpecs = [
           en: "The share of waste produced by households and similar activities that is recycled.",
         },
         technical: {
-          it: "Rifiuti urbani riciclati divisi per i rifiuti urbani generati, secondo il metodo Eurostat.",
-          en: "Municipal waste recycled divided by municipal waste generated under the Eurostat method.",
+          it: "Rifiuti urbani riciclati e preparati per il riutilizzo divisi per i rifiuti urbani generati, secondo il metodo Eurostat vigente per l’anno osservato.",
+          en: "Municipal waste recycled and prepared for reuse divided by municipal waste generated, under the Eurostat method applying to the observed year.",
         },
         unitKey: "percent",
         precision: 1,
@@ -771,6 +789,7 @@ const datasetSpecs = [
   },
   {
     id: "sdg_13_10",
+    originalInstitution: "European Environment Agency (EEA), based on UNFCCC reporting",
     filters: {
       freq: ["A"],
       src_crf: ["TOTX4_MEMO"],
@@ -787,8 +806,8 @@ const datasetSpecs = [
           en: "How emissions produced within the territory have changed since 1990. The 1990 value is set to 100.",
         },
         technical: {
-          it: "Indice delle emissioni nette secondo l’inventario UNFCCC, escluse le attività di uso del suolo, cambiamento di uso del suolo e foreste. Base 1990 uguale a 100.",
-          en: "Index of net emissions under the UNFCCC inventory, excluding land use, land use change and forestry. Base 1990 equals 100.",
+          it: "Indice delle emissioni territoriali secondo l’inventario UNFCCC, escluse le attività di uso del suolo, cambiamento di uso del suolo e foreste e, per i valori nazionali, l’aviazione e la navigazione internazionali. Base 1990 uguale a 100.",
+          en: "Index of territorial emissions under the UNFCCC inventory, excluding land use, land-use change and forestry and, for national values, international aviation and navigation. Base 1990 equals 100.",
         },
         unitKey: "index_1990",
         precision: 1,
@@ -796,6 +815,94 @@ const datasetSpecs = [
     ],
   },
 ];
+
+const indicatorNotes = {
+  "life-expectancy": [
+    {
+      type: "method_change",
+      year: 2024,
+      text: {
+        it: "Dal 2024 Eurostat estende il calcolo delle tavole di mortalità dalla classe finale 85+ alla classe 95+. Il confronto con gli anni precedenti richiede cautela.",
+        en: "From 2024 Eurostat extends life-table calculations from the final 85+ age group to 95+. Comparisons with earlier years require caution.",
+      },
+      sourceUrl:
+        "https://ec.europa.eu/eurostat/web/products-eurostat-news/w/ddn-20260313-3",
+    },
+  ],
+  "healthy-life-years": [
+    {
+      type: "comparability",
+      text: {
+        it: "La misura usa una domanda auto-riferita sulle limitazioni nelle attività. Differenze nel modo in cui la domanda è somministrata possono ridurre la comparabilità tra Paesi e nel tempo.",
+        en: "The measure uses a self-reported question on activity limitations. Differences in how the question is administered can reduce comparability across countries and over time.",
+      },
+      sourceUrl:
+        "https://ec.europa.eu/eurostat/cache/metadata/en/hlth_hlye_esms.htm",
+    },
+    {
+      type: "data_gap",
+      year: 2010,
+      text: {
+        it: "Per l’Italia il 2010 non è disponibile nella selezione ufficiale. Il sito passa dal 2009 al 2011 senza interpolare il valore mancante.",
+        en: "For Italy, 2010 is not available in the official selection. The site moves from 2009 to 2011 without interpolating the missing value.",
+      },
+      sourceUrl:
+        "https://ec.europa.eu/eurostat/databrowser/view/hlth_hlye/default/table?lang=en",
+    },
+  ],
+  "renewable-energy": [
+    {
+      type: "method_change",
+      year: 2021,
+      text: {
+        it: "La serie cambia base normativa tra 2020 e 2021: fino al 2020 segue RED I, dal 2021 RED II. Il grafico segnala questa discontinuità.",
+        en: "The legal basis changes between 2020 and 2021: data follow RED I through 2020 and RED II from 2021. The chart marks this discontinuity.",
+      },
+      sourceUrl:
+        "https://ec.europa.eu/eurostat/cache/metadata/en/nrg_ind_share_esmsip2.htm",
+    },
+  ],
+  "municipal-waste-recycling": [
+    {
+      type: "scope",
+      text: {
+        it: "Le regole più recenti includono la preparazione per il riutilizzo. Cambi di metodo e regimi transitori possono incidere sui confronti tra anni e Paesi.",
+        en: "The newer rules include preparing for reuse. Method changes and transitional regimes can affect comparisons across years and countries.",
+      },
+      sourceUrl:
+        "https://ec.europa.eu/eurostat/cache/metadata/en/cei_wm011_esmsip2.htm",
+    },
+  ],
+  "poverty-or-exclusion": [
+    {
+      type: "reference_period",
+      text: {
+        it: "L’anno mostrato è quello dell’indagine EU-SILC. Per la componente sul reddito, il periodo di riferimento è normalmente l’anno precedente.",
+        en: "The displayed year is the EU-SILC survey year. For the income component, the reference period is normally the previous year.",
+      },
+      sourceUrl:
+        "https://ec.europa.eu/eurostat/cache/metadata/en/ilc_sieusilc.htm",
+    },
+  ],
+  "greenhouse-gas-emissions": [
+    {
+      type: "scope",
+      text: {
+        it: "Eurostat diffonde il dato; la fonte originaria è EEA su inventari UNFCCC. Per questa selezione non esiste un aggregato UE con lo stesso perimetro, quindi il sito non ne costruisce uno.",
+        en: "Eurostat disseminates the data; the original source is the EEA based on UNFCCC inventories. No EU aggregate with the same scope exists for this selection, so the site does not construct one.",
+      },
+      sourceUrl:
+        "https://ec.europa.eu/eurostat/cache/metadata/en/sdg_13_10_esmsip2.htm",
+    },
+  ],
+};
+
+const definitionSourceOverrides = {
+  "spending-old-age":
+    "https://unstats.un.org/unsd/classifications/Econ/Structure/Detail/EN/4/10_2_0",
+  "pension-expenditure":
+    "https://ec.europa.eu/eurostat/web/social-protection/information-data",
+};
 
 function buildApiUrl(specification, selector = {}) {
   const url = new URL(
@@ -881,14 +988,21 @@ function median(values) {
     return sorted[middle];
   }
 
-  return (sorted[middle - 1] + sorted[middle]) / 2;
+  return normalizeNumber((sorted[middle - 1] + sorted[middle]) / 2);
 }
 
-function mean(values) {
-  return values.reduce((sum, value) => sum + value, 0) / values.length;
+function normalizeNumber(value) {
+  return Number(value.toFixed(10));
 }
 
-function buildSeries(records, selector) {
+function mergeStatus(sourceStatus, overrideStatus) {
+  const codes = `${sourceStatus ?? ""}${overrideStatus ?? ""}`
+    .replaceAll(":", "")
+    .replaceAll(" ", "");
+  return codes ? [...new Set(codes)].join("") : null;
+}
+
+function buildSeries(records, selector, statusOverrides = {}) {
   const selectedRecords = records.filter((record) =>
     matchesSelector(record, selector),
   );
@@ -907,36 +1021,74 @@ function buildSeries(records, selector) {
     .flatMap(([year, geographyRecords]) => {
       const italyRecord = geographyRecords.get("IT");
       const euRecord = geographyRecords.get("EU27_2020");
-      const countryValues = euCountries
-        .map((geography) => geographyRecords.get(geography)?.value)
-        .filter((value) => Number.isFinite(value));
+      const countries = euCountries.flatMap((geography) => {
+        const record = geographyRecords.get(geography);
+        if (!Number.isFinite(record?.value)) return [];
+        return [
+          {
+            geo: geography,
+            value: record.value,
+            status: record.status,
+          },
+        ];
+      });
+      const countryValues = countries.map((country) => country.value);
 
       if (!Number.isFinite(italyRecord?.value) || countryValues.length < 24) {
         return [];
       }
 
       const hasOfficialAggregate = Number.isFinite(euRecord?.value);
+      const effectiveItalyStatus = mergeStatus(
+        italyRecord.status,
+        statusOverrides[year],
+      );
+      const effectiveCountries = countries.map((country) =>
+        country.geo === "IT"
+          ? { ...country, status: effectiveItalyStatus }
+          : country,
+      );
 
       return [
         {
           year,
           italy: italyRecord.value,
-          eu: hasOfficialAggregate ? euRecord.value : mean(countryValues),
+          eu: hasOfficialAggregate ? euRecord.value : null,
           median: median(countryValues),
           coverage: countryValues.length,
           euMethod: hasOfficialAggregate
             ? "official_aggregate"
-            : "country_mean",
-          status: italyRecord.status,
+            : "unavailable",
+          status: effectiveItalyStatus,
+          sourceStatus: italyRecord.status,
+          euStatus: hasOfficialAggregate ? euRecord.status : null,
+          countryStatuses: effectiveCountries
+            .filter((country) => country.status)
+            .map(({ geo, status }) => ({ geo, status })),
+          missingCountries: euCountries.filter(
+            (geography) =>
+              !countries.some((country) => country.geo === geography),
+          ),
+          countries: effectiveCountries,
         },
       ];
     });
+}
+
+function withoutCountryValues(point) {
+  const publicPoint = { ...point };
+  delete publicPoint.countries;
+  return publicPoint;
 }
 
 function csvEscape(value) {
   const text = String(value ?? "");
   if (!/[",\n]/.test(text)) return text;
   return `"${text.replaceAll('"', '""')}"`;
+}
+
+function csvNumber(value) {
+  return Number.isFinite(value) ? String(normalizeNumber(value)) : "";
 }
 
 async function writeJson(path, value) {
@@ -960,12 +1112,28 @@ const previousManifest = offline
 const manifest = {
   generatedAt: previousManifest?.generatedAt ?? new Date().toISOString(),
   policy: {
-    it: "Ogni file contiene solo le serie usate dal sito. I dati grezzi restano invariati. Le mediane sono calcolate sui 27 Paesi UE con almeno 24 valori disponibili. Se Eurostat non pubblica l’aggregato UE per una certa unità, il sito calcola la media aritmetica dei Paesi disponibili.",
-    en: "Each file contains only the series used by the site. Raw data remain unchanged. Medians are calculated across the 27 EU countries when at least 24 values are available. When Eurostat does not publish an EU aggregate for a unit, the site calculates the arithmetic mean of the available countries.",
+    it: "Ogni snapshot contiene solo la selezione usata dal sito. I valori ufficiali non vengono modificati; la serializzazione normalizza soltanto gli spazi finali. Le mediane sono calcolate sui Paesi UE disponibili e pubblicate con almeno 24 valori su 27. Se non esiste un aggregato UE ufficiale con lo stesso perimetro, il sito non ne costruisce uno. Testi accessibili e traduzioni sono parafrasi del progetto, indicate come tali.",
+    en: "Each snapshot contains only the selection used by the site. Official values are not changed; serialisation only normalises trailing whitespace. Medians are calculated across available EU countries and published with at least 24 values out of 27. When no official EU aggregate with the same scope exists, the site does not construct one. Accessible copy and translations are project paraphrases and are identified as such.",
   },
   license: {
     name: "Eurostat reuse policy",
-    url: "https://ec.europa.eu/eurostat/about-us/policies/copyright",
+    url: "https://ec.europa.eu/eurostat/help/copyright-notice",
+  },
+  licenses: [
+    {
+      institution: "Eurostat",
+      name: "Eurostat reuse policy",
+      url: "https://ec.europa.eu/eurostat/help/copyright-notice",
+    },
+    {
+      institution: "European Environment Agency",
+      name: "EEA legal notice and reuse terms",
+      url: "https://www.eea.europa.eu/en/legal-notice",
+    },
+  ],
+  disclaimer: {
+    it: "Eurostat e le altre istituzioni citate non sono responsabili delle traduzioni, delle sintesi accessibili, delle mediane o di altre elaborazioni realizzate da Explainable Italy.",
+    en: "Eurostat and the other cited institutions are not responsible for translations, accessible summaries, medians or other processing performed by Explainable Italy.",
   },
   datasets: [],
 };
@@ -1009,6 +1177,8 @@ for (const specification of datasetSpecs) {
 
   const source = {
     institution: "Eurostat",
+    originalInstitution:
+      specification.originalInstitution ?? "Eurostat",
     datasetCode: specification.id,
     datasetLabel: dataset.label,
     dataBrowserUrl: `https://ec.europa.eu/eurostat/databrowser/view/${specification.id}/default/table?lang=en`,
@@ -1016,6 +1186,7 @@ for (const specification of datasetSpecs) {
     metadataUrl,
     doi: `https://doi.org/10.2908/${specification.id.toUpperCase()}`,
     sourceUpdatedAt: dataset.updated,
+    accessedAt: manifest.generatedAt,
   };
 
   manifest.datasets.push({
@@ -1028,7 +1199,14 @@ for (const specification of datasetSpecs) {
   const records = flattenJsonStat(dataset);
 
   for (const indicatorDefinition of specification.indicators) {
-    const series = buildSeries(records, indicatorDefinition.selector);
+    const seriesWithCountries = buildSeries(
+      records,
+      indicatorDefinition.selector,
+      {
+        ...(specification.statusOverrides ?? {}),
+        ...(indicatorDefinition.statusOverrides ?? {}),
+      },
+    );
     const indicatorSource = {
       ...source,
       apiUrl: buildApiUrl(
@@ -1037,20 +1215,25 @@ for (const specification of datasetSpecs) {
       ).toString(),
     };
 
-    if (series.length === 0) {
+    if (seriesWithCountries.length === 0) {
       throw new Error(
         `No complete EU comparison series for ${indicatorDefinition.id}`,
       );
     }
 
-    const latestAvailable = series.at(-1);
-    const latest =
-      [...series]
+    const latestAvailable = seriesWithCountries.at(-1);
+    const latestWithCountries =
+      [...seriesWithCountries]
         .reverse()
         .find((point) => !isEstimateOrProvisional(point.status)) ??
       latestAvailable;
-    const newerEstimate =
-      latestAvailable.year > latest.year ? latestAvailable : null;
+    const newerEstimateWithCountries =
+      latestAvailable.year > latestWithCountries.year ? latestAvailable : null;
+    const series = seriesWithCountries.map(withoutCountryValues);
+    const latest = { ...latestWithCountries };
+    const newerEstimate = newerEstimateWithCountries
+      ? { ...newerEstimateWithCountries }
+      : null;
 
     indicators.push({
       id: indicatorDefinition.id,
@@ -1062,6 +1245,14 @@ for (const specification of datasetSpecs) {
       precision: indicatorDefinition.precision,
       featured: indicatorDefinition.featured ?? false,
       isDetail: indicatorDefinition.isDetail ?? false,
+      definitionSourceUrl:
+        definitionSourceOverrides[indicatorDefinition.id] ?? metadataUrl,
+      definitionKind: "project_paraphrase",
+      notes: [
+        ...(specification.notes ?? []),
+        ...(indicatorNotes[indicatorDefinition.id] ?? []),
+        ...(indicatorDefinition.notes ?? []),
+      ],
       startYear: series[0].year,
       latest,
       newerEstimate,
@@ -1073,10 +1264,10 @@ for (const specification of datasetSpecs) {
 
 const dashboardData = {
   generatedAt: manifest.generatedAt,
-  methodologyVersion: "1.0.0",
+  methodologyVersion: "1.1.0",
   comparison: {
-    it: "Quando disponibile, il valore UE è l’aggregato ufficiale Eurostat. In caso contrario è la media aritmetica dei Paesi con dati disponibili. La mediana è calcolata ordinando i valori dei 27 Paesi e prendendo quello centrale. Se media e mediana sono lontane, la distribuzione può essere asimmetrica oppure il peso dei Paesi più grandi può incidere molto sull’aggregato. Non è da solo una prova della presenza di valori anomali.",
-    en: "When available, the EU value is the official Eurostat aggregate. Otherwise it is the arithmetic mean of countries with available data. The median is calculated by ordering the values of the 27 countries and taking the middle one. When the average and median are far apart, the distribution may be asymmetric or larger countries may have a strong influence on the aggregate. This alone is not proof of outliers.",
+    it: "Quando disponibile, il valore UE è l’aggregato ufficiale Eurostat. Se non esiste un aggregato con lo stesso perimetro, non ne costruiamo uno. La mediana è calcolata ordinando i valori dei Paesi disponibili e prendendo quello centrale; con un numero pari di Paesi è la media dei due valori centrali. Vicino al confronto sono indicati copertura, valori mancanti e contrassegni di qualità.",
+    en: "When available, the EU value is Eurostat’s official aggregate. If no aggregate with the same scope exists, we do not construct one. The median is calculated by ordering the available country values and taking the middle one; with an even number of countries it is the mean of the two middle values. Coverage, missing values and quality flags are shown next to the comparison.",
   },
   sections: [
     {
@@ -1142,11 +1333,14 @@ const csvRows = [
     "section",
     "year",
     "italy",
-    "eu27_value",
+    "eu27_official_value",
     "eu27_country_median",
     "countries_in_median",
     "eu_method",
-    "status",
+    "italy_status",
+    "eu_status",
+    "flagged_countries",
+    "missing_countries",
     "unit",
     "dataset",
   ],
@@ -1155,12 +1349,17 @@ const csvRows = [
       indicator.id,
       indicator.section,
       point.year,
-      point.italy,
-      point.eu,
-      point.median,
+      csvNumber(point.italy),
+      csvNumber(point.eu),
+      csvNumber(point.median),
       point.coverage,
       point.euMethod,
       point.status,
+      point.euStatus,
+      point.countryStatuses
+        .map(({ geo, status }) => `${geo}:${status}`)
+        .join("|"),
+      point.missingCountries.join("|"),
       indicator.unitKey,
       indicator.source.datasetCode,
     ]),

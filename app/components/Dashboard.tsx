@@ -12,18 +12,30 @@ import {
 type Locale = "it" | "en";
 type LocalizedText = Record<Locale, string>;
 
+type CountryObservation = {
+  geo: string;
+  value: number;
+  status: string | null;
+};
+
 type DataPoint = {
   year: number;
   italy: number;
-  eu: number;
+  eu: number | null;
   median: number;
   coverage: number;
-  euMethod: "official_aggregate" | "country_mean";
+  euMethod: "official_aggregate" | "unavailable";
   status: string | null;
+  sourceStatus: string | null;
+  euStatus: string | null;
+  countryStatuses: Array<{ geo: string; status: string }>;
+  missingCountries: string[];
+  countries?: CountryObservation[];
 };
 
 type Source = {
   institution: string;
+  originalInstitution: string;
   datasetCode: string;
   datasetLabel: string;
   dataBrowserUrl: string;
@@ -31,6 +43,20 @@ type Source = {
   metadataUrl: string | null;
   doi: string;
   sourceUpdatedAt: string;
+  accessedAt: string;
+};
+
+type IndicatorNote = {
+  type:
+    | "provisional"
+    | "method_change"
+    | "comparability"
+    | "scope"
+    | "reference_period"
+    | "data_gap";
+  year?: number;
+  text: LocalizedText;
+  sourceUrl: string;
 };
 
 type Indicator = {
@@ -43,6 +69,9 @@ type Indicator = {
   precision: number;
   featured: boolean;
   isDetail: boolean;
+  definitionSourceUrl: string | null;
+  definitionKind: "project_paraphrase";
+  notes: IndicatorNote[];
   startYear: number;
   latest: DataPoint;
   newerEstimate: DataPoint | null;
@@ -122,7 +151,7 @@ const copy = {
     snapshotGdpUnit: "Indice: UE = 100",
     snapshotMedianAge: "Età mediana",
     snapshotLifeExpectancy: "Speranza di vita",
-    snapshotEmployment: "Tasso di occupazione",
+    snapshotEmployment: "Occupazione, 20–64 anni",
     snapshotOpen: "Vedi andamento",
     exploreTitle: "Approfondisci, quando vuoi",
     exploreBody:
@@ -147,7 +176,7 @@ const copy = {
     heroProvisional: "dato provvisorio",
     heroSource: "Fonte ufficiale",
     heroSourceName: "Eurostat",
-    heroSourceUpdated: "aggiornata il {date}",
+    heroSourceUpdated: "dataset aggiornato il {date}",
     heroOpenSource: "Verifica dati e calcolo",
     heroMethodSummary: "Come sono create queste categorie?",
     heroMethodBody:
@@ -178,44 +207,52 @@ const copy = {
       "Esclude i pensionamenti anticipati dovuti a disabilità o disoccupazione, classificati in altre funzioni.",
     oldAgeOfficialDefinition: "Definizione ufficiale COFOG 10.2 (ONU)",
     oldAgeFilter:
-      "{year} · vecchiaia (GF1002) · quota della spesa pubblica",
+      "{year} · vecchiaia (GF1002) · quota della spesa pubblica · {status}",
     pensionMeasure: "Un indicatore diverso",
     pensionMeasureTitle: "Pensioni: nessuna equivalenza esatta con i 100 €",
     pensionMeasureBody:
-      "Il 15,5% del PIL viene da ESSPROS, che comprende tutti i regimi collettivi di protezione sociale residenti, pubblici o privati. I 100 € comprendono invece soltanto la Pubblica amministrazione. Dividere i due valori mescolerebbe perimetri diversi: per questo non trasformiamo il 15,5% in euro su 100.",
+      "Il dato in percentuale del PIL viene da ESSPROS, che comprende tutti i regimi collettivi di protezione sociale residenti, pubblici o privati. I 100 € comprendono invece soltanto la Pubblica amministrazione. Dividere i due valori mescolerebbe perimetri diversi: per questo non trasformiamo questa percentuale in euro su 100.",
     pensionIncludesTitle: "Il dato pensionistico comprende",
     pensionIncludes:
       "pensioni di invalidità; pensionamenti anticipati per ridotta capacità lavorativa; pensioni di vecchiaia, anticipate e parziali; pensioni ai superstiti; pensionamenti anticipati per ragioni di mercato del lavoro.",
     openPensionPage: "Apri l’indicatore sulle pensioni",
     pensionFilter:
-      "{year} · tutte le pensioni · quota del PIL · dato provvisorio",
+      "{year} · tutte le pensioni · quota del PIL · {status}",
     selectionUsed: "Selezione usata",
     verifyNumber: "Verifica fonte e calcolo",
     readBreakdown: "Esplora tutti i temi",
     definitive: "ultimo dato non stimato",
     estimate: "Dato più recente",
     provisional: "provvisorio o stimato",
-    compareTitle: "Italia, UE e mediana dei Paesi",
+    compareTitle: "Italia e confronto europeo",
     italy: "Italia",
     eu: "UE",
     median: "Mediana",
     officialAggregate: "aggregato ufficiale Eurostat",
-    countryMean: "media aritmetica dei Paesi",
+    noAggregate:
+      "Nessun aggregato UE ufficiale con lo stesso perimetro; mostriamo la mediana dei Paesi disponibili.",
+    countriesAvailable: "{coverage} Paesi disponibili su 27",
+    missingCountries: "Dato mancante: {countries}",
+    comparisonQuality: "Note di qualità: {details}.",
+    comparisonCountriesFlagged: "{count} Paesi",
+    comparisonEuFlagged: "aggregato UE",
     compareExplainer: "Come leggere media e mediana",
     dataSectionTitle: "Scegli un tema",
     dataSectionBody:
       "Non serve vedere tutto insieme. Parti da una domanda: ogni indicatore conserva definizione, serie storica, confronto europeo e fonte.",
     noResults: "Nessun indicatore corrisponde alla ricerca.",
     understand: "Definizione e perimetro",
-    simpleDefinition: "In linguaggio accessibile",
-    technicalDefinition: "Perimetro tecnico",
+    simpleDefinition: "Sintesi accessibile del progetto",
+    technicalDefinition: "Selezione tecnica utilizzata",
     definitionAttribution:
-      "Il testo accessibile rende leggibile la definizione ufficiale senza aggiungere interpretazioni.",
-    definitionSource: "Verifica definizione e fonte",
+      "Questi testi sono parafrasi del progetto basate sulla metodologia ufficiale; non sono citazioni della fonte.",
+    definitionSource: "Apri la metodologia alla base della definizione",
     trend: "Andamento dell’Italia",
     from: "dal",
     source: "Fonte",
-    sourceUpdated: "Fonte aggiornata",
+    sourceUpdated: "Dataset aggiornato da Eurostat",
+    sourceAccessed: "Dati acquisiti dal progetto",
+    originalInstitution: "Fonte originaria",
     dataset: "Dataset",
     openData: "Verifica fonte e calcolo",
     openMetadata: "Leggi la metodologia Eurostat",
@@ -236,15 +273,46 @@ const copy = {
     sourceAnnual: "Annuale",
     sourceFormula: "Passaggio al numero mostrato",
     sourceNoCalculation:
-      "Il sito arrotonda il valore pubblicato alla precisione indicata; non applica altre trasformazioni.",
-    sourceMedianCalculated: "calcolata dal sito sui 27 Paesi UE",
+      "Il valore italiano è quello pubblicato dalla fonte; il sito lo arrotonda soltanto per la visualizzazione.",
+    sourceMedianCalculated:
+      "calcolata dal sito su {coverage} Paesi UE disponibili su 27",
+    sourceEuUnavailable:
+      "Eurostat non pubblica un aggregato UE con lo stesso perimetro.",
+    sourceComparisonFormula:
+      "L’aggregato UE, quando presente, è quello ufficiale Eurostat. Per la mediana il progetto ordina i {coverage} valori nazionali; se sono pari, usa la media dei due valori centrali.",
+    sourceQualityTitle: "Qualità e limiti",
+    sourceQualityIntro:
+      "I contrassegni sono quelli associati dalla fonte alle osservazioni utilizzate.",
+    sourceItalyStatus: "Stato del dato italiano",
+    sourceEuStatus: "Stato dell’aggregato UE",
+    sourceCountryFlags: "Paesi con contrassegni",
+    sourceNoFlags: "Nessun contrassegno associato al dato",
+    sourceCountryValues: "Vedi i Paesi usati per la mediana",
+    sourceCountryValuesBody:
+      "Valori ufficiali dell’anno selezionato. Il sito li ordina soltanto per calcolare la mediana.",
+    sourceCountryValue: "Valore",
+    sourceCountryStatus: "Stato",
+    sourceMissingShort: "Manca: {countries}",
+    sourceNotes: "Note metodologiche pertinenti",
+    sourceNoteLink: "Verifica la nota ufficiale",
     sourceTechnicalSummary: "Collegamenti tecnici Eurostat",
     sourceTechnicalBody:
       "Servono a riprodurre il dato, ma non sono necessari per leggerlo.",
+    sourceBrowser: "Apri il dataset nel Data Browser Eurostat",
     sourceRaw: "Apri i dati grezzi",
-    sourceOfficialDefinition: "Apri la definizione ufficiale",
+    sourceOfficialDefinition: "Apri la fonte della definizione",
     sourceDoi: "Apri l’identificatore permanente del dataset",
-    dataStatusBreak: "La serie segnala una discontinuità metodologica nell’ultimo anno.",
+    dataStatusBreak:
+      "La fonte segnala una discontinuità negli anni: {years}. Il grafico non va letto come una serie perfettamente continua.",
+    dataNotesTitle: "Da sapere prima del confronto",
+    statusProvisional: "provvisorio",
+    statusEstimated: "stimato",
+    statusBreak: "interruzione della serie",
+    statusDefinition: "definizione differente",
+    statusLowReliability: "bassa affidabilità",
+    statusImputed: "valore imputato dalla fonte",
+    statusForecast: "previsione",
+    statusFlagged: "contrassegnato dalla fonte",
     methodEyebrow: "Metodo pubblico",
     methodTitle: "Le regole vengono prima dei risultati",
     methodBody:
@@ -256,7 +324,7 @@ const copy = {
       },
       {
         title: "Nessuna selezione comoda",
-        body: "Confrontiamo sempre Italia, aggregato UE e mediana dei Paesi. Non scegliamo singoli Paesi perché rendono migliore una tesi.",
+        body: "Confrontiamo Italia, aggregato UE ufficiale quando esiste e mediana dei Paesi disponibili. Non costruiamo un finto valore UE quando il perimetro non è confrontabile.",
       },
       {
         title: "Precisione senza finzioni",
@@ -264,11 +332,11 @@ const copy = {
       },
       {
         title: "Copie verificabili",
-        body: "Nella repository conserviamo le sole serie usate, il collegamento originale, la data di acquisizione e l’impronta digitale del file.",
+        body: "Nella repository conserviamo le sole serie usate, il collegamento originale, la data di acquisizione e l’impronta digitale del contenuto normalizzato.",
       },
       {
         title: "Accessibilità, non interpretazione",
-        body: "Riportiamo dati pubblici in un formato leggibile, senza interpretarli. Quando riportiamo una definizione, usiamo quella ufficiale, ne indichiamo la fonte e la rendiamo accessibile senza cambiarne il significato.",
+        body: "Riportiamo dati pubblici in un formato leggibile, senza interpretarli. Le sintesi accessibili sono parafrasi del progetto basate sulle definizioni ufficiali, sempre collegate alla fonte.",
       },
       {
         title: "Stesso intervallo quando possibile",
@@ -282,7 +350,7 @@ const copy = {
       "Ogni grafico porta al dataset che lo alimenta. La copia locale contiene solo le osservazioni necessarie, quindi occupa poco spazio e può essere verificata nel tempo.",
     sourceCount: "dataset ufficiali",
     sourceDirectory: "Consulta l’elenco completo",
-    localSize: "circa 1,1 MB di dati e copie pubbliche",
+    localSize: "circa 2 MB di dati e copie pubbliche",
     manifest: "Apri il registro delle fonti",
     downloadAll: "Scarica tutti i dati in CSV",
     aboutEyebrow: "About",
@@ -293,7 +361,7 @@ const copy = {
     independence:
       "Explainable Italy è un progetto indipendente. Non rappresenta e non è approvato dalle istituzioni citate. Le elaborazioni sono indicate come tali.",
     privacy:
-      "Il sito non usa cookie, pubblicità, profilazione o strumenti di analisi. Non raccoglie dati personali.",
+      "Il progetto non integra cookie, pubblicità, profilazione, analytics o altri tracker. L’infrastruttura che ospita il sito può conservare i normali log tecnici di accesso.",
     futureTitle: "Cosa potremo aggiungere",
     futureBody:
       "La struttura è pronta per crescere senza cambiare le regole di selezione.",
@@ -320,6 +388,7 @@ const copy = {
     contributionLink: "Visita il progetto su GitHub",
     footer:
       "Dati ufficiali. Elaborazioni trasparenti. Nessun tracciamento.",
+    footerLicense: "Codice MIT · dati: condizioni delle fonti",
     themeLight: "Usa tema chiaro",
     themeDark: "Usa tema scuro",
     language: "English",
@@ -345,7 +414,7 @@ const copy = {
     snapshotGdpUnit: "Index: EU = 100",
     snapshotMedianAge: "Median age",
     snapshotLifeExpectancy: "Life expectancy",
-    snapshotEmployment: "Employment rate",
+    snapshotEmployment: "Employment, ages 20–64",
     snapshotOpen: "See trend",
     exploreTitle: "Go deeper when you want",
     exploreBody:
@@ -370,7 +439,7 @@ const copy = {
     heroProvisional: "provisional data",
     heroSource: "Official source",
     heroSourceName: "Eurostat",
-    heroSourceUpdated: "updated {date}",
+    heroSourceUpdated: "dataset updated {date}",
     heroOpenSource: "Verify data and calculation",
     heroMethodSummary: "How are these categories created?",
     heroMethodBody:
@@ -401,44 +470,52 @@ const copy = {
       "It excludes early-retirement benefits due to disability or unemployment, which are classified under other functions.",
     oldAgeOfficialDefinition: "Official COFOG 10.2 definition (UN)",
     oldAgeFilter:
-      "{year} · old age (GF1002) · share of public spending",
+      "{year} · old age (GF1002) · share of public spending · {status}",
     pensionMeasure: "A different indicator",
     pensionMeasureTitle: "Pensions: no exact conversion to the €100",
     pensionMeasureBody:
-      "The 15.5% of GDP comes from ESSPROS, which covers all resident collective social-protection schemes, public or private. The €100 covers general government only. Dividing the two figures would mix different scopes, so we do not convert 15.5% into euros out of 100.",
+      "The percentage of GDP comes from ESSPROS, which covers all resident collective social-protection schemes, public or private. The €100 covers general government only. Dividing the two figures would mix different scopes, so we do not convert this percentage into euros out of 100.",
     pensionIncludesTitle: "The pension measure includes",
     pensionIncludes:
       "disability pensions; early retirement due to reduced capacity to work; old-age, anticipated and partial pensions; survivors’ pensions; and early retirement for labour-market reasons.",
     openPensionPage: "Open the pension indicator",
     pensionFilter:
-      "{year} · all pensions · share of GDP · provisional data",
+      "{year} · all pensions · share of GDP · {status}",
     selectionUsed: "Selection used",
     verifyNumber: "Verify source and calculation",
     readBreakdown: "Explore all topics",
     definitive: "latest non estimated value",
     estimate: "More recent value",
     provisional: "provisional or estimated",
-    compareTitle: "Italy, EU and country median",
+    compareTitle: "Italy and European comparison",
     italy: "Italy",
     eu: "EU",
     median: "Median",
     officialAggregate: "official Eurostat aggregate",
-    countryMean: "arithmetic country mean",
+    noAggregate:
+      "No official EU aggregate has the same scope; only the median of available countries is shown.",
+    countriesAvailable: "{coverage} countries available out of 27",
+    missingCountries: "Missing value: {countries}",
+    comparisonQuality: "Quality notes: {details}.",
+    comparisonCountriesFlagged: "{count} countries",
+    comparisonEuFlagged: "EU aggregate",
     compareExplainer: "How to read average and median",
     dataSectionTitle: "Choose a topic",
     dataSectionBody:
       "You do not need to see everything at once. Start with a question: every indicator retains its definition, historical series, European comparison and source.",
     noResults: "No indicators match this search.",
     understand: "Definition and scope",
-    simpleDefinition: "Accessible language",
-    technicalDefinition: "Technical scope",
+    simpleDefinition: "Project’s accessible summary",
+    technicalDefinition: "Technical selection used",
     definitionAttribution:
-      "The accessible text makes the official definition readable without adding interpretation.",
-    definitionSource: "Verify definition and source",
+      "These texts are project paraphrases based on the official methodology; they are not quotations from the source.",
+    definitionSource: "Open the methodology behind the definition",
     trend: "Italy over time",
     from: "from",
     source: "Source",
-    sourceUpdated: "Source updated",
+    sourceUpdated: "Dataset updated by Eurostat",
+    sourceAccessed: "Data acquired by the project",
+    originalInstitution: "Original source",
     dataset: "Dataset",
     openData: "Verify source and calculation",
     openMetadata: "Read Eurostat methodology",
@@ -459,15 +536,46 @@ const copy = {
     sourceAnnual: "Annual",
     sourceFormula: "Step to the displayed number",
     sourceNoCalculation:
-      "The site rounds the published value to the stated precision and applies no other transformation.",
-    sourceMedianCalculated: "calculated by the site across the 27 EU countries",
+      "The Italian value is the one published by the source; the site only rounds it for display.",
+    sourceMedianCalculated:
+      "calculated by the site across {coverage} available EU countries out of 27",
+    sourceEuUnavailable:
+      "Eurostat does not publish an EU aggregate with the same scope.",
+    sourceComparisonFormula:
+      "The EU aggregate, when present, is Eurostat’s official figure. For the median, the project orders the {coverage} national values; when their number is even, it averages the two middle values.",
+    sourceQualityTitle: "Quality and limitations",
+    sourceQualityIntro:
+      "Flags are those attached by the source to the observations used.",
+    sourceItalyStatus: "Status of the Italian value",
+    sourceEuStatus: "Status of the EU aggregate",
+    sourceCountryFlags: "Countries with flags",
+    sourceNoFlags: "No flag attached to the observation",
+    sourceCountryValues: "See the countries used for the median",
+    sourceCountryValuesBody:
+      "Official values for the selected year. The site only orders them to calculate the median.",
+    sourceCountryValue: "Value",
+    sourceCountryStatus: "Status",
+    sourceMissingShort: "Missing: {countries}",
+    sourceNotes: "Relevant methodological notes",
+    sourceNoteLink: "Verify the official note",
     sourceTechnicalSummary: "Technical Eurostat links",
     sourceTechnicalBody:
       "These reproduce the data but are not needed to read them.",
+    sourceBrowser: "Open the dataset in Eurostat Data Browser",
     sourceRaw: "Open the raw data",
-    sourceOfficialDefinition: "Open the official definition",
+    sourceOfficialDefinition: "Open the definition source",
     sourceDoi: "Open the dataset’s permanent identifier",
-    dataStatusBreak: "The series marks a methodological break in its latest year.",
+    dataStatusBreak:
+      "The source marks a discontinuity in: {years}. The chart should not be read as a perfectly continuous series.",
+    dataNotesTitle: "Before comparing",
+    statusProvisional: "provisional",
+    statusEstimated: "estimated",
+    statusBreak: "series break",
+    statusDefinition: "different definition",
+    statusLowReliability: "low reliability",
+    statusImputed: "value imputed by the source",
+    statusForecast: "forecast",
+    statusFlagged: "flagged by the source",
     methodEyebrow: "Public method",
     methodTitle: "Rules come before results",
     methodBody:
@@ -479,7 +587,7 @@ const copy = {
       },
       {
         title: "No convenient selection",
-        body: "We always compare Italy, the EU aggregate and the country median. We do not pick individual countries because they support a preferred argument.",
+        body: "We compare Italy, the official EU aggregate when one exists, and the median of available countries. We do not construct a false EU figure when the scope is not comparable.",
       },
       {
         title: "No false precision",
@@ -487,11 +595,11 @@ const copy = {
       },
       {
         title: "Verifiable copies",
-        body: "The repository stores only the series used, the original link, acquisition date and digital fingerprint of each file.",
+        body: "The repository stores only the series used, the original link, acquisition date and digital fingerprint of the normalised content.",
       },
       {
         title: "Accessibility, not interpretation",
-        body: "We present public data in a readable format without interpreting it. When we include a definition, we use the official one, cite its source and make it accessible without changing its meaning.",
+        body: "We present public data in a readable format without interpreting it. Accessible summaries are project paraphrases based on official definitions and always link back to the source.",
       },
       {
         title: "The same range where possible",
@@ -505,7 +613,7 @@ const copy = {
       "Every chart links to its dataset. The local copy contains only the observations needed, so it stays small and can be verified over time.",
     sourceCount: "official datasets",
     sourceDirectory: "Browse the full directory",
-    localSize: "about 1.1 MB of data and public copies",
+    localSize: "about 2 MB of data and public copies",
     manifest: "Open the source register",
     downloadAll: "Download all data as CSV",
     aboutEyebrow: "About",
@@ -516,7 +624,7 @@ const copy = {
     independence:
       "Explainable Italy is an independent project. It does not represent and is not endorsed by the institutions cited. Project calculations are identified as such.",
     privacy:
-      "The site uses no cookies, advertising, profiling or analytics. It collects no personal data.",
+      "The project integrates no cookies, advertising, profiling, analytics or other trackers. The hosting infrastructure may retain normal technical access logs.",
     futureTitle: "What we can add next",
     futureBody:
       "The structure is ready to grow without changing the selection rules.",
@@ -542,6 +650,7 @@ const copy = {
     ],
     contributionLink: "Visit the project on GitHub",
     footer: "Official data. Transparent calculations. No tracking.",
+    footerLicense: "MIT code · data: source terms apply",
     themeLight: "Use light theme",
     themeDark: "Use dark theme",
     language: "Italiano",
@@ -664,10 +773,23 @@ const sourceValueLabels: Record<Locale, Record<string, string>> = {
     TOTAL: "Totale",
     PC_TOT: "% della spesa pubblica",
     PC_GDP: "% del PIL",
+    PC_POP: "% della popolazione",
+    PC_ACT: "% della forza lavoro",
+    PC_EU27_2020_HAB_MPPS_CP: "Indice pro capite in PPS, UE = 100",
+    CLV_PCH_PRE_HAB: "Variazione reale annua pro capite",
+    RCH_A_AVG: "Variazione media annua",
     YR: "Anni",
     PC: "Percentuale",
+    I90: "Indice, 1990 = 100",
     S13: "Pubblica amministrazione",
     TE: "Spesa totale",
+    TR: "Entrate totali",
+    B9: "Accreditamento o indebitamento netto",
+    D41PAY: "Interessi passivi",
+    P51G: "Investimenti fissi lordi",
+    D62_D632PAY: "Prestazioni sociali",
+    GD: "Debito lordo consolidato",
+    B1GQ: "Prodotto interno lordo",
     GF01: "Servizi pubblici generali",
     GF02: "Difesa",
     GF03: "Ordine pubblico e sicurezza",
@@ -679,6 +801,27 @@ const sourceValueLabels: Record<Locale, Record<string, string>> = {
     GF09: "Istruzione",
     GF10: "Protezione sociale",
     GF1002: "Vecchiaia",
+    MEDAGEPOP: "Età mediana della popolazione",
+    PC_Y65_MAX: "Quota di popolazione di 65 anni o più",
+    OLDDEP1: "Indice di dipendenza degli anziani",
+    TOTFERRT: "Tasso di fecondità totale",
+    Y_LT1: "Alla nascita",
+    "Y20-64": "Da 20 a 64 anni",
+    "Y15-74": "Da 15 a 74 anni",
+    "Y15-24": "Da 15 a 24 anni",
+    "Y25-34": "Da 25 a 34 anni",
+    "Y18-24": "Da 18 a 24 anni",
+    "Y25-64": "Da 25 a 64 anni",
+    "Y15-29": "Da 15 a 29 anni",
+    EMP_LFS: "Persone occupate, indagine sulle forze di lavoro",
+    HLY_Y0: "Anni di vita in buona salute alla nascita",
+    "ED5-8": "Istruzione terziaria, livelli ISCED 5–8",
+    POP: "Popolazione",
+    NEMP: "Non occupati",
+    NO_FE_NO_NFE: "Nessuna istruzione o formazione",
+    REN: "Quota complessiva di energia rinnovabile",
+    RCY: "Riciclo e preparazione per il riutilizzo",
+    TOTX4_MEMO: "Totale, esclusi LULUCF e voci promemoria",
   },
   en: {
     A: "Annual",
@@ -686,10 +829,23 @@ const sourceValueLabels: Record<Locale, Record<string, string>> = {
     TOTAL: "Total",
     PC_TOT: "% of public spending",
     PC_GDP: "% of GDP",
+    PC_POP: "% of population",
+    PC_ACT: "% of the labour force",
+    PC_EU27_2020_HAB_MPPS_CP: "Per-capita PPS index, EU = 100",
+    CLV_PCH_PRE_HAB: "Annual real change per capita",
+    RCH_A_AVG: "Annual average rate of change",
     YR: "Years",
     PC: "Percent",
+    I90: "Index, 1990 = 100",
     S13: "General government",
     TE: "Total expenditure",
+    TR: "Total revenue",
+    B9: "Net lending or net borrowing",
+    D41PAY: "Interest payable",
+    P51G: "Gross fixed capital formation",
+    D62_D632PAY: "Social benefits",
+    GD: "Consolidated gross debt",
+    B1GQ: "Gross domestic product",
     GF01: "General public services",
     GF02: "Defence",
     GF03: "Public order and safety",
@@ -701,8 +857,145 @@ const sourceValueLabels: Record<Locale, Record<string, string>> = {
     GF09: "Education",
     GF10: "Social protection",
     GF1002: "Old age",
+    MEDAGEPOP: "Median age of the population",
+    PC_Y65_MAX: "Share of population aged 65 or over",
+    OLDDEP1: "Old-age dependency ratio",
+    TOTFERRT: "Total fertility rate",
+    Y_LT1: "At birth",
+    "Y20-64": "Ages 20 to 64",
+    "Y15-74": "Ages 15 to 74",
+    "Y15-24": "Ages 15 to 24",
+    "Y25-34": "Ages 25 to 34",
+    "Y18-24": "Ages 18 to 24",
+    "Y25-64": "Ages 25 to 64",
+    "Y15-29": "Ages 15 to 29",
+    EMP_LFS: "Employed people, labour force survey",
+    HLY_Y0: "Healthy life years at birth",
+    "ED5-8": "Tertiary education, ISCED levels 5–8",
+    POP: "Population",
+    NEMP: "Not employed",
+    NO_FE_NO_NFE: "No formal or non-formal education",
+    REN: "Overall renewable energy share",
+    RCY: "Recycling and preparing for reuse",
+    TOTX4_MEMO: "Total, excluding LULUCF and memo items",
   },
 };
+
+const countryNames: Record<Locale, Record<string, string>> = {
+  it: {
+    AT: "Austria",
+    BE: "Belgio",
+    BG: "Bulgaria",
+    HR: "Croazia",
+    CY: "Cipro",
+    CZ: "Cechia",
+    DK: "Danimarca",
+    EE: "Estonia",
+    FI: "Finlandia",
+    FR: "Francia",
+    DE: "Germania",
+    EL: "Grecia",
+    HU: "Ungheria",
+    IE: "Irlanda",
+    IT: "Italia",
+    LV: "Lettonia",
+    LT: "Lituania",
+    LU: "Lussemburgo",
+    MT: "Malta",
+    NL: "Paesi Bassi",
+    PL: "Polonia",
+    PT: "Portogallo",
+    RO: "Romania",
+    SK: "Slovacchia",
+    SI: "Slovenia",
+    ES: "Spagna",
+    SE: "Svezia",
+  },
+  en: {
+    AT: "Austria",
+    BE: "Belgium",
+    BG: "Bulgaria",
+    HR: "Croatia",
+    CY: "Cyprus",
+    CZ: "Czechia",
+    DK: "Denmark",
+    EE: "Estonia",
+    FI: "Finland",
+    FR: "France",
+    DE: "Germany",
+    EL: "Greece",
+    HU: "Hungary",
+    IE: "Ireland",
+    IT: "Italy",
+    LV: "Latvia",
+    LT: "Lithuania",
+    LU: "Luxembourg",
+    MT: "Malta",
+    NL: "Netherlands",
+    PL: "Poland",
+    PT: "Portugal",
+    RO: "Romania",
+    SK: "Slovakia",
+    SI: "Slovenia",
+    ES: "Spain",
+    SE: "Sweden",
+  },
+};
+
+function countryList(codes: string[], locale: Locale) {
+  return new Intl.ListFormat(locale === "it" ? "it-IT" : "en-GB", {
+    style: "long",
+    type: "conjunction",
+  }).format(codes.map((code) => countryNames[locale][code] ?? code));
+}
+
+function statusDescription(
+  status: string | null,
+  locale: Locale,
+  includeCode = true,
+) {
+  if (!status) return copy[locale].sourceNoFlags;
+  const labels = copy[locale];
+  const statusLabels: Record<string, string> = {
+    p: labels.statusProvisional,
+    e: labels.statusEstimated,
+    b: labels.statusBreak,
+    d: labels.statusDefinition,
+    u: labels.statusLowReliability,
+    i: labels.statusImputed,
+    f: labels.statusForecast,
+  };
+  const descriptions = [...new Set([...status])]
+    .map((code) => statusLabels[code])
+    .filter(Boolean);
+
+  return descriptions.length
+    ? includeCode
+      ? `${descriptions.join(", ")} (${status})`
+      : descriptions.join(", ")
+    : `${labels.statusFlagged} (${status})`;
+}
+
+function fillCount(template: string, coverage: number) {
+  return template.replace("{coverage}", String(coverage));
+}
+
+function getBreakYears(indicator: Indicator) {
+  return [
+    ...new Set([
+      ...indicator.series
+        .filter((point) => point.status?.includes("b"))
+        .map((point) => point.year),
+      ...indicator.notes
+        .filter((note) => note.type === "method_change" && note.year)
+        .map((note) => note.year as number),
+    ]),
+  ].sort((left, right) => left - right);
+}
+
+function getDisplayedPoint(indicator: Indicator) {
+  return indicator.newerEstimate ?? indicator.latest;
+}
 
 function getSourceSelection(indicator: Indicator, locale: Locale) {
   const url = new URL(indicator.source.apiUrl);
@@ -730,20 +1023,28 @@ function buildIndicatorCsv(indicator: Indicator) {
     [
       "year",
       "italy",
-      "eu",
+      "eu_official",
       "median",
       "countries_in_median",
       "eu_method",
-      "status",
+      "italy_status",
+      "eu_status",
+      "flagged_countries",
+      "missing_countries",
     ],
     ...indicator.series.map((point) => [
       point.year,
       point.italy,
-      point.eu,
+      point.eu ?? "",
       point.median,
       point.coverage,
       point.euMethod,
       point.status ?? "",
+      point.euStatus ?? "",
+      point.countryStatuses
+        .map(({ geo, status }) => `${geo}:${status}`)
+        .join("|"),
+      point.missingCountries.join("|"),
     ]),
   ];
 
@@ -772,7 +1073,9 @@ function ComparisonPlot({
   const labels = copy[locale];
   const values = [
     { id: "italy", label: labels.italy, value: indicator.latest.italy },
-    { id: "eu", label: labels.eu, value: indicator.latest.eu },
+    ...(indicator.latest.eu !== null
+      ? [{ id: "eu", label: labels.eu, value: indicator.latest.eu }]
+      : []),
     { id: "median", label: labels.median, value: indicator.latest.median },
   ];
   const minimum = Math.min(0, ...values.map((entry) => entry.value));
@@ -782,32 +1085,61 @@ function ComparisonPlot({
   const methodLabel =
     indicator.latest.euMethod === "official_aggregate"
       ? labels.officialAggregate
-      : labels.countryMean;
+      : labels.noAggregate;
+  const coverageLabel = fillCount(
+    labels.countriesAvailable,
+    indicator.latest.coverage,
+  );
+  const missingLabel = indicator.latest.missingCountries.length
+    ? labels.missingCountries.replace(
+        "{countries}",
+        countryList(indicator.latest.missingCountries, locale),
+    )
+    : "";
+  const qualityDetails = [
+    ...(indicator.latest.euStatus ? [labels.comparisonEuFlagged] : []),
+    ...(indicator.latest.countryStatuses.length
+      ? [
+          labels.comparisonCountriesFlagged.replace(
+            "{count}",
+            String(indicator.latest.countryStatuses.length),
+          ),
+        ]
+      : []),
+  ];
+  const qualityLabel = qualityDetails.length
+    ? labels.comparisonQuality.replace(
+        "{details}",
+        new Intl.ListFormat(locale === "it" ? "it-IT" : "en-GB", {
+          style: "long",
+          type: "conjunction",
+        }).format(qualityDetails),
+      )
+    : "";
+  const ariaValues = values
+    .map(
+      (entry) =>
+        `${entry.label} ${formatValue(
+          entry.value,
+          indicator.unitKey,
+          indicator.precision,
+          locale,
+        )}`,
+    )
+    .join(". ");
 
   return (
     <div
       className="comparison"
+      data-count={values.length}
       role="img"
-      aria-label={`${labels.compareTitle}. ${labels.italy} ${formatValue(
-        indicator.latest.italy,
-        indicator.unitKey,
-        indicator.precision,
-        locale,
-      )}. ${labels.eu} ${formatValue(
-        indicator.latest.eu,
-        indicator.unitKey,
-        indicator.precision,
-        locale,
-      )}. ${labels.median} ${formatValue(
-        indicator.latest.median,
-        indicator.unitKey,
-        indicator.precision,
-        locale,
-      )}.`}
+      aria-label={`${labels.compareTitle}. ${ariaValues}. ${methodLabel}. ${coverageLabel}${
+        missingLabel ? `. ${missingLabel}` : ""
+      }${qualityLabel ? `. ${qualityLabel}` : ""}.`}
     >
       <div className="comparison-heading">
         <span>{labels.compareTitle}</span>
-        <span title={methodLabel}>{indicator.latest.coverage}/27</span>
+        <span title={methodLabel}>{coverageLabel}</span>
       </div>
       {values.map((entry) => (
         <div className="comparison-row" key={entry.id}>
@@ -834,7 +1166,13 @@ function ComparisonPlot({
           </strong>
         </div>
       ))}
-      <p className="comparison-method">{methodLabel}</p>
+      <p className="comparison-method">
+        {methodLabel}
+        {missingLabel ? ` ${missingLabel}.` : ""}
+      </p>
+      {qualityLabel ? (
+        <p className="comparison-quality">{qualityLabel}</p>
+      ) : null}
     </div>
   );
 }
@@ -852,6 +1190,7 @@ function TrendBars({
   const maximum = Math.max(0, ...values);
   const range = maximum - minimum || 1;
   const zeroPosition = (maximum / range) * 100;
+  const breakYears = new Set(getBreakYears(indicator));
 
   return (
     <div className="trend-chart" aria-label={copy[locale].trend} role="img">
@@ -861,6 +1200,7 @@ function TrendBars({
         aria-hidden="true"
       />
       {points.map((point) => {
+        const hasBreak = breakYears.has(point.year);
         const top =
           point.italy >= 0
             ? ((maximum - point.italy) / range) * 100
@@ -870,16 +1210,21 @@ function TrendBars({
         return (
           <div className="trend-column" key={point.year}>
             <span
-              className={`trend-bar ${point.italy < 0 ? "negative" : ""}`}
+              className={`trend-bar ${point.italy < 0 ? "negative" : ""} ${
+                hasBreak ? "has-break" : ""
+              }`}
               style={{ top: `${top}%`, height: `${Math.max(height, 2)}%` }}
               title={`${point.year}: ${formatValue(
                 point.italy,
                 indicator.unitKey,
                 indicator.precision,
                 locale,
-              )}`}
+              )}${hasBreak ? ` · ${copy[locale].statusBreak}` : ""}`}
             />
-            <small>{String(point.year).slice(2)}</small>
+            <small>
+              {String(point.year).slice(2)}
+              {hasBreak ? <sup aria-label={copy[locale].statusBreak}>*</sup> : null}
+            </small>
           </div>
         );
       })}
@@ -899,7 +1244,7 @@ function IndicatorCard({
   expanded?: boolean;
 }) {
   const labels = copy[locale];
-  const isBreak = indicator.latest.status?.includes("b");
+  const breakYears = getBreakYears(indicator);
 
   return (
     <article
@@ -928,6 +1273,9 @@ function IndicatorCard({
           </p>
           <span>
             {labels.italy} · {indicator.latest.year}
+            {indicator.latest.status
+              ? ` · ${statusDescription(indicator.latest.status, locale, false)}`
+              : ""}
           </span>
         </div>
       </div>
@@ -944,7 +1292,12 @@ function IndicatorCard({
             )}
           </strong>
           <span>
-            {indicator.newerEstimate.year}, {labels.provisional}
+            {indicator.newerEstimate.year},{" "}
+            {statusDescription(
+              indicator.newerEstimate.status,
+              locale,
+              false,
+            )}
           </span>
         </p>
       ) : null}
@@ -967,14 +1320,47 @@ function IndicatorCard({
             </div>
             <p className="definition-attribution">
               {labels.definitionAttribution}{" "}
-              <a href={pageHref(locale, `data/${indicator.id}/source`)}>
-                {labels.definitionSource}{" "}
-                <span aria-hidden="true">→</span>
-              </a>
+              {indicator.definitionSourceUrl ? (
+                <a
+                  href={indicator.definitionSourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {labels.definitionSource}{" "}
+                  <span aria-hidden="true">↗</span>
+                </a>
+              ) : null}
             </p>
 
-            {isBreak ? (
-              <p className="status-note">{labels.dataStatusBreak}</p>
+            {breakYears.length || indicator.notes.length ? (
+              <div className="indicator-notes">
+                <h4>{labels.dataNotesTitle}</h4>
+                {breakYears.length ? (
+                  <p className="status-note">
+                    {labels.dataStatusBreak.replace(
+                      "{years}",
+                      breakYears.join(", "),
+                    )}
+                  </p>
+                ) : null}
+                {indicator.notes.length ? (
+                  <ul>
+                    {indicator.notes.map((note) => (
+                      <li key={`${note.type}-${note.year ?? "all"}`}>
+                        <span>{note.text[locale]}</span>{" "}
+                        <a
+                          href={note.sourceUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {labels.sourceNoteLink}
+                          <span aria-hidden="true"> ↗</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
             ) : null}
 
             <div className="trend-block">
@@ -1045,12 +1431,20 @@ function SourceVerification({
   const labels = copy[locale];
   const displayedPoint = indicator.newerEstimate ?? indicator.latest;
   const selection = getSourceSelection(indicator, locale);
-  const officialDefinitionUrl =
-    indicator.id === "spending-old-age"
-      ? "https://unstats.un.org/unsd/classifications/Econ/Structure/Detail/EN/4/10_2_0"
-      : indicator.id === "pension-expenditure"
-        ? "https://ec.europa.eu/eurostat/web/social-protection/information-data"
-        : null;
+  const coverageLabel = fillCount(
+    labels.sourceMedianCalculated,
+    displayedPoint.coverage,
+  );
+  const missingLabel = displayedPoint.missingCountries.length
+    ? labels.sourceMissingShort.replace(
+        "{countries}",
+        countryList(displayedPoint.missingCountries, locale),
+      )
+    : null;
+  const countryObservations = displayedPoint.countries ?? [];
+  const flaggedCountries = countryObservations.filter(
+    (country) => country.status,
+  );
   const displayedValue = formatValue(
     displayedPoint.italy,
     indicator.unitKey,
@@ -1105,6 +1499,9 @@ function SourceVerification({
           {indicator.newerEstimate
             ? labels.sourceMostRecent
             : labels.sourceDefinitive}
+          {displayedPoint.status
+            ? ` · ${statusDescription(displayedPoint.status, locale)}`
+            : ""}
         </small>
         {indicator.newerEstimate ? (
           <p>
@@ -1147,6 +1544,17 @@ function SourceVerification({
               <dt>{labels.sourceUpdated}</dt>
               <dd>{formatDate(indicator.source.sourceUpdatedAt, locale)}</dd>
             </div>
+            <div>
+              <dt>{labels.sourceAccessed}</dt>
+              <dd>{formatDate(indicator.source.accessedAt, locale)}</dd>
+            </div>
+            {indicator.source.originalInstitution !==
+            indicator.source.institution ? (
+              <div>
+                <dt>{labels.originalInstitution}</dt>
+                <dd>{indicator.source.originalInstitution}</dd>
+              </div>
+            ) : null}
             {selection.map((entry) => (
               <div key={entry.dimension}>
                 <dt>{entry.label}</dt>
@@ -1176,18 +1584,31 @@ function SourceVerification({
               </strong>
               <small>Eurostat · IT</small>
             </div>
-            <div>
-              <span>{labels.eu}</span>
-              <strong>
-                {formatValue(
-                  displayedPoint.eu,
-                  indicator.unitKey,
-                  indicator.precision,
-                  locale,
-                )}
-              </strong>
-              <small>Eurostat · EU27_2020</small>
-            </div>
+            {displayedPoint.eu !== null ? (
+              <div>
+                <span>{labels.eu}</span>
+                <strong>
+                  {formatValue(
+                    displayedPoint.eu,
+                    indicator.unitKey,
+                    indicator.precision,
+                    locale,
+                  )}
+                </strong>
+                <small>
+                  Eurostat · EU27_2020
+                  {displayedPoint.euStatus
+                    ? ` · ${statusDescription(displayedPoint.euStatus, locale)}`
+                    : ""}
+                </small>
+              </div>
+            ) : (
+              <div>
+                <span>{labels.eu}</span>
+                <strong>—</strong>
+                <small>{labels.sourceEuUnavailable}</small>
+              </div>
+            )}
             <div>
               <span>{labels.median}</span>
               <strong>
@@ -1198,18 +1619,128 @@ function SourceVerification({
                   locale,
                 )}
               </strong>
-              <small>{labels.sourceMedianCalculated}</small>
+              <small>
+                {coverageLabel}
+                {missingLabel ? ` · ${missingLabel}` : ""}
+              </small>
             </div>
           </div>
         </section>
       </div>
 
+      <a
+        className="source-browser-link"
+        href={indicator.source.dataBrowserUrl}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {labels.sourceBrowser} <span aria-hidden="true">↗</span>
+      </a>
+
+      <section className="source-quality">
+        <h2>{labels.sourceQualityTitle}</h2>
+        <p>{labels.sourceQualityIntro}</p>
+        <dl>
+          <div>
+            <dt>{labels.sourceItalyStatus}</dt>
+            <dd>{statusDescription(displayedPoint.status, locale)}</dd>
+          </div>
+          {displayedPoint.eu !== null ? (
+            <div>
+              <dt>{labels.sourceEuStatus}</dt>
+              <dd>{statusDescription(displayedPoint.euStatus, locale)}</dd>
+            </div>
+          ) : null}
+          <div>
+            <dt>{labels.sourceCountryFlags}</dt>
+            <dd>
+              {flaggedCountries.length
+                ? flaggedCountries
+                    .map(
+                      (country) =>
+                        `${countryNames[locale][country.geo] ?? country.geo}: ${statusDescription(
+                          country.status,
+                          locale,
+                        )}`,
+                    )
+                    .join("; ")
+                : labels.sourceNoFlags}
+            </dd>
+          </div>
+        </dl>
+
+        {indicator.notes.length ? (
+          <div className="source-method-notes">
+            <h3>{labels.sourceNotes}</h3>
+            <ul>
+              {indicator.notes.map((note) => (
+                <li key={`${note.type}-${note.year ?? "all"}`}>
+                  <span>{note.text[locale]}</span>{" "}
+                  <a href={note.sourceUrl} target="_blank" rel="noreferrer">
+                    {labels.sourceNoteLink}
+                    <span aria-hidden="true"> ↗</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </section>
+
+      {countryObservations.length ? (
+        <details className="source-country-table">
+          <summary>
+            {labels.sourceCountryValues} ({displayedPoint.coverage}/27)
+          </summary>
+          <p>{labels.sourceCountryValuesBody}</p>
+          {missingLabel ? <p className="source-missing">{missingLabel}</p> : null}
+          <div className="country-table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>{labels.sourceCountry}</th>
+                  <th>{labels.sourceCountryValue}</th>
+                  <th>{labels.sourceCountryStatus}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {countryObservations.map((country) => (
+                  <tr key={country.geo}>
+                    <th scope="row">
+                      {countryNames[locale][country.geo] ?? country.geo}{" "}
+                      <code>{country.geo}</code>
+                    </th>
+                    <td>
+                      {formatValue(
+                        country.value,
+                        indicator.unitKey,
+                        indicator.precision,
+                        locale,
+                      )}
+                    </td>
+                    <td>
+                      {country.status
+                        ? statusDescription(country.status, locale)
+                        : "—"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </details>
+      ) : null}
+
       <section className="source-formula">
         <h2>{labels.sourceFormula}</h2>
-        <p>
+        <p className="source-primary-formula">
           {indicator.unitKey === "percent_spending"
             ? spendingFormula
             : labels.sourceNoCalculation}
+        </p>
+        <p>
+          {fillCount(labels.sourceComparisonFormula, displayedPoint.coverage)}
+          {displayedPoint.eu === null ? ` ${labels.sourceEuUnavailable}` : ""}
         </p>
       </section>
 
@@ -1224,9 +1755,9 @@ function SourceVerification({
           >
             {labels.sourceRaw} <span aria-hidden="true">↗</span>
           </a>
-          {officialDefinitionUrl ? (
+          {indicator.definitionSourceUrl ? (
             <a
-              href={officialDefinitionUrl}
+              href={indicator.definitionSourceUrl}
               target="_blank"
               rel="noreferrer"
             >
@@ -1234,7 +1765,8 @@ function SourceVerification({
               <span aria-hidden="true">↗</span>
             </a>
           ) : null}
-          {indicator.source.metadataUrl ? (
+          {indicator.source.metadataUrl &&
+          indicator.source.metadataUrl !== indicator.definitionSourceUrl ? (
             <a
               href={indicator.source.metadataUrl}
               target="_blank"
@@ -1265,6 +1797,11 @@ function SocialProtectionDetail({
   locale: Locale;
 }) {
   const labels = copy[locale];
+  const oldAgePoint = oldAge.newerEstimate ?? oldAge.latest;
+  const oldAgeComparison = {
+    ...oldAge,
+    latest: oldAgePoint,
+  };
   const pensionPoint =
     pensionExpenditure.newerEstimate ?? pensionExpenditure.latest;
   const pensionComparison = {
@@ -1273,12 +1810,17 @@ function SocialProtectionDetail({
   };
   const oldAgeFilter = labels.oldAgeFilter.replace(
     "{year}",
-    String(oldAge.latest.year),
+    String(oldAgePoint.year),
+  ).replace(
+    "{status}",
+    statusDescription(oldAgePoint.status, locale, false),
   );
-  const pensionFilter = labels.pensionFilter.replace(
-    "{year}",
-    String(pensionPoint.year),
-  );
+  const pensionFilter = labels.pensionFilter
+    .replace("{year}", String(pensionPoint.year))
+    .replace(
+      "{status}",
+      statusDescription(pensionPoint.status, locale, false),
+    );
 
   return (
     <section className="social-protection-detail">
@@ -1296,11 +1838,12 @@ function SocialProtectionDetail({
             {new Intl.NumberFormat(locale === "it" ? "it-IT" : "en-GB", {
               minimumFractionDigits: 1,
               maximumFractionDigits: 1,
-            }).format(oldAge.latest.italy)}
+            }).format(oldAgePoint.italy)}
             €
             <small>
               {locale === "it" ? "su 100" : "out of 100"} ·{" "}
-              {oldAge.latest.year}
+              {oldAgePoint.year} ·{" "}
+              {statusDescription(oldAgePoint.status, locale, false)}
             </small>
           </p>
           <div className="exact-definition">
@@ -1320,7 +1863,7 @@ function SocialProtectionDetail({
               <span aria-hidden="true">↗</span>
             </a>
           </div>
-          <ComparisonPlot indicator={oldAge} locale={locale} />
+          <ComparisonPlot indicator={oldAgeComparison} locale={locale} />
           <div className="related-source">
             <span>{labels.selectionUsed}</span>
             <strong>Eurostat · gov_10a_exp</strong>
@@ -1347,7 +1890,8 @@ function SocialProtectionDetail({
                 locale,
               )}
               <small>
-                {pensionPoint.year} · {labels.provisional}
+                {pensionPoint.year} ·{" "}
+                {statusDescription(pensionPoint.status, locale, false)}
               </small>
             </p>
           </div>
@@ -1431,7 +1975,10 @@ export function Dashboard({
             indicator.id.startsWith("spending-") &&
             !indicator.isDetail,
         )
-        .sort((left, right) => right.latest.italy - left.latest.italy),
+        .sort(
+          (left, right) =>
+            getDisplayedPoint(right).italy - getDisplayedPoint(left).italy,
+        ),
     [data.indicators],
   );
 
@@ -1442,7 +1989,10 @@ export function Dashboard({
     (indicator) => indicator.id === "pension-expenditure",
   );
   const spendingSource = spendingBreakdown[0]?.source;
-  const spendingYear = spendingBreakdown[0]?.latest.year;
+  const spendingPoint = spendingBreakdown[0]
+    ? getDisplayedPoint(spendingBreakdown[0])
+    : null;
+  const spendingYear = spendingPoint?.year;
   const spendingNumberFormatter = new Intl.NumberFormat(
     locale === "it" ? "it-IT" : "en-GB",
     {
@@ -1477,7 +2027,7 @@ export function Dashboard({
   const spendingBoundaries = spendingBreakdown.map((_, index) =>
     spendingBreakdown
       .slice(0, index + 1)
-      .reduce((total, item) => total + item.latest.italy, 0),
+      .reduce((total, item) => total + getDisplayedPoint(item).italy, 0),
   );
   const spendingGradient = `conic-gradient(${spendingBreakdown
     .map((indicator, index) => {
@@ -1712,12 +2262,14 @@ export function Dashboard({
                       {indicator.latest.year} ·{" "}
                       {indicator.id === "gdp-per-capita-pps"
                         ? labels.snapshotGdpUnit
-                        : `${labels.eu}: ${formatValue(
-                            indicator.latest.eu,
-                            indicator.unitKey,
-                            indicator.precision,
-                            locale,
-                          )}`}
+                        : indicator.latest.eu !== null
+                          ? `${labels.eu}: ${formatValue(
+                              indicator.latest.eu,
+                              indicator.unitKey,
+                              indicator.precision,
+                              locale,
+                            )}`
+                          : labels.noAggregate}
                     </small>
                     <em>
                       {labels.snapshotOpen} <span aria-hidden="true">→</span>
@@ -1737,7 +2289,14 @@ export function Dashboard({
                     <span>{labels.heroYear}</span>
                     <strong>{spendingYear}</strong>
                     <small>
-                      {heroLatest} · {labels.heroProvisional}
+                      {heroLatest}
+                      {spendingPoint?.status
+                        ? ` · ${statusDescription(
+                            spendingPoint.status,
+                            locale,
+                            false,
+                          )}`
+                        : ""}
                     </small>
                   </div>
                   <div>
@@ -1813,7 +2372,7 @@ export function Dashboard({
                       <span className="spending-donut-center">
                         <strong>
                           {spendingNumberFormatter.format(
-                            activeSpending.latest.italy,
+                            getDisplayedPoint(activeSpending).italy,
                           )}
                           €
                         </strong>
@@ -1851,7 +2410,7 @@ export function Dashboard({
                         </span>
                         <strong>
                           {spendingNumberFormatter.format(
-                            indicator.latest.italy,
+                            getDisplayedPoint(indicator).italy,
                           )}
                           €
                         </strong>
@@ -2111,6 +2670,12 @@ export function Dashboard({
                   <div>
                     <span>{source.datasetCode}</span>
                     <h3>{source.datasetLabel}</h3>
+                    {source.originalInstitution !== source.institution ? (
+                      <small>
+                        {labels.originalInstitution}:{" "}
+                        {source.originalInstitution}
+                      </small>
+                    ) : null}
                   </div>
                   <a
                     href={source.dataBrowserUrl}
@@ -2189,7 +2754,15 @@ export function Dashboard({
         <p>
           {labels.latestUpdate} {formatDate(data.generatedAt, locale)}
         </p>
-        <p>MIT · 2026 Andrea Gentilini</p>
+        <p>
+          <a
+            href="https://github.com/andrea-gentilini/explainable-italy/blob/main/DATA_LICENSE.md"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {labels.footerLicense}
+          </a>
+        </p>
       </footer>
     </div>
   );

@@ -1,16 +1,33 @@
 {
   "generatedAt": "2026-07-26T01:07:04.829Z",
   "policy": {
-    "it": "Ogni file contiene solo le serie usate dal sito. I dati grezzi restano invariati. Le mediane sono calcolate sui 27 Paesi UE con almeno 24 valori disponibili. Se Eurostat non pubblica l’aggregato UE per una certa unità, il sito calcola la media aritmetica dei Paesi disponibili.",
-    "en": "Each file contains only the series used by the site. Raw data remain unchanged. Medians are calculated across the 27 EU countries when at least 24 values are available. When Eurostat does not publish an EU aggregate for a unit, the site calculates the arithmetic mean of the available countries."
+    "it": "Ogni snapshot contiene solo la selezione usata dal sito. I valori ufficiali non vengono modificati; la serializzazione normalizza soltanto gli spazi finali. Le mediane sono calcolate sui Paesi UE disponibili e pubblicate con almeno 24 valori su 27. Se non esiste un aggregato UE ufficiale con lo stesso perimetro, il sito non ne costruisce uno. Testi accessibili e traduzioni sono parafrasi del progetto, indicate come tali.",
+    "en": "Each snapshot contains only the selection used by the site. Official values are not changed; serialisation only normalises trailing whitespace. Medians are calculated across available EU countries and published with at least 24 values out of 27. When no official EU aggregate with the same scope exists, the site does not construct one. Accessible copy and translations are project paraphrases and are identified as such."
   },
   "license": {
     "name": "Eurostat reuse policy",
-    "url": "https://ec.europa.eu/eurostat/about-us/policies/copyright"
+    "url": "https://ec.europa.eu/eurostat/help/copyright-notice"
+  },
+  "licenses": [
+    {
+      "institution": "Eurostat",
+      "name": "Eurostat reuse policy",
+      "url": "https://ec.europa.eu/eurostat/help/copyright-notice"
+    },
+    {
+      "institution": "European Environment Agency",
+      "name": "EEA legal notice and reuse terms",
+      "url": "https://www.eea.europa.eu/en/legal-notice"
+    }
+  ],
+  "disclaimer": {
+    "it": "Eurostat e le altre istituzioni citate non sono responsabili delle traduzioni, delle sintesi accessibili, delle mediane o di altre elaborazioni realizzate da Explainable Italy.",
+    "en": "Eurostat and the other cited institutions are not responsible for translations, accessible summaries, medians or other processing performed by Explainable Italy."
   },
   "datasets": [
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "gov_10a_exp",
       "datasetLabel": "General government expenditure by function (COFOG)",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/gov_10a_exp/default/table?lang=en",
@@ -18,12 +35,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
       "doi": "https://doi.org/10.2908/GOV_10A_EXP",
       "sourceUpdatedAt": "2026-07-21T11:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/gov_10a_exp.json",
       "sha256": "243739492c39aa30a5fc2f50f2f87e0644758906cf8703238489c76d5e24b53e",
       "bytes": 92324
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "gov_10a_main",
       "datasetLabel": "Government revenue, expenditure and main aggregates",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/gov_10a_main/default/table?lang=en",
@@ -31,12 +50,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_main_esms.htm",
       "doi": "https://doi.org/10.2908/GOV_10A_MAIN",
       "sourceUpdatedAt": "2026-07-21T11:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/gov_10a_main.json",
       "sha256": "a497537a6a424e0b57ffaa97f105a905973bc4a6de11220e9636ec9d0279b402",
       "bytes": 54382
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "gov_10dd_edpt1",
       "datasetLabel": "Government deficit/surplus, debt and associated data",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/gov_10dd_edpt1/default/table?lang=en",
@@ -44,12 +65,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10dd_esms.htm",
       "doi": "https://doi.org/10.2908/GOV_10DD_EDPT1",
       "sourceUpdatedAt": "2026-04-22T11:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/gov_10dd_edpt1.json",
       "sha256": "9756c2ee32407efd2bed68a27f19820037d7544057e74d564e78c0309609f843",
       "bytes": 11994
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "demo_pjanind",
       "datasetLabel": "Population structure indicators at national level",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/demo_pjanind/default/table?lang=en",
@@ -57,12 +80,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/demo_pop_esms.htm",
       "doi": "https://doi.org/10.2908/DEMO_PJANIND",
       "sourceUpdatedAt": "2026-07-09T11:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/demo_pjanind.json",
       "sha256": "f92d2e7280e46a3ad4e141222f5f500defe8680c5d3dd1e983db6f47f19181da",
       "bytes": 30671
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "demo_find",
       "datasetLabel": "Fertility indicators",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/demo_find/default/table?lang=en",
@@ -70,12 +95,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/demo_fer_esms.htm",
       "doi": "https://doi.org/10.2908/DEMO_FIND",
       "sourceUpdatedAt": "2026-06-24T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/demo_find.json",
       "sha256": "8b39c58cd40086ec0c82d003ee302da3dd9f18db7f8625494bd871fa9e9d6ef6",
       "bytes": 12034
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "demo_mlexpec",
       "datasetLabel": "Life expectancy by age and sex",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/demo_mlexpec/default/table?lang=en",
@@ -83,12 +110,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/demo_mor_esms.htm",
       "doi": "https://doi.org/10.2908/DEMO_MLEXPEC",
       "sourceUpdatedAt": "2026-06-04T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/demo_mlexpec.json",
       "sha256": "df99dbf10084d95f1904fe5077891290da2477cb1cf6f8c658cac39f8eb1230b",
       "bytes": 12347
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "lfsi_emp_a",
       "datasetLabel": "Employment and labour force by sex and age - annual data",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/lfsi_emp_a/default/table?lang=en",
@@ -96,12 +125,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/lfsi_esms.htm",
       "doi": "https://doi.org/10.2908/LFSI_EMP_A",
       "sourceUpdatedAt": "2026-06-11T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/lfsi_emp_a.json",
       "sha256": "4c3df2596dcd6c0c5e754468f755b64b2defcbd6b5d39d68b19353ce9441833f",
       "bytes": 10313
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "une_rt_a",
       "datasetLabel": "Unemployment by sex and age - annual data",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/une_rt_a/default/table?lang=en",
@@ -109,12 +140,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/lfsi_esms.htm",
       "doi": "https://doi.org/10.2908/UNE_RT_A",
       "sourceUpdatedAt": "2026-06-11T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/une_rt_a.json",
       "sha256": "061c6a5efc5a85b30055bbb3c69cb75818bacf1719710f6ec2afef4c9b4e5f89",
       "bytes": 15631
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "nama_10_pc",
       "datasetLabel": "Gross domestic product (GDP) and main components per capita - annual data",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/nama_10_pc/default/table?lang=en",
@@ -122,12 +155,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/nama_10_gdp_esms.htm",
       "doi": "https://doi.org/10.2908/NAMA_10_PC",
       "sourceUpdatedAt": "2026-07-22T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/nama_10_pc.json",
       "sha256": "d958ddc32ef7a10b7c73a8cab35d285fa2f081424ca2166237a75f6d34ff105b",
       "bytes": 21642
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "tec00118",
       "datasetLabel": "HICP - inflation rate",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/tec00118/default/table?lang=en",
@@ -135,12 +170,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/prc_hicp_esms.htm",
       "doi": "https://doi.org/10.2908/TEC00118",
       "sourceUpdatedAt": "2026-07-17T11:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/tec00118.json",
       "sha256": "372b02769040ac008ed49f465c928fe7c67b515fa26b4b7087faa7dd12e5aed4",
       "bytes": 8592
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "ilc_peps01n",
       "datasetLabel": "Persons at risk of poverty or social exclusion by age and sex",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/ilc_peps01n/default/table?lang=en",
@@ -148,12 +185,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/ilc_sieusilc.htm",
       "doi": "https://doi.org/10.2908/ILC_PEPS01N",
       "sourceUpdatedAt": "2026-06-08T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/ilc_peps01n.json",
       "sha256": "9f90debe03036d904ca5d55c3c677b7fbdc5fc87b8c9920b5a17b1a1b63496f7",
       "bytes": 7652
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "spr_exp_pens",
       "datasetLabel": "Expenditure on pensions by type of pension and means-testing",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/spr_exp_pens/default/table?lang=en",
@@ -161,12 +200,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/spr_esms.htm",
       "doi": "https://doi.org/10.2908/SPR_EXP_PENS",
       "sourceUpdatedAt": "2026-07-24T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/spr_exp_pens.json",
       "sha256": "4da65b76eccea6fa730dfc86404f8488a9162a3c67c1adb9635ee9407845b380",
       "bytes": 13086
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "hlth_hlye",
       "datasetLabel": "Healthy life years by sex (from 2004 onwards)",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/hlth_hlye/default/table?lang=en",
@@ -174,12 +215,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/hlth_hlye_esms.htm",
       "doi": "https://doi.org/10.2908/HLTH_HLYE",
       "sourceUpdatedAt": "2026-07-17T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/hlth_hlye.json",
       "sha256": "dc6024d54810183eb2a29a08deff479a3c0aeb6dc9470afbb55e59ef15071126",
       "bytes": 10842
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "edat_lfse_03",
       "datasetLabel": "Population in private households by educational attainment level",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/edat_lfse_03/default/table?lang=en",
@@ -187,12 +230,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm",
       "doi": "https://doi.org/10.2908/EDAT_LFSE_03",
       "sourceUpdatedAt": "2026-06-11T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/edat_lfse_03.json",
       "sha256": "25221c96831aaf42eb4361477d9fad35a991bf8f4d901461a25248d21b663360",
       "bytes": 13302
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "edat_lfse_14",
       "datasetLabel": "Early leavers from education and training by labour status",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/edat_lfse_14/default/table?lang=en",
@@ -200,12 +245,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm",
       "doi": "https://doi.org/10.2908/EDAT_LFSE_14",
       "sourceUpdatedAt": "2026-06-11T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/edat_lfse_14.json",
       "sha256": "2df2f082898a9fb7a258e773f4ec7116d44dc63156cff62453278bd861109e84",
       "bytes": 13605
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "trng_lfse_01",
       "datasetLabel": "Participation rate in education and training (last 4 weeks)",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/trng_lfse_01/default/table?lang=en",
@@ -213,12 +260,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/trng_lfs_4w_esms.htm",
       "doi": "https://doi.org/10.2908/TRNG_LFSE_01",
       "sourceUpdatedAt": "2026-06-11T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/trng_lfse_01.json",
       "sha256": "19221b6456e39cfa60560a63955ae156b82d6c7e888f17122c89b7ccc9ac13de",
       "bytes": 12661
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "edat_lfse_20",
       "datasetLabel": "Young persons neither in employment nor in education and training by labour status (NEET rates)",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/edat_lfse_20/default/table?lang=en",
@@ -226,12 +275,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm",
       "doi": "https://doi.org/10.2908/EDAT_LFSE_20",
       "sourceUpdatedAt": "2026-06-11T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/edat_lfse_20.json",
       "sha256": "50e32fd7ae3b285dd9e0d009ed1c27d876ff9fb87f5716f78ae066745eda2fad",
       "bytes": 13496
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "nrg_ind_ren",
       "datasetLabel": "Main indicators - share of renewable energy",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/nrg_ind_ren/default/table?lang=en",
@@ -239,12 +290,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/nrg_ind_share_esmsip2.htm",
       "doi": "https://doi.org/10.2908/NRG_IND_REN",
       "sourceUpdatedAt": "2026-07-14T11:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/nrg_ind_ren.json",
       "sha256": "67c2f0ad9591d59459c1ca2e8e77fc61ae8d57f5614076933b252571066e4854",
       "bytes": 11695
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "Eurostat",
       "datasetCode": "cei_wm011",
       "datasetLabel": "Recycling rate of municipal waste",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/cei_wm011/default/table?lang=en",
@@ -252,12 +305,14 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/cei_wm011_esmsip2.htm",
       "doi": "https://doi.org/10.2908/CEI_WM011",
       "sourceUpdatedAt": "2026-03-30T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/cei_wm011.json",
       "sha256": "ee1fb5cbe876fde37676ba7c12541f3049bde6ed1c00806bacf073d656821238",
       "bytes": 14230
     },
     {
       "institution": "Eurostat",
+      "originalInstitution": "European Environment Agency (EEA), based on UNFCCC reporting",
       "datasetCode": "sdg_13_10",
       "datasetLabel": "Domestic net greenhouse gas emissions",
       "dataBrowserUrl": "https://ec.europa.eu/eurostat/databrowser/view/sdg_13_10/default/table?lang=en",
@@ -265,6 +320,7 @@
       "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/sdg_13_10_esmsip2.htm",
       "doi": "https://doi.org/10.2908/SDG_13_10",
       "sourceUpdatedAt": "2026-04-22T23:00:00+0200",
+      "accessedAt": "2026-07-26T01:07:04.829Z",
       "localPath": "data/raw/eurostat/sdg_13_10.json",
       "sha256": "77d9b554b057c0535b6fc4417a107f138a7fd5ed42deaa0526577ad1ad930ec3",
       "bytes": 12834

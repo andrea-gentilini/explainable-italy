@@ -27,14 +27,14 @@ test("contains the bilingual multi-page editorial experience", async () => {
 
   assert.match(dashboard, /L’Italia, i dati ufficiali per tutti\./);
   assert.match(dashboard, /Italy, official data for everyone\./);
-  assert.match(dashboard, /Italia, UE e mediana dei Paesi/);
-  assert.match(dashboard, /Italy, EU and country median/);
+  assert.match(dashboard, /Italia e confronto europeo/);
+  assert.match(dashboard, /Italy and European comparison/);
   assert.match(dashboard, /Riduciamo a 100 € tutta la spesa pubblica italiana/);
   assert.match(dashboard, /L’Italia, in breve/);
   assert.match(dashboard, /PIL per abitante/);
   assert.match(dashboard, /Età mediana/);
   assert.match(dashboard, /Speranza di vita/);
-  assert.match(dashboard, /Tasso di occupazione/);
+  assert.match(dashboard, /Occupazione, 20–64 anni/);
   assert.match(dashboard, /"gdp-per-capita-pps"/);
   assert.match(dashboard, /"median-age"/);
   assert.match(dashboard, /className="spending-donut"/);
@@ -54,7 +54,13 @@ test("contains the bilingual multi-page editorial experience", async () => {
     dashboard,
     /Riportiamo dati pubblici in un formato leggibile, senza interpretarli/,
   );
-  assert.match(dashboard, /Verifica definizione e fonte/);
+  assert.match(dashboard, /Apri la metodologia alla base della definizione/);
+  assert.match(dashboard, /parafrasi del progetto basate sulla metodologia ufficiale/);
+  assert.match(dashboard, /source-country-table/);
+  assert.match(dashboard, /sourceQualityTitle/);
+  assert.match(dashboard, /\{coverage\} Paesi UE disponibili su 27/);
+  assert.match(dashboard, /Nessun aggregato UE ufficiale con lo stesso perimetro/);
+  assert.doesNotMatch(dashboard, /media aritmetica dei Paesi/);
   assert.doesNotMatch(dashboard, /Spiegazioni, non giudizi/);
   assert.doesNotMatch(dashboard, /Definiamo cosa misura un indicatore/);
   assert.match(dashboard, /href=\{indicator\.source\.apiUrl\}/);
@@ -119,17 +125,22 @@ test("has no starter preview left", async () => {
     access(new URL("CODE_OF_CONDUCT.md", projectRoot)),
   );
 
-  const [packageJson, readme, contributing] = await Promise.all([
+  const [packageJson, readme, contributing, dataLicense] = await Promise.all([
     readFile(new URL("package.json", projectRoot), "utf8"),
     readFile(new URL("README.md", projectRoot), "utf8"),
     readFile(new URL("CONTRIBUTING.md", projectRoot), "utf8"),
+    readFile(new URL("DATA_LICENSE.md", projectRoot), "utf8"),
   ]);
 
   assert.doesNotMatch(packageJson, /site-creator-vinext-starter/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.doesNotMatch(readme, /Your site is taking shape/);
+  assert.doesNotMatch(readme, /prototipo privato/);
+  assert.match(readme, /sviluppo aperto/);
   assert.match(contributing, /Ogni contributo è benvenuto/);
   assert.doesNotMatch(contributing, /Codice di condotta/);
+  assert.match(dataLicense, /politica di riuso Eurostat/);
+  assert.match(dataLicense, /European Environment Agency/);
 });
 
 test("links every indicator to its exact Eurostat query", async () => {
@@ -153,4 +164,71 @@ test("links every indicator to its exact Eurostat query", async () => {
   assert.match(defence.source.apiUrl, /cofog99=GF02/);
   assert.match(health.source.apiUrl, /cofog99=GF07/);
   assert.match(oldAge.source.apiUrl, /cofog99=GF1002/);
+});
+
+test("renders quality notes and comparisons without false EU figures", async () => {
+  const [
+    home,
+    spendingSource,
+    healthyLifeSource,
+    greenhouseGasSource,
+    renewableIndicator,
+    lifeExpectancyIndicator,
+  ] = await Promise.all([
+    readFile(new URL(".next/server/app/index.html", projectRoot), "utf8"),
+    readFile(
+      new URL(
+        ".next/server/app/data/spending-health/source.html",
+        projectRoot,
+      ),
+      "utf8",
+    ),
+    readFile(
+      new URL(
+        ".next/server/app/data/healthy-life-years/source.html",
+        projectRoot,
+      ),
+      "utf8",
+    ),
+    readFile(
+      new URL(
+        ".next/server/app/data/greenhouse-gas-emissions/source.html",
+        projectRoot,
+      ),
+      "utf8",
+    ),
+    readFile(
+      new URL(
+        ".next/server/app/data/renewable-energy.html",
+        projectRoot,
+      ),
+      "utf8",
+    ),
+    readFile(
+      new URL(
+        ".next/server/app/data/life-expectancy.html",
+        projectRoot,
+      ),
+      "utf8",
+    ),
+  ]);
+
+  assert.match(home, /Spesa pubblica · Italia · 2024/);
+  assert.match(home, /provvisorio/);
+  assert.match(spendingSource, /Stato del dato italiano/);
+  assert.match(spendingSource, /Eurostat indica come provvisoria/);
+  assert.match(healthyLifeSource, /26 Paesi UE disponibili su 27/);
+  assert.match(healthyLifeSource, /Manca: Lussemburgo/);
+  assert.match(healthyLifeSource, /2009 al 2011 senza interpolare/);
+  assert.match(
+    greenhouseGasSource,
+    /Eurostat non pubblica un aggregato UE con lo stesso perimetro/,
+  );
+  assert.match(greenhouseGasSource, /European Environment Agency/);
+  assert.doesNotMatch(
+    greenhouseGasSource,
+    /<small>Eurostat · EU27_2020<\/small>/,
+  );
+  assert.match(renewableIndicator, /RED I/);
+  assert.match(lifeExpectancyIndicator, /classe 95\+/);
 });

@@ -18,7 +18,7 @@ function assert(condition, message) {
 function assertPoint(point, indicatorId) {
   assert(Number.isInteger(point.year), `${indicatorId}: anno non valido`);
   assert(point.year >= 2000, `${indicatorId}: anno precedente al 2000`);
-  for (const field of ["italy", "eu", "median"]) {
+  for (const field of ["italy", "median"]) {
     assert(
       Number.isFinite(point[field]),
       `${indicatorId}: valore ${field} non valido`,
@@ -31,9 +31,38 @@ function assertPoint(point, indicatorId) {
     `${indicatorId}: copertura UE non valida`,
   );
   assert(
-    ["official_aggregate", "country_mean"].includes(point.euMethod),
+    ["official_aggregate", "unavailable"].includes(point.euMethod),
     `${indicatorId}: metodo UE non valido`,
   );
+  if (point.euMethod === "official_aggregate") {
+    assert(Number.isFinite(point.eu), `${indicatorId}: aggregato UE mancante`);
+  } else {
+    assert(point.eu === null, `${indicatorId}: aggregato UE non ufficiale`);
+  }
+  assert(
+    Array.isArray(point.countryStatuses) &&
+      Array.isArray(point.missingCountries),
+    `${indicatorId}: stati geografici mancanti`,
+  );
+  assert(
+    point.coverage + point.missingCountries.length === 27,
+    `${indicatorId}: Paesi disponibili e mancanti incoerenti`,
+  );
+  assert(
+    point.countryStatuses.every(
+      (entry) =>
+        typeof entry.geo === "string" &&
+        typeof entry.status === "string" &&
+        entry.status.length > 0,
+    ),
+    `${indicatorId}: contrassegni Paese non validi`,
+  );
+  if (point.countries) {
+    assert(
+      point.countries.length === point.coverage,
+      `${indicatorId}: osservazioni Paese incomplete`,
+    );
+  }
 }
 
 const [dashboard, manifest, publicDashboard, publicManifest, csv] =
@@ -84,6 +113,16 @@ for (const indicator of dashboard.indicators) {
       );
     }
   }
+  assert(
+    indicator.definitionKind === "project_paraphrase",
+    `${indicator.id}: tipo di definizione inatteso`,
+  );
+  assert(
+    typeof indicator.definitionSourceUrl === "string" &&
+      indicator.definitionSourceUrl.startsWith("https://"),
+    `${indicator.id}: fonte della definizione mancante`,
+  );
+  assert(Array.isArray(indicator.notes), `${indicator.id}: note mancanti`);
 
   let previousYear = 1999;
   for (const point of indicator.series) {
@@ -94,11 +133,20 @@ for (const indicator of dashboard.indicators) {
 
   assertPoint(indicator.latest, indicator.id);
   assert(
+    indicator.latest.countries?.length === indicator.latest.coverage,
+    `${indicator.id}: dettaglio Paesi assente dal dato principale`,
+  );
+  assert(
     indicator.latest.year >= indicator.startYear,
     `${indicator.id}: ultimo anno precedente all’inizio`,
   );
   if (indicator.newerEstimate) {
     assertPoint(indicator.newerEstimate, indicator.id);
+    assert(
+      indicator.newerEstimate.countries?.length ===
+        indicator.newerEstimate.coverage,
+      `${indicator.id}: dettaglio Paesi assente dal dato più recente`,
+    );
     assert(
       indicator.newerEstimate.year > indicator.latest.year,
       `${indicator.id}: stima non più recente del dato principale`,
@@ -106,12 +154,34 @@ for (const indicator of dashboard.indicators) {
   }
 }
 
+assert(
+  manifest.license.url ===
+    "https://ec.europa.eu/eurostat/help/copyright-notice",
+  "La politica di riuso Eurostat non è aggiornata",
+);
+assert(
+  manifest.licenses.some(
+    (license) => license.institution === "European Environment Agency",
+  ),
+  "Attribuzione EEA mancante",
+);
+
 for (const dataset of manifest.datasets) {
   const raw = await readFile(join(projectRoot, dataset.localPath));
   const hash = createHash("sha256").update(raw).digest("hex");
   assert(hash === dataset.sha256, `${dataset.datasetCode}: SHA256 non coincide`);
   assert(raw.byteLength === dataset.bytes, `${dataset.datasetCode}: byte non coincidono`);
   assert(dataset.institution === "Eurostat", `${dataset.datasetCode}: fonte inattesa`);
+  assert(
+    typeof dataset.originalInstitution === "string" &&
+      dataset.originalInstitution.length > 0,
+    `${dataset.datasetCode}: fonte originaria mancante`,
+  );
+  assert(
+    typeof dataset.accessedAt === "string" &&
+      !Number.isNaN(Date.parse(dataset.accessedAt)),
+    `${dataset.datasetCode}: data di acquisizione mancante`,
+  );
   assert(dataset.dataBrowserUrl.startsWith("https://"), `${dataset.datasetCode}: URL dati`);
   assert(dataset.apiUrl.startsWith("https://"), `${dataset.datasetCode}: URL API`);
   assert(dataset.doi.startsWith("https://doi.org/"), `${dataset.datasetCode}: DOI`);
@@ -138,13 +208,82 @@ assert(
   `Le funzioni COFOG sommano a ${spendingTotal}`,
 );
 
+const spendingDisplayed = spending.map(
+  (indicator) => indicator.newerEstimate ?? indicator.latest,
+);
+const spendingDisplayedYear = spendingDisplayed[0].year;
+assert(
+  spendingDisplayed.every((point) => point.year === spendingDisplayedYear),
+  "Le funzioni COFOG visualizzate non hanno lo stesso anno",
+);
+assert(
+  spendingDisplayed.every((point) => point.status?.includes("p")),
+  "La ripartizione COFOG 2024 deve risultare provvisoria",
+);
+assert(
+  spendingDisplayed.every((point) =>
+    point.countryStatuses.some(
+      (entry) => entry.geo === "IT" && entry.status.includes("p"),
+    ),
+  ),
+  "Lo stato provvisorio COFOG deve comparire anche nel dettaglio Italia",
+);
+assert(
+  Math.abs(
+    spendingDisplayed.reduce((total, point) => total + point.italy, 0) - 100,
+  ) <= 0.2,
+  "Le funzioni COFOG visualizzate non sommano a 100",
+);
+
+const greenhouseGas = dashboard.indicators.find(
+  (indicator) => indicator.id === "greenhouse-gas-emissions",
+);
+assert(greenhouseGas.latest.eu === null, "Le emissioni non hanno un aggregato UE comparabile");
+assert(
+  greenhouseGas.latest.euMethod === "unavailable",
+  "Le emissioni non devono usare una media nazionale come valore UE",
+);
+assert(
+  greenhouseGas.source.originalInstitution.includes(
+    "European Environment Agency",
+  ),
+  "Fonte originaria EEA mancante per le emissioni",
+);
+
+for (const indicatorId of [
+  "life-expectancy",
+  "healthy-life-years",
+  "renewable-energy",
+  "municipal-waste-recycling",
+  "poverty-or-exclusion",
+  "greenhouse-gas-emissions",
+]) {
+  const indicator = dashboard.indicators.find(
+    (candidate) => candidate.id === indicatorId,
+  );
+  assert(indicator.notes.length > 0, `${indicatorId}: nota metodologica mancante`);
+}
+
+const healthyLifeYears = dashboard.indicators.find(
+  (indicator) => indicator.id === "healthy-life-years",
+);
+assert(
+  healthyLifeYears.latest.coverage === 26 &&
+    healthyLifeYears.latest.missingCountries.includes("LU"),
+  "La copertura di Healthy Life Years deve indicare il Lussemburgo mancante",
+);
+
 const csvLines = csv.trim().split("\n");
 assert(
   csvLines[0] ===
-    "indicator_id,section,year,italy,eu27_value,eu27_country_median,countries_in_median,eu_method,status,unit,dataset",
+    "indicator_id,section,year,italy,eu27_official_value,eu27_country_median,countries_in_median,eu_method,italy_status,eu_status,flagged_countries,missing_countries,unit,dataset",
   "Intestazione CSV inattesa",
 );
 assert(csvLines.length > 900, "CSV troppo corto");
+assert(
+  !/\d+\.\d{10,}/.test(csv),
+  "Il CSV contiene artefatti di precisione binaria",
+);
 
 console.log(
   `Dati validi: ${dashboard.indicators.length} indicatori, ${manifest.datasets.length} dataset, ${csvLines.length - 1} righe CSV.`,
