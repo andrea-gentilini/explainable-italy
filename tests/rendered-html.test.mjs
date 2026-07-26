@@ -29,6 +29,14 @@ test("contains the bilingual multi-page editorial experience", async () => {
   assert.match(dashboard, /Italy, official data for everyone\./);
   assert.match(dashboard, /Italia, UE e mediana dei Paesi/);
   assert.match(dashboard, /Italy, EU and country median/);
+  assert.match(dashboard, /Non sono 100 € a persona/);
+  assert.match(dashboard, /il \{nextYear\} non è ancora pubblicato/);
+  assert.match(dashboard, /Eurostat, dati trasmessi da Istat/);
+  assert.match(dashboard, /spendingSource\.dataBrowserUrl/);
+  assert.match(dashboard, /Come sono create queste categorie/);
+  assert.match(dashboard, /Protezione sociale \(incluse pensioni\)/);
+  assert.match(dashboard, /Le pensioni sono qui/);
+  assert.match(dashboard, /data\/spending-old-age/);
   assert.match(dashboard, /id="method"/);
   assert.match(dashboard, /id="sources"/);
   assert.match(dashboard, /id="about"/);
