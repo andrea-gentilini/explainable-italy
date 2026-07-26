@@ -30,7 +30,7 @@ test("contains the bilingual editorial experience", async () => {
   assert.match(italianPage, /locale="it"/);
   assert.match(englishPage, /locale="en"/);
   assert.match(layout, /Andrea Gentilini/);
-  assert.match(layout, /social-preview\.png/);
+  assert.match(layout, /social-preview-v2\.jpg/);
 });
 
 test("has no starter preview left", async () => {

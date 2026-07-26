@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./redesign.css";
 
 export const metadata: Metadata = {
   title: {
@@ -24,9 +25,9 @@ export const metadata: Metadata = {
     description: "L’Italia, i dati ufficiali per tutti.",
     images: [
       {
-        url: "social-preview.png",
-        width: 1731,
-        height: 909,
+        url: "social-preview-v2.jpg",
+        width: 1536,
+        height: 804,
         alt: "Explainable Italy. L’Italia, i dati ufficiali per tutti.",
       },
     ],
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Explainable Italy",
     description: "L’Italia, i dati ufficiali per tutti.",
-    images: ["social-preview.png"],
+    images: ["social-preview-v2.jpg"],
   },
 };
 

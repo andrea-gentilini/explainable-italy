@@ -168,6 +168,7 @@ const copy = {
     sourcesBody:
       "Ogni grafico porta al dataset che lo alimenta. La copia locale contiene solo le osservazioni necessarie, quindi occupa poco spazio e può essere verificata nel tempo.",
     sourceCount: "dataset ufficiali",
+    sourceDirectory: "Consulta l’elenco completo",
     localSize: "circa 1,1 MB di dati e copie pubbliche",
     manifest: "Apri il registro delle fonti",
     downloadAll: "Scarica tutti i dati in CSV",
@@ -183,6 +184,7 @@ const copy = {
     futureTitle: "Cosa potremo aggiungere",
     futureBody:
       "La struttura è pronta per crescere senza cambiare le regole di selezione.",
+    futureToggle: "Vedi le prossime aree di lavoro",
     roadmap: [
       "Imposte, contributi e composizione del prelievo",
       "Distribuzione dei redditi, disuguaglianza e potere d’acquisto",
@@ -213,6 +215,7 @@ const copy = {
     themeDark: "Usa tema scuro",
     language: "English",
     latestUpdate: "Dati acquisiti",
+    results: "indicatori mostrati",
   },
   en: {
     skip: "Skip to content",
@@ -297,6 +300,7 @@ const copy = {
     sourcesBody:
       "Every chart links to its dataset. The local copy contains only the observations needed, so it stays small and can be verified over time.",
     sourceCount: "official datasets",
+    sourceDirectory: "Browse the full directory",
     localSize: "about 1.1 MB of data and public copies",
     manifest: "Open the source register",
     downloadAll: "Download all data as CSV",
@@ -312,6 +316,7 @@ const copy = {
     futureTitle: "What we can add next",
     futureBody:
       "The structure is ready to grow without changing the selection rules.",
+    futureToggle: "See the next areas of work",
     roadmap: [
       "Taxes, social contributions and the composition of the tax burden",
       "Income distribution, inequality and purchasing power",
@@ -341,6 +346,7 @@ const copy = {
     themeDark: "Use dark theme",
     language: "Italiano",
     latestUpdate: "Data acquired",
+    results: "indicators shown",
   },
 } as const;
 
@@ -571,9 +577,11 @@ function TrendBars({
 function IndicatorCard({
   indicator,
   locale,
+  sectionTitle,
 }: {
   indicator: Indicator;
   locale: Locale;
+  sectionTitle: string;
 }) {
   const labels = copy[locale];
   const isBreak = indicator.latest.status?.includes("b");
@@ -589,20 +597,24 @@ function IndicatorCard({
       }
     >
       <div className="indicator-card-top">
-        <div>
-          <p className="indicator-kicker">
-            {labels.definitive}, {indicator.latest.year}
-          </p>
+        <div className="indicator-copy">
+          <p className="indicator-kicker">{sectionTitle}</p>
           <h3>{indicator.title[locale]}</h3>
+          <p className="indicator-summary">{indicator.plain[locale]}</p>
         </div>
-        <p className="indicator-value">
-          {formatValue(
-            indicator.latest.italy,
-            indicator.unitKey,
-            indicator.precision,
-            locale,
-          )}
-        </p>
+        <div className="indicator-reading">
+          <p className="indicator-value">
+            {formatValue(
+              indicator.latest.italy,
+              indicator.unitKey,
+              indicator.precision,
+              locale,
+            )}
+          </p>
+          <span>
+            {labels.italy} · {indicator.latest.year}
+          </span>
+        </div>
       </div>
 
       {indicator.newerEstimate ? (
@@ -805,9 +817,7 @@ export function Dashboard({ data, locale }: DashboardProps) {
         <nav aria-label="Primary">
           <a href="#data">{labels.navData}</a>
           <a href="#method">{labels.navMethod}</a>
-          <a href="#sources">{labels.navSources}</a>
           <a href="#about">{labels.navAbout}</a>
-          <a href="#contribute">{labels.navContribute}</a>
         </nav>
 
         <div className="header-actions">
@@ -968,6 +978,10 @@ export function Dashboard({ data, locale }: DashboardProps) {
                 </span>
               </button>
             ))}
+            <p className="results-count" aria-live="polite">
+              <strong>{filteredIndicators.length}</strong> /{" "}
+              {data.indicators.length} {labels.results}
+            </p>
           </div>
 
           <div className="indicator-grid">
@@ -975,6 +989,11 @@ export function Dashboard({ data, locale }: DashboardProps) {
               <IndicatorCard
                 indicator={indicator}
                 locale={locale}
+                sectionTitle={
+                  data.sections.find(
+                    (section) => section.id === indicator.section,
+                  )?.title[locale] ?? ""
+                }
                 key={indicator.id}
               />
             ))}
@@ -1027,24 +1046,32 @@ export function Dashboard({ data, locale }: DashboardProps) {
             </a>
           </div>
 
-          <div className="source-list">
-            {sources.map((source) => (
-              <article key={source.datasetCode}>
-                <div>
-                  <span>{source.datasetCode}</span>
-                  <h3>{source.datasetLabel}</h3>
-                </div>
-                <a
-                  href={source.dataBrowserUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`${labels.openData}: ${source.datasetCode}`}
-                >
-                  ↗
-                </a>
-              </article>
-            ))}
-          </div>
+          <details className="source-directory">
+            <summary>
+              <span>
+                {sources.length} {labels.sourceCount}
+              </span>
+              <strong>{labels.sourceDirectory}</strong>
+            </summary>
+            <div className="source-list">
+              {sources.map((source) => (
+                <article key={source.datasetCode}>
+                  <div>
+                    <span>{source.datasetCode}</span>
+                    <h3>{source.datasetLabel}</h3>
+                  </div>
+                  <a
+                    href={source.dataBrowserUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`${labels.openData}: ${source.datasetCode}`}
+                  >
+                    ↗
+                  </a>
+                </article>
+              ))}
+            </div>
+          </details>
         </section>
 
         <section className="about-section" id="about">
@@ -1059,17 +1086,20 @@ export function Dashboard({ data, locale }: DashboardProps) {
             <p>{labels.privacy}</p>
           </div>
 
-          <div className="roadmap">
-            <div>
-              <h3>{labels.futureTitle}</h3>
-              <p>{labels.futureBody}</p>
-            </div>
+          <details className="roadmap">
+            <summary>
+              <span>
+                <strong>{labels.futureTitle}</strong>
+                <small>{labels.futureBody}</small>
+              </span>
+              <span>{labels.futureToggle}</span>
+            </summary>
             <ol>
               {labels.roadmap.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ol>
-          </div>
+          </details>
         </section>
 
         <section className="contribute-section" id="contribute">
