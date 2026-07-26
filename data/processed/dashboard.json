@@ -2762,8 +2762,8 @@
         "en": "Old age"
       },
       "plain": {
-        "it": "La parte della protezione sociale destinata alla vecchiaia. Comprende soprattutto pensioni di vecchiaia, ma anche servizi e altre prestazioni. Non coincide quindi con tutte le pensioni.",
-        "en": "The part of social protection devoted to old age. It mainly includes old age pensions, but also services and other benefits. It is not the same as all pension expenditure."
+        "it": "La funzione COFOG «vecchiaia»: pensioni di vecchiaia, anticipate per età e parziali; assegni di cura e altri pagamenti legati al pensionamento o all’età; alloggio, assistenza domiciliare, trasporti e altri servizi per persone anziane.",
+        "en": "The COFOG old-age function: old-age, age-related early-retirement and partial pensions; care allowances and other payments linked to retirement or old age; accommodation, home help, transport and other services for older people."
       },
       "technical": {
         "it": "Classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale. Unità PC_TOT, percentuale della spesa complessiva.",

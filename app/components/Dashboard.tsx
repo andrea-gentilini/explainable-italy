@@ -77,7 +77,8 @@ export type DashboardView =
   | "sources"
   | "about"
   | "contribute"
-  | "indicator";
+  | "indicator"
+  | "indicatorSource";
 
 const themeStorageKey = "explainable-italy-theme";
 
@@ -145,21 +146,34 @@ const copy = {
     socialDetailEyebrow: "Dentro la protezione sociale",
     socialDetailTitle: "Quanta parte riguarda le pensioni?",
     socialDetailBody:
-      "La voce “Protezione sociale” include le pensioni, ma non le isola. Per rispondere servono due statistiche diverse.",
+      "Nei 100 € Eurostat non pubblica una voce “pensioni”. Pubblica invece la funzione “vecchiaia”, che ha un perimetro preciso.",
     oldAgeMeasure: "Nella ripartizione dei 100 €",
-    oldAgeMeasureTitle: "Vecchiaia",
-    oldAgeMeasureBody:
-      "Comprende soprattutto pensioni di vecchiaia, ma anche servizi e altre prestazioni. Non è il totale esatto di tutte le pensioni.",
+    oldAgeMeasureTitle: "Funzione vecchiaia",
+    oldAgeIncludesTitle: "Comprende esattamente",
+    oldAgeIncludes: [
+      "pensioni di vecchiaia, pensioni anticipate dovute all’età e pensioni parziali;",
+      "assegni di cura e altri pagamenti periodici o una tantum legati al pensionamento o all’età;",
+      "alloggio e vitto in strutture per anziani, assistenza nelle attività quotidiane, aiuto domestico e trasporto;",
+      "sostegni a chi assiste una persona anziana e servizi per la partecipazione sociale e culturale;",
+      "regimi pensionistici del personale militare e dei dipendenti pubblici.",
+    ],
+    oldAgeExcludes:
+      "Esclude i pensionamenti anticipati dovuti a disabilità o disoccupazione, classificati in altre funzioni.",
+    oldAgeOfficialDefinition: "Definizione ufficiale COFOG 10.2 (ONU)",
     oldAgeFilter:
       "{year} · vecchiaia (GF1002) · quota della spesa pubblica",
-    pensionMeasure: "Dato pensionistico dedicato",
-    pensionMeasureTitle: "Tutte le pensioni",
+    pensionMeasure: "Un indicatore diverso",
+    pensionMeasureTitle: "Pensioni: nessuna equivalenza esatta con i 100 €",
     pensionMeasureBody:
-      "Eurostat usa la statistica europea sulla protezione sociale, ESSPROS. Il valore più recente è provvisorio e usa il PIL come riferimento: non va sommato ai 100 € della landing.",
+      "Il 15,5% del PIL viene da ESSPROS, che comprende tutti i regimi collettivi di protezione sociale residenti, pubblici o privati. I 100 € comprendono invece soltanto la Pubblica amministrazione. Dividere i due valori mescolerebbe perimetri diversi: per questo non trasformiamo il 15,5% in euro su 100.",
+    pensionIncludesTitle: "Il dato pensionistico comprende",
+    pensionIncludes:
+      "pensioni di invalidità; pensionamenti anticipati per ridotta capacità lavorativa; pensioni di vecchiaia, anticipate e parziali; pensioni ai superstiti; pensionamenti anticipati per ragioni di mercato del lavoro.",
+    openPensionPage: "Apri l’indicatore sulle pensioni",
     pensionFilter:
       "{year} · tutte le pensioni · quota del PIL · dato provvisorio",
     selectionUsed: "Selezione usata",
-    openExactData: "Apri la query esatta su Eurostat",
+    verifyNumber: "Verifica fonte e calcolo",
     readBreakdown: "Esplora tutte le voci",
     keyNumbers: "Quattro numeri per orientarsi",
     definitive: "ultimo dato non stimato",
@@ -184,9 +198,33 @@ const copy = {
     source: "Fonte",
     sourceUpdated: "Fonte aggiornata",
     dataset: "Dataset",
-    openData: "Apri la query esatta",
+    openData: "Verifica fonte e calcolo",
     openMetadata: "Leggi la metodologia Eurostat",
     downloadIndicator: "Scarica questo indicatore",
+    sourcePageEyebrow: "Fonte verificabile",
+    sourcePageTitle: "Da dove viene questo numero",
+    sourcePageBody:
+      "Qui trovi il dato utilizzato dal sito, la selezione applicata e il passaggio che porta al numero mostrato.",
+    sourceBack: "Torna all’indicatore",
+    sourceDisplayed: "Dato mostrato",
+    sourceMostRecent: "dato più recente",
+    sourceDefinitive: "ultimo dato non provvisorio",
+    sourceSelection: "Selezione Eurostat",
+    sourceObservations: "Valori utilizzati",
+    sourceCountry: "Paese",
+    sourceYear: "Anno",
+    sourceFrequency: "Frequenza",
+    sourceAnnual: "Annuale",
+    sourceFormula: "Passaggio al numero mostrato",
+    sourceNoCalculation:
+      "Il sito arrotonda il valore pubblicato alla precisione indicata; non applica altre trasformazioni.",
+    sourceMedianCalculated: "calcolata dal sito sui 27 Paesi UE",
+    sourceTechnicalSummary: "Collegamenti tecnici Eurostat",
+    sourceTechnicalBody:
+      "Servono a riprodurre il dato, ma non sono necessari per leggerlo.",
+    sourceRaw: "Apri i dati grezzi",
+    sourceOfficialDefinition: "Apri la definizione ufficiale",
+    sourceDoi: "Apri l’identificatore permanente del dataset",
     dataStatusBreak: "La serie segnala una discontinuità metodologica nell’ultimo anno.",
     methodEyebrow: "Metodo pubblico",
     methodTitle: "Le regole vengono prima dei risultati",
@@ -317,21 +355,34 @@ const copy = {
     socialDetailEyebrow: "Inside social protection",
     socialDetailTitle: "How much relates to pensions?",
     socialDetailBody:
-      "“Social protection” includes pensions, but does not isolate them. Answering this needs two different statistics.",
+      "Eurostat does not publish a “pensions” category within the €100 breakdown. It publishes the precisely defined old-age function instead.",
     oldAgeMeasure: "In the €100 breakdown",
-    oldAgeMeasureTitle: "Old age",
-    oldAgeMeasureBody:
-      "This mainly includes old-age pensions, but also services and other benefits. It is not the exact total for all pensions.",
+    oldAgeMeasureTitle: "Old-age function",
+    oldAgeIncludesTitle: "It includes exactly",
+    oldAgeIncludes: [
+      "old-age pensions, age-related anticipated old-age pensions and partial pensions;",
+      "care allowances and other periodic or lump-sum payments linked to retirement or old age;",
+      "accommodation and board in facilities for older people, help with daily tasks, home help and transport;",
+      "allowances for carers and services supporting social and cultural participation;",
+      "pension schemes for military personnel and government employees.",
+    ],
+    oldAgeExcludes:
+      "It excludes early-retirement benefits due to disability or unemployment, which are classified under other functions.",
+    oldAgeOfficialDefinition: "Official COFOG 10.2 definition (UN)",
     oldAgeFilter:
       "{year} · old age (GF1002) · share of public spending",
-    pensionMeasure: "Dedicated pension measure",
-    pensionMeasureTitle: "All pensions",
+    pensionMeasure: "A different indicator",
+    pensionMeasureTitle: "Pensions: no exact conversion to the €100",
     pensionMeasureBody:
-      "Eurostat uses the European social protection statistics, ESSPROS. The latest value is provisional and uses GDP as its reference, so it must not be added to the landing page’s €100.",
+      "The 15.5% of GDP comes from ESSPROS, which covers all resident collective social-protection schemes, public or private. The €100 covers general government only. Dividing the two figures would mix different scopes, so we do not convert 15.5% into euros out of 100.",
+    pensionIncludesTitle: "The pension measure includes",
+    pensionIncludes:
+      "disability pensions; early retirement due to reduced capacity to work; old-age, anticipated and partial pensions; survivors’ pensions; and early retirement for labour-market reasons.",
+    openPensionPage: "Open the pension indicator",
     pensionFilter:
       "{year} · all pensions · share of GDP · provisional data",
     selectionUsed: "Selection used",
-    openExactData: "Open the exact Eurostat query",
+    verifyNumber: "Verify source and calculation",
     readBreakdown: "Explore every category",
     keyNumbers: "Four numbers for orientation",
     definitive: "latest non estimated value",
@@ -356,9 +407,33 @@ const copy = {
     source: "Source",
     sourceUpdated: "Source updated",
     dataset: "Dataset",
-    openData: "Open the exact query",
+    openData: "Verify source and calculation",
     openMetadata: "Read Eurostat methodology",
     downloadIndicator: "Download this indicator",
+    sourcePageEyebrow: "Verifiable source",
+    sourcePageTitle: "Where this number comes from",
+    sourcePageBody:
+      "This page shows the value used by the site, the applied selection and the step that produces the displayed number.",
+    sourceBack: "Back to the indicator",
+    sourceDisplayed: "Displayed value",
+    sourceMostRecent: "most recent value",
+    sourceDefinitive: "latest non-provisional value",
+    sourceSelection: "Eurostat selection",
+    sourceObservations: "Values used",
+    sourceCountry: "Country",
+    sourceYear: "Year",
+    sourceFrequency: "Frequency",
+    sourceAnnual: "Annual",
+    sourceFormula: "Step to the displayed number",
+    sourceNoCalculation:
+      "The site rounds the published value to the stated precision and applies no other transformation.",
+    sourceMedianCalculated: "calculated by the site across the 27 EU countries",
+    sourceTechnicalSummary: "Technical Eurostat links",
+    sourceTechnicalBody:
+      "These reproduce the data but are not needed to read them.",
+    sourceRaw: "Open the raw data",
+    sourceOfficialDefinition: "Open the official definition",
+    sourceDoi: "Open the dataset’s permanent identifier",
     dataStatusBreak: "The series marks a methodological break in its latest year.",
     methodEyebrow: "Public method",
     methodTitle: "Rules come before results",
@@ -506,6 +581,119 @@ function formatDate(date: string, locale: Locale) {
     month: "long",
     day: "numeric",
   }).format(new Date(date));
+}
+
+const sourceDimensionLabels: Record<Locale, Record<string, string>> = {
+  it: {
+    freq: "Frequenza",
+    unit: "Unità",
+    sector: "Settore",
+    na_item: "Voce contabile",
+    cofog99: "Funzione",
+    indic_de: "Indicatore demografico",
+    sex: "Sesso",
+    age: "Fascia d’età",
+    indic_em: "Indicatore del lavoro",
+    coicop18: "Paniere dei prezzi",
+    spdepb: "Tipo di pensione",
+    spdepm: "Prova dei mezzi",
+    hlth_hle: "Misura di salute",
+    isced11: "Livello di istruzione",
+    wstatus: "Condizione lavorativa",
+    training: "Formazione",
+    nrg_bal: "Voce energetica",
+    wst_oper: "Trattamento dei rifiuti",
+    src_crf: "Categoria di emissioni",
+  },
+  en: {
+    freq: "Frequency",
+    unit: "Unit",
+    sector: "Sector",
+    na_item: "Accounting item",
+    cofog99: "Function",
+    indic_de: "Demographic indicator",
+    sex: "Sex",
+    age: "Age group",
+    indic_em: "Labour indicator",
+    coicop18: "Price basket",
+    spdepb: "Pension type",
+    spdepm: "Means testing",
+    hlth_hle: "Health measure",
+    isced11: "Education level",
+    wstatus: "Labour status",
+    training: "Training",
+    nrg_bal: "Energy item",
+    wst_oper: "Waste treatment",
+    src_crf: "Emissions category",
+  },
+};
+
+const sourceValueLabels: Record<Locale, Record<string, string>> = {
+  it: {
+    A: "Annuale",
+    T: "Totale",
+    TOTAL: "Totale",
+    PC_TOT: "% della spesa pubblica",
+    PC_GDP: "% del PIL",
+    YR: "Anni",
+    PC: "Percentuale",
+    S13: "Pubblica amministrazione",
+    TE: "Spesa totale",
+    GF01: "Servizi pubblici generali",
+    GF02: "Difesa",
+    GF03: "Ordine pubblico e sicurezza",
+    GF04: "Affari economici",
+    GF05: "Protezione dell’ambiente",
+    GF06: "Abitazioni e territorio",
+    GF07: "Sanità",
+    GF08: "Cultura, sport e religione",
+    GF09: "Istruzione",
+    GF10: "Protezione sociale",
+    GF1002: "Vecchiaia",
+  },
+  en: {
+    A: "Annual",
+    T: "Total",
+    TOTAL: "Total",
+    PC_TOT: "% of public spending",
+    PC_GDP: "% of GDP",
+    YR: "Years",
+    PC: "Percent",
+    S13: "General government",
+    TE: "Total expenditure",
+    GF01: "General public services",
+    GF02: "Defence",
+    GF03: "Public order and safety",
+    GF04: "Economic affairs",
+    GF05: "Environmental protection",
+    GF06: "Housing and community amenities",
+    GF07: "Health",
+    GF08: "Recreation, culture and religion",
+    GF09: "Education",
+    GF10: "Social protection",
+    GF1002: "Old age",
+  },
+};
+
+function getSourceSelection(indicator: Indicator, locale: Locale) {
+  const url = new URL(indicator.source.apiUrl);
+  const valuesByDimension = new Map<string, string[]>();
+
+  for (const [dimension, value] of url.searchParams) {
+    if (["lang", "sinceTimePeriod", "geo"].includes(dimension)) continue;
+    const values = valuesByDimension.get(dimension) ?? [];
+    if (!values.includes(value)) values.push(value);
+    valuesByDimension.set(dimension, values);
+  }
+
+  return [...valuesByDimension].map(([dimension, values]) => ({
+    dimension,
+    label: sourceDimensionLabels[locale][dimension] ?? dimension,
+    value: values
+      .map((value) => sourceValueLabels[locale][value] ?? value)
+      .join(", "),
+    codes: values.join(", "),
+  }));
 }
 
 function buildIndicatorCsv(indicator: Indicator) {
@@ -780,11 +968,9 @@ function IndicatorCard({
 
             <div className="card-actions">
               <a
-                href={indicator.source.apiUrl}
-                target="_blank"
-                rel="noreferrer"
+                href={pageHref(locale, `data/${indicator.id}/source`)}
               >
-                {labels.openData} <span aria-hidden="true">↗</span>
+                {labels.openData} <span aria-hidden="true">→</span>
               </a>
               {indicator.source.metadataUrl ? (
                 <a
@@ -810,6 +996,226 @@ function IndicatorCard({
         </a>
       )}
     </article>
+  );
+}
+
+function SourceVerification({
+  indicator,
+  locale,
+}: {
+  indicator: Indicator;
+  locale: Locale;
+}) {
+  const labels = copy[locale];
+  const displayedPoint = indicator.newerEstimate ?? indicator.latest;
+  const selection = getSourceSelection(indicator, locale);
+  const officialDefinitionUrl =
+    indicator.id === "spending-old-age"
+      ? "https://unstats.un.org/unsd/classifications/Econ/Structure/Detail/EN/4/10_2_0"
+      : indicator.id === "pension-expenditure"
+        ? "https://ec.europa.eu/eurostat/web/social-protection/information-data"
+        : null;
+  const displayedValue = formatValue(
+    displayedPoint.italy,
+    indicator.unitKey,
+    indicator.precision,
+    locale,
+  );
+  const spendingFormula =
+    locale === "it"
+      ? `${new Intl.NumberFormat("it-IT", {
+          minimumFractionDigits: indicator.precision,
+          maximumFractionDigits: indicator.precision,
+        }).format(displayedPoint.italy)}% della spesa × 100 € = ${new Intl.NumberFormat(
+          "it-IT",
+          {
+            minimumFractionDigits: indicator.precision,
+            maximumFractionDigits: indicator.precision,
+          },
+        ).format(displayedPoint.italy)} € su 100`
+      : `${new Intl.NumberFormat("en-GB", {
+          minimumFractionDigits: indicator.precision,
+          maximumFractionDigits: indicator.precision,
+        }).format(displayedPoint.italy)}% of spending × €100 = €${new Intl.NumberFormat(
+          "en-GB",
+          {
+            minimumFractionDigits: indicator.precision,
+            maximumFractionDigits: indicator.precision,
+          },
+        ).format(displayedPoint.italy)} out of €100`;
+
+  return (
+    <section className="source-verification">
+      <a
+        className="back-link"
+        href={pageHref(locale, `data/${indicator.id}`)}
+      >
+        <span aria-hidden="true">←</span> {labels.sourceBack}
+      </a>
+
+      <header className="source-verification-heading">
+        <p className="eyebrow">{labels.sourcePageEyebrow}</p>
+        <h1>
+          {labels.sourcePageTitle}: {indicator.title[locale]}
+        </h1>
+        <p>{labels.sourcePageBody}</p>
+      </header>
+
+      <div className="source-value-panel">
+        <span>{labels.sourceDisplayed}</span>
+        <strong>{displayedValue}</strong>
+        <small>
+          {labels.italy} · {displayedPoint.year} ·{" "}
+          {indicator.newerEstimate
+            ? labels.sourceMostRecent
+            : labels.sourceDefinitive}
+        </small>
+        {indicator.newerEstimate ? (
+          <p>
+            {labels.sourceDefinitive}:{" "}
+            <strong>
+              {formatValue(
+                indicator.latest.italy,
+                indicator.unitKey,
+                indicator.precision,
+                locale,
+              )}
+            </strong>{" "}
+            · {indicator.latest.year}
+          </p>
+        ) : null}
+      </div>
+
+      <div className="source-verification-grid">
+        <section>
+          <h2>{labels.sourceSelection}</h2>
+          <dl className="source-selection-list">
+            <div>
+              <dt>{labels.dataset}</dt>
+              <dd>
+                {indicator.source.datasetLabel}{" "}
+                <code>{indicator.source.datasetCode}</code>
+              </dd>
+            </div>
+            <div>
+              <dt>{labels.sourceCountry}</dt>
+              <dd>
+                {labels.italy} <code>IT</code>
+              </dd>
+            </div>
+            <div>
+              <dt>{labels.sourceYear}</dt>
+              <dd>{displayedPoint.year}</dd>
+            </div>
+            <div>
+              <dt>{labels.sourceUpdated}</dt>
+              <dd>{formatDate(indicator.source.sourceUpdatedAt, locale)}</dd>
+            </div>
+            {selection.map((entry) => (
+              <div key={entry.dimension}>
+                <dt>{entry.label}</dt>
+                <dd>
+                  {entry.value} <code>{entry.codes}</code>
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <p className="source-technical-definition">
+            {indicator.technical[locale]}
+          </p>
+        </section>
+
+        <section>
+          <h2>{labels.sourceObservations}</h2>
+          <div className="source-observation-list">
+            <div>
+              <span>{labels.italy}</span>
+              <strong>
+                {formatValue(
+                  displayedPoint.italy,
+                  indicator.unitKey,
+                  indicator.precision,
+                  locale,
+                )}
+              </strong>
+              <small>Eurostat · IT</small>
+            </div>
+            <div>
+              <span>{labels.eu}</span>
+              <strong>
+                {formatValue(
+                  displayedPoint.eu,
+                  indicator.unitKey,
+                  indicator.precision,
+                  locale,
+                )}
+              </strong>
+              <small>Eurostat · EU27_2020</small>
+            </div>
+            <div>
+              <span>{labels.median}</span>
+              <strong>
+                {formatValue(
+                  displayedPoint.median,
+                  indicator.unitKey,
+                  indicator.precision,
+                  locale,
+                )}
+              </strong>
+              <small>{labels.sourceMedianCalculated}</small>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section className="source-formula">
+        <h2>{labels.sourceFormula}</h2>
+        <p>
+          {indicator.unitKey === "percent_spending"
+            ? spendingFormula
+            : labels.sourceNoCalculation}
+        </p>
+      </section>
+
+      <details className="source-technical-links">
+        <summary>{labels.sourceTechnicalSummary}</summary>
+        <p>{labels.sourceTechnicalBody}</p>
+        <div>
+          <a
+            href={indicator.source.apiUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {labels.sourceRaw} <span aria-hidden="true">↗</span>
+          </a>
+          {officialDefinitionUrl ? (
+            <a
+              href={officialDefinitionUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {labels.sourceOfficialDefinition}{" "}
+              <span aria-hidden="true">↗</span>
+            </a>
+          ) : null}
+          {indicator.source.metadataUrl ? (
+            <a
+              href={indicator.source.metadataUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {labels.openMetadata} <span aria-hidden="true">↗</span>
+            </a>
+          ) : null}
+          <a href={indicator.source.doi} target="_blank" rel="noreferrer">
+            {labels.sourceDoi} <span aria-hidden="true">↗</span>
+          </a>
+          <button type="button" onClick={() => downloadIndicator(indicator)}>
+            {labels.downloadIndicator}
+          </button>
+        </div>
+      </details>
+    </section>
   );
 }
 
@@ -846,8 +1252,8 @@ function SocialProtectionDetail({
         <p>{labels.socialDetailBody}</p>
       </div>
 
-      <div className="related-detail-grid">
-        <article>
+      <div className="related-detail-stack">
+        <article className="old-age-definition">
           <p className="indicator-kicker">{labels.oldAgeMeasure}</p>
           <h3>{labels.oldAgeMeasureTitle}</h3>
           <p className="related-detail-value">
@@ -861,49 +1267,77 @@ function SocialProtectionDetail({
               {oldAge.latest.year}
             </small>
           </p>
-          <p className="related-detail-copy">{labels.oldAgeMeasureBody}</p>
+          <div className="exact-definition">
+            <h4>{labels.oldAgeIncludesTitle}</h4>
+            <ul>
+              {labels.oldAgeIncludes.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <p>{labels.oldAgeExcludes}</p>
+            <a
+              href="https://unstats.un.org/unsd/classifications/Econ/Structure/Detail/EN/4/10_2_0"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {labels.oldAgeOfficialDefinition}{" "}
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
           <ComparisonPlot indicator={oldAge} locale={locale} />
           <div className="related-source">
             <span>{labels.selectionUsed}</span>
             <strong>Eurostat · gov_10a_exp</strong>
             <small>{oldAgeFilter}</small>
             <a
-              href={oldAge.source.apiUrl}
-              target="_blank"
-              rel="noreferrer"
+              href={pageHref(locale, `data/${oldAge.id}/source`)}
             >
-              {labels.openExactData} <span aria-hidden="true">↗</span>
+              {labels.verifyNumber} <span aria-hidden="true">→</span>
             </a>
           </div>
         </article>
 
-        <article>
-          <p className="indicator-kicker">{labels.pensionMeasure}</p>
-          <h3>{labels.pensionMeasureTitle}</h3>
-          <p className="related-detail-value">
-            {formatValue(
-              pensionPoint.italy,
-              pensionExpenditure.unitKey,
-              pensionExpenditure.precision,
-              locale,
-            )}
-            <small>
-              {pensionPoint.year} · {labels.provisional}
-            </small>
-          </p>
-          <p className="related-detail-copy">{labels.pensionMeasureBody}</p>
+        <article className="pension-boundary">
+          <div className="pension-boundary-heading">
+            <div>
+              <p className="indicator-kicker">{labels.pensionMeasure}</p>
+              <h3>{labels.pensionMeasureTitle}</h3>
+            </div>
+            <p className="related-detail-value">
+              {formatValue(
+                pensionPoint.italy,
+                pensionExpenditure.unitKey,
+                pensionExpenditure.precision,
+                locale,
+              )}
+              <small>
+                {pensionPoint.year} · {labels.provisional}
+              </small>
+            </p>
+          </div>
+          <p className="pension-boundary-copy">{labels.pensionMeasureBody}</p>
+          <div className="pension-includes">
+            <h4>{labels.pensionIncludesTitle}</h4>
+            <p>{labels.pensionIncludes}</p>
+          </div>
           <ComparisonPlot indicator={pensionComparison} locale={locale} />
           <div className="related-source">
             <span>{labels.selectionUsed}</span>
             <strong>Eurostat · spr_exp_pens · ESSPROS</strong>
             <small>{pensionFilter}</small>
-            <a
-              href={pensionExpenditure.source.apiUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {labels.openExactData} <span aria-hidden="true">↗</span>
-            </a>
+            <div>
+              <a href={pageHref(locale, `data/${pensionExpenditure.id}`)}>
+                {labels.openPensionPage} <span aria-hidden="true">→</span>
+              </a>
+              <a
+                href={pageHref(
+                  locale,
+                  `data/${pensionExpenditure.id}/source`,
+                )}
+              >
+                {labels.verifyNumber} <span aria-hidden="true">→</span>
+              </a>
+            </div>
           </div>
         </article>
       </div>
@@ -1080,8 +1514,9 @@ export function Dashboard({
   const currentPath =
     view === "home"
       ? ""
-      : view === "indicator"
+      : view === "indicator" || view === "indicatorSource"
         ? `data/${selectedIndicatorId ?? ""}`
+          + (view === "indicatorSource" ? "/source" : "")
         : view;
 
   return (
@@ -1102,7 +1537,11 @@ export function Dashboard({
           <a
             href={pageHref(locale, "data")}
             aria-current={
-              view === "data" || view === "indicator" ? "page" : undefined
+              view === "data" ||
+              view === "indicator" ||
+              view === "indicatorSource"
+                ? "page"
+                : undefined
             }
           >
             {labels.navData}
@@ -1335,6 +1774,10 @@ export function Dashboard({
               />
             ) : null}
           </section>
+        ) : null}
+
+        {view === "indicatorSource" && selectedIndicator ? (
+          <SourceVerification indicator={selectedIndicator} locale={locale} />
         ) : null}
 
         {view === "data" ? (

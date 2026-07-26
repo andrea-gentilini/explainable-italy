@@ -33,10 +33,15 @@ test("contains the bilingual multi-page editorial experience", async () => {
   assert.match(dashboard, /il \{nextYear\} non è ancora pubblicato/);
   assert.match(dashboard, /Classification of the Functions of Government/);
   assert.match(dashboard, /href=\{indicator\.source\.apiUrl\}/);
+  assert.match(dashboard, /data\/\$\{indicator\.id\}\/source/);
   assert.match(dashboard, /Come sono create queste categorie/);
   assert.match(dashboard, /Protezione sociale \(incluse pensioni\)/);
   assert.match(dashboard, /function SocialProtectionDetail/);
+  assert.match(dashboard, /function SourceVerification/);
   assert.match(dashboard, /Quanta parte riguarda le pensioni/);
+  assert.match(dashboard, /pensioni di vecchiaia, pensioni anticipate/);
+  assert.match(dashboard, /pubblici o privati/);
+  assert.doesNotMatch(dashboard, /Comprende soprattutto pensioni/);
   assert.doesNotMatch(dashboard, /className="old-age-note"/);
   assert.doesNotMatch(dashboard, /www\.istat\.it/);
   assert.match(dashboard, /id="method"/);
@@ -75,6 +80,8 @@ test("contains the bilingual multi-page editorial experience", async () => {
       "app/en/sources/page.tsx",
       "app/en/about/page.tsx",
       "app/en/contribute/page.tsx",
+      "app/data/[id]/source/page.tsx",
+      "app/en/data/[id]/source/page.tsx",
     ].map((path) => access(new URL(path, projectRoot))),
   );
 });
