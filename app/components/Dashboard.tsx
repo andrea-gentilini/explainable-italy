@@ -1091,51 +1091,6 @@ function getSourceSelection(indicator: Indicator, locale: Locale) {
   }));
 }
 
-function buildIndicatorCsv(indicator: Indicator) {
-  const rows = [
-    [
-      "year",
-      "italy",
-      "eu_official",
-      "median",
-      "countries_in_median",
-      "eu_method",
-      "italy_status",
-      "eu_status",
-      "flagged_countries",
-      "missing_countries",
-    ],
-    ...indicator.series.map((point) => [
-      point.year,
-      point.italy,
-      point.eu ?? "",
-      point.median,
-      point.coverage,
-      point.euMethod,
-      point.status ?? "",
-      point.euStatus ?? "",
-      point.countryStatuses
-        .map(({ geo, status }) => `${geo}:${status}`)
-        .join("|"),
-      point.missingCountries.join("|"),
-    ]),
-  ];
-
-  return rows.map((row) => row.join(",")).join("\n");
-}
-
-function downloadIndicator(indicator: Indicator) {
-  const blob = new Blob([buildIndicatorCsv(indicator)], {
-    type: "text/csv;charset=utf-8",
-  });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `${indicator.id}.csv`;
-  anchor.click();
-  URL.revokeObjectURL(url);
-}
-
 function ComparisonPlot({
   indicator,
   locale,
@@ -1507,9 +1462,9 @@ function IndicatorCard({
                   {labels.openMetadata} <span aria-hidden="true">↗</span>
                 </a>
               ) : null}
-              <button type="button" onClick={() => downloadIndicator(indicator)}>
+              <a href={`${basePath}/data/indicators/${indicator.id}.csv`} download={`${indicator.id}.csv`}>
                 {labels.downloadIndicator}
-              </button>
+              </a>
             </div>
           </div>
         </section>
@@ -1873,9 +1828,9 @@ function SourceVerification({
           <a href={indicator.source.doi} target="_blank" rel="noreferrer">
             {labels.sourceDoi} <span aria-hidden="true">↗</span>
           </a>
-          <button type="button" onClick={() => downloadIndicator(indicator)}>
+          <a href={`${basePath}/data/indicators/${indicator.id}.csv`} download={`${indicator.id}.csv`}>
             {labels.downloadIndicator}
-          </button>
+          </a>
         </div>
       </details>
     </section>
