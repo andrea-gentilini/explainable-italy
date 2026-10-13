@@ -1,42 +1,16 @@
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import {
+  euCountries, flattenJsonStat, buildSeries, isEstimateOrProvisional, normalizeNumber,
+} from "./data-utils.mjs";
 
 const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const rawDirectory = join(projectRoot, "data", "raw", "eurostat");
 const processedDirectory = join(projectRoot, "data", "processed");
 const publicDataDirectory = join(projectRoot, "public", "data");
-
-const euCountries = [
-  "AT",
-  "BE",
-  "BG",
-  "HR",
-  "CY",
-  "CZ",
-  "DK",
-  "EE",
-  "FI",
-  "FR",
-  "DE",
-  "EL",
-  "HU",
-  "IE",
-  "IT",
-  "LV",
-  "LT",
-  "LU",
-  "MT",
-  "NL",
-  "PL",
-  "PT",
-  "RO",
-  "SK",
-  "SI",
-  "ES",
-  "SE",
-];
 
 const allGeographies = [...euCountries, "EU27_2020"];
 
@@ -152,16 +126,19 @@ const datasetSpecs = [
     statusOverrides: {
       2024: "p",
     },
+    euStatusOverrides: {
+      2024: "p",
+    },
     notes: [
       {
         type: "provisional",
         year: 2024,
         text: {
-          it: "Eurostat indica come provvisoria la ripartizione per funzione dell’Italia relativa al 2024.",
-          en: "Eurostat marks Italy’s 2024 distribution by function as provisional.",
+          it: "Eurostat indica come provvisorie la ripartizione per funzione dell’Italia e l’aggregato UE relativi al 2024.",
+          en: "Eurostat marks Italy’s 2024 distribution by function and the 2024 EU aggregate as provisional.",
         },
         sourceUrl:
-          "https://webgate.ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
+          "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
       },
     ],
     filters: {
@@ -855,11 +832,20 @@ const indicatorNotes = {
       type: "method_change",
       year: 2021,
       text: {
-        it: "La serie cambia base normativa tra 2020 e 2021: fino al 2020 segue RED I, dal 2021 RED II. Il grafico segnala questa discontinuità.",
-        en: "The legal basis changes between 2020 and 2021: data follow RED I through 2020 and RED II from 2021. The chart marks this discontinuity.",
+        it: "La serie cambia base normativa tra 2020 e 2021: fino al 2020 segue RED I, dal 2021 al 2024 RED II. Il grafico segnala questa discontinuità.",
+        en: "The legal basis changes between 2020 and 2021: data follow RED I through 2020 and RED II from 2021 to 2024. The chart marks this discontinuity.",
       },
       sourceUrl:
-        "https://ec.europa.eu/eurostat/cache/metadata/en/nrg_ind_share_esmsip2.htm",
+        "https://ec.europa.eu/eurostat/documents/d/energy/shares-manual",
+    },
+    {
+      type: "method_change",
+      year: 2025,
+      text: {
+        it: "Dal 2025 il calcolo segue RED III. Il cambio delle regole può incidere sul confronto con gli anni precedenti.",
+        en: "From 2025 calculations follow RED III. The change in rules can affect comparisons with earlier years.",
+      },
+      sourceUrl: "https://ec.europa.eu/eurostat/documents/d/energy/shares-manual",
     },
   ],
   "municipal-waste-recycling": [
@@ -898,6 +884,7 @@ const indicatorNotes = {
 };
 
 const definitionSourceOverrides = {
+  "renewable-energy": "https://ec.europa.eu/eurostat/documents/d/energy/shares-manual",
   "spending-old-age":
     "https://unstats.un.org/unsd/classifications/Econ/Structure/Detail/EN/4/10_2_0",
   "pension-expenditure":
@@ -934,147 +921,6 @@ function buildApiUrl(specification, selector = {}) {
   return url;
 }
 
-function getPositionCodes(dimension) {
-  return Object.entries(dimension.category.index)
-    .sort((left, right) => left[1] - right[1])
-    .map(([code]) => code);
-}
-
-function flattenJsonStat(dataset) {
-  const positionCodes = Object.fromEntries(
-    dataset.id.map((dimensionId) => [
-      dimensionId,
-      getPositionCodes(dataset.dimension[dimensionId]),
-    ]),
-  );
-
-  return Object.entries(dataset.value).map(([flatIndex, value]) => {
-    let remainder = Number(flatIndex);
-    const coordinates = new Array(dataset.id.length);
-
-    for (let index = dataset.id.length - 1; index >= 0; index -= 1) {
-      coordinates[index] = remainder % dataset.size[index];
-      remainder = Math.floor(remainder / dataset.size[index]);
-    }
-
-    const record = {
-      value,
-      status: dataset.status?.[flatIndex] ?? null,
-    };
-
-    dataset.id.forEach((dimensionId, index) => {
-      record[dimensionId] = positionCodes[dimensionId][coordinates[index]];
-    });
-
-    return record;
-  });
-}
-
-function matchesSelector(record, selector) {
-  return Object.entries(selector).every(
-    ([dimension, expectedValue]) => record[dimension] === expectedValue,
-  );
-}
-
-function isEstimateOrProvisional(status) {
-  return typeof status === "string" && /[epf]/.test(status);
-}
-
-function median(values) {
-  const sorted = [...values].sort((left, right) => left - right);
-  const middle = Math.floor(sorted.length / 2);
-
-  if (sorted.length % 2 === 1) {
-    return sorted[middle];
-  }
-
-  return normalizeNumber((sorted[middle - 1] + sorted[middle]) / 2);
-}
-
-function normalizeNumber(value) {
-  return Number(value.toFixed(10));
-}
-
-function mergeStatus(sourceStatus, overrideStatus) {
-  const codes = `${sourceStatus ?? ""}${overrideStatus ?? ""}`
-    .replaceAll(":", "")
-    .replaceAll(" ", "");
-  return codes ? [...new Set(codes)].join("") : null;
-}
-
-function buildSeries(records, selector, statusOverrides = {}) {
-  const selectedRecords = records.filter((record) =>
-    matchesSelector(record, selector),
-  );
-  const byYear = new Map();
-
-  for (const record of selectedRecords) {
-    const year = Number(record.time);
-    if (!Number.isInteger(year) || year < 2000) continue;
-
-    if (!byYear.has(year)) byYear.set(year, new Map());
-    byYear.get(year).set(record.geo, record);
-  }
-
-  return [...byYear.entries()]
-    .sort(([leftYear], [rightYear]) => leftYear - rightYear)
-    .flatMap(([year, geographyRecords]) => {
-      const italyRecord = geographyRecords.get("IT");
-      const euRecord = geographyRecords.get("EU27_2020");
-      const countries = euCountries.flatMap((geography) => {
-        const record = geographyRecords.get(geography);
-        if (!Number.isFinite(record?.value)) return [];
-        return [
-          {
-            geo: geography,
-            value: record.value,
-            status: record.status,
-          },
-        ];
-      });
-      const countryValues = countries.map((country) => country.value);
-
-      if (!Number.isFinite(italyRecord?.value) || countryValues.length < 24) {
-        return [];
-      }
-
-      const hasOfficialAggregate = Number.isFinite(euRecord?.value);
-      const effectiveItalyStatus = mergeStatus(
-        italyRecord.status,
-        statusOverrides[year],
-      );
-      const effectiveCountries = countries.map((country) =>
-        country.geo === "IT"
-          ? { ...country, status: effectiveItalyStatus }
-          : country,
-      );
-
-      return [
-        {
-          year,
-          italy: italyRecord.value,
-          eu: hasOfficialAggregate ? euRecord.value : null,
-          median: median(countryValues),
-          coverage: countryValues.length,
-          euMethod: hasOfficialAggregate
-            ? "official_aggregate"
-            : "unavailable",
-          status: effectiveItalyStatus,
-          sourceStatus: italyRecord.status,
-          euStatus: hasOfficialAggregate ? euRecord.status : null,
-          countryStatuses: effectiveCountries
-            .filter((country) => country.status)
-            .map(({ geo, status }) => ({ geo, status })),
-          missingCountries: euCountries.filter(
-            (geography) =>
-              !countries.some((country) => country.geo === geography),
-          ),
-          countries: effectiveCountries,
-        },
-      ];
-    });
-}
-
 function withoutCountryValues(point) {
   const publicPoint = { ...point };
   delete publicPoint.countries;
@@ -1091,9 +937,10 @@ function csvNumber(value) {
   return Number.isFinite(value) ? String(normalizeNumber(value)) : "";
 }
 
-async function writeJson(path, value) {
-  await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, `${JSON.stringify(value, null, 2)}\n`);
+// Prepare the complete update before replacing any project file.
+const pendingFiles = new Map();
+function writeJson(path, value) {
+  pendingFiles.set(path, `${JSON.stringify(value, null, 2)}\n`);
 }
 
 await Promise.all([
@@ -1145,12 +992,22 @@ for (const specification of datasetSpecs) {
   const rawFileName = `${specification.id}.json`;
   const rawPath = join(rawDirectory, rawFileName);
   let rawText;
+  let accessedAt;
 
   if (offline) {
     rawText = await readFile(rawPath, "utf8");
+    const previousSource = previousManifest.datasets.find(
+      (entry) => entry.datasetCode === specification.id,
+    );
+    const checksum = createHash("sha256").update(rawText).digest("hex");
+    if (!previousSource || previousSource.sha256 !== checksum) {
+      throw new Error(`Offline snapshot integrity failed: ${specification.id}`);
+    }
+    accessedAt = previousSource.accessedAt;
   } else {
     const response = await fetch(apiUrl, {
       headers: { "user-agent": "Explainable-Italy/0.1 data update" },
+      signal: AbortSignal.timeout(45_000),
     });
 
     if (!response.ok) {
@@ -1160,6 +1017,7 @@ for (const specification of datasetSpecs) {
     }
 
     rawText = await response.text();
+    accessedAt = new Date().toISOString();
   }
 
   const normalizedRawText = `${rawText.trim()}\n`;
@@ -1168,7 +1026,7 @@ for (const specification of datasetSpecs) {
     .update(normalizedRawText)
     .digest("hex");
 
-  await writeFile(rawPath, normalizedRawText);
+  pendingFiles.set(rawPath, normalizedRawText);
 
   const metadataUrl =
     dataset.extension?.annotation?.find(
@@ -1186,7 +1044,7 @@ for (const specification of datasetSpecs) {
     metadataUrl,
     doi: `https://doi.org/10.2908/${specification.id.toUpperCase()}`,
     sourceUpdatedAt: dataset.updated,
-    accessedAt: manifest.generatedAt,
+    accessedAt,
   };
 
   manifest.datasets.push({
@@ -1196,7 +1054,21 @@ for (const specification of datasetSpecs) {
     bytes: Buffer.byteLength(normalizedRawText),
   });
 
+  if (dataset.extension?.id?.toLowerCase() !== specification.id) {
+    throw new Error(`Unexpected Eurostat dataset: ${specification.id}`);
+  }
   const records = flattenJsonStat(dataset);
+  if (records.some((record) => !allGeographies.includes(record.geo))) {
+    throw new Error(`Unexpected Eurostat geography: ${specification.id}`);
+  }
+  for (const dimension of dataset.id) {
+    if (dimension === "time" || dimension === "geo") continue;
+    if (!specification.filters[dimension] || records.some(
+      (record) => !specification.filters[dimension].includes(record[dimension]),
+    )) {
+      throw new Error(`Unexpected Eurostat selection: ${specification.id}.${dimension}`);
+    }
+  }
 
   for (const indicatorDefinition of specification.indicators) {
     const seriesWithCountries = buildSeries(
@@ -1205,6 +1077,10 @@ for (const specification of datasetSpecs) {
       {
         ...(specification.statusOverrides ?? {}),
         ...(indicatorDefinition.statusOverrides ?? {}),
+      },
+      {
+        ...(specification.euStatusOverrides ?? {}),
+        ...(indicatorDefinition.euStatusOverrides ?? {}),
       },
     );
     const indicatorSource = {
@@ -1264,7 +1140,7 @@ for (const specification of datasetSpecs) {
 
 const dashboardData = {
   generatedAt: manifest.generatedAt,
-  methodologyVersion: "1.1.0",
+  methodologyVersion: "1.2.0",
   comparison: {
     it: "Quando disponibile, il valore UE è l’aggregato ufficiale Eurostat. Se non esiste un aggregato con lo stesso perimetro, non ne costruiamo uno. La mediana è calcolata ordinando i valori dei Paesi disponibili e prendendo quello centrale; con un numero pari di Paesi è la media dei due valori centrali. Vicino al confronto sono indicati copertura, valori mancanti e contrassegni di qualità.",
     en: "When available, the EU value is Eurostat’s official aggregate. If no aggregate with the same scope exists, we do not construct one. The median is calculated by ordering the available country values and taking the middle one; with an even number of countries it is the mean of the two middle values. Coverage, missing values and quality flags are shown next to the comparison.",
@@ -1366,10 +1242,17 @@ const csvRows = [
   ),
 ];
 
-await writeFile(
+pendingFiles.set(
   join(publicDataDirectory, "dashboard.csv"),
   `${csvRows.map((row) => row.map(csvEscape).join(",")).join("\n")}\n`,
 );
+
+for (const [path, content] of pendingFiles) {
+  await mkdir(dirname(path), { recursive: true });
+  const temporaryPath = `${path}.tmp`;
+  await writeFile(temporaryPath, content);
+  await rename(temporaryPath, path);
+}
 
 console.log(
   `Updated ${indicators.length} indicators from ${manifest.datasets.length} official Eurostat datasets.`,
