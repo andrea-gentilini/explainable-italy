@@ -751,7 +751,7 @@ h1 {
   border-top: 1px solid var(--line);
 }
 
-.indicator-details summary {
+.indicator-details > summary {
   padding: 0.9rem 1.25rem;
   cursor: pointer;
   color: var(--muted);
@@ -760,11 +760,11 @@ h1 {
   list-style: none;
 }
 
-.indicator-details summary::-webkit-details-marker {
+.indicator-details > summary::-webkit-details-marker {
   display: none;
 }
 
-.indicator-details summary::after {
+.indicator-details > summary::after {
   float: right;
   content: "+";
   color: var(--foreground);
@@ -772,7 +772,7 @@ h1 {
   line-height: 1;
 }
 
-.indicator-details[open] summary::after {
+.indicator-details[open] > summary::after {
   content: "×";
 }
 

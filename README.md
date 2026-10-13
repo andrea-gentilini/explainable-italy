@@ -19,6 +19,14 @@ La prima versione include 39 indicatori in sei aree:
 
 I dataset sono diffusi da Eurostat; per le emissioni la fonte originaria indicata nei metadati è EEA su inventari UNFCCC. Il sito usa l’aggregato UE ufficiale quando esiste e calcola la mediana quando sono disponibili almeno 24 Stati membri su 27. Se non esiste un aggregato UE con lo stesso perimetro, non ne costruisce uno.
 
+## Come usare il sito
+
+Dalla homepage puoi aprire uno dei quattro numeri principali o esplorare un tema. La ricerca riconosce testi italiani e inglesi anche senza accenti; i filtri permettono di restringere i risultati.
+
+Ogni scheda mostra il valore italiano, l’anno e il confronto europeo dello stesso anno. Se c’è un valore successivo provvisorio o stimato, resta distinto: puoi sceglierlo dal menu dell’anno e aprire la fonte corrispondente. Il grafico e la tabella riportano l’intera serie pubblicata, con gli anni mancanti lasciati vuoti e i contrassegni della fonte indicati.
+
+Tema, ricerca e anno sono conservati nel collegamento: puoi tornare ai risultati, cambiare lingua o condividere la pagina senza perdere il contesto. I dati si possono scaricare dalla scheda o dalla pagina delle fonti.
+
 ## Principi editoriali
 
 1. Solo fonti istituzionali e dati riproducibili.

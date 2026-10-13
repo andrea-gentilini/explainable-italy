@@ -1409,16 +1409,16 @@ function IndicatorCard({
       {expanded ? <details className="comparison-explainer"><summary>{labels.compareExplainer}</summary><p>{labels.comparisonHelp}</p></details> : null}
 
       {expanded ? (
-        <details className="indicator-details" open>
-          <summary>{labels.understand}</summary>
+        <section className="indicator-details">
+          <h2 className="indicator-details-title">{labels.understand}</h2>
           <div className="indicator-details-body">
             <div className="definition-grid">
               <div>
-                <h4>{labels.simpleDefinition}</h4>
+                <h3>{labels.simpleDefinition}</h3>
                 <p>{indicator.plain[locale]}</p>
               </div>
               <div>
-                <h4>{labels.technicalDefinition}</h4>
+                <h3>{labels.technicalDefinition}</h3>
                 <p>{indicator.technical[locale]}</p>
               </div>
             </div>
@@ -1438,7 +1438,7 @@ function IndicatorCard({
 
             {breakYears.length || indicator.notes.length ? (
               <div className="indicator-notes">
-                <h4>{labels.dataNotesTitle}</h4>
+                <h3>{labels.dataNotesTitle}</h3>
                 {breakYears.length ? (
                   <p className="status-note">
                     {labels.dataStatusBreak.replace(
@@ -1469,7 +1469,7 @@ function IndicatorCard({
 
             <div className="trend-block">
               <div className="trend-heading">
-                <h4>{labels.trend}</h4>
+                <h3>{labels.trend}</h3>
                 <span>
                   {indicator.series[0].year}–{indicator.series[indicator.series.length - 1].year}
                 </span>
@@ -1512,7 +1512,7 @@ function IndicatorCard({
               </button>
             </div>
           </div>
-        </details>
+        </section>
       ) : (
         <a
           className="indicator-page-link"

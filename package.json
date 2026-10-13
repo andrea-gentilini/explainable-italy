@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "test": "pnpm run validate:data && pnpm run build && node --test tests/rendered-html.test.mjs",
+    "test": "pnpm run validate:data && pnpm run build && node --test tests/*.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "validate:data": "node scripts/validate-data.mjs",
     "data:update": "node scripts/update-data.mjs",

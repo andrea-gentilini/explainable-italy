@@ -534,18 +534,18 @@ h1 {
   border-color: var(--line);
 }
 
-.indicator-details summary {
+.indicator-details > summary {
   min-height: 2.75rem;
   padding: 0.72rem 1.15rem;
   color: var(--foreground);
   font-size: 0.68rem;
 }
 
-.indicator-details summary::after {
+.indicator-details > summary::after {
   color: var(--muted);
 }
 
-.indicator-details[open] summary {
+.indicator-details[open] > summary {
   background: color-mix(in srgb, var(--background), transparent 40%);
 }
 
@@ -1188,7 +1188,7 @@ footer a:hover {
     padding-left: 0;
   }
 
-  .indicator-details summary {
+  .indicator-details > summary {
     padding-right: 0.9rem;
     padding-left: 0.9rem;
   }
@@ -2622,7 +2622,7 @@ footer a:hover {
 }
 .comparison-heading { flex-wrap: wrap; gap: 0.4rem; }
 .comparison-method::first-letter { text-transform: uppercase; }
-.indicator-details summary, .card-actions a, .card-actions button,
+.indicator-details > summary, .card-actions a, .card-actions button,
 .indicator-page-link { min-height: 2.75rem; font-size: 0.9rem; }
 .definition-grid p { font-size: 1rem; }
 .definition-grid h4 { font-size: 0.85rem; }
@@ -2733,3 +2733,9 @@ footer a:hover {
 .trend-table > summary { display: list-item; list-style: disclosure-closed; }
 .trend-table[open] > summary { list-style: disclosure-open; }
 .trend-table > summary::after, .comparison-explainer > summary::after { content: none; }
+
+.indicator-details-title { margin: 1rem 1.15rem; font-family: inherit; font-size: 1.25rem; font-weight: 650; line-height: 1.4; letter-spacing: -0.015em; }
+.indicator-details-body h3 { margin: 0.8rem 0 0.4rem; font-family: inherit; font-size: 0.95rem; font-weight: 700; letter-spacing: 0; }
+.trend-bar { min-height: 0; }
+
+.indicator-value { color: var(--foreground); }
