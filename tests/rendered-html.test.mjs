@@ -3,232 +3,274 @@ import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
+const data = JSON.parse(
+  await readFile(new URL("data/processed/dashboard.json", projectRoot), "utf8"),
+);
+const locales = ["it", "en"];
+const staticPages = ["", "data", "method", "sources", "about", "contribute"];
 
-test("contains the bilingual multi-page editorial experience", async () => {
-  const [
-    dashboard,
-    italianPage,
-    englishPage,
-    italianDataPage,
-    englishDataPage,
-    italianIndicatorPage,
-    englishIndicatorPage,
-    layout,
-  ] = await Promise.all([
-    readFile(new URL("app/components/Dashboard.tsx", projectRoot), "utf8"),
-    readFile(new URL("app/page.tsx", projectRoot), "utf8"),
-    readFile(new URL("app/en/page.tsx", projectRoot), "utf8"),
-    readFile(new URL("app/data/page.tsx", projectRoot), "utf8"),
-    readFile(new URL("app/en/data/page.tsx", projectRoot), "utf8"),
-    readFile(new URL("app/data/[id]/page.tsx", projectRoot), "utf8"),
-    readFile(new URL("app/en/data/[id]/page.tsx", projectRoot), "utf8"),
-    readFile(new URL("app/layout.tsx", projectRoot), "utf8"),
-  ]);
+function localizedRoute(locale, path = "") {
+  return `/${[locale === "en" ? "en" : "", path].filter(Boolean).join("/")}`;
+}
 
-  assert.match(dashboard, /L’Italia, i dati ufficiali per tutti\./);
-  assert.match(dashboard, /Italy, official data for everyone\./);
-  assert.match(dashboard, /Italia e confronto europeo/);
-  assert.match(dashboard, /Italy and European comparison/);
-  assert.match(dashboard, /Riduciamo a 100 € tutta la spesa pubblica italiana/);
-  assert.match(dashboard, /L’Italia, in breve/);
-  assert.match(dashboard, /PIL per abitante/);
-  assert.match(dashboard, /Età mediana/);
-  assert.match(dashboard, /Speranza di vita/);
-  assert.match(dashboard, /Occupazione, 20–64 anni/);
-  assert.match(dashboard, /"gdp-per-capita-pps"/);
-  assert.match(dashboard, /"median-age"/);
-  assert.match(dashboard, /className="spending-donut"/);
-  assert.match(dashboard, /conic-gradient/);
-  assert.match(dashboard, /onPointerDown=\{selectSpendingSlice\}/);
-  assert.match(dashboard, /activeSection === "overview"/);
-  assert.match(dashboard, /className="topic-grid"/);
-  assert.match(dashboard, /Scegli un tema/);
-  assert.match(dashboard, /Aperto a chi vuole dare una mano/);
-  assert.match(dashboard, /progetto open source nato per aiutare le persone/);
-  assert.doesNotMatch(dashboard, /Un progetto aperto, con regole chiare/);
-  assert.doesNotMatch(dashboard, /contributionRules/);
-  assert.match(dashboard, /il \{nextYear\} non è ancora pubblicato/);
-  assert.match(dashboard, /Classification of the Functions of Government/);
-  assert.match(dashboard, /Accessibilità, non interpretazione/);
-  assert.match(
-    dashboard,
-    /Riportiamo dati pubblici in un formato leggibile, senza interpretarli/,
-  );
-  assert.match(dashboard, /Apri la metodologia alla base della definizione/);
-  assert.match(dashboard, /parafrasi del progetto basate sulla metodologia ufficiale/);
-  assert.match(dashboard, /source-country-table/);
-  assert.match(dashboard, /sourceQualityTitle/);
-  assert.match(dashboard, /\{coverage\} Paesi UE disponibili su 27/);
-  assert.match(dashboard, /Nessun aggregato UE ufficiale con lo stesso perimetro/);
-  assert.doesNotMatch(dashboard, /media aritmetica dei Paesi/);
-  assert.doesNotMatch(dashboard, /Spiegazioni, non giudizi/);
-  assert.doesNotMatch(dashboard, /Definiamo cosa misura un indicatore/);
-  assert.match(dashboard, /href=\{indicator\.source\.apiUrl\}/);
-  assert.match(dashboard, /data\/\$\{indicator\.id\}\/source/);
-  assert.match(dashboard, /Come sono create queste categorie/);
-  assert.match(dashboard, /Protezione sociale \(incluse pensioni\)/);
-  assert.match(dashboard, /function SocialProtectionDetail/);
-  assert.match(dashboard, /function SourceVerification/);
-  assert.match(dashboard, /Quanta parte riguarda le pensioni/);
-  assert.match(dashboard, /pensioni di vecchiaia, pensioni anticipate/);
-  assert.match(dashboard, /pubblici o privati/);
-  assert.doesNotMatch(dashboard, /Comprende soprattutto pensioni/);
-  assert.doesNotMatch(dashboard, /className="old-age-note"/);
-  assert.doesNotMatch(dashboard, /www\.istat\.it/);
-  assert.match(dashboard, /id="method"/);
-  assert.match(dashboard, /id="sources"/);
-  assert.match(dashboard, /id="about"/);
-  assert.match(dashboard, /id="contribute"/);
-  assert.match(dashboard, /downloadIndicator/);
-  assert.match(dashboard, /localStorage/);
-  assert.match(dashboard, /prefers-color-scheme: dark/);
-  assert.doesNotMatch(dashboard, />\s*ei\s*</);
-  assert.doesNotMatch(dashboard, /\bAI\b/);
-  assert.doesNotMatch(
-    dashboard,
-    /gtag|googletagmanager|plausible\.io|posthog/i,
-  );
-  assert.match(italianPage, /locale="it" view="home"/);
-  assert.match(englishPage, /locale="en" view="home"/);
-  assert.match(italianDataPage, /locale="it" view="data"/);
-  assert.match(englishDataPage, /locale="en" view="data"/);
-  assert.match(italianIndicatorPage, /generateStaticParams/);
-  assert.match(englishIndicatorPage, /generateStaticParams/);
-  assert.match(italianIndicatorPage, /spending-old-age/);
-  assert.match(italianIndicatorPage, /pension-expenditure/);
-  assert.match(englishIndicatorPage, /spending-old-age/);
-  assert.match(englishIndicatorPage, /pension-expenditure/);
-  assert.match(layout, /Andrea Gentilini/);
-  assert.match(layout, /social-preview-v2\.jpg/);
+function decode(value) {
+  return value
+    .replace(/&#(x[0-9a-f]+|\d+);/gi, (_, code) =>
+      String.fromCodePoint(
+        code.startsWith("x") || code.startsWith("X")
+          ? parseInt(code.slice(1), 16)
+          : Number(code),
+      ),
+    )
+    .replace(/&(amp|lt|gt|quot|apos|nbsp);/g, (_, name) =>
+      ({ amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " })[name],
+    );
+}
 
-  await Promise.all(
-    [
-      "app/method/page.tsx",
-      "app/sources/page.tsx",
-      "app/about/page.tsx",
-      "app/contribute/page.tsx",
-      "app/en/method/page.tsx",
-      "app/en/sources/page.tsx",
-      "app/en/about/page.tsx",
-      "app/en/contribute/page.tsx",
-      "app/data/[id]/source/page.tsx",
-      "app/en/data/[id]/source/page.tsx",
-    ].map((path) => access(new URL(path, projectRoot))),
-  );
+function textContent(html) {
+  return decode(html.replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim();
+}
+
+function elements(html, tag) {
+  return [...html.matchAll(new RegExp(`<${tag}\\b([^>]*)>([\\s\\S]*?)<\\/${tag}>`, "gi"))]
+    .map((match) => ({ attributes: match[1], html: match[2], text: textContent(match[2]) }));
+}
+
+function attribute(element, name) {
+  const match = element.attributes.match(new RegExp(`(?:^|\\s)${name}="([^"]*)"`, "i"));
+  return match ? decode(match[1]) : null;
+}
+
+function hasClass(element, name) {
+  return (attribute(element, "class") ?? "").split(/\s+/).includes(name);
+}
+
+const pageCache = new Map();
+async function page(route) {
+  if (pageCache.has(route)) return pageCache.get(route);
+  const stem = route.replace(/^\//, "").replace(/\/$/, "");
+  const candidates = [
+    `out/${stem ? `${stem}/` : ""}index.html`,
+    `.next/server/app/${stem || "index"}.html`,
+  ];
+  for (const path of candidates) {
+    try {
+      const fullHtml = await readFile(new URL(path, projectRoot), "utf8");
+      // React's hydration payload also contains copy and URLs; assertions must
+      // inspect the actual page that readers and assistive technology receive.
+      const html = fullHtml.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
+      const result = { fullHtml, html, text: textContent(html), links: elements(html, "a") };
+      pageCache.set(route, result);
+      return result;
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+    }
+  }
+  assert.fail(`Missing rendered route ${route}. Run the production build before these tests.`);
+}
+
+function number(value, indicator, locale) {
+  return new Intl.NumberFormat(locale === "it" ? "it-IT" : "en-GB", {
+    minimumFractionDigits: indicator.precision,
+    maximumFractionDigits: indicator.precision,
+  }).format(value);
+}
+
+function requireLink(rendered, href, message) {
+  const normalize = (value) => value?.startsWith("/")
+    ? value.replace(/\/(?=[?#]|$)/, "")
+    : value;
+  assert(rendered.links.some((link) => normalize(attribute(link, "href")) === normalize(href)), message);
+}
+
+async function basePath() {
+  const home = await page("/");
+  const brand = home.links.find((link) => hasClass(link, "brand"));
+  assert(brand, "The site has a home link");
+  return attribute(brand, "href").replace(/\/$/, "");
+}
+
+const allRoutes = locales.flatMap((locale) => [
+  ...staticPages.map((path) => ({ locale, path })),
+  ...data.indicators.flatMap((indicator) => [
+    { locale, path: `data/${indicator.id}`, indicator },
+    { locale, path: `data/${indicator.id}/source`, indicator },
+  ]),
+]);
+
+for (const locale of locales) {
+  test(`${locale}: every page has an accessible heading, navigation and matching language destination`, async () => {
+    const prefix = await basePath();
+    for (const { path, indicator } of allRoutes.filter((entry) => entry.locale === locale)) {
+      const route = localizedRoute(locale, path);
+      const rendered = await page(route);
+      const headings = elements(rendered.html, "h1");
+      assert.equal(headings.length, 1, `${route}: one main heading`);
+      assert(headings[0].text.length > 0, `${route}: meaningful heading`);
+      if (indicator) {
+        assert(headings[0].text.includes(indicator.title[locale]), `${route}: heading identifies the indicator`);
+      }
+      assert.match(rendered.html, /<main\b[^>]*id="main"/, `${route}: main content landmark`);
+      requireLink(rendered, "#main", `${route}: keyboard skip link`);
+      const navigation = elements(rendered.html, "nav")[0];
+      assert(navigation, `${route}: primary navigation`);
+      for (const destination of ["data", "method", "sources", "about", "contribute"]) {
+        requireLink(
+          { links: elements(navigation.html, "a") },
+          `${prefix}${localizedRoute(locale, destination)}`,
+          `${route}: ${destination} is in the primary navigation`,
+        );
+      }
+      const oppositeLocale = locale === "it" ? "en" : "it";
+      requireLink(rendered, `${prefix}${localizedRoute(oppositeLocale, path)}`, `${route}: language switch keeps the same page`);
+      assert.match(rendered.html, new RegExp(`\\blang="${locale}"`), `${route}: content declares its language`);
+      assert.doesNotMatch(rendered.fullHtml, /googletagmanager|google-analytics|plausible\.io|posthog|connect\.facebook\.net/i, `${route}: no tracking integrations`);
+      assert.match(rendered.text, locale === "it" ? /Nessun tracciamento/ : /No tracking/, `${route}: privacy statement`);
+    }
+  });
+}
+
+test("all rendered local links lead to an exported page, asset or existing section", async () => {
+  const prefix = await basePath();
+  const checked = new Set();
+  for (const { locale, path } of allRoutes) {
+    const route = localizedRoute(locale, path);
+    const rendered = await page(route);
+    for (const link of rendered.links) {
+      const href = attribute(link, "href");
+      if (!href || /^(https?:|mailto:|tel:)/.test(href)) continue;
+      const url = new URL(href, `https://example.test${prefix}${route}/`);
+      assert.equal(url.origin, "https://example.test", `${route}: unexpected local link ${href}`);
+      let destination = decodeURIComponent(url.pathname);
+      if (prefix) {
+        assert(destination === prefix || destination.startsWith(`${prefix}/`), `${route}: ${href} retains the deployment path`);
+        destination = destination.slice(prefix.length) || "/";
+      }
+      destination = destination.replace(/\/$/, "") || "/";
+      const key = `${destination}${url.hash}`;
+      if (checked.has(key)) continue;
+      checked.add(key);
+      if (/\.[a-z0-9]+$/i.test(destination)) {
+        await access(new URL(`public${destination}`, projectRoot));
+      } else {
+        const target = await page(destination);
+        if (url.hash) {
+          const id = decodeURIComponent(url.hash.slice(1));
+          assert(target.html.includes(`id="${id}"`), `${route}: section ${href} exists`);
+        }
+      }
+    }
+  }
 });
 
-test("has no starter preview left", async () => {
-  await assert.rejects(
-    access(new URL("app/_sites-preview/SkeletonPreview.tsx", projectRoot)),
-  );
-  await assert.rejects(
-    access(new URL("CODE_OF_CONDUCT.md", projectRoot)),
-  );
+for (const locale of locales) {
+  test(`${locale}: sources reproduce the main card and disclose current coverage, notes and official provenance`, async () => {
+    const prefix = await basePath();
+    for (const indicator of data.indicators) {
+      const indicatorRoute = localizedRoute(locale, `data/${indicator.id}`);
+      const sourceRoute = localizedRoute(locale, `data/${indicator.id}/source`);
+      const [card, source] = await Promise.all([page(indicatorRoute), page(sourceRoute)]);
+      const reading = elements(card.html, "p").find((element) => hasClass(element, "indicator-value"));
+      const panel = elements(source.html, "div").find((element) => hasClass(element, "source-value-panel"));
+      assert(reading && panel, `${sourceRoute}: main value and source value are present`);
+      const sourceValue = elements(panel.html, "strong")[0];
+      assert.equal(sourceValue?.text, reading.text, `${sourceRoute}: the source defaults to the value on the card`);
+      assert(elements(panel.html, "small")[0]?.text.includes(String(indicator.latest.year)), `${sourceRoute}: default year is the main observation`);
+      assert(sourceValue.text.includes(number(indicator.latest.italy, indicator, locale)), `${sourceRoute}: main value matches the snapshot`);
+      requireLink(card, `${prefix}${sourceRoute}?year=${indicator.latest.year}`, `${indicatorRoute}: opens its own source for the year displayed`);
+      requireLink(source, indicator.source.apiUrl, `${sourceRoute}: exact original query`);
+      requireLink(source, indicator.source.dataBrowserUrl, `${sourceRoute}: official data browser`);
+      requireLink(source, indicator.source.doi, `${sourceRoute}: permanent dataset identifier`);
+      requireLink(source, indicator.definitionSourceUrl, `${sourceRoute}: official definition`);
+      requireLink(card, indicator.definitionSourceUrl, `${indicatorRoute}: definition attribution`);
+      assert(source.text.includes(indicator.source.datasetCode), `${sourceRoute}: dataset identifier`);
+      assert(source.text.includes(indicator.source.originalInstitution), `${sourceRoute}: original institution`);
+      assert(card.text.includes(indicator.plain[locale]), `${indicatorRoute}: readable definition`);
+      assert(card.text.includes(indicator.technical[locale]), `${indicatorRoute}: precise definition`);
+      assert.match(card.text, locale === "it" ? /parafrasi del progetto/ : /project paraphrases/, `${indicatorRoute}: distinguishes the project's wording from the official definition`);
+      for (const note of indicator.notes) {
+        assert(source.text.includes(note.text[locale]), `${sourceRoute}: source caveat ${note.type}`);
+        assert(card.text.includes(note.text[locale]), `${indicatorRoute}: source caveat ${note.type}`);
+        requireLink(source, note.sourceUrl, `${sourceRoute}: note is verifiable`);
+      }
+      assert.match(source.text, new RegExp(`${indicator.latest.coverage} (?:Paesi UE disponibili su 27|available EU countries out of 27)`), `${sourceRoute}: coverage derives from the selected data`);
+      const countryTable = elements(source.html, "table")[0];
+      assert(countryTable, `${sourceRoute}: observations behind the median`);
+      const countryCodes = [...countryTable.html.matchAll(/<code>([A-Z]{2})<\/code>/g)].map((match) => match[1]).sort();
+      assert.deepEqual(countryCodes, indicator.latest.countries.map((country) => country.geo).sort(), `${sourceRoute}: the displayed countries reproduce the main observation`);
+      const selectedOptions = elements(source.html, "option").filter((option) => /\bselected(?:="")?(?:\s|$)/.test(option.attributes));
+      if (indicator.newerEstimate) {
+        assert.equal(selectedOptions.length, 1, `${sourceRoute}: one default comparison year`);
+        assert.equal(attribute(selectedOptions[0], "value"), String(indicator.latest.year), `${sourceRoute}: the main observation is selected`);
+        const options = elements(source.html, "option").map((option) => attribute(option, "value"));
+        assert(options.includes(String(indicator.newerEstimate.year)), `${sourceRoute}: newer provisional or estimated year is available separately`);
+      }
+      if (indicator.latest.eu === null) {
+        assert.match(source.text, locale === "it" ? /non pubblica un aggregato UE con lo stesso perimetro/ : /does not publish an EU aggregate with the same scope/, `${sourceRoute}: no invented EU aggregate`);
+        assert(!elements(source.html, "small").some((element) => element.text.includes("Eurostat · EU27_2020")), `${sourceRoute}: no unavailable figure attributed to Eurostat`);
+      } else {
+        assert(elements(source.html, "small").some((element) => element.text.includes("Eurostat · EU27_2020")), `${sourceRoute}: EU value is the official aggregate`);
+      }
+    }
+  });
 
-  const [packageJson, readme, contributing, dataLicense] = await Promise.all([
-    readFile(new URL("package.json", projectRoot), "utf8"),
-    readFile(new URL("README.md", projectRoot), "utf8"),
-    readFile(new URL("CONTRIBUTING.md", projectRoot), "utf8"),
-    readFile(new URL("DATA_LICENSE.md", projectRoot), "utf8"),
-  ]);
+  test(`${locale}: every indicator exposes its complete historical series as an accessible table`, async () => {
+    for (const indicator of data.indicators) {
+      const route = localizedRoute(locale, `data/${indicator.id}`);
+      const rendered = await page(route);
+      const table = elements(rendered.html, "table").find((candidate) => {
+        const body = elements(candidate.html, "tbody")[0];
+        if (!body) return false;
+        const years = elements(body.html, "tr").map((row) => Number(elements(row.html, "th")[0]?.text));
+        const expectedYears = indicator.series.map((point) => point.year).sort((left, right) => left - right);
+        const sortedYears = [...years].sort((left, right) => left - right);
+        return sortedYears.length === expectedYears.length
+          && sortedYears.every((year, index) => year === expectedYears[index]);
+      });
+      assert(table, `${route}: each published year appears exactly once, including gaps`);
+      const rows = elements(elements(table.html, "tbody")[0].html, "tr");
+      const years = rows.map((row) => Number(elements(row.html, "th")[0]?.text));
+      const ascending = years.every((year, index) => index === 0 || year > years[index - 1]);
+      const descending = years.every((year, index) => index === 0 || year < years[index - 1]);
+      assert(ascending || descending, `${route}: historical years are ordered`);
+      const pointsByYear = new Map(indicator.series.map((point) => [point.year, point]));
+      const headings = elements(elements(table.html, "thead")[0]?.html ?? "", "th");
+      assert(headings.length >= 4, `${route}: year and comparison columns have headings`);
+      for (const row of rows) {
+        const point = pointsByYear.get(Number(elements(row.html, "th")[0]?.text));
+        const cells = elements(row.html, "td");
+        assert.equal(attribute(elements(row.html, "th")[0], "scope"), "row", `${route}: year identifies its row`);
+        assert(cells[0]?.text.includes(number(point.italy, indicator, locale)), `${route}: Italy's value for ${point.year}`);
+        if (point.eu === null) {
+          assert.equal(cells[1]?.text, "—", `${route}: no unofficial EU figure for ${point.year}`);
+        } else {
+          assert(cells[1]?.text.includes(number(point.eu, indicator, locale)), `${route}: official EU value for ${point.year}`);
+        }
+        assert(cells[2]?.text.includes(number(point.median, indicator, locale)), `${route}: median for ${point.year}`);
+        assert(cells[3]?.text.startsWith(String(point.coverage)), `${route}: country coverage for ${point.year}`);
+      }
+    }
+  });
+}
 
-  assert.doesNotMatch(packageJson, /site-creator-vinext-starter/);
-  assert.doesNotMatch(packageJson, /react-loading-skeleton/);
-  assert.doesNotMatch(readme, /Your site is taking shape/);
-  assert.doesNotMatch(readme, /prototipo privato/);
-  assert.match(readme, /sviluppo aperto/);
-  assert.match(contributing, /Ogni contributo è benvenuto/);
-  assert.doesNotMatch(contributing, /Codice di condotta/);
-  assert.match(dataLicense, /politica di riuso Eurostat/);
-  assert.match(dataLicense, /European Environment Agency/);
+test("data filters expose their selected state to assistive technology", async () => {
+  for (const locale of locales) {
+    const rendered = await page(localizedRoute(locale, "data"));
+    const filterGroup = elements(rendered.html, "div").find((element) => hasClass(element, "section-filters"));
+    assert(filterGroup, `${locale}: topic controls are present`);
+    const controls = elements(filterGroup.html, "button");
+    assert(controls.length >= data.sections.length, `${locale}: all topics can be selected`);
+    assert(controls.every((control) => ["true", "false"].includes(attribute(control, "aria-pressed"))), `${locale}: filters announce whether they are selected`);
+    assert.equal(controls.filter((control) => attribute(control, "aria-pressed") === "true").length, 1, `${locale}: exactly one topic view is active`);
+    assert.match(rendered.html, /<input\b[^>]*type="search"/, `${locale}: searchable catalogue`);
+  }
 });
 
-test("links every indicator to its exact Eurostat query", async () => {
-  const data = JSON.parse(
-    await readFile(
-      new URL("data/processed/dashboard.json", projectRoot),
-      "utf8",
-    ),
-  );
-  const defence = data.indicators.find(
-    (indicator) => indicator.id === "spending-defence",
-  );
-  const health = data.indicators.find(
-    (indicator) => indicator.id === "spending-health",
-  );
-  const oldAge = data.indicators.find(
-    (indicator) => indicator.id === "spending-old-age",
-  );
-
-  assert.notEqual(defence.source.apiUrl, health.source.apiUrl);
-  assert.match(defence.source.apiUrl, /cofog99=GF02/);
-  assert.match(health.source.apiUrl, /cofog99=GF07/);
-  assert.match(oldAge.source.apiUrl, /cofog99=GF1002/);
-});
-
-test("renders quality notes and comparisons without false EU figures", async () => {
-  const [
-    home,
-    spendingSource,
-    healthyLifeSource,
-    greenhouseGasSource,
-    renewableIndicator,
-    lifeExpectancyIndicator,
-  ] = await Promise.all([
-    readFile(new URL(".next/server/app/index.html", projectRoot), "utf8"),
-    readFile(
-      new URL(
-        ".next/server/app/data/spending-health/source.html",
-        projectRoot,
-      ),
-      "utf8",
-    ),
-    readFile(
-      new URL(
-        ".next/server/app/data/healthy-life-years/source.html",
-        projectRoot,
-      ),
-      "utf8",
-    ),
-    readFile(
-      new URL(
-        ".next/server/app/data/greenhouse-gas-emissions/source.html",
-        projectRoot,
-      ),
-      "utf8",
-    ),
-    readFile(
-      new URL(
-        ".next/server/app/data/renewable-energy.html",
-        projectRoot,
-      ),
-      "utf8",
-    ),
-    readFile(
-      new URL(
-        ".next/server/app/data/life-expectancy.html",
-        projectRoot,
-      ),
-      "utf8",
-    ),
-  ]);
-
-  assert.match(home, /Spesa pubblica · Italia · 2024/);
-  assert.match(home, /provvisorio/);
-  assert.match(spendingSource, /Stato del dato italiano/);
-  assert.match(spendingSource, /Eurostat indica come provvisoria/);
-  assert.match(healthyLifeSource, /26 Paesi UE disponibili su 27/);
-  assert.match(healthyLifeSource, /Manca: Lussemburgo/);
-  assert.match(healthyLifeSource, /2009 al 2011 senza interpolare/);
-  assert.match(
-    greenhouseGasSource,
-    /Eurostat non pubblica un aggregato UE con lo stesso perimetro/,
-  );
-  assert.match(greenhouseGasSource, /European Environment Agency/);
-  assert.doesNotMatch(
-    greenhouseGasSource,
-    /<small>Eurostat · EU27_2020<\/small>/,
-  );
-  assert.match(renewableIndicator, /RED I/);
-  assert.match(lifeExpectancyIndicator, /classe 95\+/);
+test("each COFOG category retains its exact source selection", () => {
+  const selections = { "spending-defence": "GF02", "spending-health": "GF07", "spending-old-age": "GF1002" };
+  for (const [id, code] of Object.entries(selections)) {
+    const indicator = data.indicators.find((candidate) => candidate.id === id);
+    assert(indicator, `${id}: category exists`);
+    assert.equal(new URL(indicator.source.apiUrl).searchParams.get("cofog99"), code, `${id}: correct official category`);
+  }
 });
