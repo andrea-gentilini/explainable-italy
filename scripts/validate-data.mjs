@@ -124,6 +124,10 @@ function checkAgainstSource(indicator, point, byYear) {
     `${indicator.id}: contrassegno Italia originale perso nel ${point.year}`);
   assert(point.euSourceStatus === (Number.isFinite(officialEu?.value) ? officialEu.status : null),
     `${indicator.id}: contrassegno UE originale perso nel ${point.year}`);
+  for (const [original, effective] of [[point.sourceStatus, point.status], [point.euSourceStatus, point.euStatus]]) {
+    assert([...original ?? ""].every((code) => effective?.includes(code)),
+      `${indicator.id}: contrassegno originale rimosso nel ${point.year}`);
+  }
   assert(point.median === expectedMedian, `${indicator.id}: mediana non riproducibile nel ${point.year}`);
   assert(point.coverage === countries.length, `${indicator.id}: copertura diversa dalla fonte nel ${point.year}`);
   assert(JSON.stringify(point.missingCountries) === JSON.stringify(euCountries.filter((geo) => !countries.includes(geo))),

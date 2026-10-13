@@ -53,6 +53,9 @@ test("JSON-stat rejects invalid cell coordinates and malformed source responses"
   assert.equal(flattenJsonStat(dataset)[0].value, 0);
   assert.throws(() => flattenJsonStat({ ...dataset, value: { 1: 100 } }), /Invalid Eurostat cell index/);
   assert.throws(() => flattenJsonStat({ error: "Unavailable" }), /Invalid Eurostat/);
+  assert.throws(() => flattenJsonStat({ ...dataset, dimension: {
+    ...dataset.dimension, time: { category: { index: { 2024: 2 } } },
+  } }), /Invalid Eurostat dimension positions/);
 });
 
 test("an interrupted source update leaves all snapshots and published files unchanged", async () => {

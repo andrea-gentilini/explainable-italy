@@ -31,9 +31,12 @@ export const euCountries = [
 function getPositionCodes(dimension) {
   if (!dimension?.category?.index) throw new Error("Missing Eurostat dimension codes");
   if (Array.isArray(dimension.category.index)) return dimension.category.index;
-  return Object.entries(dimension.category.index)
-    .sort((left, right) => left[1] - right[1])
-    .map(([code]) => code);
+  const entries = Object.entries(dimension.category.index)
+    .sort((left, right) => left[1] - right[1]);
+  if (entries.some(([, position], index) => position !== index)) {
+    throw new Error("Invalid Eurostat dimension positions");
+  }
+  return entries.map(([code]) => code);
 }
 
 export function flattenJsonStat(dataset) {
