@@ -4,7 +4,8 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
-  euCountries, flattenJsonStat, buildSeries, isEstimateOrProvisional, normalizeNumber,
+  euCountries, flattenJsonStat, buildSeries, isEstimateOrProvisional,
+  csvEscape, csvNumber, buildIndicatorCsv,
 } from "./data-utils.mjs";
 
 const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -927,16 +928,6 @@ function withoutCountryValues(point) {
   return publicPoint;
 }
 
-function csvEscape(value) {
-  const text = String(value ?? "");
-  if (!/[",\n]/.test(text)) return text;
-  return `"${text.replaceAll('"', '""')}"`;
-}
-
-function csvNumber(value) {
-  return Number.isFinite(value) ? String(normalizeNumber(value)) : "";
-}
-
 // Prepare the complete update before replacing any project file.
 const pendingFiles = new Map();
 function writeJson(path, value) {
@@ -1246,6 +1237,13 @@ pendingFiles.set(
   join(publicDataDirectory, "dashboard.csv"),
   `${csvRows.map((row) => row.map(csvEscape).join(",")).join("\n")}\n`,
 );
+
+for (const indicator of indicators) {
+  pendingFiles.set(
+    join(publicDataDirectory, "indicators", `${indicator.id}.csv`),
+    buildIndicatorCsv(indicator),
+  );
+}
 
 for (const [path, content] of pendingFiles) {
   await mkdir(dirname(path), { recursive: true });

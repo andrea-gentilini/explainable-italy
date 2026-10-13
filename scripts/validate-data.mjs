@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { euCountries, flattenJsonStat, matchesSelector, isEstimateOrProvisional } from "./data-utils.mjs";
+import { euCountries, flattenJsonStat, matchesSelector, isEstimateOrProvisional, buildIndicatorCsv } from "./data-utils.mjs";
 
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 
@@ -375,6 +375,17 @@ assert(
   "Il CSV contiene artefatti di precisione binaria",
 );
 
+const indicatorCsvDirectory = join(projectRoot, "public/data/indicators");
+const csvFiles = (await readdir(indicatorCsvDirectory)).sort();
+const expectedCsvFiles = dashboard.indicators.map((indicator) => `${indicator.id}.csv`).sort();
+assert(JSON.stringify(csvFiles) === JSON.stringify(expectedCsvFiles),
+  "CSV dei singoli indicatori mancanti o inattesi");
+for (const indicator of dashboard.indicators) {
+  const indicatorCsv = await readFile(join(indicatorCsvDirectory, `${indicator.id}.csv`), "utf8");
+  assert(indicatorCsv === buildIndicatorCsv(indicator),
+    `${indicator.id}: CSV scaricabile diverso dalle osservazioni pubblicate`);
+}
+
 console.log(
-  `Dati validi e riprodotti dagli snapshot ufficiali: ${dashboard.indicators.length} indicatori, ${manifest.datasets.length} dataset, ${csvLines.length - 1} righe CSV.`,
+  `Dati validi e riprodotti dagli snapshot ufficiali: ${dashboard.indicators.length} indicatori, ${manifest.datasets.length} dataset, ${csvLines.length - 1} righe CSV, ${csvFiles.length} CSV per indicatore.`,
 );

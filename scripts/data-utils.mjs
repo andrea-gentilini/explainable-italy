@@ -201,3 +201,28 @@ export function buildSeries(records, selector, statusOverrides = {}, euStatusOve
     });
 }
 
+export function csvEscape(value) {
+  const text = String(value ?? "");
+  if (!/[",\n]/.test(text)) return text;
+  return `"${text.replaceAll('"', '""')}"`;
+}
+
+export function csvNumber(value) {
+  return Number.isFinite(value) ? String(normalizeNumber(value)) : "";
+}
+
+export function buildIndicatorCsv(indicator) {
+  const rows = [
+    [
+      "year", "italy", "eu_official", "median", "countries_in_median",
+      "eu_method", "italy_status", "eu_status", "flagged_countries", "missing_countries",
+    ],
+    ...indicator.series.map((point) => [
+      point.year, csvNumber(point.italy), csvNumber(point.eu), csvNumber(point.median),
+      point.coverage, point.euMethod, point.status, point.euStatus,
+      point.countryStatuses.map(({ geo, status }) => `${geo}:${status}`).join("|"),
+      point.missingCountries.join("|"),
+    ]),
+  ];
+  return `${rows.map((row) => row.map(csvEscape).join(",")).join("\n")}\n`;
+}
