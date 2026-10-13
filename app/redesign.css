@@ -2687,7 +2687,7 @@ footer a:hover {
 .trend-scale, .trend-legend { color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
 .trend-scale { margin: 0.6rem 0; }
 .trend-scroll { overflow-x: auto; padding: 0.5rem 0 1.5rem; }
-.trend-chart { display: grid; min-width: 36rem; height: 10rem; gap: 0.35rem; }
+.trend-chart { display: grid; height: 10rem; padding: 0; gap: 0.35rem; }
 .trend-column small { font-size: 0.75rem; }
 .trend-bar.uncertain { background-image: repeating-linear-gradient(135deg, transparent 0 4px, var(--surface) 4px 6px); }
 .trend-table { margin-top: 1rem; }
@@ -2729,3 +2729,7 @@ footer a:hover {
   .snapshot-grid strong { font-size: clamp(1.7rem, 8vw, 2.5rem); }
   .snapshot-grid > a { padding-bottom: 1.2rem; gap: 0.3rem; }
 }
+
+.trend-table > summary { display: list-item; list-style: disclosure-closed; }
+.trend-table[open] > summary { list-style: disclosure-open; }
+.trend-table > summary::after, .comparison-explainer > summary::after { content: none; }
