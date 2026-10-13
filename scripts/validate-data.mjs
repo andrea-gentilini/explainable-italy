@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { euCountries, flattenJsonStat, matchesSelector, isEstimateOrProvisional } from "./data-utils.mjs";
+
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 
 async function readJson(path) {
@@ -57,6 +59,15 @@ function assertPoint(point, indicatorId) {
     ),
     `${indicatorId}: contrassegni Paese non validi`,
   );
+  const validCountries = new Set(euCountries);
+  assert(new Set(point.missingCountries).size === point.missingCountries.length,
+    `${indicatorId}: Paesi mancanti duplicati`);
+  assert(point.missingCountries.every((geo) => validCountries.has(geo)),
+    `${indicatorId}: Paese mancante estraneo all’UE27`);
+  assert(new Set(point.countryStatuses.map((entry) => entry.geo)).size === point.countryStatuses.length,
+    `${indicatorId}: contrassegni Paese duplicati`);
+  assert(point.countryStatuses.every((entry) => validCountries.has(entry.geo) && !point.missingCountries.includes(entry.geo)),
+    `${indicatorId}: contrassegno di un Paese senza valore`);
   if (point.countries) {
     assert(
       point.countries.length === point.coverage,
@@ -91,6 +102,45 @@ const datasetCodes = new Set(
   manifest.datasets.map((dataset) => dataset.datasetCode),
 );
 const indicatorIds = new Set();
+const rawDatasets = new Map(await Promise.all(manifest.datasets.map(async (source) => {
+  const raw = await readJson(source.localPath);
+  return [source.datasetCode, { dataset: raw, records: flattenJsonStat(raw) }];
+})));
+
+function checkAgainstSource(indicator, point, byYear) {
+  const observations = byYear.get(point.year);
+  assert(observations, `${indicator.id}: anno non presente nello snapshot`);
+  const countries = euCountries.filter((geo) => Number.isFinite(observations.get(geo)?.value));
+  const values = countries.map((geo) => observations.get(geo).value).sort((a, b) => a - b);
+  const middle = Math.floor(values.length / 2);
+  const expectedMedian = values.length % 2
+    ? values[middle]
+    : Number(((values[middle - 1] + values[middle]) / 2).toFixed(10));
+  assert(point.italy === observations.get("IT")?.value, `${indicator.id}: Italia diversa dalla fonte nel ${point.year}`);
+  const officialEu = observations.get("EU27_2020");
+  assert(point.eu === (Number.isFinite(officialEu?.value) ? officialEu.value : null),
+    `${indicator.id}: UE diversa dalla fonte nel ${point.year}`);
+  assert(point.sourceStatus === (observations.get("IT")?.status ?? null),
+    `${indicator.id}: contrassegno Italia originale perso nel ${point.year}`);
+  assert(point.euSourceStatus === (Number.isFinite(officialEu?.value) ? officialEu.status : null),
+    `${indicator.id}: contrassegno UE originale perso nel ${point.year}`);
+  assert(point.median === expectedMedian, `${indicator.id}: mediana non riproducibile nel ${point.year}`);
+  assert(point.coverage === countries.length, `${indicator.id}: copertura diversa dalla fonte nel ${point.year}`);
+  assert(JSON.stringify(point.missingCountries) === JSON.stringify(euCountries.filter((geo) => !countries.includes(geo))),
+    `${indicator.id}: elenco Paesi mancanti diverso dalla fonte nel ${point.year}`);
+  const expectedFlags = countries.flatMap((geo) => {
+    const status = geo === "IT" ? point.status : observations.get(geo).status;
+    return status ? [{ geo, status }] : [];
+  });
+  assert(JSON.stringify(point.countryStatuses) === JSON.stringify(expectedFlags),
+    `${indicator.id}: contrassegni nazionali diversi dalla fonte nel ${point.year}`);
+  if (point.countries) {
+    assert(JSON.stringify(point.countries) === JSON.stringify(countries.map((geo) => ({
+      geo, value: observations.get(geo).value,
+      status: geo === "IT" ? point.status : observations.get(geo).status,
+    }))), `${indicator.id}: tabella Paesi diversa dallo snapshot nel ${point.year}`);
+  }
+}
 
 for (const indicator of dashboard.indicators) {
   assert(!indicatorIds.has(indicator.id), `ID duplicato: ${indicator.id}`);
@@ -124,14 +174,47 @@ for (const indicator of dashboard.indicators) {
   );
   assert(Array.isArray(indicator.notes), `${indicator.id}: note mancanti`);
 
+  const { records } = rawDatasets.get(indicator.source.datasetCode);
+  const parameters = new URL(indicator.source.apiUrl).searchParams;
+  const selector = Object.fromEntries([...parameters].filter(([dimension]) => ![
+    "lang", "sinceTimePeriod", "geo",
+  ].includes(dimension)));
+  const byYear = new Map();
+  for (const record of records.filter((record) => matchesSelector(record, selector))) {
+    const year = Number(record.time);
+    if (!byYear.has(year)) byYear.set(year, new Map());
+    assert(!byYear.get(year).has(record.geo), `${indicator.id}: selezione ambigua`);
+    byYear.get(year).set(record.geo, record);
+  }
+  const expectedYears = [...byYear].filter(([year, observations]) =>
+    year >= 2000 && Number.isFinite(observations.get("IT")?.value) &&
+    euCountries.filter((geo) => Number.isFinite(observations.get(geo)?.value)).length >= 24,
+  ).map(([year]) => year).sort((a, b) => a - b);
+  assert(JSON.stringify(indicator.series.map((point) => point.year)) === JSON.stringify(expectedYears),
+    `${indicator.id}: anni confrontabili omessi o interpolati`);
   let previousYear = 1999;
   for (const point of indicator.series) {
     assertPoint(point, indicator.id);
+    checkAgainstSource(indicator, point, byYear);
     assert(point.year > previousYear, `${indicator.id}: anni non ordinati`);
     previousYear = point.year;
   }
 
   assertPoint(indicator.latest, indicator.id);
+  checkAgainstSource(indicator, indicator.latest, byYear);
+  const latestExpected = [...indicator.series].reverse().find((point) => !isEstimateOrProvisional(point.status))
+    ?? indicator.series.at(-1);
+  assert(indicator.latest.year === latestExpected.year,
+    `${indicator.id}: selezione dell’ultimo dato non provvisorio incoerente`);
+  const newest = indicator.series.at(-1);
+  assert((indicator.newerEstimate?.year ?? null) === (newest.year > latestExpected.year ? newest.year : null),
+    `${indicator.id}: dato più recente omesso o non coerente`);
+  for (const point of [indicator.latest, indicator.newerEstimate].filter(Boolean)) {
+    const comparisonPoint = { ...point };
+    delete comparisonPoint.countries;
+    assert(JSON.stringify(comparisonPoint) === JSON.stringify(indicator.series.find((item) => item.year === point.year)),
+      `${indicator.id}: dato principale incoerente con la serie`);
+  }
   assert(
     indicator.latest.countries?.length === indicator.latest.coverage,
     `${indicator.id}: dettaglio Paesi assente dal dato principale`,
@@ -142,6 +225,7 @@ for (const indicator of dashboard.indicators) {
   );
   if (indicator.newerEstimate) {
     assertPoint(indicator.newerEstimate, indicator.id);
+    checkAgainstSource(indicator, indicator.newerEstimate, byYear);
     assert(
       indicator.newerEstimate.countries?.length ===
         indicator.newerEstimate.coverage,
@@ -185,6 +269,16 @@ for (const dataset of manifest.datasets) {
   assert(dataset.dataBrowserUrl.startsWith("https://"), `${dataset.datasetCode}: URL dati`);
   assert(dataset.apiUrl.startsWith("https://"), `${dataset.datasetCode}: URL API`);
   assert(dataset.doi.startsWith("https://doi.org/"), `${dataset.datasetCode}: DOI`);
+  const original = rawDatasets.get(dataset.datasetCode).dataset;
+  assert(dataset.sourceUpdatedAt === original.updated,
+    `${dataset.datasetCode}: aggiornamento diverso dalla fonte`);
+  assert(dataset.datasetLabel === original.label,
+    `${dataset.datasetCode}: titolo diverso dalla fonte`);
+  for (const indicator of dashboard.indicators.filter((item) => item.source.datasetCode === dataset.datasetCode)) {
+    for (const key of ["institution", "originalInstitution", "datasetLabel", "sourceUpdatedAt", "accessedAt", "metadataUrl", "doi"]) {
+      assert(indicator.source[key] === dataset[key], `${indicator.id}: provenienza ${key} incoerente`);
+    }
+  }
 }
 
 const spending = dashboard.indicators.filter(
@@ -216,18 +310,12 @@ assert(
   spendingDisplayed.every((point) => point.year === spendingDisplayedYear),
   "Le funzioni COFOG visualizzate non hanno lo stesso anno",
 );
-assert(
-  spendingDisplayed.every((point) => point.status?.includes("p")),
-  "La ripartizione COFOG 2024 deve risultare provvisoria",
-);
-assert(
-  spendingDisplayed.every((point) =>
-    point.countryStatuses.some(
-      (entry) => entry.geo === "IT" && entry.status.includes("p"),
-    ),
-  ),
-  "Lo stato provvisorio COFOG deve comparire anche nel dettaglio Italia",
-);
+for (const point of spendingDisplayed.filter((item) => item.year === 2024)) {
+  assert(point.status?.includes("p") && point.euStatus?.includes("p"),
+    "La ripartizione COFOG 2024 Italia e UE deve risultare provvisoria");
+  assert(point.countryStatuses.some((entry) => entry.geo === "IT" && entry.status.includes("p")),
+    "Lo stato provvisorio COFOG deve comparire anche nel dettaglio Italia");
+}
 assert(
   Math.abs(
     spendingDisplayed.reduce((total, point) => total + point.italy, 0) - 100,
@@ -264,27 +352,25 @@ for (const indicatorId of [
   assert(indicator.notes.length > 0, `${indicatorId}: nota metodologica mancante`);
 }
 
-const healthyLifeYears = dashboard.indicators.find(
-  (indicator) => indicator.id === "healthy-life-years",
-);
-assert(
-  healthyLifeYears.latest.coverage === 26 &&
-    healthyLifeYears.latest.missingCountries.includes("LU"),
-  "La copertura di Healthy Life Years deve indicare il Lussemburgo mancante",
-);
-
 const csvLines = csv.trim().split("\n");
 assert(
   csvLines[0] ===
     "indicator_id,section,year,italy,eu27_official_value,eu27_country_median,countries_in_median,eu_method,italy_status,eu_status,flagged_countries,missing_countries,unit,dataset",
   "Intestazione CSV inattesa",
 );
-assert(csvLines.length > 900, "CSV troppo corto");
+const expectedCsvRows = dashboard.indicators.flatMap((indicator) => indicator.series.map((point) => [
+  indicator.id, indicator.section, point.year, point.italy, point.eu ?? "", point.median,
+  point.coverage, point.euMethod, point.status ?? "", point.euStatus ?? "",
+  point.countryStatuses.map(({ geo, status }) => `${geo}:${status}`).join("|"),
+  point.missingCountries.join("|"), indicator.unitKey, indicator.source.datasetCode,
+].join(",")));
+assert(csvLines.slice(1).join("\n") === expectedCsvRows.join("\n"),
+  "CSV diverso dalle osservazioni pubblicate");
 assert(
   !/\d+\.\d{10,}/.test(csv),
   "Il CSV contiene artefatti di precisione binaria",
 );
 
 console.log(
-  `Dati validi: ${dashboard.indicators.length} indicatori, ${manifest.datasets.length} dataset, ${csvLines.length - 1} righe CSV.`,
+  `Dati validi e riprodotti dagli snapshot ufficiali: ${dashboard.indicators.length} indicatori, ${manifest.datasets.length} dataset, ${csvLines.length - 1} righe CSV.`,
 );

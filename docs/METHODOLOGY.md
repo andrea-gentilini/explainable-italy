@@ -37,11 +37,11 @@ La mediana è il valore centrale dopo avere ordinato i Paesi disponibili. Per un
 
 ## Tempo
 
-Le serie iniziano dal primo anno comune utile, mai prima del 2000. Non si riempiono anni mancanti con interpolazioni.
+Le serie iniziano dal primo anno con Italia e almeno 24 Stati membri disponibili, mai prima del 2000. Italia, UE e mediana sono sempre confrontate nello stesso anno e con la stessa selezione. Se un anno più recente ha meno di 24 Stati disponibili, il confronto resta all’ultimo anno che supera questa soglia. Non si riempiono anni mancanti con interpolazioni.
 
-Il valore principale è il dato più recente che non porta un contrassegno Eurostat di stima o provvisorietà. Un dato successivo stimato o provvisorio appare separatamente. La selezione considera sia i contrassegni delle singole osservazioni sia le note ufficiali che attribuiscono uno stato a un Paese o a un intero anno. Per questo la ripartizione COFOG italiana del 2024 è indicata come provvisoria anche se il flag non compare nelle singole celle API.
+La scheda mostra il più recente confronto disponibile, segnalando se il valore italiano è stimato, provvisorio o previsto. Nei dettagli conserva anche il più recente dato italiano privo dei contrassegni `e`, `p` o `f`. L’assenza di questi contrassegni non significa che il dato non potrà essere rivisto. La selezione dello stato italiano non implica che tutti i Paesi o l’aggregato UE siano definitivi: i loro contrassegni restano indicati separatamente. La selezione considera sia i contrassegni delle singole osservazioni sia le note ufficiali che attribuiscono uno stato a un Paese o a un intero anno. Per questo la ripartizione COFOG italiana e l’aggregato UE del 2024 sono indicati come provvisori anche se il flag non compare nelle singole celle API. Il contrassegno originale resta conservato separatamente da quello integrato con i metadati.
 
-I contrassegni di interruzione della serie restano visibili sul singolo anno. Anche le discontinuità documentate soltanto nei metadati, come il passaggio da RED I a RED II per le rinnovabili, vengono indicate separatamente. In questi casi il confronto nel tempo richiede cautela.
+I contrassegni di interruzione della serie restano visibili sul singolo anno. Anche le discontinuità documentate soltanto nei metadati, come i passaggi da RED I a RED II nel 2021 e a RED III nel 2025 per le rinnovabili, vengono indicate separatamente. In questi casi il confronto nel tempo richiede cautela.
 
 ## Trasformazioni
 
@@ -68,12 +68,14 @@ Il valore “vecchiaia” è una sottofunzione della protezione sociale. Non si 
 9. distinzione tra aggregato UE ufficiale e aggregato non disponibile
 10. coerenza tra copertura, Paesi mancanti e osservazioni usate nella mediana
 11. presenza delle fonti delle definizioni e delle note metodologiche
+12. riproduzione di ogni valore Italia e UE, mediana, elenco dei Paesi e contrassegno originale dagli snapshot ufficiali
+13. corrispondenza esatta del CSV con le serie pubblicate e selezione coerente dell’ultimo dato
 
 I controlli automatici non sostituiscono la revisione editoriale e il confronto con il portale ufficiale.
 
 ## Revisioni
 
-I dati ufficiali possono essere rivisti. Ogni aggiornamento ricostruisce snapshot, manifest, file elaborati e CSV. Le differenze restano nella cronologia Git, così è possibile vedere quali valori sono cambiati.
+I dati ufficiali possono essere rivisti. Ogni aggiornamento acquisisce tutte le fonti e prepara snapshot, manifest, file elaborati e CSV prima di sostituire i file: una richiesta fallita o una risposta incoerente interrompe l’aggiornamento e conserva i dati precedenti. Ogni file è sostituito atomicamente. La modalità offline verifica le impronte degli snapshot e conserva le date di acquisizione originali; non dichiara un nuovo accesso alle fonti. Le date di acquisizione sono registrate per ciascun dataset. Le differenze restano nella cronologia Git, così è possibile vedere quali valori sono cambiati.
 
 ## Definizioni e testi accessibili
 
@@ -86,3 +88,9 @@ Quando una definizione ha limiti rilevanti — periodo di riferimento, popolazio
 La licenza MIT riguarda il codice e la documentazione originale del progetto, non attribuisce una nuova licenza ai dati. I dati mantengono le condizioni della fonte. Si applicano la politica di riuso Eurostat e, per i dati di emissione originati da EEA, le condizioni EEA indicate nel manifest e in `DATA_LICENSE.md`.
 
 Traduzioni, sintesi accessibili, mediane e altre elaborazioni sono prodotte da Explainable Italy. Eurostat, EEA e le altre istituzioni citate non ne sono responsabili.
+
+## Fonti metodologiche ricontrollate
+
+La revisione del 13 ottobre 2026 ha verificato tutte le 20 selezioni API. I [metadati COFOG](https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm), sezione 19, confermano lo stato provvisorio del 2024 per Italia e UE. Il [manuale SHARES](https://ec.europa.eu/eurostat/documents/d/energy/shares-manual), sezione 1.1, sostituisce il precedente collegamento ai metadati delle rinnovabili, non più disponibile, e documenta i tre regimi normativi. I [metadati sulle emissioni](https://ec.europa.eu/eurostat/cache/metadata/en/sdg_13_10_esmsip2.htm), sezione 6.1, confermano che l’aggregato UE disponibile altrove include trasporti internazionali e non è confrontabile con la selezione nazionale usata qui.
+
+Eurostat conserva online la versione più recente dei dataset, senza versionare le risposte precedenti: le copie locali con impronta e data di acquisizione servono per riprodurre i confronti pubblicati. Si veda la [documentazione API Eurostat](https://ec.europa.eu/eurostat/web/user-guides/data-browser/api-data-access/api-introduction).
