@@ -1,0 +1,34 @@
+name: Proponi un miglioramento / Suggest an improvement
+description: Testi, traduzioni, accessibilità o codice / Copy, translations, accessibility or code
+title: "[Miglioramento] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Puoi scrivere in italiano o in inglese. La proposta sarà pubblica.
+
+        You can write in Italian or English. Your proposal will be public.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Cosa vuoi migliorare? / What would you like to improve?
+      options:
+        - Testi e spiegazioni / Copy and explanations
+        - Traduzioni / Translations
+        - Accessibilità / Accessibility
+        - Interfaccia / Interface
+        - Codice / Code
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: La tua proposta / Your proposal
+      description: Descrivi cosa cambieresti e come aiuterebbe chi usa il sito. / Describe what you would change and how it would help people using the site.
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Pagina o file interessato / Relevant page or file
+      description: Se puoi, aggiungi un collegamento per aiutarci a trovare il punto da migliorare. / If you can, add a link to help us find the part you want to improve.

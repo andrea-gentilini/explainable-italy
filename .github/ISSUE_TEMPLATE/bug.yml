@@ -1,31 +1,37 @@
-name: Segnala un problema
-description: Correggi un dato, un testo o un comportamento del sito
+name: Segnala un problema / Report a problem
+description: Segnala un dato errato o un link non funzionante / Report an incorrect value or broken link
 title: "[Problema] "
 labels:
   - bug
 body:
-  - type: dropdown
-    id: area
+  - type: markdown
     attributes:
-      label: Area
-      options:
-        - Dato
-        - Fonte
-        - Definizione
-        - Traduzione
-        - Interfaccia
-        - Accessibilità
+      value: |
+        Puoi scrivere in italiano o in inglese. La segnalazione sarà pubblica.
+
+        You can write in Italian or English. Your report will be public.
+  - type: input
+    id: page
+    attributes:
+      label: Pagina del sito / Website page
+      description: Incolla il collegamento alla pagina in cui hai trovato il problema. / Paste the link to the page where you found the problem.
+      placeholder: https://andrea-gentilini.github.io/explainable-italy/
     validations:
       required: true
   - type: textarea
     id: observed
     attributes:
-      label: Cosa hai osservato
+      label: Qual è il problema? / What is the problem?
+      description: Indica il dato o il collegamento e descrivi cosa hai osservato. / Identify the value or link and describe what you observed.
     validations:
       required: true
+  - type: input
+    id: context
+    attributes:
+      label: Anno e contesto / Year and context
+      description: Se utile, indica l'anno selezionato, l'indicatore o i passaggi per trovare il problema. / If relevant, include the selected year, indicator or steps to find the problem.
   - type: textarea
     id: evidence
     attributes:
-      label: Fonte o passaggi per riprodurre
-    validations:
-      required: true
+      label: Fonte ufficiale / Official source
+      description: Se segnali un dato, aggiungi una fonte ufficiale se disponibile. Puoi lasciare vuoto questo campo per un link che non funziona. / For a data issue, add an official source if available. You can leave this blank for a broken link.

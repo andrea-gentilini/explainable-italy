@@ -441,10 +441,12 @@ const copy = {
     contributeBody:
       "Explainable Italy è un progetto open source nato per aiutare le persone a leggere i dati pubblici. Se noti un errore o vuoi migliorare qualcosa, il tuo contributo è benvenuto.",
     contributionWays: [
-      "Segnala un dato o un collegamento che non funziona.",
-      "Proponi una fonte pubblica che potrebbe essere utile.",
-      "Migliora testi, traduzioni, accessibilità o codice.",
+      { template: "bug.yml", title: "Segnala un dato o un collegamento", detail: "Indica la pagina, l’anno del dato e il problema che hai trovato." },
+      { template: "indicator.yml", title: "Proponi una fonte pubblica", detail: "Condividi il collegamento alla fonte ufficiale e spiega a quale domanda potrebbe rispondere." },
+      { template: "improvement.yml", title: "Proponi un miglioramento", detail: "Suggerisci una modifica a testi, traduzioni, accessibilità o codice." },
     ],
+    contributionHow: "Ogni voce apre un modulo su GitHub. Serve un account e le segnalazioni, insieme alle risposte, sono pubbliche. Puoi scrivere in italiano o in inglese.",
+    contributionGuide: "Come contribuire al codice",
     contributionLink: "Visita il progetto su GitHub",
     footer:
       "Dati ufficiali. Elaborazioni trasparenti. Nessun tracciamento.",
@@ -707,10 +709,12 @@ const copy = {
     contributeBody:
       "Explainable Italy is an open-source project created to help people read public data. If you spot an error or want to improve something, your contribution is welcome.",
     contributionWays: [
-      "Report a figure or link that does not work.",
-      "Suggest a public source that could be useful.",
-      "Improve the copy, translations, accessibility or code.",
+      { template: "bug.yml", title: "Report a data or link issue", detail: "Include the page, the year of the data and the problem you found." },
+      { template: "indicator.yml", title: "Suggest a public source", detail: "Share a link to the official source and explain which question it could help answer." },
+      { template: "improvement.yml", title: "Suggest an improvement", detail: "Propose a change to wording, translations, accessibility or code." },
     ],
+    contributionHow: "Each option opens a GitHub form. You need an account, and reports and replies are public. You can write in English or Italian.",
+    contributionGuide: "How to contribute code",
     contributionLink: "Visit the project on GitHub",
     footer: "Official data. Transparent calculations. No tracking.",
     footerLicense: "MIT code · data: source terms apply",
@@ -2922,15 +2926,21 @@ export function Dashboard({
             <p className="eyebrow">{labels.contributeEyebrow}</p>
             <h1>{labels.contributeTitle}</h1>
             <p>{labels.contributeBody}</p>
+            <p className="contribution-help">{labels.contributionHow}</p>
             <a href="https://github.com/andrea-gentilini/explainable-italy">
               {labels.contributionLink} <span aria-hidden="true">↗</span>
+            </a>
+            <a href="https://github.com/andrea-gentilini/explainable-italy/blob/main/CONTRIBUTING.md">
+              {labels.contributionGuide} <span aria-hidden="true">↗</span>
             </a>
           </div>
           <ul className="contribution-ways">
             {labels.contributionWays.map((way) => (
-              <li key={way}>
-                <span aria-hidden="true">→</span>
-                <p>{way}</p>
+              <li key={way.template}>
+                <a className="contribution-link" href={`https://github.com/andrea-gentilini/explainable-italy/issues/new?template=${way.template}`}>
+                  <div><strong>{way.title}</strong><small>{way.detail}</small></div>
+                  <span className="contribution-arrow" aria-hidden="true">↗</span>
+                </a>
               </li>
             ))}
           </ul>

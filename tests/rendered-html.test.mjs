@@ -547,3 +547,25 @@ for (const locale of locales) {
     }
   });
 }
+
+for (const locale of locales) {
+  test(`${locale}: every contribution action opens its own existing GitHub issue form`, async () => {
+    const rendered = await page(localizedRoute(locale, "contribute"));
+    const actions = rendered.links.filter((link) => hasClass(link, "contribution-link"));
+    assert.equal(actions.length, 3, "All three contribution rows are real links");
+    const templates = new Set();
+    for (const action of actions) {
+      const url = new URL(attribute(action, "href"));
+      assert.equal(url.origin, "https://github.com");
+      assert.equal(url.pathname, "/andrea-gentilini/explainable-italy/issues/new");
+      const template = url.searchParams.get("template");
+      assert.match(template, /^[a-z-]+\.yml$/);
+      await access(new URL(`.github/ISSUE_TEMPLATE/${template}`, projectRoot));
+      templates.add(template);
+      assert(action.text.length > 20, "The action explains what can be submitted");
+    }
+    assert.equal(templates.size, 3, "Different requests open different forms");
+    assert.match(rendered.text, locale === "it" ? /Serve un account/ : /You need an account/);
+    assert.match(rendered.text, locale === "it" ? /sono pubbliche/ : /are public/);
+  });
+}

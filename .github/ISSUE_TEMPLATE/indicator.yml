@@ -1,34 +1,36 @@
-name: Proponi un indicatore
-description: Suggerisci un nuovo dato ufficiale
-title: "[Indicatore] "
+name: Proponi una fonte / Suggest a source
+description: Proponi un dataset pubblico ufficiale / Suggest an official public dataset
+title: "[Fonte] "
 labels:
   - data
 body:
-  - type: textarea
-    id: question
+  - type: markdown
     attributes:
-      label: Domanda
-      description: Quale domanda concreta dovrebbe aiutare a capire?
-    validations:
-      required: true
+      value: |
+        Puoi scrivere in italiano o in inglese. La proposta sarà pubblica.
+
+        You can write in Italian or English. Your proposal will be public.
   - type: input
     id: dataset
     attributes:
-      label: Dataset ufficiale
-      description: Collegamento diretto al dataset
+      label: Dataset ufficiale / Official dataset
+      description: Inserisci il collegamento al dataset sul sito dell'ente che lo pubblica. / Link to the dataset on the website of the institution that publishes it.
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: A quale domanda aiuterebbe a rispondere? / What question would it help answer?
+      description: Descrivi in poche parole come potrebbe essere utile a chi visita il sito. / Briefly describe how it could help someone visiting the site.
     validations:
       required: true
   - type: input
     id: metadata
     attributes:
-      label: Metadati
-      description: Collegamento a definizioni e metodologia
-    validations:
-      required: true
+      label: Definizioni e metodologia / Definitions and methodology
+      description: Aggiungi il collegamento ai metadati, se disponibile. / Add a link to the metadata, if available.
   - type: textarea
     id: notes
     attributes:
-      label: Note
-      description: Unità, anni, geografie, revisioni e limiti noti
-    validations:
-      required: true
+      label: Altre informazioni / Further information
+      description: Puoi indicare unità, anni, territori disponibili e limiti che conosci. / You can include units, available years and regions, and any limitations you know of.
