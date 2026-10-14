@@ -294,7 +294,8 @@ const copy = {
     comparisonHelp: "Il dato UE descrive l’Unione nel suo insieme secondo il metodo Eurostat. La mediana è il valore centrale dei Paesi disponibili, ognuno con lo stesso peso. Tutti i valori si riferiscono allo stesso anno e alla stessa selezione.",
     comparisonYear: "Anno del confronto",
     trendTable: "Vedi tutti gli anni e i valori",
-    trendInteraction: "Seleziona un anno per aggiornare il confronto. Con la tastiera, usa le frecce destra e sinistra.",
+    trendInteraction: "Clicca sulla barra di un anno per vedere i dati di quel periodo.",
+    trendKeyboardHelp: "Con la tastiera, usa le frecce destra e sinistra per scegliere un anno.",
     yearUnflagged: "nessun contrassegno della fonte",
     edition: "Edizione del",
     editionNote: "Gli indicatori si riferiscono ad anni diversi. L’anno è indicato accanto a ogni numero.",
@@ -558,7 +559,8 @@ const copy = {
     comparisonHelp: "The EU figure describes the Union as a whole, using Eurostat’s method. The median is the central value among available countries, each carrying equal weight. All figures use the same year and selection.",
     comparisonYear: "Comparison year",
     trendTable: "View all years and values",
-    trendInteraction: "Select a year to update the comparison. Use the left and right arrow keys to navigate by keyboard.",
+    trendInteraction: "Click a year’s bar to see the figures for that period.",
+    trendKeyboardHelp: "Use the left and right arrow keys to choose a year by keyboard.",
     yearUnflagged: "no source flags",
     edition: "Edition dated",
     editionNote: "The indicators refer to different years. The year is shown beside each figure.",
@@ -1359,7 +1361,7 @@ function TrendBars({ indicator, locale, selectedYear }: {
   return (
     <>
       <div className="trend-reading" aria-live="polite"><span>{labels.italy} · {selected.year}</span><strong>{value(selected.italy)}</strong></div>
-      <p className="trend-interaction" id={`trend-help-${indicator.id}`}>{labels.trendInteraction}</p>
+      <p className="trend-interaction" id={`trend-help-${indicator.id}`}>{labels.trendInteraction}<span className="visually-hidden"> {labels.trendKeyboardHelp}</span></p>
       <p className="trend-scale">{labels.trendScale}: {value(minimum)} – {value(maximum)}</p>
       <div className="trend-scroll" ref={scrollRef} role="region" aria-label={`${labels.trend}. ${rangeLabel}`}>
         <div className="trend-chart" role="group" aria-label={labels.trend} aria-describedby={`trend-help-${indicator.id}`} style={{ minWidth: `${(lastYear - firstYear + 1) * 1.8}rem`, gridTemplateColumns: `repeat(${lastYear - firstYear + 1}, minmax(0, 1fr))` }}>
