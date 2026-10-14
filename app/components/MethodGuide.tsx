@@ -4,41 +4,61 @@ export function MethodGuide({ locale, sourcesHref }: { locale: "it" | "en"; sour
   const it = locale === "it";
   return (
     <section className="method-guide" aria-labelledby="reading-guide">
-      <h2 id="reading-guide">{it ? "Un numero, il suo contesto" : "A number and its context"}</h2>
-      <p>{it ? "Tre distinzioni aiutano a leggere il confronto senza attribuirgli più di quanto dica." : "Three distinctions help you read a comparison without asking it to say more than it does."}</p>
-      <p>{it ? "Le differenze fra Paesi o nel tempo non dimostrano da sole un rapporto causa-effetto, né costituiscono una valutazione complessiva di un Paese. Leggi sempre definizioni e perimetro dell’indicatore." : "Differences between countries or over time do not, by themselves, establish cause and effect or provide an overall assessment of a country. Always check the indicator’s definition and scope."}</p>
+      <h2 id="reading-guide">{it ? "Come leggere questi dati" : "How to read these figures"}</h2>
+      <p>{it ? "Apri una scheda, scegli un anno e confronta il valore italiano con quello dell’UE e con la mediana dei Paesi. Qui trovi le indicazioni per leggere il confronto e risalire alla fonte." : "Open an indicator, choose a year and compare Italy with the EU and the median across countries. This guide explains how to read the comparison and check the source."}</p>
       <details>
-        <summary>{it ? "Aggregato UE e mediana rispondono a domande diverse" : "The EU aggregate and the median answer different questions"}</summary>
+        <summary>{it ? "Scegliere l’anno e leggere le segnalazioni" : "Choosing a year and reading the flags"}</summary>
         <div className="method-guide-body">
-          <p>{it ? "L’aggregato UE descrive l’Unione nel suo insieme. È pubblicato da Eurostat secondo le regole di ciascun indicatore: il progetto non lo ricostruisce facendo la media dei valori nazionali." : "The EU aggregate describes the Union as a whole. Eurostat publishes it using each indicator’s own methodology: the project does not reconstruct it by averaging national values."}</p>
-          <p>{it ? "La mediana descrive invece il Paese centrale: ordiniamo i valori disponibili e prendiamo quello al centro. Ogni Paese conta una volta, indipendentemente dalla popolazione. Con un numero pari di Paesi, usiamo la media dei due valori centrali." : "The median describes the country in the middle: we sort the available values and take the central one. Each country counts once, regardless of population. With an even number of countries, we average the two middle values."}</p>
-          <figure className="median-example">
-            <figcaption>{it ? "Esempio inventato: cinque Paesi, valori ordinati" : "Made-up example: five countries, sorted values"}</figcaption>
-            <div className="median-example-values">
-              {[10, 12, 14, 18, 40].map((value, index) => <span key={value} data-middle={index === 2} style={{ "--example-height": `${value / 40 * 100}%` } as CSSProperties}><i aria-hidden="true" /><strong>{value}</strong>{index === 2 ? <small>{it ? "mediana" : "median"}</small> : null}</span>)}
-            </div>
-            <p>{it ? "La mediana è 14. Il valore 40 non sposta il Paese centrale. Questo esempio non rappresenta dati reali e non calcola un aggregato UE." : "The median is 14. The value 40 does not move the middle country. This example is not real data and does not calculate an EU aggregate."}</p>
-          </figure>
+          <p>{it ? "L’anno accanto al valore è il periodo descritto dal dato. Italia, UE e mediana si riferiscono allo stesso anno." : "The year beside a value is the period that the figure describes. Italy, the EU and the median refer to the same year."}</p>
+          <p>{it ? "La scheda dà precedenza all’ultimo anno in cui il dato italiano è privo dei contrassegni di stima (e), provvisorio (p) o previsione (f). Gli eventuali anni successivi restano disponibili con le relative segnalazioni, così puoi scegliere un confronto più recente sapendo quale stato ha il dato. Se tutti gli anni hanno questi contrassegni, viene mostrato il più recente." : "The indicator opens on the latest year in which Italy’s figure has no estimated (e), provisional (p) or forecast (f) flag. Any later years remain available with their flags, so you can choose a more recent comparison knowing the figure’s status. If all years carry these flags, the most recent is shown."}</p>
+          <p>{it ? "Anche i valori privi di questi contrassegni possono essere rivisti. L’Italia, l’aggregato UE e i Paesi usati per la mediana possono avere stati diversi. Controlla anche le note sulle discontinuità, che segnalano limiti al confronto nel tempo." : "Figures without these flags can also be revised. Italy, the EU aggregate and the countries used for the median can have different statuses. Also check the notes on breaks in series, which flag limits to comparisons over time."}</p>
         </div>
       </details>
       <details>
-        <summary>{it ? "Anno, aggiornamento e stato del dato sono cose diverse" : "Reference year, update date and observation status are different"}</summary>
+        <summary>{it ? "Confrontare Italia, UE e mediana" : "Comparing Italy, the EU and the median"}</summary>
         <div className="method-guide-body">
+          <p>{it ? "L’aggregato UE descrive l’Unione nel suo insieme. È il valore pubblicato da Eurostat secondo il metodo del singolo indicatore. Le schede lo mostrano quando è disponibile con lo stesso perimetro del dato italiano." : "The EU aggregate describes the Union as a whole. Eurostat publishes it using the method for each indicator. It is shown when it is available with the same scope as Italy’s figure."}</p>
+          <p>{it ? "La mediana è il valore centrale dopo aver ordinato i valori nazionali. Ogni Paese conta una volta, indipendentemente dalla popolazione. Con un numero pari di Paesi si fa la media dei due valori centrali." : "The median is the middle value after sorting the national figures. Each country counts once, regardless of population. With an even number of countries, it is the average of the two middle values."}</p>
+          <p>{it ? "Il confronto considera i 27 Paesi che oggi fanno parte dell’UE, anche per gli anni passati. Pubblichiamo la mediana quando sono disponibili almeno 24 valori nazionali. La scheda indica quanti Paesi sono inclusi." : "The comparison uses today’s 27 EU members, including for past years. We publish the median when at least 24 national values are available. Each indicator shows how many countries are included."}</p>
+          <figure className="median-example">
+            <figcaption>{it ? "Esempio illustrativo: cinque Paesi, valori ordinati" : "Illustrative example: five countries, sorted values"}</figcaption>
+            <div className="median-example-values">
+              {[10, 12, 14, 18, 40].map((value, index) => (
+                <span key={value} data-middle={index === 2} style={{ "--example-height": `${value / 40 * 100}%` } as CSSProperties}>
+                  <i aria-hidden="true" />
+                  <strong>{value}</strong>
+                  {index === 2 ? <small>{it ? "mediana" : "median"}</small> : null}
+                </span>
+              ))}
+            </div>
+            <p>{it ? "La mediana è 14, con due valori sotto e due sopra. I numeri dell’esempio sono inventati." : "The median is 14, with two values below it and two above. These example numbers are made up."}</p>
+          </figure>
+          <p>{it ? "Per interpretare una differenza, controlla la definizione, la popolazione considerata e le note sul metodo. Per stabilire quanto dipenda da una politica o da altri fattori servono analisi ulteriori." : "To interpret a difference, check the definition, the population covered and the methodological notes. Establishing how much of it is due to a policy or other factors requires further analysis."}</p>
+        </div>
+      </details>
+      <details>
+        <summary>{it ? "Capire quanto sono recenti i dati" : "Understanding how recent the data are"}</summary>
+        <div className="method-guide-body">
+          <p>{it ? "Un dato riferito a un anno passato può essere stato pubblicato o rivisto di recente. Nelle fonti trovi due date che aiutano a ricostruirne la disponibilità." : "A figure for a past year may have been published or revised recently. The sources show two dates that help you trace when it became available."}</p>
           <dl className="method-terms">
-            <div><dt>{it ? "Anno del dato" : "Reference year"}</dt><dd>{it ? "È il periodo descritto dal numero. Un dataset aggiornato oggi può contenere dati riferiti a due anni fa." : "The period described by the number. A dataset updated today can contain figures referring to two years ago."}</dd></div>
-            <div><dt>{it ? "Aggiornamento Eurostat" : "Eurostat update"}</dt><dd>{it ? "È la data di aggiornamento del dataset presso la fonte. Non implica che ogni osservazione o ogni anno sia cambiato." : "The source dataset’s update date. It does not imply that every observation or reference year changed."}</dd></div>
-            <div><dt>{it ? "Acquisizione del progetto" : "Project acquisition"}</dt><dd>{it ? "È il momento in cui il progetto ha acquisito la copia utilizzata. Revisioni successive della fonte possono differire dallo snapshot pubblicato qui." : "When the project acquired the copy used here. Later revisions at the source may differ from this published snapshot."}</dd></div>
-            <div><dt>{it ? "Stato del dato" : "Observation status"}</dt><dd>{it ? "Stime, dati provvisori, previsioni e discontinuità sono segnalati separatamente. Lo stato del dato italiano non determina quello dell’aggregato UE o dei Paesi nella mediana." : "Estimates, provisional figures, forecasts and breaks are flagged separately. The Italian observation’s status does not determine the status of the EU aggregate or the countries used in the median."}</dd></div>
+            <div>
+              <dt>{it ? "Aggiornamento Eurostat" : "Eurostat update"}</dt>
+              <dd>{it ? "Quando Eurostat ha aggiornato il dataset. L’aggiornamento può aggiungere un anno o rivedere dati già pubblicati, anche per un solo Paese." : "When Eurostat updated the dataset. An update may add a year or revise previously published figures, including for a single country."}</dd>
+            </div>
+            <div>
+              <dt>{it ? "Acquisizione del progetto" : "Project acquisition"}</dt>
+              <dd>{it ? "Quando il progetto ha scaricato la copia usata dal sito. Questa copia resta disponibile per verificare i numeri mostrati. La fonte può essere stata rivista successivamente." : "When the project downloaded the copy used by this site. That copy remains available so you can verify the figures shown. The source may have been revised since then."}</dd>
+            </div>
           </dl>
         </div>
       </details>
       <details>
-        <summary>{it ? "Come verificare o riutilizzare un numero" : "How to verify or reuse a number"}</summary>
+        <summary>{it ? "Verificare o riutilizzare un valore" : "Checking or reusing a figure"}</summary>
         <div className="method-guide-body">
           <ol>
-            <li>{it ? "Apri una scheda e scegli l’anno del confronto." : "Open an indicator and select the comparison year."}</li>
-            <li>{it ? "Segui “Verifica fonte e calcolo”: trovi la selezione applicata, i valori nazionali della mediana e i contrassegni della fonte." : "Follow “Verify source and calculation” for the exact selection, the national values behind the median, and source flags."}</li>
-            <li>{it ? "Scarica il CSV per lavorare sui valori. Lo snapshot conserva la risposta usata; l’API mostra invece i dati correnti, che possono essere stati rivisti." : "Download the CSV to work with the values. The snapshot preserves the response used here; the API instead shows current data, which may have been revised."}</li>
+            <li>{it ? "Nella scheda, scegli l’anno e apri “Verifica fonte e calcolo”. Trovi la selezione applicata alla fonte, i valori nazionali usati nella mediana e i relativi contrassegni." : "Choose a year in the indicator and open “Verify source and calculation”. You will find the exact selection from the source, the national values used for the median and their flags."}</li>
+            <li>{it ? "Scarica il CSV per lavorare sui valori della serie. Nella pagina della fonte puoi scaricare anche la risposta originale salvata dal progetto, chiamata snapshot. Il collegamento all’API apre i dati correnti della fonte, che possono essere stati rivisti." : "Download the CSV to work with the series. On the source page, you can also download the original response saved by the project, called a snapshot. The API link opens the source’s current data, which may have been revised."}</li>
+            <li>{it ? "Quando citi un valore, riporta indicatore, anno, unità, fonte e data di acquisizione. Per riutilizzare i dati, consulta anche le condizioni della fonte." : "When citing a figure, include the indicator, year, unit, source and acquisition date. Check the source’s reuse terms when using the data elsewhere."}</li>
           </ol>
           <a href={sourcesHref}>{it ? "Fonti, download e registro delle acquisizioni" : "Sources, downloads and acquisition register"} <span aria-hidden="true">→</span></a>
         </div>

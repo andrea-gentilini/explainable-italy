@@ -425,3 +425,125 @@ test("a static 404 page is available to the hosting service", async () => {
   assert.match(textContent(html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")), /404/, "404 identifies the missing-page condition");
   assert(openingElements(html, "meta").some((element) => attribute(element, "name") === "robots" && /noindex/.test(attribute(element, "content") ?? "")), "Missing pages are not indexed");
 });
+
+
+// Unlike a flat tag match, this keeps nested blocks intact when checking the
+// reading order or groups of question links.
+function classRegions(html, className) {
+  return [...html.matchAll(/<([a-z][\w:-]*)\b([^>]*)>/gi)]
+    .filter((match) => hasClass({ attributes: match[2] }, className))
+    .map((match) => {
+      const tag = match[1];
+      const contentStart = match.index + match[0].length;
+      const boundaries = new RegExp(`<(/?)${tag}\\b[^>]*>`, "gi");
+      boundaries.lastIndex = contentStart;
+      let depth = 1;
+      let boundary;
+      while ((boundary = boundaries.exec(html))) {
+        depth += boundary[1] ? -1 : 1;
+        if (depth === 0) {
+          const content = html.slice(contentStart, boundary.index);
+          return { tag, attributes: match[2], html: content, text: textContent(content), index: match.index };
+        }
+      }
+      assert.fail(`Unclosed ${tag}.${className} in exported markup`);
+    });
+}
+
+function detailsDepthAt(html, position) {
+  return [...html.slice(0, position).matchAll(/<(\/?)details\b[^>]*>/gi)]
+    .reduce((depth, match) => depth + (match[1] ? -1 : 1), 0);
+}
+
+for (const locale of locales) {
+  test(`${locale}: interpretation and historical trend precede optional definitions without hiding source caveats`, async () => {
+    for (const indicator of data.indicators) {
+      const route = localizedRoute(locale, `data/${indicator.id}`);
+      const rendered = await page(route);
+      const reading = classRegions(rendered.html, "reading-context");
+      const trend = classRegions(rendered.html, "trend-block");
+      const definitions = classRegions(rendered.html, "definition-details");
+      assert.equal(reading.length, 1, `${route}: one concise reading of the current comparison`);
+      assert.equal(trend.length, 1, `${route}: one historical trend`);
+      assert.equal(definitions.length, 1, `${route}: definitions have one optional section`);
+      assert.equal(definitions[0].tag, "details", `${route}: detailed definitions are expandable`);
+      assert(reading[0].index < trend[0].index && trend[0].index < definitions[0].index,
+        `${route}: reading and historical context come before technical detail`);
+      assert.equal(detailsDepthAt(rendered.html, reading[0].index), 0, `${route}: reading is visible without expanding details`);
+      assert.equal(detailsDepthAt(rendered.html, trend[0].index), 0, `${route}: historical trend is visible without expanding details`);
+      const plain = indicator.plain[locale].replace(/\s+/g, " ").trim();
+      assert.equal(rendered.text.split(plain).length - 1, 1, `${route}: the plain-language definition is not repeated`);
+      const notes = classRegions(rendered.html, "indicator-notes");
+      if (indicator.notes.length || indicator.series.some((point) => point.status?.includes("b"))) {
+        assert(notes.length > 0, `${route}: comparability and source caveats remain present`);
+      }
+      for (const note of notes) {
+        assert.equal(detailsDepthAt(rendered.html, note.index), 0, `${route}: source caveats are visible without opening technical definitions`);
+      }
+    }
+  });
+
+  test(`${locale}: guided questions open existing localized pages with valid topic and year selections`, async () => {
+    const prefix = await basePath();
+    const topics = new Set(["all", "overview", ...data.sections.map((section) => section.id)]);
+    for (const [path, className] of [["", "question-grid"], ["data", "topic-questions"]]) {
+      const route = localizedRoute(locale, path);
+      const rendered = await page(route);
+      const groups = classRegions(rendered.html, className);
+      assert(groups.length > 0, `${route}: readers can start from a concrete question`);
+      for (const group of groups) {
+        const links = elements(group.html, "a");
+        assert(links.length > 0, `${route}: each question group offers a destination`);
+        for (const link of links) {
+          const href = attribute(link, "href");
+          assert(href && link.text.trim(), `${route}: every question has a named destination`);
+          const url = new URL(href, `https://example.test${prefix}${route}/`);
+          assert.equal(url.origin, "https://example.test", `${route}: questions stay within the data site`);
+          assert(!prefix || url.pathname.startsWith(`${prefix}/`), `${route}: question retains the deployment path`);
+          const destination = url.pathname.slice(prefix.length).replace(/\/$/, "") || "/";
+          const target = allRoutes.find((entry) => localizedRoute(entry.locale, entry.path) === destination);
+          assert(target, `${route}: question opens an exported content page`);
+          assert.equal(target.locale, locale, `${route}: question preserves the chosen language`);
+          if (url.searchParams.has("topic")) {
+            assert(topics.has(url.searchParams.get("topic")), `${route}: question selects a known topic`);
+          }
+          if (url.searchParams.has("year")) {
+            assert(target.indicator, `${route}: year selection refers to a specific indicator`);
+            const years = new Set([
+              ...target.indicator.series.map((point) => String(point.year)),
+              String(target.indicator.latest.year),
+              ...(target.indicator.newerEstimate ? [String(target.indicator.newerEstimate.year)] : []),
+            ]);
+            assert(years.has(url.searchParams.get("year")), `${route}: selected year exists for the question's indicator`);
+          }
+          await page(destination);
+        }
+      }
+    }
+  });
+
+  test(`${locale}: newer provisional observations have visible year guidance and an explicit selection control`, async () => {
+    for (const indicator of data.indicators.filter((entry) => entry.newerEstimate)) {
+      for (const suffix of ["", "/source"]) {
+        const route = localizedRoute(locale, `data/${indicator.id}${suffix}`);
+        const rendered = await page(route);
+        const guidance = classRegions(rendered.html, "year-context");
+        assert.equal(guidance.length, 1, `${route}: explains why the main year differs from the newer observation`);
+        assert(guidance[0].text.includes(String(indicator.latest.year)), `${route}: guidance identifies the selected main year`);
+        assert(guidance[0].text.includes(String(indicator.newerEstimate.year)), `${route}: guidance identifies the newer observation`);
+        assert.equal(detailsDepthAt(rendered.html, guidance[0].index), 0, `${route}: year guidance is immediately visible`);
+        if (!suffix) {
+          const notes = classRegions(rendered.html, "estimate-note");
+          assert.equal(notes.length, 1, `${route}: newer observation stays separately identified`);
+          assert.match(notes[0].text, locale === "it" ? /provvisor|stimat|previs/i : /provisional|estimat|forecast/i,
+            `${route}: newer observation discloses its non-final status`);
+          const controls = elements(notes[0].html, "button");
+          assert.equal(controls.length, 1, `${route}: newer observation can be selected directly`);
+          assert.equal(attribute(controls[0], "type"), "button", `${route}: selection does not submit a form`);
+          assert(controls[0].text.trim(), `${route}: selection button has a readable name`);
+          assert.equal(detailsDepthAt(rendered.html, notes[0].index), 0, `${route}: provisional observation is not hidden in technical details`);
+        }
+      }
+    }
+  });
+}

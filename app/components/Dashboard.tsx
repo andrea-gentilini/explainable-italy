@@ -2,6 +2,7 @@
 
 import { ShareLink } from "./ShareLink";
 import { MethodGuide } from "./MethodGuide";
+import { IndicatorReading } from "./IndicatorReading";
 
 import {
   useEffect,
@@ -199,19 +200,19 @@ const copy = {
     snapshotEyebrow: "Italia in quattro numeri",
     snapshotTitle: "L’Italia, in breve",
     snapshotBody:
-      "Economia, età, salute e lavoro. Apri un numero per vedere andamento, confronto europeo e fonte.",
+      "Quattro indicatori per cominciare. Apri una scheda per leggere il dato, seguirlo nel tempo e confrontarlo con l’Unione europea.",
     snapshotWhy: "Perché proprio questi quattro?",
     snapshotWhyBody:
-      "Sono quattro misure diverse e complementari: quanto produce il Paese, la struttura per età, la salute e la partecipazione al lavoro.",
+      "Abbiamo scelto produzione per abitante, età della popolazione, speranza di vita e occupazione come primo percorso fra i temi del sito. La selezione copre alcuni aspetti dell’Italia.",
     snapshotGdp: "PIL per abitante",
-    snapshotGdpUnit: "Indice: UE = 100",
-    snapshotMedianAge: "Età mediana",
-    snapshotLifeExpectancy: "Speranza di vita",
+    snapshotGdpUnit: "Indice · UE = 100",
+    snapshotMedianAge: "Età mediana della popolazione",
+    snapshotLifeExpectancy: "Speranza di vita alla nascita",
     snapshotEmployment: "Occupazione, 20–64 anni",
-    snapshotOpen: "Vedi andamento",
-    exploreTitle: "Approfondisci, quando vuoi",
+    snapshotOpen: "Leggi il dato",
+    exploreTitle: "Per approfondire",
     exploreBody:
-      "Scegli un tema, leggi il metodo oppure verifica direttamente una fonte.",
+      "La guida spiega come leggere i confronti. Le fonti permettono di ripercorrere ogni passaggio.",
     openPage: "Apri la pagina",
     openIndicator: "Apri la scheda completa",
     backToData: "Torna a tutti i dati",
@@ -222,41 +223,41 @@ const copy = {
     topicIndicators: "indicatori",
     topicExamples: "Dentro trovi",
     topicOpen: "Apri il tema",
-    heroEyebrow: "Spesa pubblica · Italia · {year}",
+    heroEyebrow: "Un esempio da esplorare · spesa pubblica · {year}",
     heroTitle: "Come si spendono 100 €?",
     heroBody:
-      "Riduciamo a 100 € tutta la spesa pubblica italiana: pensioni, sanità, scuola, stipendi, investimenti e interessi.",
+      "Per ogni 100 € spesi dalle amministrazioni pubbliche italiane, vediamo quanto è destinato a ciascuna funzione. Tutte le quote si riferiscono allo stesso anno.",
     heroYear: "Anno dei dati",
     heroLatest:
-      "Anno più recente presente nello snapshot del progetto",
+      "Ultimo anno italiano disponibile nella serie utilizzata",
     heroProvisional: "dato provvisorio",
     heroSource: "Fonte ufficiale",
     heroSourceName: "Eurostat",
     heroSourceUpdated: "dataset aggiornato il {date}",
-    heroOpenSource: "Verifica dati e calcolo",
+    heroOpenSource: "Verifica la voce selezionata",
     heroMethodSummary: "Come sono create queste categorie?",
     heroMethodBody:
       "COFOG significa “Classification of the Functions of Government”: classificazione delle funzioni della Pubblica amministrazione. È il sistema usato da Eurostat per dividere la spesa in dieci categorie confrontabili.",
     heroBudgetNote:
-      "Il totale comprende tutta la Pubblica amministrazione italiana, non soltanto lo Stato.",
+      "Il totale comprende le amministrazioni centrali, quelle locali e gli enti di previdenza.",
     heroMethodLink: "Leggi il metodo",
     heroCardLabel: "equivalgono al 100% della spesa del {year}",
     spendingInteract:
-      "Passa sulle voci per leggere il grafico. Clicca per approfondire.",
-    spendingDonutLabel: "Grafico della spesa pubblica; apre la voce selezionata",
+      "Scegli una voce per leggere il dettaglio e il confronto europeo.",
+    spendingDonutLabel: "Spesa pubblica. Apri la voce selezionata",
     socialProtectionHero: "Protezione sociale (incluse pensioni)",
     socialDetailEyebrow: "Dentro la protezione sociale",
-    socialDetailTitle: "Quanta parte riguarda le pensioni?",
+    socialDetailTitle: "Vecchiaia e pensioni: cosa comprendono",
     socialDetailBody:
-      "Nei 100 € Eurostat non pubblica una voce “pensioni”. Pubblica invece la funzione “vecchiaia”, che ha un perimetro preciso.",
+      "La voce “vecchiaia” comprende diverse pensioni e servizi per le persone anziane. Qui trovi il suo perimetro e quello della spesa pensionistica.",
     oldAgeMeasure: "Nella ripartizione dei 100 €",
     oldAgeMeasureTitle: "Funzione vecchiaia",
-    oldAgeIncludesTitle: "Comprende esattamente",
+    oldAgeIncludesTitle: "La funzione vecchiaia comprende",
     oldAgeIncludes: [
-      "pensioni di vecchiaia, pensioni anticipate dovute all’età e pensioni parziali;",
-      "assegni di cura e altri pagamenti periodici o una tantum legati al pensionamento o all’età;",
-      "alloggio e vitto in strutture per anziani, assistenza nelle attività quotidiane, aiuto domestico e trasporto;",
-      "sostegni a chi assiste una persona anziana e servizi per la partecipazione sociale e culturale;",
+      "pensioni di vecchiaia, pensioni anticipate dovute all’età e pensioni parziali.",
+      "assegni di cura e altri pagamenti periodici o una tantum legati al pensionamento o all’età.",
+      "alloggio e vitto in strutture per anziani, assistenza nelle attività quotidiane, aiuto domestico e trasporto.",
+      "sostegni a chi assiste una persona anziana e servizi per la partecipazione sociale e culturale.",
       "regimi pensionistici del personale militare e dei dipendenti pubblici.",
     ],
     oldAgeExcludes:
@@ -264,13 +265,13 @@ const copy = {
     oldAgeOfficialDefinition: "Definizione ufficiale COFOG 10.2 (ONU)",
     oldAgeFilter:
       "{year} · vecchiaia (GF1002) · quota della spesa pubblica · {status}",
-    pensionMeasure: "Un indicatore diverso",
-    pensionMeasureTitle: "Pensioni: nessuna equivalenza esatta con i 100 €",
+    pensionMeasure: "Spesa pensionistica",
+    pensionMeasureTitle: "Il dato sulle pensioni",
     pensionMeasureBody:
-      "Il dato in percentuale del PIL viene da ESSPROS, che comprende tutti i regimi collettivi di protezione sociale residenti, pubblici o privati. I 100 € comprendono invece soltanto la Pubblica amministrazione. Dividere i due valori mescolerebbe perimetri diversi: per questo non trasformiamo questa percentuale in euro su 100.",
+      "La statistica ESSPROS comprende i regimi collettivi di protezione sociale residenti, pubblici e privati, ed esprime la spesa in percentuale del PIL. La ripartizione dei 100 € riguarda le amministrazioni pubbliche. I due perimetri sono diversi, quindi questa percentuale non può essere convertita direttamente in una quota dei 100 €.",
     pensionIncludesTitle: "Il dato pensionistico comprende",
     pensionIncludes:
-      "pensioni di invalidità; pensionamenti anticipati per ridotta capacità lavorativa; pensioni di vecchiaia, anticipate e parziali; pensioni ai superstiti; pensionamenti anticipati per ragioni di mercato del lavoro.",
+      "Pensioni di invalidità, pensionamenti anticipati per ridotta capacità lavorativa, pensioni di vecchiaia, anticipate e parziali, pensioni ai superstiti e pensionamenti anticipati per ragioni di mercato del lavoro.",
     openPensionPage: "Apri l’indicatore sulle pensioni",
     pensionFilter:
       "{year} · tutte le pensioni · quota del PIL · {status}",
@@ -283,24 +284,24 @@ const copy = {
     compareTitle: "Italia e confronto europeo",
     italy: "Italia",
     eu: "UE",
-    median: "Mediana UE",
+    median: "Mediana dei Paesi UE",
     officialAggregate: "aggregato ufficiale Eurostat",
     noAggregate:
-      "Nessun aggregato UE ufficiale con lo stesso perimetro; mostriamo la mediana dei Paesi disponibili.",
+      "L’aggregato UE per questa selezione non è disponibile. Il confronto riporta la mediana dei Paesi con dati.",
     countriesAvailable: "{coverage} Paesi disponibili su 27",
     missingCountries: "Dato mancante: {countries}",
-    comparisonQuality: "Note di qualità: {details}.",
+    comparisonQuality: "La fonte segnala contrassegni per {details}.",
     comparisonCountryFlagged: "{count} Paese",
     comparisonCountriesFlagged: "{count} Paesi",
-    comparisonEuFlagged: "aggregato UE",
+    comparisonEuFlagged: "l’aggregato UE",
     compareExplainer: "Come leggere il confronto europeo",
-    comparisonHelp: "UE è il valore ufficiale riferito all’Unione europea nel suo insieme: non è la media semplice dei Paesi. La mediana è il valore centrale dei Paesi disponibili, ciascuno con lo stesso peso. Il confronto usa lo stesso anno e la stessa selezione per tutti i valori.",
+    comparisonHelp: "Il dato UE descrive l’Unione nel suo insieme secondo il metodo Eurostat. La mediana è il valore centrale dei Paesi disponibili, ognuno con lo stesso peso. Tutti i valori si riferiscono allo stesso anno e alla stessa selezione.",
     comparisonYear: "Anno del confronto",
     trendTable: "Vedi tutti gli anni e i valori",
     trendInteraction: "Seleziona un anno per aggiornare il confronto. Con la tastiera, usa le frecce destra e sinistra.",
-    yearUnflagged: "dato italiano senza contrassegni",
+    yearUnflagged: "nessun contrassegno della fonte",
     edition: "Edizione del",
-    editionNote: "Ogni indicatore riporta il proprio anno e lo stato del dato.",
+    editionNote: "Gli indicatori si riferiscono ad anni diversi. L’anno è indicato accanto a ogni numero.",
     browseAll: "Esplora tutti gli indicatori",
     snapshotDownload: "Scarica lo snapshot utilizzato",
     snapshotHash: "Impronta SHA-256 dello snapshot",
@@ -315,13 +316,13 @@ const copy = {
     searchHint: "La ricerca cerca in tutti i temi. Puoi poi restringere i risultati con i filtri.",
     dataSectionTitle: "Scegli un tema",
     dataSectionBody:
-      "Non serve vedere tutto insieme. Parti da una domanda: ogni indicatore conserva definizione, serie storica, confronto europeo e fonte.",
+      "Scegli una delle domande qui sotto oppure cerca un indicatore. Ogni scheda contiene una spiegazione, il confronto europeo, l’andamento nel tempo e la fonte.",
     noResults: "Nessun indicatore corrisponde alla ricerca.",
-    understand: "Definizione e perimetro",
+    understand: "Definizione e dettagli",
     simpleDefinition: "Sintesi accessibile del progetto",
     technicalDefinition: "Selezione tecnica utilizzata",
     definitionAttribution:
-      "Questi testi sono parafrasi del progetto basate sulla metodologia ufficiale; non sono citazioni della fonte.",
+      "Le spiegazioni sono parafrasi del progetto basate sulle definizioni ufficiali.",
     definitionSource: "Apri la metodologia alla base della definizione",
     trend: "Andamento dell’Italia",
     from: "dal",
@@ -349,13 +350,13 @@ const copy = {
     sourceAnnual: "Annuale",
     sourceFormula: "Passaggio al numero mostrato",
     sourceNoCalculation:
-      "Il valore italiano è quello pubblicato dalla fonte; il sito lo arrotonda soltanto per la visualizzazione.",
+      "Il sito riporta il valore italiano pubblicato dalla fonte, arrotondato per la visualizzazione.",
     sourceMedianCalculated:
       "calcolata dal sito su {coverage} Paesi UE disponibili su 27",
     sourceEuUnavailable:
       "Eurostat non pubblica un aggregato UE con lo stesso perimetro.",
     sourceComparisonFormula:
-      "L’aggregato UE, quando presente, è quello ufficiale Eurostat. Per la mediana il progetto ordina i {coverage} valori nazionali; se sono pari, usa la media dei due valori centrali.",
+      "L’aggregato UE è pubblicato da Eurostat. La mediana è calcolata dal progetto ordinando i {coverage} valori nazionali. Con un numero pari di Paesi si usa la media dei due valori centrali.",
     sourceQualityTitle: "Qualità e limiti",
     sourceQualityIntro:
       "I contrassegni sono quelli associati dalla fonte alle osservazioni utilizzate.",
@@ -373,13 +374,13 @@ const copy = {
     sourceNoteLink: "Verifica la nota ufficiale",
     sourceTechnicalSummary: "Collegamenti tecnici Eurostat",
     sourceTechnicalBody:
-      "Servono a riprodurre il dato, ma non sono necessari per leggerlo.",
+      "Qui trovi la risposta API corrente, la copia utilizzata e i riferimenti per riprodurre il dato.",
     sourceBrowser: "Apri il dataset nel Data Browser Eurostat",
     sourceRaw: "Consulta i dati correnti nell’API",
     sourceOfficialDefinition: "Apri la fonte della definizione",
     sourceDoi: "Apri l’identificatore permanente del dataset",
     dataStatusBreak:
-      "La fonte segnala una discontinuità negli anni: {years}. Il grafico non va letto come una serie perfettamente continua.",
+      "La fonte segnala un cambio nella serie negli anni {years}. Il confronto attraverso questi passaggi richiede cautela.",
     dataNotesTitle: "Da sapere prima del confronto",
     statusProvisional: "provvisorio",
     statusEstimated: "stimato",
@@ -391,49 +392,31 @@ const copy = {
     statusForecast: "previsione",
     statusFlagged: "contrassegnato dalla fonte",
     methodEyebrow: "Metodo pubblico",
-    methodTitle: "Le regole vengono prima dei risultati",
+    methodTitle: "Come lavoriamo sui dati",
     methodBody:
-      "Se una regola cambia dopo avere visto un numero, il confronto perde credibilità. Per questo criteri, formule e limiti sono dichiarati in anticipo.",
+      "Per leggere un confronto servono l’anno, la definizione e la popolazione a cui si riferisce. Qui spieghiamo come trovarli e come costruiamo le schede.",
     rules: [
-      {
-        title: "Solo fonti ufficiali",
-        body: "Usiamo dati prodotti o pubblicati da istituzioni statistiche e amministrazioni pubbliche. Per i confronti scegliamo serie armonizzate Eurostat.",
-      },
-      {
-        title: "Tre riferimenti, un perimetro comune",
-        body: "Confrontiamo Italia, aggregato UE ufficiale quando esiste e mediana dei Paesi disponibili. Se manca un aggregato con lo stesso perimetro, lo indichiamo come non disponibile.",
-      },
-      {
-        title: "Precisione senza finzioni",
-        body: "Mostriamo solo i decimali giustificati dalla fonte. Stime e dati provvisori restano separati dall’ultimo valore non stimato.",
-      },
-      {
-        title: "Copie verificabili",
-        body: "Nella repository conserviamo le sole serie usate, il collegamento originale, la data di acquisizione e l’impronta digitale del contenuto normalizzato.",
-      },
-      {
-        title: "Accessibilità, non interpretazione",
-        body: "Riportiamo dati pubblici in un formato leggibile, senza interpretarli. Le sintesi accessibili sono parafrasi del progetto basate sulle definizioni ufficiali, sempre collegate alla fonte.",
-      },
-      {
-        title: "Stesso intervallo quando possibile",
-        body: "Le serie iniziano dal primo anno comune disponibile per Italia e confronto UE, mai prima del 2000.",
-      },
+      { title: "Fonti ufficiali", body: "Usiamo le serie armonizzate diffuse da Eurostat. Ogni indicatore collega i dati e la documentazione della fonte." },
+      { title: "Confronti omogenei", body: "Italia, aggregato UE e mediana si riferiscono allo stesso anno e allo stesso perimetro. La mediana richiede almeno 24 Paesi su 27." },
+      { title: "Stato e precisione", body: "Manteniamo i contrassegni della fonte e indichiamo stime, dati provvisori e discontinuità. I numeri sono arrotondati solo nella visualizzazione." },
+      { title: "Dati verificabili", body: "Conserviamo la copia utilizzata, l’URL originale, la data di acquisizione e l’impronta del file. Puoi scaricarli dalla pagina della fonte." },
+      { title: "Spiegazioni trasparenti", body: "Le definizioni accessibili e le mediane sono elaborazioni del progetto. Descriviamo le misure e i confronti, lasciando espliciti i limiti delle conclusioni possibili." },
+      { title: "Anni confrontabili", body: "Le serie partono dal primo anno con dati italiani e almeno 24 Paesi UE, a partire dal 2000. Gli anni mancanti restano vuoti." },
     ],
     medianTitle: "Perché mostriamo anche la mediana",
     sourcesEyebrow: "Tracciabilità",
-    sourcesTitle: "La fonte è parte del dato",
+    sourcesTitle: "Fonti e dati scaricabili",
     sourcesBody:
-      "Ogni grafico porta al dataset che lo alimenta. La copia locale contiene solo le osservazioni necessarie, quindi occupa poco spazio e può essere verificata nel tempo.",
+      "I dati provengono da Eurostat. Per le emissioni, la fonte originaria è l’Agenzia europea dell’ambiente. In ogni scheda trovi il collegamento alla fonte e la copia esatta usata dal sito.",
     sourceCount: "dataset ufficiali",
     sourceDirectory: "Consulta l’elenco completo",
     localSize: "Dati scaricabili, fonti verificabili",
     manifest: "Apri il registro delle fonti",
     downloadAll: "Scarica tutti i dati in CSV",
-    aboutEyebrow: "About",
-    aboutTitle: "Rendere leggibile ciò che è già pubblico",
+    aboutEyebrow: "Il progetto",
+    aboutTitle: "I dati pubblici, più facili da leggere",
     aboutBody:
-      "Explainable Italy nasce da un problema semplice. Molti dati ufficiali esistono, ma sono distribuiti tra portali, classificazioni e formati difficili da leggere. Il progetto li raccoglie in un percorso coerente, chiaro e verificabile.",
+      "Explainable Italy raccoglie alcune statistiche ufficiali sull’Italia e le accompagna con definizioni, confronti europei e fonti verificabili. Puoi partire da una domanda e arrivare fino ai dati usati per rispondere.",
     founder: "Un progetto di Andrea Gentilini",
     independence:
       "Explainable Italy è un progetto indipendente. Non rappresenta e non è approvato dalle istituzioni citate. Le elaborazioni sono indicate come tali.",
@@ -441,7 +424,7 @@ const copy = {
       "Il progetto non integra cookie, pubblicità, profilazione, analytics o altri tracker. L’infrastruttura che ospita il sito può conservare i normali log tecnici di accesso.",
     futureTitle: "Cosa potremo aggiungere",
     futureBody:
-      "La struttura è pronta per crescere senza cambiare le regole di selezione.",
+      "Aggiungeremo nuovi temi quando avremo fonti adatte e confronti verificabili.",
     futureToggle: "Vedi le prossime aree di lavoro",
     roadmap: [
       "Imposte, contributi e composizione del prelievo",
@@ -483,19 +466,19 @@ const copy = {
     snapshotEyebrow: "Italy in four numbers",
     snapshotTitle: "Italy, at a glance",
     snapshotBody:
-      "Economy, age, health and work. Open a number for its trend, European comparison and source.",
+      "Four indicators to get started. Open a page to understand the figure, follow it over time and compare it with the European Union.",
     snapshotWhy: "Why these four?",
     snapshotWhyBody:
-      "They are four distinct, complementary measures: what the country produces, its age structure, health and participation in work.",
+      "We chose output per person, population age, life expectancy and employment as a first route through the site. This selection covers a few aspects of Italy.",
     snapshotGdp: "GDP per person",
-    snapshotGdpUnit: "Index: EU = 100",
-    snapshotMedianAge: "Median age",
-    snapshotLifeExpectancy: "Life expectancy",
+    snapshotGdpUnit: "Index · EU = 100",
+    snapshotMedianAge: "Median age of the population",
+    snapshotLifeExpectancy: "Life expectancy at birth",
     snapshotEmployment: "Employment, ages 20–64",
-    snapshotOpen: "See trend",
-    exploreTitle: "Go deeper when you want",
+    snapshotOpen: "Read the figure",
+    exploreTitle: "Explore further",
     exploreBody:
-      "Choose a topic, read the method or verify a source directly.",
+      "The guide explains how to read the comparisons. The sources let you trace each step.",
     openPage: "Open page",
     openIndicator: "Open the full indicator",
     backToData: "Back to all data",
@@ -506,41 +489,41 @@ const copy = {
     topicIndicators: "indicators",
     topicExamples: "Includes",
     topicOpen: "Open topic",
-    heroEyebrow: "Public spending · Italy · {year}",
+    heroEyebrow: "An example to explore · public spending · {year}",
     heroTitle: "How is €100 spent?",
     heroBody:
-      "We scale all Italian public spending down to €100: pensions, health, education, pay, investment and interest.",
+      "For every €100 spent by Italian general government, see how much goes to each function. All shares refer to the same year.",
     heroYear: "Data year",
     heroLatest:
-      "Latest year available in the project’s snapshot",
+      "Latest Italian year available in the series used here",
     heroProvisional: "provisional data",
     heroSource: "Official source",
     heroSourceName: "Eurostat",
     heroSourceUpdated: "dataset updated {date}",
-    heroOpenSource: "Verify data and calculation",
+    heroOpenSource: "Verify the selected category",
     heroMethodSummary: "How are these categories created?",
     heroMethodBody:
       "COFOG stands for “Classification of the Functions of Government”. It is the system Eurostat uses to split spending into ten comparable categories.",
     heroBudgetNote:
-      "The total covers all Italian public bodies, not only central government.",
+      "The total includes central and local government and social security funds.",
     heroMethodLink: "Read the method",
     heroCardLabel: "represent 100% of {year} spending",
     spendingInteract:
-      "Hover over a category to read the chart. Click to explore it.",
-    spendingDonutLabel: "Public spending chart; opens the selected category",
+      "Choose a category to see its detail and European comparison.",
+    spendingDonutLabel: "Public spending. Open the selected category",
     socialProtectionHero: "Social protection (including pensions)",
     socialDetailEyebrow: "Inside social protection",
-    socialDetailTitle: "How much relates to pensions?",
+    socialDetailTitle: "Old age and pensions: what they cover",
     socialDetailBody:
-      "Eurostat does not publish a “pensions” category within the €100 breakdown. It publishes the precisely defined old-age function instead.",
+      "The old-age category covers several pensions and services for older people. Here you can see its scope alongside that of pension expenditure.",
     oldAgeMeasure: "In the €100 breakdown",
     oldAgeMeasureTitle: "Old-age function",
-    oldAgeIncludesTitle: "It includes exactly",
+    oldAgeIncludesTitle: "The old-age function includes",
     oldAgeIncludes: [
-      "old-age pensions, age-related anticipated old-age pensions and partial pensions;",
-      "care allowances and other periodic or lump-sum payments linked to retirement or old age;",
-      "accommodation and board in facilities for older people, help with daily tasks, home help and transport;",
-      "allowances for carers and services supporting social and cultural participation;",
+      "old-age pensions, age-related anticipated old-age pensions and partial pensions.",
+      "care allowances and other periodic or lump-sum payments linked to retirement or old age.",
+      "accommodation and board in facilities for older people, help with daily tasks, home help and transport.",
+      "allowances for carers and services supporting social and cultural participation.",
       "pension schemes for military personnel and government employees.",
     ],
     oldAgeExcludes:
@@ -548,13 +531,13 @@ const copy = {
     oldAgeOfficialDefinition: "Official COFOG 10.2 definition (UN)",
     oldAgeFilter:
       "{year} · old age (GF1002) · share of public spending · {status}",
-    pensionMeasure: "A different indicator",
-    pensionMeasureTitle: "Pensions: no exact conversion to the €100",
+    pensionMeasure: "Pension expenditure",
+    pensionMeasureTitle: "The pension expenditure figure",
     pensionMeasureBody:
-      "The percentage of GDP comes from ESSPROS, which covers all resident collective social-protection schemes, public or private. The €100 covers general government only. Dividing the two figures would mix different scopes, so we do not convert this percentage into euros out of 100.",
+      "ESSPROS covers resident collective social protection schemes, both public and private, and measures expenditure as a share of GDP. The €100 breakdown covers general government. These different scopes prevent a direct conversion of the pension percentage into a share of the €100.",
     pensionIncludesTitle: "The pension measure includes",
     pensionIncludes:
-      "disability pensions; early retirement due to reduced capacity to work; old-age, anticipated and partial pensions; survivors’ pensions; and early retirement for labour-market reasons.",
+      "Disability pensions, early retirement due to reduced capacity to work, old-age, anticipated and partial pensions, survivors’ pensions and early retirement for labour-market reasons.",
     openPensionPage: "Open the pension indicator",
     pensionFilter:
       "{year} · all pensions · share of GDP · {status}",
@@ -567,24 +550,24 @@ const copy = {
     compareTitle: "Italy and European comparison",
     italy: "Italy",
     eu: "EU",
-    median: "EU median",
+    median: "Median of EU countries",
     officialAggregate: "official Eurostat aggregate",
     noAggregate:
-      "No official EU aggregate has the same scope; only the median of available countries is shown.",
+      "An EU aggregate for this selection is unavailable. The comparison shows the median of countries with data.",
     countriesAvailable: "{coverage} countries available out of 27",
     missingCountries: "Missing value: {countries}",
-    comparisonQuality: "Quality notes: {details}.",
+    comparisonQuality: "The source reports flags for {details}.",
     comparisonCountryFlagged: "{count} country",
     comparisonCountriesFlagged: "{count} countries",
-    comparisonEuFlagged: "EU aggregate",
+    comparisonEuFlagged: "the EU aggregate",
     compareExplainer: "How to read the European comparison",
-    comparisonHelp: "EU is the official value for the European Union as a whole, not the simple average of countries. The median is the middle value of the available countries, each given equal weight. All values use the same year and selection.",
+    comparisonHelp: "The EU figure describes the Union as a whole, using Eurostat’s method. The median is the central value among available countries, each carrying equal weight. All figures use the same year and selection.",
     comparisonYear: "Comparison year",
     trendTable: "View all years and values",
     trendInteraction: "Select a year to update the comparison. Use the left and right arrow keys to navigate by keyboard.",
-    yearUnflagged: "Italian observation without flags",
+    yearUnflagged: "no source flags",
     edition: "Edition dated",
-    editionNote: "Each indicator shows its own reference year and observation status.",
+    editionNote: "The indicators refer to different years. The year is shown beside each figure.",
     browseAll: "Explore all indicators",
     snapshotDownload: "Download the snapshot used",
     snapshotHash: "Snapshot SHA-256 fingerprint",
@@ -599,13 +582,13 @@ const copy = {
     searchHint: "Search covers all topics. You can then narrow the results with the filters.",
     dataSectionTitle: "Choose a topic",
     dataSectionBody:
-      "You do not need to see everything at once. Start with a question: every indicator retains its definition, historical series, European comparison and source.",
+      "Choose a question below or search for an indicator. Each page includes an explanation, a European comparison, the historical series and its source.",
     noResults: "No indicators match this search.",
-    understand: "Definition and scope",
+    understand: "Definition and details",
     simpleDefinition: "Project’s accessible summary",
     technicalDefinition: "Technical selection used",
     definitionAttribution:
-      "These texts are project paraphrases based on the official methodology; they are not quotations from the source.",
+      "These explanations are project paraphrases based on official definitions.",
     definitionSource: "Open the methodology behind the definition",
     trend: "Italy over time",
     from: "from",
@@ -633,13 +616,13 @@ const copy = {
     sourceAnnual: "Annual",
     sourceFormula: "Step to the displayed number",
     sourceNoCalculation:
-      "The Italian value is the one published by the source; the site only rounds it for display.",
+      "The site displays the Italian value published by the source, rounded for presentation.",
     sourceMedianCalculated:
       "calculated by the site across {coverage} available EU countries out of 27",
     sourceEuUnavailable:
       "Eurostat does not publish an EU aggregate with the same scope.",
     sourceComparisonFormula:
-      "The EU aggregate, when present, is Eurostat’s official figure. For the median, the project orders the {coverage} national values; when their number is even, it averages the two middle values.",
+      "Eurostat publishes the EU aggregate. The project calculates the median by sorting the {coverage} national values. With an even number of countries, it averages the two central values.",
     sourceQualityTitle: "Quality and limitations",
     sourceQualityIntro:
       "Flags are those attached by the source to the observations used.",
@@ -657,13 +640,13 @@ const copy = {
     sourceNoteLink: "Verify the official note",
     sourceTechnicalSummary: "Technical Eurostat links",
     sourceTechnicalBody:
-      "These reproduce the data but are not needed to read them.",
+      "Here you can find the current API response, the copy used and references for reproducing the figure.",
     sourceBrowser: "Open the dataset in Eurostat Data Browser",
     sourceRaw: "View current data in the API",
     sourceOfficialDefinition: "Open the definition source",
     sourceDoi: "Open the dataset’s permanent identifier",
     dataStatusBreak:
-      "The source marks a discontinuity in: {years}. The chart should not be read as a perfectly continuous series.",
+      "The source records a change in the series in {years}. Comparisons across these changes need care.",
     dataNotesTitle: "Before comparing",
     statusProvisional: "provisional",
     statusEstimated: "estimated",
@@ -675,49 +658,31 @@ const copy = {
     statusForecast: "forecast",
     statusFlagged: "flagged by the source",
     methodEyebrow: "Public method",
-    methodTitle: "Rules come before results",
+    methodTitle: "How we work with the data",
     methodBody:
-      "If a rule changes after seeing a number, the comparison loses credibility. Criteria, formulas and limitations are declared in advance.",
+      "Reading a comparison starts with its year, definition and population. Here we explain where to find them and how we prepare the indicator pages.",
     rules: [
-      {
-        title: "Official sources only",
-        body: "We use data produced or published by statistical institutions and public administrations. For comparisons we use harmonised Eurostat series.",
-      },
-      {
-        title: "Three references, a common scope",
-        body: "We compare Italy, the official EU aggregate when one exists, and the median of available countries. When no aggregate with the same scope is published, we mark it as unavailable.",
-      },
-      {
-        title: "No false precision",
-        body: "We show only the decimals justified by the source. Estimates and provisional data remain separate from the latest non estimated value.",
-      },
-      {
-        title: "Verifiable copies",
-        body: "The repository stores only the series used, the original link, acquisition date and digital fingerprint of the normalised content.",
-      },
-      {
-        title: "Accessibility, not interpretation",
-        body: "We present public data in a readable format without interpreting it. Accessible summaries are project paraphrases based on official definitions and always link back to the source.",
-      },
-      {
-        title: "The same range where possible",
-        body: "Series begin at the first common year available for Italy and the EU comparison, never before 2000.",
-      },
+      { title: "Official sources", body: "We use harmonised series published by Eurostat. Each indicator links to the source data and documentation." },
+      { title: "Comparable figures", body: "Italy, the EU aggregate and the median refer to the same year and scope. The median requires at least 24 of the 27 countries." },
+      { title: "Status and precision", body: "We retain source flags and identify estimates, provisional figures and breaks. Numbers are rounded only for display." },
+      { title: "Verifiable data", body: "We retain the copy used, its original URL, acquisition date and file checksum. You can download them from the source page." },
+      { title: "Transparent explanations", body: "Accessible definitions and medians are prepared by the project. We describe the measures and comparisons and state the limits of what they can tell us." },
+      { title: "Comparable years", body: "Series start in the first year with Italian data and at least 24 EU countries, from 2000 onwards. Missing years are left empty." },
     ],
     medianTitle: "Why we also show the median",
     sourcesEyebrow: "Traceability",
-    sourcesTitle: "The source is part of the data",
+    sourcesTitle: "Sources and downloads",
     sourcesBody:
-      "Every chart links to its dataset. The local copy contains only the observations needed, so it stays small and can be verified over time.",
+      "The data come from Eurostat. For emissions, the original source is the European Environment Agency. Each indicator links to its source and the exact copy used by the site.",
     sourceCount: "official datasets",
     sourceDirectory: "Browse the full directory",
     localSize: "Downloadable data, verifiable sources",
     manifest: "Open the source register",
     downloadAll: "Download all data as CSV",
     aboutEyebrow: "About",
-    aboutTitle: "Making public information readable",
+    aboutTitle: "Making public data easier to read",
     aboutBody:
-      "Explainable Italy begins with a simple problem. A great deal of official data exists, but it is spread across portals, classifications and formats that are hard to read. The project brings it into one coherent, clear and verifiable path.",
+      "Explainable Italy brings together selected official statistics on Italy, with definitions, European comparisons and verifiable sources. You can start with a question and follow it through to the data used to answer it.",
     founder: "A project by Andrea Gentilini",
     independence:
       "Explainable Italy is an independent project. It does not represent and is not endorsed by the institutions cited. Project calculations are identified as such.",
@@ -725,7 +690,7 @@ const copy = {
       "The project integrates no cookies, advertising, profiling, analytics or other trackers. The hosting infrastructure may retain normal technical access logs.",
     futureTitle: "What we can add next",
     futureBody:
-      "The structure is ready to grow without changing the selection rules.",
+      "We will add topics when suitable sources and verifiable comparisons are available.",
     futureToggle: "See the next areas of work",
     roadmap: [
       "Taxes, social contributions and the composition of the tax burden",
@@ -767,6 +732,105 @@ const sectionColors: Record<string, string> = {
 };
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+const topicQuestions: Record<string, Array<{ id: string; text: LocalizedText }>> = {
+  "spending": [
+    {
+      "id": "total-public-expenditure",
+      "text": {
+        "it": "Quanto vale la spesa pubblica rispetto al PIL?",
+        "en": "How much is public spending as a share of GDP?"
+      }
+    },
+    {
+      "id": "public-debt",
+      "text": {
+        "it": "Quanto pesa il debito pubblico rispetto al PIL?",
+        "en": "How large is public debt relative to GDP?"
+      }
+    }
+  ],
+  "people": [
+    {
+      "id": "median-age",
+      "text": {
+        "it": "Qual è l’età mediana della popolazione?",
+        "en": "What is the median age of the population?"
+      }
+    },
+    {
+      "id": "population-65-plus",
+      "text": {
+        "it": "Su 100 residenti, quanti hanno almeno 65 anni?",
+        "en": "What percentage of residents are aged 65 or over?"
+      }
+    }
+  ],
+  "economy": [
+    {
+      "id": "employment-rate",
+      "text": {
+        "it": "Su 100 persone tra 20 e 64 anni, quante lavorano?",
+        "en": "What percentage of people aged 20 to 64 are in work?"
+      }
+    },
+    {
+      "id": "inflation",
+      "text": {
+        "it": "Come sono cambiati i prezzi al consumo?",
+        "en": "How have consumer prices changed?"
+      }
+    }
+  ],
+  "welfare": [
+    {
+      "id": "pension-expenditure",
+      "text": {
+        "it": "Quanto pesa la spesa pensionistica sul PIL?",
+        "en": "How much is pension expenditure as a share of GDP?"
+      }
+    },
+    {
+      "id": "poverty-or-exclusion",
+      "text": {
+        "it": "Quale percentuale della popolazione è a rischio di povertà o esclusione sociale?",
+        "en": "What percentage of people are at risk of poverty or social exclusion?"
+      }
+    }
+  ],
+  "education": [
+    {
+      "id": "tertiary-education",
+      "text": {
+        "it": "Tra i 25–34enni, quanti su 100 hanno una laurea o un altro titolo terziario?",
+        "en": "What percentage of 25–34-year-olds hold a tertiary qualification?"
+      }
+    },
+    {
+      "id": "early-school-leavers",
+      "text": {
+        "it": "Quanti 18–24enni su 100 hanno al massimo la scuola media e sono fuori da studio e formazione?",
+        "en": "What percentage of 18–24-year-olds have low qualifications and are outside education and training?"
+      }
+    }
+  ],
+  "environment": [
+    {
+      "id": "renewable-energy",
+      "text": {
+        "it": "Quale quota dell’energia consumata viene da fonti rinnovabili?",
+        "en": "What share of energy consumption comes from renewable sources?"
+      }
+    },
+    {
+      "id": "municipal-waste-recycling",
+      "text": {
+        "it": "Quale quota dei rifiuti urbani viene riciclata?",
+        "en": "What share of municipal waste is recycled?"
+      }
+    }
+  ]
+};
 
 function formatValue(
   value: number,
@@ -1126,10 +1190,12 @@ function ComparisonPlot({
   indicator,
   locale,
   point = indicator.latest,
+  visual = false,
 }: {
   indicator: Indicator;
   locale: Locale;
   point?: DataPoint;
+  visual?: boolean;
 }) {
   const labels = copy[locale];
   const values = [
@@ -1140,7 +1206,7 @@ function ComparisonPlot({
     { id: "median", label: labels.median, value: point.median },
   ];
   const minimum = Math.min(0, ...values.map((entry) => entry.value));
-  const maximum = Math.max(0, ...values.map((entry) => entry.value));
+  const maximum = Math.max(["percent", "percent_spending"].includes(indicator.unitKey) ? 100 : 0, ...values.map((entry) => entry.value));
   const range = maximum - minimum || 1;
   const position = (value: number) => ((value - minimum) / range) * 100;
   const methodLabel =
@@ -1190,6 +1256,7 @@ function ComparisonPlot({
     <div
       className="comparison"
       data-count={values.length}
+      data-visual={visual}
       role="img"
       aria-label={[`${labels.compareTitle} · ${point.year}`, ariaValues, methodLabel, coverageLabel, missingLabel, qualityLabel]
         .filter(Boolean)
@@ -1225,6 +1292,7 @@ function ComparisonPlot({
           </strong>
         </div>
       ))}
+      {visual ? <p className="comparison-scale">{locale === "it" ? "Scala comune" : "Shared scale"}: {formatValue(minimum, indicator.unitKey, indicator.precision, locale)} – {formatValue(maximum, indicator.unitKey, indicator.precision, locale)}</p> : null}
       <p className="comparison-method">
         {methodLabel}
         {missingLabel ? ` ${missingLabel}.` : ""}
@@ -1249,14 +1317,22 @@ function YearSelection({ indicator, point, locale }: {
       <select value={point.year} onChange={(event) => updateQuery({ year: event.target.value })}>
         {[...options.values()].sort((a, b) => b.year - a.year).map((entry) => (
           <option key={entry.year} value={entry.year}>
-            {entry.year} · {entry.status
-              ? statusDescription(entry.status, locale, false)
-              : copy[locale].yearUnflagged}
+            {entry.year}{entry.status ? ` · ${statusDescription(entry.status, locale, false)}` : ""}
           </option>
         ))}
       </select>
     </label>
   );
+}
+
+function YearContext({ indicator, point, locale }: { indicator: Indicator; point: DataPoint; locale: Locale }) {
+  const newer = indicator.newerEstimate;
+  if (!newer || point.year !== indicator.latest.year) return null;
+  return <p className="year-context">
+    {locale === "it"
+      ? `Il dato del ${newer.year} è ${statusDescription(newer.status, locale, false)}. Per questo la scheda si apre sul ${indicator.latest.year}. Puoi scegliere l’anno dal menu.`
+      : `The ${newer.year} figure is ${statusDescription(newer.status, locale, false)}. The page therefore opens on ${indicator.latest.year}. You can choose a year from the menu.`}
+  </p>;
 }
 
 function TrendBars({ indicator, locale, selectedYear }: {
@@ -1368,6 +1444,7 @@ function IndicatorCard({
     <article
       className="indicator-card"
       id={indicator.id}
+      data-expanded={expanded}
       style={
         {
           "--section-color": sectionColors[indicator.section],
@@ -1417,41 +1494,18 @@ function IndicatorCard({
               false,
             )}
           </span>
+          {expanded ? <button type="button" onClick={() => updateQuery({ year: String(indicator.newerEstimate!.year) })}>{locale === "it" ? `Vedi il ${indicator.newerEstimate.year}` : `View ${indicator.newerEstimate.year}`} <span aria-hidden="true">→</span></button> : null}
         </p>
       ) : null}
 
       {expanded ? <div className="indicator-toolbar"><YearSelection indicator={indicator} point={point} locale={locale} /><ShareLink locale={locale} key={`${query}-${point.year}`} /><a className="compact-download" href={`${basePath}/data/indicators/${indicator.id}.csv`} download={`${indicator.id}.csv`}>CSV <span aria-hidden="true">↓</span><span className="visually-hidden"> · {labels.downloadIndicator}</span></a></div> : null}
-      <ComparisonPlot indicator={indicator} locale={locale} point={point} />
+      {expanded ? <><YearContext indicator={indicator} point={point} locale={locale} /><IndicatorReading indicator={indicator} point={point} locale={locale} /></> : null}
+      <ComparisonPlot indicator={indicator} locale={locale} point={point} visual={expanded} />
       {expanded ? <details className="comparison-explainer"><summary>{labels.compareExplainer}</summary><p>{labels.comparisonHelp}</p></details> : null}
 
       {expanded ? (
         <section className="indicator-details">
-          <h2 className="indicator-details-title">{labels.understand}</h2>
           <div className="indicator-details-body">
-            <div className="definition-grid">
-              <div>
-                <h3>{labels.simpleDefinition}</h3>
-                <p>{indicator.plain[locale]}</p>
-              </div>
-              <div>
-                <h3>{labels.technicalDefinition}</h3>
-                <p>{indicator.technical[locale]}</p>
-              </div>
-            </div>
-            <p className="definition-attribution">
-              {labels.definitionAttribution}{" "}
-              {indicator.definitionSourceUrl ? (
-                <a
-                  href={indicator.definitionSourceUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {labels.definitionSource}{" "}
-                  <span aria-hidden="true">↗</span>
-                </a>
-              ) : null}
-            </p>
-
             {breakYears.length || indicator.notes.length ? (
               <div className="indicator-notes">
                 <h3>{labels.dataNotesTitle}</h3>
@@ -1485,13 +1539,22 @@ function IndicatorCard({
 
             <div className="trend-block">
               <div className="trend-heading">
-                <h3>{labels.trend}</h3>
+                <h2>{indicator.unitKey === "eu_index" ? (locale === "it" ? "PIL per abitante rispetto all’UE" : "GDP per person relative to the EU") : labels.trend}</h2>
                 <span>
                   {indicator.series[0].year}–{indicator.series[indicator.series.length - 1].year}
                 </span>
               </div>
               <TrendBars indicator={indicator} locale={locale} selectedYear={point.year} />
             </div>
+
+            <details className="definition-details">
+              <summary>{labels.understand}</summary>
+              <h3>{labels.technicalDefinition}</h3>
+              <p>{indicator.technical[locale]}</p>
+              <p className="definition-attribution">{labels.definitionAttribution}{" "}
+                {indicator.definitionSourceUrl ? <a href={indicator.definitionSourceUrl} target="_blank" rel="noreferrer">{labels.definitionSource} <span aria-hidden="true">↗</span></a> : null}
+              </p>
+            </details>
 
             <div className="source-box">
               <div>
@@ -1527,6 +1590,7 @@ function IndicatorCard({
                 {labels.downloadIndicator}
               </a>
             </div>
+
           </div>
         </section>
       ) : (
@@ -1625,6 +1689,7 @@ function SourceVerification({
         </small>
       </div>
 
+      <YearContext indicator={indicator} point={displayedPoint} locale={locale} />
       <div className="source-verification-grid">
         <section>
           <h2>{labels.sourceSelection}</h2>
@@ -2135,6 +2200,7 @@ export function Dashboard({
     "life-expectancy": labels.snapshotLifeExpectancy,
     "employment-rate": labels.snapshotEmployment,
   };
+  const snapshotDefinitions: Record<string, LocalizedText> = {"gdp-per-capita-pps": {"it": "Produzione per persona, corretta per le differenze di prezzo tra Paesi.", "en": "Output per person, adjusted for differences in prices between countries."}, "median-age": {"it": "L’età che divide la popolazione in due metà, al 1° gennaio.", "en": "The age that divides the population into two halves, on 1 January."}, "life-expectancy": {"it": "Basata sui livelli di mortalità dell’anno, mantenuti costanti per tutta la vita.", "en": "Based on the year’s mortality rates, held constant throughout life."}, "employment-rate": {"it": "Percentuale degli occupati nella popolazione di questa fascia d’età.", "en": "The percentage of people in this age group who are employed."}};
   const activeSpending =
     spendingBreakdown.find((indicator) => indicator.id === activeSpendingId) ??
     spendingBreakdown[0];
@@ -2239,13 +2305,17 @@ export function Dashboard({
     ? data.indicators.find((indicator) => indicator.id === selectedIndicatorId)
     : undefined;
 
+  const selectedSection = data.sections.find((section) => section.id === activeSection);
+  const catalogueTitle = search.trim()
+    ? (locale === "it" ? "Risultati della ricerca" : "Search results")
+    : selectedSection?.title[locale] ?? (activeSection === "all" ? labels.allSections : labels.dataSectionTitle);
+  const catalogueBody = search.trim()
+    ? (locale === "it" ? "Apri una scheda per leggere il dato e il suo contesto. Puoi restringere i risultati scegliendo un tema." : "Open an indicator to read the figure and its context. Choose a topic to narrow the results.")
+    : selectedSection?.description[locale] ?? (activeSection === "all"
+      ? (locale === "it" ? "Ogni scheda riporta l’anno del dato, il confronto europeo e la fonte." : "Each indicator shows its reference year, European comparison and source.")
+      : labels.dataSectionBody);
+
   const pageCards = [
-    {
-      path: "data",
-      eyebrow: `${data.indicators.length} ${labels.results}`,
-      title: labels.dataSectionTitle,
-      body: labels.dataSectionBody,
-    },
     {
       path: "method",
       eyebrow: labels.methodEyebrow,
@@ -2391,6 +2461,8 @@ export function Dashboard({
                             )}`
                           : labels.noAggregate}
                     </small>
+                    <p className="snapshot-definition">{snapshotDefinitions[indicator.id][locale]}</p>
+                    {indicator.newerEstimate ? <small className="snapshot-newer">{locale === "it" ? "Disponibile anche" : "Also available"}{" "}{indicator.newerEstimate.year}, {statusDescription(indicator.newerEstimate.status, locale, false)}</small> : null}
                     <em>
                       {labels.snapshotOpen} <span aria-hidden="true">→</span>
                     </em>
@@ -2399,7 +2471,18 @@ export function Dashboard({
               </div>
             </section>
 
-            <section className="hero">
+            <section className="question-directory" aria-labelledby="questions-title">
+              <h2 id="questions-title">{locale === "it" ? "Da cosa vuoi partire?" : "What would you like to explore?"}</h2>
+              <div className="question-grid">
+                {data.sections.map((section) => <article key={section.id}>
+                  <h3>{section.title[locale]}</h3>
+                  <a className="question-link" href={pageHref(locale, `data/${topicQuestions[section.id][0].id}`)}>{topicQuestions[section.id][0].text[locale]} <span aria-hidden="true">→</span></a>
+                  <a className="topic-all-link" href={pageHref(locale, "data") + `?topic=${section.id}`}>{locale === "it" ? "Tutti gli indicatori del tema" : "All indicators in this topic"}</a>
+                </article>)}
+              </div>
+            </section>
+
+            <section className="hero" id="spending-example">
               <div className="hero-copy">
                 <p className="eyebrow">{heroEyebrow}</p>
                 <h2>{labels.heroTitle}</h2>
@@ -2611,8 +2694,8 @@ export function Dashboard({
           <div className="section-heading">
             <div>
               <p className="eyebrow">{labels.navData}</p>
-              <h1>{labels.dataSectionTitle}</h1>
-              <p>{labels.dataSectionBody}</p>
+              <h1>{catalogueTitle}</h1>
+              <p>{catalogueBody}</p>
             </div>
             <div className="search-field">
               <label htmlFor="indicator-search">{labels.searchLabel}</label>
@@ -2688,31 +2771,15 @@ export function Dashboard({
                 );
 
                 return (
-                  <button
-                    type="button"
-                    onClick={() => setActiveSection(section.id)}
-                    key={section.id}
-                    style={
-                      {
-                        "--topic-color": sectionColors[section.id],
-                      } as CSSProperties
-                    }
-                  >
-                    <span className="topic-count">
-                      {sectionIndicators.length} {labels.topicIndicators}
-                    </span>
-                    <h3>{section.title[locale]}</h3>
+                  <article key={section.id} style={{ "--topic-color": sectionColors[section.id] } as CSSProperties}>
+                    <span className="topic-count">{sectionIndicators.length} {labels.topicIndicators}</span>
+                    <h2>{section.title[locale]}</h2>
                     <p>{section.description[locale]}</p>
-                    <small>{labels.topicExamples}</small>
-                    <ul>
-                      {sectionIndicators.slice(0, 3).map((indicator) => (
-                        <li key={indicator.id}>{indicator.title[locale]}</li>
-                      ))}
-                    </ul>
-                    <strong>
-                      {labels.topicOpen} <span aria-hidden="true">→</span>
-                    </strong>
-                  </button>
+                    <div className="topic-questions">
+                      {topicQuestions[section.id].map((question) => <a key={question.id} href={pageHref(locale, `data/${question.id}`) + `?topic=${section.id}`}>{question.text[locale]} <span aria-hidden="true">→</span></a>)}
+                    </div>
+                    <button type="button" className="topic-open" onClick={() => setActiveSection(section.id)}>{labels.topicOpen} <span aria-hidden="true">→</span></button>
+                  </article>
                 );
               })}
             </div>
@@ -2748,6 +2815,8 @@ export function Dashboard({
             <h1>{labels.methodTitle}</h1>
             <p>{labels.methodBody}</p>
           </div>
+          <MethodGuide locale={locale} sourcesHref={pageHref(locale, "sources")} />
+          <h2 className="method-principles-title">{locale === "it" ? "Come prepariamo le schede" : "How we prepare the indicator pages"}</h2>
           <div className="method-rules">
             {labels.rules.map((rule, index) => (
               <article key={rule.title}>
@@ -2757,11 +2826,6 @@ export function Dashboard({
               </article>
             ))}
           </div>
-          <details className="median-explainer">
-            <summary>{labels.medianTitle}</summary>
-            <p>{data.comparison[locale]}</p>
-          </details>
-          <MethodGuide locale={locale} sourcesHref={pageHref(locale, "sources")} />
           </section>
         ) : null}
 
@@ -2787,7 +2851,7 @@ export function Dashboard({
             </a>
           </div>
 
-          <details className="source-directory">
+          <details className="source-directory" open>
             <summary>
               <span>
                 {sources.length} {labels.sourceCount}
