@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { buildIndicatorCsv } from "../scripts/data-utils.mjs";
 
 test("downloadable CSV preserves zeros, missing EU aggregates, negative values and quality flags", () => {
-  const csv = buildIndicatorCsv({ series: [
+  const csv = buildIndicatorCsv({ unitKey: "percent", source: { datasetCode: "example" }, series: [
     {
       year: 2024, italy: 0, eu: null, median: -2.5, coverage: 26,
       euMethod: "unavailable", status: null, euStatus: null,
@@ -17,7 +17,7 @@ test("downloadable CSV preserves zeros, missing EU aggregates, negative values a
     },
   ] });
   assert.equal(csv,
-    "year,italy,eu_official,median,countries_in_median,eu_method,italy_status,eu_status,flagged_countries,missing_countries\n" +
-    "2024,0,,-2.5,26,unavailable,,,DE:p|FR:b,LU\n" +
-    "2025,-3.1,0,0.3,27,official_aggregate,p,e,IT:p,\n");
+    "year,italy,eu_official,median,countries_in_median,eu_method,italy_status,eu_status,flagged_countries,missing_countries,unit,dataset\n" +
+    "2024,0,,-2.5,26,unavailable,,,DE:p|FR:b,LU,percent,example\n" +
+    "2025,-3.1,0,0.3,27,official_aggregate,p,e,IT:p,,percent,example\n");
 });

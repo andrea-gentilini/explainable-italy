@@ -1,11 +1,17 @@
 import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { euCountries, flattenJsonStat, matchesSelector, isEstimateOrProvisional, buildIndicatorCsv } from "./data-utils.mjs";
+import { euCountries, flattenJsonStat, matchesSelector, isEstimateOrProvisional, buildIndicatorCsv, mergeStatus } from "./data-utils.mjs";
 
-const projectRoot = fileURLToPath(new URL("..", import.meta.url));
+import { metadataStatusOverrides } from "./metadata-rules.mjs";
+
+const rootIndex = process.argv.indexOf("--root");
+if (rootIndex >= 0 && !process.argv[rootIndex + 1]) throw new Error("--root requires a directory");
+const projectRoot = rootIndex >= 0
+  ? resolve(process.argv[rootIndex + 1])
+  : fileURLToPath(new URL("..", import.meta.url));
 
 async function readJson(path) {
   return JSON.parse(await readFile(join(projectRoot, path), "utf8"));
@@ -132,8 +138,14 @@ function checkAgainstSource(indicator, point, byYear) {
   assert(point.coverage === countries.length, `${indicator.id}: copertura diversa dalla fonte nel ${point.year}`);
   assert(JSON.stringify(point.missingCountries) === JSON.stringify(euCountries.filter((geo) => !countries.includes(geo))),
     `${indicator.id}: elenco Paesi mancanti diverso dalla fonte nel ${point.year}`);
+  const selector = Object.fromEntries(new URL(indicator.source.apiUrl).searchParams);
+  const overrides = metadataStatusOverrides(indicator.source.datasetCode, selector);
+  const expectedStatus = (geo) => mergeStatus(observations.get(geo)?.status, overrides[geo]?.["*"], overrides[geo]?.[point.year]);
+  assert(point.status === expectedStatus("IT"), `${indicator.id}: stato Italia diverso dai metadati`);
+  assert(point.euStatus === (Number.isFinite(officialEu?.value) ? expectedStatus("EU27_2020") : null),
+    `${indicator.id}: stato UE diverso dai metadati`);
   const expectedFlags = countries.flatMap((geo) => {
-    const status = geo === "IT" ? point.status : observations.get(geo).status;
+    const status = expectedStatus(geo);
     return status ? [{ geo, status }] : [];
   });
   assert(JSON.stringify(point.countryStatuses) === JSON.stringify(expectedFlags),
@@ -141,7 +153,7 @@ function checkAgainstSource(indicator, point, byYear) {
   if (point.countries) {
     assert(JSON.stringify(point.countries) === JSON.stringify(countries.map((geo) => ({
       geo, value: observations.get(geo).value,
-      status: geo === "IT" ? point.status : observations.get(geo).status,
+      status: expectedStatus(geo), sourceStatus: observations.get(geo).status,
     }))), `${indicator.id}: tabella Paesi diversa dallo snapshot nel ${point.year}`);
   }
 }
@@ -199,6 +211,7 @@ for (const indicator of dashboard.indicators) {
   let previousYear = 1999;
   for (const point of indicator.series) {
     assertPoint(point, indicator.id);
+    assert(point.countries?.length === point.coverage, `${indicator.id}: dettaglio storico Paesi incompleto`);
     checkAgainstSource(indicator, point, byYear);
     assert(point.year > previousYear, `${indicator.id}: anni non ordinati`);
     previousYear = point.year;
@@ -214,9 +227,7 @@ for (const indicator of dashboard.indicators) {
   assert((indicator.newerEstimate?.year ?? null) === (newest.year > latestExpected.year ? newest.year : null),
     `${indicator.id}: dato più recente omesso o non coerente`);
   for (const point of [indicator.latest, indicator.newerEstimate].filter(Boolean)) {
-    const comparisonPoint = { ...point };
-    delete comparisonPoint.countries;
-    assert(JSON.stringify(comparisonPoint) === JSON.stringify(indicator.series.find((item) => item.year === point.year)),
+    assert(JSON.stringify(point) === JSON.stringify(indicator.series.find((item) => item.year === point.year)),
       `${indicator.id}: dato principale incoerente con la serie`);
   }
   assert(
@@ -259,6 +270,10 @@ for (const dataset of manifest.datasets) {
   const hash = createHash("sha256").update(raw).digest("hex");
   assert(hash === dataset.sha256, `${dataset.datasetCode}: SHA256 non coincide`);
   assert(raw.byteLength === dataset.bytes, `${dataset.datasetCode}: byte non coincidono`);
+  assert(dataset.snapshotPath === `data/raw/eurostat/${dataset.datasetCode}.json`,
+    `${dataset.datasetCode}: percorso snapshot pubblico inatteso`);
+  const publicRaw = await readFile(join(projectRoot, "public", dataset.snapshotPath));
+  assert(raw.equals(publicRaw), `${dataset.datasetCode}: snapshot pubblico diverso dalla fonte salvata`);
   assert(dataset.institution === "Eurostat", `${dataset.datasetCode}: fonte inattesa`);
   assert(
     typeof dataset.originalInstitution === "string" &&
@@ -279,7 +294,7 @@ for (const dataset of manifest.datasets) {
   assert(dataset.datasetLabel === original.label,
     `${dataset.datasetCode}: titolo diverso dalla fonte`);
   for (const indicator of dashboard.indicators.filter((item) => item.source.datasetCode === dataset.datasetCode)) {
-    for (const key of ["institution", "originalInstitution", "datasetLabel", "sourceUpdatedAt", "accessedAt", "metadataUrl", "doi"]) {
+    for (const key of ["institution", "originalInstitution", "datasetLabel", "sourceUpdatedAt", "accessedAt", "metadataUrl", "doi", "snapshotPath", "sha256", "bytes"]) {
       assert(indicator.source[key] === dataset[key], `${indicator.id}: provenienza ${key} incoerente`);
     }
   }

@@ -1,16 +1,13 @@
-import type { Metadata } from "next";
-import dashboardData from "../../../data/processed/dashboard.json";
-import { Dashboard, type DashboardData } from "../../components/Dashboard";
+import { pageData } from "../../page-data";
+import { pageMetadata } from "../../metadata";
+import { Dashboard } from "../../components/Dashboard";
 
-export const metadata: Metadata = {
-  title: "Sources",
-  description: "Official datasets, verifiable copies and the source register.",
-};
+export const metadata = pageMetadata("en", "sources", "Sources", "Official datasets, verifiable copies and the source register.");
 
 export default function EnglishSourcesPage() {
   return (
     <Dashboard
-      data={dashboardData as DashboardData}
+      data={pageData("sources")}
       locale="en"
       view="sources"
     />

@@ -1,17 +1,13 @@
-import type { Metadata } from "next";
-import dashboardData from "../../../data/processed/dashboard.json";
-import { Dashboard, type DashboardData } from "../../components/Dashboard";
+import { pageData } from "../../page-data";
+import { pageMetadata } from "../../metadata";
+import { Dashboard } from "../../components/Dashboard";
 
-export const metadata: Metadata = {
-  title: "Open source",
-  description:
-    "An open project created to help people read public data.",
-};
+export const metadata = pageMetadata("en", "contribute", "Open source", "An open project created to help people read public data.");
 
 export default function EnglishContributePage() {
   return (
     <Dashboard
-      data={dashboardData as DashboardData}
+      data={pageData("contribute")}
       locale="en"
       view="contribute"
     />

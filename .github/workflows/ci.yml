@@ -1,38 +1,58 @@
-name: Controlli
+name: Verify and deploy
 
 on:
   pull_request:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      NEXT_PUBLIC_BASE_PATH: /explainable-italy
+      NEXT_TELEMETRY_DISABLED: 1
     steps:
-      - name: Scarica il codice
-        uses: actions/checkout@v4
-
-      - name: Installa pnpm
-        uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
           version: 11.9.0
-
-      - name: Installa Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 22.13.0
+          node-version: '24'
           cache: pnpm
-
-      - name: Installa le dipendenze
+      - name: Install locked dependencies
         run: pnpm install --frozen-lockfile
+      - name: Check code, data and exported pages
+        run: pnpm check
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level=high
+      - name: Upload the verified site
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
 
-      - name: Controlla stile e tipi
-        run: pnpm lint
-
-      - name: Verifica dati e build
-        run: pnpm test
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish verified snapshot
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,14 +1,11 @@
-import type { Metadata } from "next";
-import dashboardData from "../../data/processed/dashboard.json";
-import { Dashboard, type DashboardData } from "../components/Dashboard";
+import { pageData } from "../page-data";
+import { pageMetadata } from "../metadata";
+import { Dashboard } from "../components/Dashboard";
 
-export const metadata: Metadata = {
-  title: "Explainable Italy",
-  description: "Italy, official data for everyone.",
-};
+export const metadata = pageMetadata("en", "", "Explainable Italy", "Italy, official data for everyone.");
 
 export default function EnglishHome() {
   return (
-    <Dashboard data={dashboardData as DashboardData} locale="en" view="home" />
+    <Dashboard data={pageData("home")} locale="en" view="home" />
   );
 }

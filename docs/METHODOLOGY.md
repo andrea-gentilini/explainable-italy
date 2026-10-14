@@ -19,7 +19,7 @@ La prima versione usa dataset diffusi da Eurostat. Per le emissioni di gas serra
 9. data di acquisizione del progetto
 10. fonte originaria, quando diversa dall’istituzione che diffonde il dato
 
-Il manifest completo è in `data/manifest.json`.
+Il manifest completo è in `data/manifest.json` e nella copia scaricabile `public/data/manifest.json`. Ogni pagina fonte collega lo snapshot esatto usato dal sito, con dimensione e SHA256. La risposta API corrente è un collegamento distinto: può essere stata revisionata dopo l’acquisizione. Gli snapshot pubblici in `public/data/raw/eurostat/` sono identici, byte per byte, alle copie di lavoro.
 
 ## Geografie
 
@@ -28,6 +28,8 @@ La dashboard mostra, quando disponibili:
 1. Italia
 2. aggregato ufficiale dell’Unione europea a 27 Paesi
 3. mediana degli Stati membri con dati disponibili
+
+Il perimetro è quello dei 27 Stati membri attuali (`EU27_2020`), anche per gli anni precedenti alla loro adesione: non è la composizione storica dell’UE di ciascun anno. La mediana include l’Italia e assegna lo stesso peso a ogni Paese disponibile; non è la mediana delle persone residenti.
 
 Il valore UE è l’aggregato pubblicato da Eurostat quando disponibile. Un aggregato può essere una somma, una media ponderata o un altro valore costruito secondo la metodologia del dataset. Non va interpretato automaticamente come media aritmetica.
 
@@ -39,7 +41,7 @@ La mediana è il valore centrale dopo avere ordinato i Paesi disponibili. Per un
 
 Le serie iniziano dal primo anno con Italia e almeno 24 Stati membri disponibili, mai prima del 2000. Italia, UE e mediana sono sempre confrontate nello stesso anno e con la stessa selezione. Se un anno più recente ha meno di 24 Stati disponibili, il confronto resta all’ultimo anno che supera questa soglia. Non si riempiono anni mancanti con interpolazioni.
 
-La scheda e la pagina della fonte mostrano inizialmente il più recente confronto con dato italiano privo dei contrassegni `e`, `p` o `f`. Se esiste un confronto successivo stimato, provvisorio o previsto, è mostrato separatamente e può essere selezionato per confrontare lo stesso anno in scheda e fonte. I collegamenti conservano l’anno selezionato. La ripartizione dei 100 € in homepage usa il confronto più recente disponibile e indica esplicitamente l’anno e lo stato. L’assenza di questi contrassegni non significa che il dato non potrà essere rivisto. La selezione dello stato italiano non implica che tutti i Paesi o l’aggregato UE siano definitivi: i loro contrassegni restano indicati separatamente. La selezione considera sia i contrassegni delle singole osservazioni sia le note ufficiali che attribuiscono uno stato a un Paese o a un intero anno. Per questo la ripartizione COFOG italiana e l’aggregato UE del 2024 sono indicati come provvisori anche se il flag non compare nelle singole celle API. Il contrassegno originale resta conservato separatamente da quello integrato con i metadati.
+La scheda e la pagina della fonte mostrano inizialmente il più recente confronto con dato italiano privo dei contrassegni `e`, `p` o `f`. Se esiste un confronto successivo stimato, provvisorio o previsto, è mostrato separatamente e può essere selezionato per confrontare lo stesso anno in scheda e fonte. I collegamenti conservano l’anno selezionato. La ripartizione dei 100 € in homepage usa il confronto più recente disponibile e indica esplicitamente l’anno e lo stato. L’assenza di questi contrassegni non significa che il dato non potrà essere rivisto. La selezione dello stato italiano non implica che tutti i Paesi o l’aggregato UE siano definitivi: i loro contrassegni restano indicati separatamente. La selezione considera sia i contrassegni delle singole osservazioni sia le note ufficiali che attribuiscono uno stato a un Paese o a un intero anno. Per questo la ripartizione COFOG italiana e l’aggregato UE del 2024 sono indicati come provvisori anche se il flag non compare nelle singole celle API. Lo stesso criterio si applica agli altri Paesi citati nelle note COFOG. In particolare, i gruppi di dettaglio della Bulgaria sono provvisori anche quando la singola cella non ha un flag; questa regola non viene estesa alle dieci divisioni principali. Il contrassegno originale (`sourceStatus`, oppure `euSourceStatus` per l’UE) resta conservato per Italia, UE e ciascun Paese, separatamente da quello integrato con i metadati (`status`). Le regole supplementari, limitate ai casi espliciti della fonte, sono in `scripts/metadata-rules.mjs`.
 
 I contrassegni di interruzione della serie restano visibili sul singolo anno. Anche le discontinuità documentate soltanto nei metadati, come i passaggi da RED I a RED II nel 2021 e a RED III nel 2025 per le rinnovabili, vengono indicate separatamente. In questi casi il confronto nel tempo richiede cautela.
 
@@ -47,7 +49,7 @@ I contrassegni di interruzione della serie restano visibili sul singolo anno. An
 
 I valori ufficiali non vengono cambiati. Gli snapshot normalizzano soltanto gli spazi finali della risposta HTTP prima di essere salvati e firmati con SHA256. L’arrotondamento è applicato nella visualizzazione, con una precisione definita per ogni indicatore. I risultati calcolati dal progetto, come la mediana, vengono serializzati senza artefatti della rappresentazione binaria.
 
-Il valore italiano e l’aggregato UE ufficiale sono osservazioni della fonte. La mediana è un’elaborazione del progetto. La pagina di verifica separa queste operazioni e rende leggibili anche i 27 valori nazionali utilizzati.
+Il valore italiano e l’aggregato UE ufficiale sono osservazioni della fonte. La mediana è un’elaborazione del progetto. La pagina di verifica separa queste operazioni e rende leggibili i valori nazionali utilizzati per ogni anno selezionabile, con la copertura effettiva. Il JSON conserva queste osservazioni per tutta la serie; i CSV, compresi quelli dei singoli indicatori, riportano unità, dataset, copertura e contrassegni.
 
 Per la domanda “dove vanno 100 euro di spesa pubblica” si usa il dataset COFOG con unità `PC_TOT`. Le dieci funzioni principali descrivono la quota percentuale della spesa complessiva delle Amministrazioni pubbliche. Il totale può differire da 100 di pochi decimi a causa dell’arrotondamento della fonte.
 
@@ -70,12 +72,14 @@ Il valore “vecchiaia” è una sottofunzione della protezione sociale. Non si 
 11. presenza delle fonti delle definizioni e delle note metodologiche
 12. riproduzione di ogni valore Italia e UE, mediana, elenco dei Paesi e contrassegno originale dagli snapshot ufficiali
 13. corrispondenza esatta del CSV con le serie pubblicate e selezione coerente dell’ultimo dato
+14. osservazioni nazionali e contrassegni originali per ogni anno storico
+15. identità byte per byte degli snapshot scaricabili e delle copie di lavoro
 
 I controlli automatici non sostituiscono la revisione editoriale e il confronto con il portale ufficiale.
 
 ## Revisioni
 
-I dati ufficiali possono essere rivisti. Ogni aggiornamento acquisisce tutte le fonti e prepara snapshot, manifest, file elaborati e CSV prima di sostituire i file: una richiesta fallita o una risposta incoerente interrompe l’aggiornamento e conserva i dati precedenti. Ogni file è sostituito atomicamente. La modalità offline verifica le impronte degli snapshot e conserva le date di acquisizione originali; non dichiara un nuovo accesso alle fonti. Le date di acquisizione sono registrate per ciascun dataset. Le differenze restano nella cronologia Git, così è possibile vedere quali valori sono cambiati.
+I dati ufficiali possono essere rivisti. Ogni aggiornamento acquisisce tutte le fonti e prepara snapshot, manifest, file elaborati e CSV in un’area temporanea interna al progetto. Il validatore completo controlla questa versione candidata prima di sostituire i file: una richiesta fallita o una risposta incoerente interrompe l’aggiornamento e conserva i dati precedenti. Ogni file è sostituito atomicamente; se una normale operazione di scrittura fallisce, vengono ripristinati i file già sostituiti. Se anche il ripristino fallisce, i backup sono conservati e l’errore ne indica il percorso. Non si dichiara una transazione atomica tra tutti i file in caso di arresto forzato del processo. La modalità offline verifica le impronte degli snapshot e conserva le date di acquisizione originali; non dichiara un nuovo accesso alle fonti. Le date di acquisizione sono registrate per ciascun dataset. Le differenze restano nella cronologia Git, così è possibile vedere quali valori sono cambiati.
 
 ## Definizioni e testi accessibili
 
@@ -91,6 +95,6 @@ Traduzioni, sintesi accessibili, mediane e altre elaborazioni sono prodotte da E
 
 ## Fonti metodologiche ricontrollate
 
-La revisione del 13 ottobre 2026 ha verificato tutte le 20 selezioni API. I [metadati COFOG](https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm), sezione 19, confermano lo stato provvisorio del 2024 per Italia e UE. Il [manuale SHARES](https://ec.europa.eu/eurostat/documents/d/energy/shares-manual), sezione 1.1, sostituisce il precedente collegamento ai metadati delle rinnovabili, non più disponibile, e documenta i tre regimi normativi. I [metadati sulle emissioni](https://ec.europa.eu/eurostat/cache/metadata/en/sdg_13_10_esmsip2.htm), sezione 6.1, confermano che l’aggregato UE disponibile altrove include trasporti internazionali e non è confrontabile con la selezione nazionale usata qui.
+Le 20 selezioni API sono state nuovamente acquisite e validate il 14 ottobre 2026. La revisione metodologica ha ricontrollato le fonti ufficiali collegate, mantenendo separate le note della fonte e le elaborazioni del progetto. I [metadati COFOG](https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm), sezione 19, confermano lo stato provvisorio del 2024 per Italia e UE. Il [manuale SHARES](https://ec.europa.eu/eurostat/documents/d/energy/shares-manual), sezione 1.1, sostituisce il precedente collegamento ai metadati delle rinnovabili, non più disponibile, e documenta i tre regimi normativi. I [metadati sulle emissioni](https://ec.europa.eu/eurostat/cache/metadata/en/sdg_13_10_esmsip2.htm), sezione 6.1, confermano che l’aggregato UE disponibile altrove include trasporti internazionali e non è confrontabile con la selezione nazionale usata qui.
 
 Eurostat conserva online la versione più recente dei dataset, senza versionare le risposte precedenti: le copie locali con impronta e data di acquisizione servono per riprodurre i confronti pubblicati. Si veda la [documentazione API Eurostat](https://ec.europa.eu/eurostat/web/user-guides/data-browser/api-data-access/api-introduction).

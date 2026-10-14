@@ -1,5 +1,7 @@
 import { createHash } from "node:crypto";
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -7,6 +9,8 @@ import {
   euCountries, flattenJsonStat, buildSeries, isEstimateOrProvisional,
   csvEscape, csvNumber, buildIndicatorCsv,
 } from "./data-utils.mjs";
+import { metadataStatusOverrides } from "./metadata-rules.mjs";
+import { publishDataFiles } from "./data-publish.mjs";
 
 const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const rawDirectory = join(projectRoot, "data", "raw", "eurostat");
@@ -124,19 +128,13 @@ const cofogIndicators = [
 const datasetSpecs = [
   {
     id: "gov_10a_exp",
-    statusOverrides: {
-      2024: "p",
-    },
-    euStatusOverrides: {
-      2024: "p",
-    },
     notes: [
       {
         type: "provisional",
         year: 2024,
         text: {
-          it: "Eurostat indica come provvisorie la ripartizione per funzione dell’Italia e l’aggregato UE relativi al 2024.",
-          en: "Eurostat marks Italy’s 2024 distribution by function and the 2024 EU aggregate as provisional.",
+          it: "I contrassegni includono le note Eurostat sui dati provvisori: Italia e UE 2024, alcuni anni di Belgio, Germania, Spagna, Francia e Portogallo, tutti gli anni della Slovacchia e i gruppi di dettaglio della Bulgaria. I flag originali restano disponibili.",
+          en: "Flags include Eurostat’s provisional-data notes: Italy and EU 2024, selected years for Belgium, Germany, Spain, France and Portugal, all Slovak years, and Bulgarian detail groups. Original flags remain available.",
         },
         sourceUrl:
           "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
@@ -922,12 +920,6 @@ function buildApiUrl(specification, selector = {}) {
   return url;
 }
 
-function withoutCountryValues(point) {
-  const publicPoint = { ...point };
-  delete publicPoint.countries;
-  return publicPoint;
-}
-
 // Prepare the complete update before replacing any project file.
 const pendingFiles = new Map();
 function writeJson(path, value) {
@@ -991,7 +983,7 @@ for (const specification of datasetSpecs) {
       (entry) => entry.datasetCode === specification.id,
     );
     const checksum = createHash("sha256").update(rawText).digest("hex");
-    if (!previousSource || previousSource.sha256 !== checksum) {
+    if (!previousSource || previousSource.sha256 !== checksum || previousSource.apiUrl !== apiUrl.toString()) {
       throw new Error(`Offline snapshot integrity failed: ${specification.id}`);
     }
     accessedAt = previousSource.accessedAt;
@@ -1018,6 +1010,7 @@ for (const specification of datasetSpecs) {
     .digest("hex");
 
   pendingFiles.set(rawPath, normalizedRawText);
+  pendingFiles.set(join(publicDataDirectory, "raw", "eurostat", rawFileName), normalizedRawText);
 
   const metadataUrl =
     dataset.extension?.annotation?.find(
@@ -1036,6 +1029,9 @@ for (const specification of datasetSpecs) {
     doi: `https://doi.org/10.2908/${specification.id.toUpperCase()}`,
     sourceUpdatedAt: dataset.updated,
     accessedAt,
+    snapshotPath: `data/raw/eurostat/${rawFileName}`,
+    sha256: checksum,
+    bytes: Buffer.byteLength(normalizedRawText),
   };
 
   manifest.datasets.push({
@@ -1073,6 +1069,7 @@ for (const specification of datasetSpecs) {
         ...(specification.euStatusOverrides ?? {}),
         ...(indicatorDefinition.euStatusOverrides ?? {}),
       },
+      metadataStatusOverrides(specification.id, indicatorDefinition.selector),
     );
     const indicatorSource = {
       ...source,
@@ -1096,7 +1093,7 @@ for (const specification of datasetSpecs) {
       latestAvailable;
     const newerEstimateWithCountries =
       latestAvailable.year > latestWithCountries.year ? latestAvailable : null;
-    const series = seriesWithCountries.map(withoutCountryValues);
+    const series = seriesWithCountries;
     const latest = { ...latestWithCountries };
     const newerEstimate = newerEstimateWithCountries
       ? { ...newerEstimateWithCountries }
@@ -1131,7 +1128,7 @@ for (const specification of datasetSpecs) {
 
 const dashboardData = {
   generatedAt: manifest.generatedAt,
-  methodologyVersion: "1.2.0",
+  methodologyVersion: "1.3.0",
   comparison: {
     it: "Quando disponibile, il valore UE è l’aggregato ufficiale Eurostat. Se non esiste un aggregato con lo stesso perimetro, non ne costruiamo uno. La mediana è calcolata ordinando i valori dei Paesi disponibili e prendendo quello centrale; con un numero pari di Paesi è la media dei due valori centrali. Vicino al confronto sono indicati copertura, valori mancanti e contrassegni di qualità.",
     en: "When available, the EU value is Eurostat’s official aggregate. If no aggregate with the same scope exists, we do not construct one. The median is calculated by ordering the available country values and taking the middle one; with an even number of countries it is the mean of the two middle values. Coverage, missing values and quality flags are shown next to the comparison.",
@@ -1245,12 +1242,15 @@ for (const indicator of indicators) {
   );
 }
 
-for (const [path, content] of pendingFiles) {
-  await mkdir(dirname(path), { recursive: true });
-  const temporaryPath = `${path}.tmp`;
-  await writeFile(temporaryPath, content);
-  await rename(temporaryPath, path);
-}
+await publishDataFiles(pendingFiles, {
+  root: projectRoot,
+  validate: async (candidateRoot) => {
+    const { stdout } = await promisify(execFile)(process.execPath, [
+      join(projectRoot, "scripts", "validate-data.mjs"), "--root", candidateRoot,
+    ]);
+    process.stdout.write(stdout);
+  },
+});
 
 console.log(
   `Updated ${indicators.length} indicators from ${manifest.datasets.length} official Eurostat datasets.`,

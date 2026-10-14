@@ -1,8 +1,12 @@
 "use client";
 
+import { ShareLink } from "./ShareLink";
+import { MethodGuide } from "./MethodGuide";
+
 import {
   useEffect,
   useMemo,
+  useRef,
   useState,
   useSyncExternalStore,
   type CSSProperties,
@@ -44,6 +48,9 @@ type Source = {
   doi: string;
   sourceUpdatedAt: string;
   accessedAt: string;
+  snapshotPath?: string;
+  sha256?: string;
+  bytes?: number;
 };
 
 type IndicatorNote = {
@@ -175,9 +182,9 @@ function normalizeSearch(value: string, locale: Locale) {
 }
 
 function selectedPoint(indicator: Indicator, year: string | null) {
-  return indicator.newerEstimate && String(indicator.newerEstimate.year) === year
-    ? indicator.newerEstimate
-    : indicator.latest;
+  if (String(indicator.latest.year) === year) return indicator.latest;
+  if (indicator.newerEstimate && String(indicator.newerEstimate.year) === year) return indicator.newerEstimate;
+  return indicator.series.find((point) => String(point.year) === year) ?? indicator.latest;
 }
 
 const copy = {
@@ -221,7 +228,7 @@ const copy = {
       "Riduciamo a 100 € tutta la spesa pubblica italiana: pensioni, sanità, scuola, stipendi, investimenti e interessi.",
     heroYear: "Anno dei dati",
     heroLatest:
-      "Ultimo disponibile per l’Italia; il {nextYear} non è ancora pubblicato",
+      "Anno più recente presente nello snapshot del progetto",
     heroProvisional: "dato provvisorio",
     heroSource: "Fonte ufficiale",
     heroSourceName: "Eurostat",
@@ -283,12 +290,20 @@ const copy = {
     countriesAvailable: "{coverage} Paesi disponibili su 27",
     missingCountries: "Dato mancante: {countries}",
     comparisonQuality: "Note di qualità: {details}.",
+    comparisonCountryFlagged: "{count} Paese",
     comparisonCountriesFlagged: "{count} Paesi",
     comparisonEuFlagged: "aggregato UE",
     compareExplainer: "Come leggere il confronto europeo",
     comparisonHelp: "UE è il valore ufficiale riferito all’Unione europea nel suo insieme: non è la media semplice dei Paesi. La mediana è il valore centrale dei Paesi disponibili, ciascuno con lo stesso peso. Il confronto usa lo stesso anno e la stessa selezione per tutti i valori.",
     comparisonYear: "Anno del confronto",
     trendTable: "Vedi tutti gli anni e i valori",
+    trendInteraction: "Seleziona un anno per aggiornare il confronto. Con la tastiera, usa le frecce destra e sinistra.",
+    yearUnflagged: "dato italiano senza contrassegni",
+    edition: "Edizione del",
+    editionNote: "Ogni indicatore riporta il proprio anno e lo stato del dato.",
+    browseAll: "Esplora tutti gli indicatori",
+    snapshotDownload: "Scarica lo snapshot utilizzato",
+    snapshotHash: "Impronta SHA-256 dello snapshot",
     trendRange: "Serie completa: {start}–{end}",
     trendScale: "Scala del grafico",
     trendLegend: "Barre tratteggiate: dati provvisori, stime o previsioni. *: discontinuità. Anni senza dato lasciati vuoti. Tutti i valori e i contrassegni sono nella tabella.",
@@ -360,7 +375,7 @@ const copy = {
     sourceTechnicalBody:
       "Servono a riprodurre il dato, ma non sono necessari per leggerlo.",
     sourceBrowser: "Apri il dataset nel Data Browser Eurostat",
-    sourceRaw: "Apri i dati grezzi",
+    sourceRaw: "Consulta i dati correnti nell’API",
     sourceOfficialDefinition: "Apri la fonte della definizione",
     sourceDoi: "Apri l’identificatore permanente del dataset",
     dataStatusBreak:
@@ -369,6 +384,7 @@ const copy = {
     statusProvisional: "provvisorio",
     statusEstimated: "stimato",
     statusBreak: "interruzione della serie",
+    statusMethodNote: "nota metodologica sulla comparabilità",
     statusDefinition: "definizione differente",
     statusLowReliability: "bassa affidabilità",
     statusImputed: "valore imputato dalla fonte",
@@ -384,8 +400,8 @@ const copy = {
         body: "Usiamo dati prodotti o pubblicati da istituzioni statistiche e amministrazioni pubbliche. Per i confronti scegliamo serie armonizzate Eurostat.",
       },
       {
-        title: "Nessuna selezione comoda",
-        body: "Confrontiamo Italia, aggregato UE ufficiale quando esiste e mediana dei Paesi disponibili. Non costruiamo un finto valore UE quando il perimetro non è confrontabile.",
+        title: "Tre riferimenti, un perimetro comune",
+        body: "Confrontiamo Italia, aggregato UE ufficiale quando esiste e mediana dei Paesi disponibili. Se manca un aggregato con lo stesso perimetro, lo indichiamo come non disponibile.",
       },
       {
         title: "Precisione senza finzioni",
@@ -411,7 +427,7 @@ const copy = {
       "Ogni grafico porta al dataset che lo alimenta. La copia locale contiene solo le osservazioni necessarie, quindi occupa poco spazio e può essere verificata nel tempo.",
     sourceCount: "dataset ufficiali",
     sourceDirectory: "Consulta l’elenco completo",
-    localSize: "circa 2 MB di dati e copie pubbliche",
+    localSize: "Dati scaricabili, fonti verificabili",
     manifest: "Apri il registro delle fonti",
     downloadAll: "Scarica tutti i dati in CSV",
     aboutEyebrow: "About",
@@ -453,7 +469,7 @@ const copy = {
     themeLight: "Usa tema chiaro",
     themeDark: "Usa tema scuro",
     language: "English",
-    latestUpdate: "Dati acquisiti",
+    latestUpdate: "Edizione pubblicata",
     results: "indicatori mostrati",
   },
   en: {
@@ -496,7 +512,7 @@ const copy = {
       "We scale all Italian public spending down to €100: pensions, health, education, pay, investment and interest.",
     heroYear: "Data year",
     heroLatest:
-      "Latest available for Italy; {nextYear} has not been published yet",
+      "Latest year available in the project’s snapshot",
     heroProvisional: "provisional data",
     heroSource: "Official source",
     heroSourceName: "Eurostat",
@@ -558,12 +574,20 @@ const copy = {
     countriesAvailable: "{coverage} countries available out of 27",
     missingCountries: "Missing value: {countries}",
     comparisonQuality: "Quality notes: {details}.",
+    comparisonCountryFlagged: "{count} country",
     comparisonCountriesFlagged: "{count} countries",
     comparisonEuFlagged: "EU aggregate",
     compareExplainer: "How to read the European comparison",
     comparisonHelp: "EU is the official value for the European Union as a whole, not the simple average of countries. The median is the middle value of the available countries, each given equal weight. All values use the same year and selection.",
     comparisonYear: "Comparison year",
     trendTable: "View all years and values",
+    trendInteraction: "Select a year to update the comparison. Use the left and right arrow keys to navigate by keyboard.",
+    yearUnflagged: "Italian observation without flags",
+    edition: "Edition dated",
+    editionNote: "Each indicator shows its own reference year and observation status.",
+    browseAll: "Explore all indicators",
+    snapshotDownload: "Download the snapshot used",
+    snapshotHash: "Snapshot SHA-256 fingerprint",
     trendRange: "Full series: {start}–{end}",
     trendScale: "Chart scale",
     trendLegend: "Hatched bars: provisional data, estimates or forecasts. *: break in series. Years without data are left blank. All values and flags are in the table.",
@@ -635,7 +659,7 @@ const copy = {
     sourceTechnicalBody:
       "These reproduce the data but are not needed to read them.",
     sourceBrowser: "Open the dataset in Eurostat Data Browser",
-    sourceRaw: "Open the raw data",
+    sourceRaw: "View current data in the API",
     sourceOfficialDefinition: "Open the definition source",
     sourceDoi: "Open the dataset’s permanent identifier",
     dataStatusBreak:
@@ -644,6 +668,7 @@ const copy = {
     statusProvisional: "provisional",
     statusEstimated: "estimated",
     statusBreak: "series break",
+    statusMethodNote: "methodological note on comparability",
     statusDefinition: "different definition",
     statusLowReliability: "low reliability",
     statusImputed: "value imputed by the source",
@@ -659,8 +684,8 @@ const copy = {
         body: "We use data produced or published by statistical institutions and public administrations. For comparisons we use harmonised Eurostat series.",
       },
       {
-        title: "No convenient selection",
-        body: "We compare Italy, the official EU aggregate when one exists, and the median of available countries. We do not construct a false EU figure when the scope is not comparable.",
+        title: "Three references, a common scope",
+        body: "We compare Italy, the official EU aggregate when one exists, and the median of available countries. When no aggregate with the same scope is published, we mark it as unavailable.",
       },
       {
         title: "No false precision",
@@ -686,7 +711,7 @@ const copy = {
       "Every chart links to its dataset. The local copy contains only the observations needed, so it stays small and can be verified over time.",
     sourceCount: "official datasets",
     sourceDirectory: "Browse the full directory",
-    localSize: "about 2 MB of data and public copies",
+    localSize: "Downloadable data, verifiable sources",
     manifest: "Open the source register",
     downloadAll: "Download all data as CSV",
     aboutEyebrow: "About",
@@ -727,7 +752,7 @@ const copy = {
     themeLight: "Use light theme",
     themeDark: "Use dark theme",
     language: "Italiano",
-    latestUpdate: "Data acquired",
+    latestUpdate: "Published edition",
     results: "indicators shown",
   },
 } as const;
@@ -1049,6 +1074,12 @@ function statusDescription(
     : `${labels.statusFlagged} (${status})`;
 }
 
+function formatFlaggedCountryCount(count: number, locale: Locale) {
+  const labels = copy[locale];
+  const template = count === 1 ? labels.comparisonCountryFlagged : labels.comparisonCountriesFlagged;
+  return template.replace("{count}", String(count));
+}
+
 function fillCount(template: string, coverage: number) {
   return template.replace("{coverage}", String(coverage));
 }
@@ -1130,10 +1161,7 @@ function ComparisonPlot({
     ...(point.euStatus ? [labels.comparisonEuFlagged] : []),
     ...(point.countryStatuses.length
       ? [
-          labels.comparisonCountriesFlagged.replace(
-            "{count}",
-            String(point.countryStatuses.length),
-          ),
+          formatFlaggedCountryCount(point.countryStatuses.length, locale),
         ]
       : []),
   ];
@@ -1163,9 +1191,10 @@ function ComparisonPlot({
       className="comparison"
       data-count={values.length}
       role="img"
-      aria-label={`${labels.compareTitle} · ${point.year}. ${ariaValues}. ${methodLabel}. ${coverageLabel}${
-        missingLabel ? `. ${missingLabel}` : ""
-      }${qualityLabel ? `. ${qualityLabel}` : ""}.`}
+      aria-label={[`${labels.compareTitle} · ${point.year}`, ariaValues, methodLabel, coverageLabel, missingLabel, qualityLabel]
+        .filter(Boolean)
+        .map((sentence) => sentence.trim().replace(/[.!?]+$/u, ""))
+        .join(". ") + "."}
     >
       <div className="comparison-heading">
         <span>{labels.compareTitle} · {point.year}</span>
@@ -1210,16 +1239,19 @@ function ComparisonPlot({
 function YearSelection({ indicator, point, locale }: {
   indicator: Indicator; point: DataPoint; locale: Locale;
 }) {
-  if (!indicator.newerEstimate) return null;
+  const options = new Map(indicator.series.map((entry) => [entry.year, entry]));
+  options.set(indicator.latest.year, indicator.latest);
+  if (indicator.newerEstimate) options.set(indicator.newerEstimate.year, indicator.newerEstimate);
+  if (options.size < 2) return null;
   return (
     <label className="year-selection">
       <span>{copy[locale].comparisonYear}</span>
       <select value={point.year} onChange={(event) => updateQuery({ year: event.target.value })}>
-        {[indicator.latest, indicator.newerEstimate].map((entry) => (
+        {[...options.values()].sort((a, b) => b.year - a.year).map((entry) => (
           <option key={entry.year} value={entry.year}>
             {entry.year} · {entry.status
               ? statusDescription(entry.status, locale, false)
-              : copy[locale].sourceDefinitive}
+              : copy[locale].yearUnflagged}
           </option>
         ))}
       </select>
@@ -1227,7 +1259,9 @@ function YearSelection({ indicator, point, locale }: {
   );
 }
 
-function TrendBars({ indicator, locale }: { indicator: Indicator; locale: Locale }) {
+function TrendBars({ indicator, locale, selectedYear }: {
+  indicator: Indicator; locale: Locale; selectedYear: number;
+}) {
   const labels = copy[locale];
   const points = indicator.series;
   const firstYear = points[0].year;
@@ -1239,23 +1273,50 @@ function TrendBars({ indicator, locale }: { indicator: Indicator; locale: Locale
   const zeroPosition = (maximum / range) * 100;
   const breakYears = new Set(getBreakYears(indicator));
   const rangeLabel = labels.trendRange.replace("{start}", String(firstYear)).replace("{end}", String(lastYear));
+  const selected = points.find((point) => point.year === selectedYear) ?? indicator.latest;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const container = scrollRef.current;
+    const active = container?.querySelector<HTMLButtonElement>('button[aria-pressed="true"]');
+    if (container && active) {
+      container.scrollLeft = active.offsetLeft - (container.clientWidth - active.offsetWidth) / 2;
+    }
+  }, [selectedYear]);
+  const value = (number: number) => formatValue(number, indicator.unitKey, indicator.precision, locale);
 
   return (
     <>
-      <p className="trend-scale">{labels.trendScale}: {formatValue(minimum, indicator.unitKey, indicator.precision, locale)} – {formatValue(maximum, indicator.unitKey, indicator.precision, locale)}</p>
-      <div className="trend-scroll" tabIndex={0} role="region" aria-label={labels.trend}>
-        <div className="trend-chart" role="img" aria-label={`${labels.trend}. ${rangeLabel}. ${labels.trendLegend}`} style={{ minWidth: `${(lastYear - firstYear + 1) * 1.8}rem`, gridTemplateColumns: `repeat(${lastYear - firstYear + 1}, minmax(0, 1fr))` }}>
+      <div className="trend-reading" aria-live="polite"><span>{labels.italy} · {selected.year}</span><strong>{value(selected.italy)}</strong></div>
+      <p className="trend-interaction" id={`trend-help-${indicator.id}`}>{labels.trendInteraction}</p>
+      <p className="trend-scale">{labels.trendScale}: {value(minimum)} – {value(maximum)}</p>
+      <div className="trend-scroll" ref={scrollRef} role="region" aria-label={`${labels.trend}. ${rangeLabel}`}>
+        <div className="trend-chart" role="group" aria-label={labels.trend} aria-describedby={`trend-help-${indicator.id}`} style={{ minWidth: `${(lastYear - firstYear + 1) * 1.8}rem`, gridTemplateColumns: `repeat(${lastYear - firstYear + 1}, minmax(0, 1fr))` }}>
           <span className="trend-zero" style={{ top: `${zeroPosition}%` }} aria-hidden="true" />
-          {points.map((point) => {
+          {points.map((point, index) => {
             const hasBreak = breakYears.has(point.year);
             const uncertain = /[pef]/.test(point.status ?? "");
             const top = point.italy >= 0 ? ((maximum - point.italy) / range) * 100 : zeroPosition;
             const height = (Math.abs(point.italy) / range) * 100;
+            const methodNote = hasBreak && !point.status?.includes("b") ? ` · ${labels.statusMethodNote}` : "";
+            const description = `${point.year}: ${value(point.italy)} · ${statusDescription(point.status, locale, false)}${methodNote}`;
             return (
-              <div className="trend-column" key={point.year} style={{ gridColumn: point.year - firstYear + 1 }}>
-                <span className={`trend-bar ${point.italy < 0 ? "negative" : ""} ${hasBreak ? "has-break" : ""} ${uncertain ? "uncertain" : ""}`} style={{ top: `${top}%`, height: `${height}%` }} title={`${point.year}: ${formatValue(point.italy, indicator.unitKey, indicator.precision, locale)} · ${statusDescription(point.status, locale, false)}`} />
-                <small>{String(point.year).slice(2)}{hasBreak ? <sup>*</sup> : null}</small>
-              </div>
+              <button className="trend-column" type="button" key={point.year}
+                style={{ gridColumn: point.year - firstYear + 1 }}
+                aria-label={description} aria-pressed={point.year === selectedYear}
+                tabIndex={point.year === selected.year ? 0 : -1} title={description}
+                onClick={() => updateQuery({ year: String(point.year) })}
+                onKeyDown={(event) => {
+                  const next = event.key === "ArrowRight" ? Math.min(index + 1, points.length - 1)
+                    : event.key === "ArrowLeft" ? Math.max(index - 1, 0)
+                      : event.key === "Home" ? 0 : event.key === "End" ? points.length - 1 : null;
+                  if (next === null) return;
+                  event.preventDefault();
+                  updateQuery({ year: String(points[next].year) });
+                  event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>("button")[next]?.focus();
+                }}>
+                <span aria-hidden="true" className={`trend-bar ${point.italy < 0 ? "negative" : ""} ${hasBreak ? "has-break" : ""} ${uncertain ? "uncertain" : ""}`} style={{ top: `${top}%`, height: `${height}%` }} />
+                <small aria-hidden="true">{String(point.year).slice(2)}{hasBreak ? <sup>*</sup> : null}</small>
+              </button>
             );
           })}
         </div>
@@ -1270,9 +1331,9 @@ function TrendBars({ indicator, locale }: { indicator: Indicator; locale: Locale
               <th scope="col">{labels.sourceYear}</th><th scope="col">{labels.italy}</th><th scope="col">{labels.eu}</th><th scope="col">{labels.median}</th><th scope="col">{labels.trendCoverage}</th><th scope="col">{labels.sourceItalyStatus}</th>
             </tr></thead>
             <tbody>{[...points].reverse().map((point) => (
-              <tr key={point.year}>
+              <tr key={point.year} data-selected={point.year === selectedYear}>
                 <th scope="row">{point.year}</th>
-                {[point.italy, point.eu, point.median].map((value, index) => <td key={index}>{value === null ? "—" : formatValue(value, indicator.unitKey, indicator.precision, locale)}</td>)}
+                {[point.italy, point.eu, point.median].map((entry, index) => <td key={index}>{entry === null ? "—" : value(entry)}</td>)}
                 <td>{point.coverage}/27</td><td>{statusDescription(point.status, locale, false)}</td>
               </tr>
             ))}</tbody>
@@ -1359,7 +1420,7 @@ function IndicatorCard({
         </p>
       ) : null}
 
-      {expanded ? <YearSelection indicator={indicator} point={point} locale={locale} /> : null}
+      {expanded ? <div className="indicator-toolbar"><YearSelection indicator={indicator} point={point} locale={locale} /><ShareLink locale={locale} key={`${query}-${point.year}`} /><a className="compact-download" href={`${basePath}/data/indicators/${indicator.id}.csv`} download={`${indicator.id}.csv`}>CSV <span aria-hidden="true">↓</span><span className="visually-hidden"> · {labels.downloadIndicator}</span></a></div> : null}
       <ComparisonPlot indicator={indicator} locale={locale} point={point} />
       {expanded ? <details className="comparison-explainer"><summary>{labels.compareExplainer}</summary><p>{labels.comparisonHelp}</p></details> : null}
 
@@ -1429,7 +1490,7 @@ function IndicatorCard({
                   {indicator.series[0].year}–{indicator.series[indicator.series.length - 1].year}
                 </span>
               </div>
-              <TrendBars indicator={indicator} locale={locale} />
+              <TrendBars indicator={indicator} locale={locale} selectedYear={point.year} />
             </div>
 
             <div className="source-box">
@@ -1505,9 +1566,7 @@ function SourceVerification({
       )
     : null;
   const countryObservations = displayedPoint.countries ?? [];
-  const flaggedCountries = countryObservations.filter(
-    (country) => country.status,
-  );
+  const flaggedCountries = displayedPoint.countryStatuses;
   const displayedValue = formatValue(
     displayedPoint.italy,
     indicator.unitKey,
@@ -1554,18 +1613,15 @@ function SourceVerification({
         <p>{labels.sourcePageBody}</p>
       </header>
 
-      <YearSelection indicator={indicator} point={displayedPoint} locale={locale} />
+      <div className="indicator-toolbar"><YearSelection indicator={indicator} point={displayedPoint} locale={locale} /><ShareLink locale={locale} key={`${query}-${displayedPoint.year}`} />{indicator.source.snapshotPath ? <a className="compact-download" href={`${basePath}/${indicator.source.snapshotPath}`} download>{labels.snapshotDownload} <span aria-hidden="true">↓</span></a> : null}</div>
       <div className="source-value-panel">
         <span>{labels.sourceDisplayed}</span>
         <strong>{displayedValue}</strong>
         <small>
           {labels.italy} · {displayedPoint.year} ·{" "}
-          {indicator.newerEstimate?.year === displayedPoint.year
-            ? labels.sourceMostRecent
-            : labels.sourceDefinitive}
           {displayedPoint.status
-            ? ` · ${statusDescription(displayedPoint.status, locale)}`
-            : ""}
+            ? statusDescription(displayedPoint.status, locale)
+            : labels.yearUnflagged}
         </small>
       </div>
 
@@ -1831,7 +1887,9 @@ function SourceVerification({
           <a href={`${basePath}/data/indicators/${indicator.id}.csv`} download={`${indicator.id}.csv`}>
             {labels.downloadIndicator}
           </a>
+          {indicator.source.snapshotPath ? <a href={`${basePath}/${indicator.source.snapshotPath}`} download>{labels.snapshotDownload}</a> : null}
         </div>
+        {indicator.source.sha256 ? <p className="source-hash">{labels.snapshotHash}: <code>{indicator.source.sha256}</code></p> : null}
       </details>
     </section>
   );
@@ -2169,10 +2227,7 @@ export function Dashboard({
     "{year}",
     String(spendingYear ?? ""),
   );
-  const heroLatest = labels.heroLatest.replace(
-    "{nextYear}",
-    String(spendingYear ? spendingYear + 1 : ""),
-  );
+  const heroLatest = labels.heroLatest;
   const heroSourceUpdated =
     spendingSource &&
     labels.heroSourceUpdated.replace(
@@ -2275,12 +2330,14 @@ export function Dashboard({
             aria-label={darkMode ? labels.themeLight : labels.themeDark}
             title={darkMode ? labels.themeLight : labels.themeDark}
           >
-            <span aria-hidden="true">{darkMode ? "○" : "●"}</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
+              {darkMode ? <><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.4 1.4m11.2 11.2L19 19M5 19l1.4-1.4M17.6 6.4L19 5" /></> : <path d="M20.6 14.1A9 9 0 0 1 9.9 3.4 9 9 0 1 0 20.6 14.1Z" />}
+            </svg>
           </button>
         </div>
       </header>
 
-      <main id="main">
+      <main id="main" tabIndex={-1}>
         {view === "home" ? (
           <>
             <section
@@ -2292,6 +2349,7 @@ export function Dashboard({
                   <p className="eyebrow">{labels.snapshotEyebrow}</p>
                   <h1 id="country-snapshot-title">{labels.snapshotTitle}</h1>
                   <p>{labels.snapshotBody}</p>
+                  <a className="snapshot-explore" href={pageHref(locale, "data")}>{labels.browseAll} <span aria-hidden="true">→</span></a>
                 </div>
                 <details className="snapshot-method">
                   <summary>
@@ -2304,6 +2362,7 @@ export function Dashboard({
                 </details>
               </div>
 
+              <div className="edition-strip"><span>{data.indicators.length} {locale === "it" ? "indicatori" : "indicators"} · {data.sections.length} {locale === "it" ? "temi" : "topics"}</span><span>{labels.edition} <time dateTime={data.generatedAt}>{formatDate(data.generatedAt, locale)}</time></span><p>{labels.editionNote}</p></div>
               <div className="snapshot-grid">
                 {snapshotIndicators.map((indicator) => (
                   <a
@@ -2573,7 +2632,8 @@ export function Dashboard({
             </div>
           </div>
 
-          <div className="section-filters" aria-label={labels.navData}>
+          <div className="catalog-tools"><ShareLink locale={locale} key={locationQuery} /><a href={`${basePath}/data/dashboard.csv`} download>{labels.downloadAll} <span aria-hidden="true">↓</span></a></div>
+          <div className="section-filters" role="group" aria-label={labels.navData}>
             <button
               type="button"
               className={activeSection === "overview" ? "active" : ""}
@@ -2701,6 +2761,7 @@ export function Dashboard({
             <summary>{labels.medianTitle}</summary>
             <p>{data.comparison[locale]}</p>
           </details>
+          <MethodGuide locale={locale} sourcesHref={pageHref(locale, "sources")} />
           </section>
         ) : null}
 

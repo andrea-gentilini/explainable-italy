@@ -1,10 +1,11 @@
+import { pageMetadata } from "../../../../metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import dashboardData from "../../../../data/processed/dashboard.json";
+import dashboardData from "../../../../../data/processed/dashboard.json";
 import {
   Dashboard,
   type DashboardData,
-} from "../../../components/Dashboard";
+} from "../../../../components/Dashboard";
 
 const data = dashboardData as DashboardData;
 
@@ -22,12 +23,7 @@ export async function generateMetadata({
   const { id } = await params;
   const indicator = data.indicators.find((entry) => entry.id === id);
 
-  return {
-    title: indicator ? `Fonte · ${indicator.title.it}` : "Fonte",
-    description: indicator
-      ? `Fonte, selezione e calcolo per ${indicator.title.it}.`
-      : undefined,
-  };
+  return pageMetadata("it", `data/${id}/source`, indicator ? `Fonte · ${indicator.title.it}` : "Fonte", indicator ? `Fonte, selezione e calcolo: ${indicator.title.it}.` : undefined);
 }
 
 export default async function IndicatorSourcePage({

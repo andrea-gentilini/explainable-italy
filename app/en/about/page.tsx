@@ -1,14 +1,11 @@
-import type { Metadata } from "next";
-import dashboardData from "../../../data/processed/dashboard.json";
-import { Dashboard, type DashboardData } from "../../components/Dashboard";
+import { pageData } from "../../page-data";
+import { pageMetadata } from "../../metadata";
+import { Dashboard } from "../../components/Dashboard";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: "Why Explainable Italy exists and how it can grow.",
-};
+export const metadata = pageMetadata("en", "about", "About", "Why Explainable Italy exists and how it can grow.");
 
 export default function EnglishAboutPage() {
   return (
-    <Dashboard data={dashboardData as DashboardData} locale="en" view="about" />
+    <Dashboard data={pageData("about")} locale="en" view="about" />
   );
 }

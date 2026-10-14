@@ -1,0 +1,43 @@
+name: Propose a data refresh
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: data-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_PUBLIC_BASE_PATH: /explainable-italy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Fetch and validate official snapshots
+        run: pnpm data:update
+      - name: Verify the refreshed edition
+        run: pnpm check
+      - name: Prepare reviewable changes
+        run: |
+          git diff --stat
+          git diff --binary -- data public/data > data-refresh.patch
+      - name: Save the validated update for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: validated-data-refresh
+          path: data-refresh.patch
+          retention-days: 14

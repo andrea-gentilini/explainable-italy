@@ -1,3 +1,4 @@
+import { pageMetadata } from "../../../metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import dashboardData from "../../../../data/processed/dashboard.json";
@@ -19,10 +20,7 @@ export async function generateMetadata({
   const { id } = await params;
   const indicator = data.indicators.find((entry) => entry.id === id);
 
-  return {
-    title: indicator?.title.en ?? "Indicator",
-    description: indicator?.plain.en,
-  };
+  return pageMetadata("en", `data/${id}`, indicator?.title.en ?? "Indicator", indicator?.plain.en);
 }
 
 export default async function EnglishIndicatorPage({

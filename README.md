@@ -1,93 +1,91 @@
 # Explainable Italy
 
-> L’Italia, i dati ufficiali per tutti.
+[Open the website](https://andrea-gentilini.github.io/explainable-italy/en/) · [Leggi in italiano](README.it.md)
 
-Explainable Italy è un sito bilingue open source che rende leggibili alcuni dati essenziali sull’Italia senza interpretarli. Ogni indicatore mostra la fonte ufficiale, una sintesi accessibile del progetto basata sulla metodologia della fonte, la selezione tecnica, la serie storica e un confronto europeo.
+Explainable Italy makes official statistics about Italy easier to read and verify. Explore **39 indicators across six themes**, compare Italy with the official EU aggregate and the country median, and follow each number back to its source.
 
-Il progetto è in sviluppo aperto. Dati, elaborazioni e limiti metodologici possono essere verificati nella repository.
+This is an independent, open-source project, not an official institutional website. Version **1.0.0** is available in Italian and English.
 
-## Cosa contiene
+![Explainable Italy dashboard](docs/images/dashboard.jpg)
 
-La prima versione include 39 indicatori in sei aree:
+## Explore
 
-1. spesa pubblica e finanza pubblica
-2. popolazione e demografia
-3. lavoro ed economia
-4. protezione sociale e salute
-5. istruzione e competenze
-6. ambiente ed energia
+The six themes cover public finances, population, work and the economy, welfare and health, education, and environment and energy. Search, choose a year, inspect the historical series, or open the source page to check definitions, country observations and quality flags. Shareable links preserve the selected year and search context.
 
-I dataset sono diffusi da Eurostat; per le emissioni la fonte originaria indicata nei metadati è EEA su inventari UNFCCC. Il sito usa l’aggregato UE ufficiale quando esiste e calcola la mediana quando sono disponibili almeno 24 Stati membri su 27. Se non esiste un aggregato UE con lo stesso perimetro, non ne costruisce uno.
+For example, open [life expectancy in 2010](https://andrea-gentilini.github.io/explainable-italy/en/data/life-expectancy/?year=2010) and [verify its source and calculation](https://andrea-gentilini.github.io/explainable-italy/en/data/life-expectancy/source/?year=2010).
 
-## Come usare il sito
+Download an indicator as CSV, the complete dataset as CSV or JSON, or the exact source snapshot used by the site. Snapshot downloads include a SHA256 fingerprint and acquisition date; links to the current Eurostat API are identified separately.
 
-Dalla homepage puoi aprire uno dei quattro numeri principali o esplorare un tema. La ricerca riconosce testi italiani e inglesi anche senza accenti; i filtri permettono di restringere i risultati.
+## How to read the comparisons
 
-Ogni scheda mostra il valore italiano, l’anno e il confronto europeo dello stesso anno. Se c’è un valore successivo provvisorio o stimato, resta distinto: puoi sceglierlo dal menu dell’anno e aprire la fonte corrispondente. Il grafico e la tabella riportano l’intera serie pubblicata, con gli anni mancanti lasciati vuoti e i contrassegni della fonte indicati.
+- **Italy and EU:** the EU value is Eurostat’s official aggregate with the same scope. It is not the simple average of countries. If a comparable aggregate is unavailable, the site leaves it missing.
+- **Country median:** each available country has equal weight. It includes Italy and requires at least **24 of the current 27 EU members**. Coverage and missing countries are shown. This is not the median European resident.
+- **Years and status:** comparisons use the same year and selection, never before 2000. The default is the latest Italian observation without an estimated, provisional or forecast flag, when available. Newer flagged observations remain distinct and selectable. An unflagged value is not guaranteed to be final; EU and national flags are reported separately.
+- **Limits:** these are published snapshots, not live statistics. Check the observation year, source update date and acquisition date. Missing years are not interpolated; revisions and methodological breaks can affect trends. The project provides neither country rankings nor causal conclusions.
 
-Tema, ricerca e anno sono conservati nel collegamento: puoi tornare ai risultati, cambiare lingua o condividere la pagina senza perdere il contesto. I dati si possono scaricare dalla scheda o dalla pagina delle fonti.
+The data comes from **20 official datasets published by Eurostat**. For greenhouse-gas emissions, the original source is the European Environment Agency, based on UNFCCC inventories. Accessible explanations and translations are project paraphrases, with links to the official definitions.
 
-## Principi editoriali
+Read the [methodology](docs/METHODOLOGY.md), browse the [source manifest](data/manifest.json), or use the website’s [method](https://andrea-gentilini.github.io/explainable-italy/en/method/) and [sources](https://andrea-gentilini.github.io/explainable-italy/en/sources/) pages.
 
-1. Solo fonti istituzionali e dati riproducibili.
-2. Nessun confronto scelto per sostenere una tesi.
-3. Il dato definitivo è quello principale.
-4. Stime, valori provvisori, interruzioni e differenze di definizione sono segnalati.
-5. Le serie iniziano dall’anno comune disponibile, mai prima del 2000.
-6. Le sintesi accessibili sono parafrasi del progetto basate sulle definizioni ufficiali e collegate alla fonte.
-7. Le trasformazioni sono documentate e verificabili.
-8. Il progetto non integra tracciamento, profilazione, analytics o cookie.
+## Run locally
 
-Il metodo completo è in [docs/METHODOLOGY.md](docs/METHODOLOGY.md).
+Requires **Node.js 22.13 or newer** and **pnpm 11.9.0**.
 
-## Dati nella repository
-
-Le copie locali sono intenzionalmente piccole. Contengono soltanto le serie usate dal sito.
-
-1. `data/raw/eurostat` conserva le risposte ufficiali ridotte alle geografie e alle variabili necessarie.
-2. `data/processed/dashboard.json` contiene i dati pronti per l’interfaccia.
-3. `data/manifest.json` registra URL, data di aggiornamento, DOI, dimensione e impronta SHA256 di ogni fonte.
-4. `public/data` contiene i file scaricabili dal sito.
-
-L’intero pacchetto dati e le copie pubbliche occupano circa 2 MB nella repository.
-
-## Sviluppo locale
-
-Requisiti: Node.js 22.13 o successivo e pnpm 11.
-
-```bash
-pnpm install
+```sh
+git clone https://github.com/andrea-gentilini/explainable-italy.git
+cd explainable-italy
+pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Il sito italiano è disponibile su `http://localhost:3000/`. La versione inglese è su `http://localhost:3000/en/`.
+Open [localhost:3000](http://localhost:3000/) for Italian or [localhost:3000/en/](http://localhost:3000/en/) for English. The committed snapshots are sufficient; no source download is needed to run or build the site.
 
-Comandi utili:
-
-```bash
-pnpm validate:data
-pnpm lint
-pnpm test
-pnpm data:update
-pnpm data:update:offline
+```sh
+pnpm check                  # Lint, validate data, build, and test exported pages
+pnpm validate:data          # Reproduce values and check snapshots and downloads
+pnpm data:update            # Fetch all official selections; network required
+pnpm data:update:offline    # Rebuild from snapshots, preserving acquisition dates
 ```
 
-`data:update` scarica nuove copie da Eurostat e ricostruisce i file pubblici. `data:update:offline` ricostruisce tutto usando gli snapshot già presenti.
+An update validates the complete candidate before replacing published files. Review the resulting diff before committing: new observations can also revise earlier years. Offline reconstruction is deterministic with the same code and snapshots.
 
-## Pubblicazione
+## Architecture and privacy
 
-Il progetto produce un sito statico compatibile con GitHub Pages. In una pubblicazione su `andrea-gentilini.github.io/explainable-italy` la build dovrà impostare:
+Next.js and React produce a **static export** in `out/`. Search, year selection and charts run in the browser; viewing the site does not require a database or a live statistics API.
 
-```bash
+| Location | Contents |
+| --- | --- |
+| `app/` | Bilingual pages, interface and source verification |
+| `scripts/` | Data acquisition, transformations and validation |
+| `data/raw/eurostat/` | Exact, minimal official data selections |
+| `data/processed/` and `data/manifest.json` | Interface data and source provenance |
+| `public/data/` | Downloadable snapshots, JSON and CSV files |
+| `tests/` | Data-pipeline and exported-page regression tests |
+
+The project adds no analytics, advertising, tracking cookies or user accounts. The theme preference is stored locally in the browser using `localStorage`. GitHub Pages may retain normal technical hosting logs; following an external source link opens that institution’s website.
+
+## Publish and refresh
+
+Build for the GitHub Pages project path:
+
+```sh
+NEXT_PUBLIC_BASE_PATH=/explainable-italy pnpm check
+```
+
+This includes the production build. To rebuild an already checked edition separately:
+
+```sh
 NEXT_PUBLIC_BASE_PATH=/explainable-italy pnpm build
 ```
 
-Prima di ogni pubblicazione va eseguito `pnpm data:update` in un ambiente con accesso alla rete, seguito da `pnpm test`.
+The [Verify and deploy workflow](.github/workflows/ci.yml) checks pull requests and `main`. Publication from `main` runs only after the checks and production-dependency audit pass; it deploys the verified static output.
 
-## Contribuire
+The manual [Propose a data refresh workflow](.github/workflows/refresh-data.yml) fetches the sources, runs the checks and produces a `validated-data-refresh` artifact containing `data-refresh.patch`. It does not commit or publish the update automatically. Review and apply the patch through the normal contribution process.
 
-Explainable Italy è open source e ogni contributo è benvenuto: segnalazioni, nuove fonti pubbliche, testi, traduzioni, accessibilità o codice. Le informazioni essenziali sono in [CONTRIBUTING.md](CONTRIBUTING.md).
+## Contribute and reuse
 
-La licenza [MIT](LICENSE) riguarda il codice e la documentazione originale. I dataset conservano le condizioni delle rispettive fonti, riepilogate in [DATA_LICENSE.md](DATA_LICENSE.md).
+Report a data issue, improve an explanation or translation, or contribute accessibility and code fixes. Include an official source for proposed data changes. See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 
-Creato da Andrea Gentilini.
+The [MIT license](LICENSE) covers the code and original documentation. Third-party data retains its source terms; see [DATA_LICENSE.md](DATA_LICENSE.md). Eurostat and EEA are not responsible for the project’s translations, summaries or calculated medians.
+
+Created by [Andrea Gentilini](https://github.com/andrea-gentilini).

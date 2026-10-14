@@ -1,16 +1,13 @@
-import type { Metadata } from "next";
-import dashboardData from "../../../data/processed/dashboard.json";
-import { Dashboard, type DashboardData } from "../../components/Dashboard";
+import { pageData } from "../../page-data";
+import { pageMetadata } from "../../metadata";
+import { Dashboard } from "../../components/Dashboard";
 
-export const metadata: Metadata = {
-  title: "Method",
-  description: "Rules, criteria and limits behind Explainable Italy.",
-};
+export const metadata = pageMetadata("en", "method", "Method", "Rules, criteria and limits behind Explainable Italy.");
 
 export default function EnglishMethodPage() {
   return (
     <Dashboard
-      data={dashboardData as DashboardData}
+      data={pageData("method")}
       locale="en"
       view="method"
     />

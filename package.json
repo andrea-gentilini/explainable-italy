@@ -1,6 +1,6 @@
 {
   "name": "explainable-italy",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "packageManager": "pnpm@11.9.0",
   "engines": {
@@ -13,7 +13,8 @@
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "validate:data": "node scripts/validate-data.mjs",
     "data:update": "node scripts/update-data.mjs",
-    "data:update:offline": "node scripts/update-data.mjs --offline"
+    "data:update:offline": "node scripts/update-data.mjs --offline",
+    "check": "pnpm lint && pnpm test"
   },
   "dependencies": {
     "next": "16.3.8",

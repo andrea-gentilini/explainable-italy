@@ -12,7 +12,10 @@ I dataset utilizzati sono diffusi da Eurostat. Per ogni dataset, `data/manifest.
 4. DOI;
 5. data di aggiornamento comunicata dalla fonte;
 6. data di acquisizione del progetto;
-7. impronta SHA256 e dimensione della copia locale.
+7. impronta SHA256 e dimensione della copia locale;
+8. percorso dello snapshot esatto scaricabile dal sito.
+
+Gli snapshot scaricabili sono copie delle selezioni ufficiali conservate dal progetto. I CSV e i JSON elaborati includono i riferimenti al dataset; i CSV dei singoli indicatori mantengono anche l’unità di misura.
 
 Si applica la [politica di riuso Eurostat](https://ec.europa.eu/eurostat/help/copyright-notice).
 

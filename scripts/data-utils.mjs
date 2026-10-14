@@ -115,14 +115,14 @@ export function normalizeNumber(value) {
   return Number(value.toFixed(10));
 }
 
-function mergeStatus(sourceStatus, overrideStatus) {
-  const codes = `${sourceStatus ?? ""}${overrideStatus ?? ""}`
+export function mergeStatus(...statuses) {
+  const codes = statuses.map((status) => status ?? "").join("")
     .replaceAll(":", "")
     .replaceAll(" ", "");
   return codes ? [...new Set(codes)].join("") : null;
 }
 
-export function buildSeries(records, selector, statusOverrides = {}, euStatusOverrides = {}) {
+export function buildSeries(records, selector, statusOverrides = {}, euStatusOverrides = {}, countryStatusOverrides = {}) {
   const selectedRecords = records.filter((record) =>
     matchesSelector(record, selector),
   );
@@ -151,7 +151,8 @@ export function buildSeries(records, selector, statusOverrides = {}, euStatusOve
           {
             geo: geography,
             value: record.value,
-            status: record.status,
+            status: mergeStatus(record.status, countryStatusOverrides[geography]?.["*"], countryStatusOverrides[geography]?.[year]),
+            sourceStatus: record.status,
           },
         ];
       });
@@ -165,6 +166,8 @@ export function buildSeries(records, selector, statusOverrides = {}, euStatusOve
       const effectiveItalyStatus = mergeStatus(
         italyRecord.status,
         statusOverrides[year],
+        countryStatusOverrides.IT?.["*"],
+        countryStatusOverrides.IT?.[year],
       );
       const effectiveCountries = countries.map((country) =>
         country.geo === "IT"
@@ -185,7 +188,7 @@ export function buildSeries(records, selector, statusOverrides = {}, euStatusOve
           status: effectiveItalyStatus,
           sourceStatus: italyRecord.status,
           euStatus: hasOfficialAggregate
-            ? mergeStatus(euRecord.status, euStatusOverrides[year])
+            ? mergeStatus(euRecord.status, euStatusOverrides[year], countryStatusOverrides.EU27_2020?.["*"], countryStatusOverrides.EU27_2020?.[year])
             : null,
           euSourceStatus: hasOfficialAggregate ? euRecord.status : null,
           countryStatuses: effectiveCountries
@@ -216,12 +219,13 @@ export function buildIndicatorCsv(indicator) {
     [
       "year", "italy", "eu_official", "median", "countries_in_median",
       "eu_method", "italy_status", "eu_status", "flagged_countries", "missing_countries",
+      "unit", "dataset",
     ],
     ...indicator.series.map((point) => [
       point.year, csvNumber(point.italy), csvNumber(point.eu), csvNumber(point.median),
       point.coverage, point.euMethod, point.status, point.euStatus,
       point.countryStatuses.map(({ geo, status }) => `${geo}:${status}`).join("|"),
-      point.missingCountries.join("|"),
+      point.missingCountries.join("|"), indicator.unitKey, indicator.source.datasetCode,
     ]),
   ];
   return `${rows.map((row) => row.map(csvEscape).join(",")).join("\n")}\n`;

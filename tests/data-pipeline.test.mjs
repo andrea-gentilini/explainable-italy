@@ -3,6 +3,7 @@ import { test } from "node:test";
 import { readFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { metadataStatusOverrides } from "../scripts/metadata-rules.mjs";
 import { euCountries, flattenJsonStat, buildSeries } from "../scripts/data-utils.mjs";
 
 function records(count = 27) {
@@ -76,5 +77,43 @@ test("an interrupted source update leaves all snapshots and published files unch
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /Injected source outage/);
   const after = await Promise.all(paths.map((path) => readFile(`${root}/${path}`, "utf8")));
+  assert.deepEqual(after, before);
+});
+
+
+test("metadata provisional flags apply to Bulgarian COFOG detail while preserving source flags", () => {
+  const source = records();
+  const detail = buildSeries(source, {}, {}, {}, metadataStatusOverrides("gov_10a_exp", { cofog99: "GF1002" }))[0];
+  const bulgaria = detail.countries.find((item) => item.geo === "BG");
+  assert.equal(bulgaria.status, "p");
+  assert.equal(bulgaria.sourceStatus, null);
+  assert(detail.countryStatuses.some((item) => item.geo === "BG" && item.status === "p"));
+  const division = buildSeries(source, {}, {}, {}, metadataStatusOverrides("gov_10a_exp", { cofog99: "GF10" }))[0];
+  assert.equal(division.countries.find((item) => item.geo === "BG").status, null);
+  assert.equal(detail.italy, division.italy);
+  assert.equal(detail.median, division.median);
+});
+
+test("a complete but inconsistent source response cannot replace published data", async () => {
+  const root = fileURLToPath(new URL("..", import.meta.url));
+  const paths = ["data/manifest.json", "data/raw/eurostat/gov_10a_exp.json",
+    "data/processed/dashboard.json", "public/data/dashboard.json", "public/data/dashboard.csv"];
+  const before = await Promise.all(paths.map((path) => readFile(root + "/" + path, "utf8")));
+  const hook = `import {readFile} from "node:fs/promises";
+    globalThis.fetch = async (url) => {
+      const code = new URL(url).pathname.split("/").at(-1);
+      const data = JSON.parse(await readFile(${JSON.stringify(root)} + "/data/raw/eurostat/" + code + ".json", "utf8"));
+      if (code === "gov_10a_exp") {
+        for (const index of Object.keys(data.value)) {
+          if (data.value[index] !== null) data.value[index] *= 2;
+        }
+      }
+      return {ok:true,text:async()=>JSON.stringify(data)};
+    };`;
+  const result = spawnSync(process.execPath, ["--import", `data:text/javascript,${encodeURIComponent(hook)}`,
+    root + "/scripts/update-data.mjs"], { encoding: "utf8" });
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /COFOG/);
+  const after = await Promise.all(paths.map((path) => readFile(root + "/" + path, "utf8")));
   assert.deepEqual(after, before);
 });

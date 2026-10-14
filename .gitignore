@@ -43,3 +43,6 @@ next-env.d.ts
 
 # incremental type checks
 *.tsbuildinfo
+
+# Recoverable data refresh staging
+/.data-update-*/

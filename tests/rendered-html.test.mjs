@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, stat } from "node:fs/promises";
 import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
@@ -51,7 +51,6 @@ async function page(route) {
   const stem = route.replace(/^\//, "").replace(/\/$/, "");
   const candidates = [
     `out/${stem ? `${stem}/` : ""}index.html`,
-    `.next/server/app/${stem || "index"}.html`,
   ];
   for (const path of candidates) {
     try {
@@ -123,7 +122,7 @@ for (const locale of locales) {
       }
       const oppositeLocale = locale === "it" ? "en" : "it";
       requireLink(rendered, `${prefix}${localizedRoute(oppositeLocale, path)}`, `${route}: language switch keeps the same page`);
-      assert.match(rendered.html, new RegExp(`\\blang="${locale}"`), `${route}: content declares its language`);
+      assert.match(rendered.html, new RegExp(`<html\\b[^>]*\\blang="${locale}"`), `${route}: document declares its language`);
       assert.doesNotMatch(rendered.fullHtml, /googletagmanager|google-analytics|plausible\.io|posthog|connect\.facebook\.net/i, `${route}: no tracking integrations`);
       assert.match(rendered.text, locale === "it" ? /Nessun tracciamento/ : /No tracking/, `${route}: privacy statement`);
     }
@@ -151,7 +150,7 @@ test("all rendered local links lead to an exported page, asset or existing secti
       if (checked.has(key)) continue;
       checked.add(key);
       if (/\.[a-z0-9]+$/i.test(destination)) {
-        await access(new URL(`public${destination}`, projectRoot));
+        await access(new URL(`out${destination}`, projectRoot));
       } else {
         const target = await page(destination);
         if (url.hash) {
@@ -273,4 +272,156 @@ test("each COFOG category retains its exact source selection", () => {
     assert(indicator, `${id}: category exists`);
     assert.equal(new URL(indicator.source.apiUrl).searchParams.get("cofog99"), code, `${id}: correct official category`);
   }
+});
+
+
+function openingElements(html, tag) {
+  return [...html.matchAll(new RegExp(`<${tag}\\b([^>]*)>`, "gi"))]
+    .map((match) => ({ attributes: match[1] }));
+}
+
+function normalizeUrl(value) {
+  const url = new URL(value);
+  url.pathname = url.pathname.replace(/\/$/, "") || "/";
+  return url.href;
+}
+
+test("exported pages ship every referenced local script, stylesheet and image", async () => {
+  const prefix = await basePath();
+  const checked = new Set();
+  for (const { locale, path } of allRoutes) {
+    const route = localizedRoute(locale, path);
+    const rendered = await page(route);
+    const assets = [
+      ...openingElements(rendered.fullHtml, "script").map((element) => attribute(element, "src")),
+      ...openingElements(rendered.html, "img").map((element) => attribute(element, "src")),
+      ...openingElements(rendered.html, "link")
+        .filter((element) => ["stylesheet", "icon", "preload", "modulepreload"].includes(attribute(element, "rel")))
+        .map((element) => attribute(element, "href")),
+    ].filter(Boolean);
+    for (const value of assets) {
+      if (/^(?:https?:|data:)/.test(value)) continue;
+      const url = new URL(value, `https://example.test${prefix}${route}/`);
+      assert.equal(url.origin, "https://example.test", `${route}: no unexpected asset origin`);
+      assert(!prefix || url.pathname.startsWith(`${prefix}/`), `${route}: asset ${value} retains the deployment path`);
+      const relative = decodeURIComponent(url.pathname.slice(prefix.length));
+      if (checked.has(relative)) continue;
+      checked.add(relative);
+      assert((await stat(new URL(`out${relative}`, projectRoot))).isFile(), `${route}: asset ${value} was exported`);
+    }
+  }
+  assert(checked.size > 0, "The exported site includes its runtime assets");
+});
+
+test("canonical, language alternatives and social metadata identify the current page", async () => {
+  const home = await page("/");
+  const homeCanonical = openingElements(home.html, "link")
+    .find((element) => attribute(element, "rel") === "canonical");
+  assert(homeCanonical, "Homepage declares its canonical URL");
+  const site = new URL(`${attribute(homeCanonical, "href").replace(/\/$/, "")}/`);
+  assert.equal(site.origin, "https://andrea-gentilini.github.io", "Canonical host is the deployed site");
+  const prefix = site.pathname.replace(/\/$/, "");
+  for (const { locale, path } of allRoutes) {
+    const route = localizedRoute(locale, path);
+    const rendered = await page(route);
+    const links = openingElements(rendered.html, "link");
+    const canonical = links.filter((element) => attribute(element, "rel") === "canonical");
+    assert.equal(canonical.length, 1, `${route}: one canonical URL`);
+    const expected = new URL(route.slice(1), site);
+    assert.equal(normalizeUrl(attribute(canonical[0], "href")), normalizeUrl(expected.href), `${route}: canonical preserves the page`);
+    for (const language of locales) {
+      const alternatives = links.filter((element) => attribute(element, "rel") === "alternate"
+        && [language, language === "it" ? "it-IT" : "en-GB"].includes(attribute(element, "hreflang")));
+      assert.equal(alternatives.length, 1, `${route}: one ${language} alternative`);
+      const target = new URL(localizedRoute(language, path).slice(1), site);
+      assert.equal(normalizeUrl(attribute(alternatives[0], "href")), normalizeUrl(target.href), `${route}: language alternative preserves the page`);
+    }
+    const metadata = openingElements(rendered.html, "meta");
+    const ogLocale = metadata.find((element) => attribute(element, "property") === "og:locale");
+    assert.equal(attribute(ogLocale ?? { attributes: "" }, "content"), locale === "it" ? "it_IT" : "en_GB", `${route}: social locale matches the page`);
+    const description = metadata.find((element) => attribute(element, "name") === "description");
+    assert(attribute(description ?? { attributes: "" }, "content")?.trim(), `${route}: meaningful description`);
+    const image = metadata.find((element) => attribute(element, "property") === "og:image");
+    assert(image, `${route}: social preview is declared`);
+    const imageUrl = new URL(attribute(image, "content"));
+    assert.equal(imageUrl.origin, site.origin, `${route}: preview hosted with the site`);
+    assert(!prefix || imageUrl.pathname.startsWith(`${prefix}/`), `${route}: preview retains deployment path`);
+    await access(new URL(`out${imageUrl.pathname.slice(prefix.length)}`, projectRoot));
+  }
+});
+
+
+for (const locale of locales) {
+  test(`${locale}: historical controls expose every available year and the local source snapshot`, async () => {
+    const prefix = await basePath();
+    for (const indicator of data.indicators) {
+      const years = [...new Set([
+        ...indicator.series.map((point) => point.year),
+        indicator.latest.year,
+        ...(indicator.newerEstimate ? [indicator.newerEstimate.year] : []),
+      ])].sort((a, b) => a - b);
+      for (const suffix of ["", "/source"]) {
+        const route = localizedRoute(locale, `data/${indicator.id}${suffix}`);
+        const rendered = await page(route);
+        if (years.length > 1) {
+          const selector = elements(rendered.html, "label").find((element) => hasClass(element, "year-selection"));
+          assert(selector, `${route}: the year control has an explicit accessible label`);
+          const options = elements(selector.html, "option");
+          assert.deepEqual(options.map((option) => Number(attribute(option, "value"))).sort((a, b) => a - b), years, `${route}: all available years are selectable exactly once`);
+          const selected = options.filter((option) => /\bselected(?:="")?(?:\s|$)/.test(option.attributes));
+          assert.equal(selected.length, 1, `${route}: one default year`);
+          assert.equal(Number(attribute(selected[0], "value")), indicator.latest.year, `${route}: default remains the main non-estimated observation`);
+        }
+        if (suffix === "/source") {
+          assert.match(indicator.source.snapshotPath, /^data\/raw\/eurostat\/[a-z0-9_]+\.json$/i, `${route}: has a local raw-data snapshot`);
+          requireLink(rendered, `${prefix}/${indicator.source.snapshotPath}`, `${route}: original snapshot is directly downloadable`);
+        } else {
+          requireLink(rendered, `${prefix}/data/indicators/${indicator.id}.csv`, `${route}: the indicator series is directly downloadable`);
+        }
+      }
+      const route = localizedRoute(locale, `data/${indicator.id}`);
+      const chart = await page(route);
+      const bars = elements(chart.html, "button").filter((button) => hasClass(button, "trend-column"));
+      assert.equal(bars.length, indicator.series.length, `${route}: every historical observation is an accessible chart control`);
+      assert.equal(bars.filter((button) => attribute(button, "tabindex") === "0").length, 1, `${route}: chart has one keyboard entry point`);
+      assert(bars.every((button) => ["true", "false"].includes(attribute(button, "aria-pressed"))), `${route}: every chart control exposes selection state`);
+      const selected = bars.filter((button) => attribute(button, "aria-pressed") === "true");
+      assert.equal(selected.length, 1, `${route}: one selected observation`);
+      assert(attribute(selected[0], "aria-label")?.startsWith(`${indicator.latest.year}:`), `${route}: selected chart observation matches the main year`);
+      assert(bars.every((button) => attribute(button, "aria-label")?.trim()), `${route}: chart controls have meaningful accessible names`);
+    }
+  });
+}
+
+test("sitemap contains exactly the exported localized canonical routes and matching language alternatives", async () => {
+  const xml = await readFile(new URL("out/sitemap.xml", projectRoot), "utf8");
+  const entries = elements(xml, "url");
+  assert.equal(entries.length, allRoutes.length, "Every localized public page appears once");
+  const byUrl = new Map(entries.map((entry) => [normalizeUrl(elements(entry.html, "loc")[0].text), entry]));
+  assert.equal(byUrl.size, entries.length, "Sitemap has no duplicate URLs");
+  for (const { locale, path } of allRoutes) {
+    const route = localizedRoute(locale, path);
+    const rendered = await page(route);
+    const links = openingElements(rendered.html, "link");
+    const canonical = links.find((element) => attribute(element, "rel") === "canonical");
+    const address = normalizeUrl(attribute(canonical, "href"));
+    const entry = byUrl.get(address);
+    assert(entry, `${route}: sitemap URL matches the rendered canonical`);
+    const alternatives = openingElements(entry.html, "xhtml:link");
+    for (const language of ["it-IT", "en-GB"]) {
+      const pageLink = links.find((element) => attribute(element, "hreflang") === language);
+      const mapLink = alternatives.find((element) => attribute(element, "hreflang") === language);
+      assert(mapLink, `${route}: sitemap includes ${language} counterpart`);
+      assert.equal(normalizeUrl(attribute(mapLink, "href")), normalizeUrl(attribute(pageLink, "href")), `${route}: sitemap language counterpart matches the page`);
+    }
+  }
+  const robots = await readFile(new URL("out/robots.txt", projectRoot), "utf8");
+  assert.match(robots, /^Sitemap: https:\/\/andrea-gentilini\.github\.io\/explainable-italy\/sitemap\.xml$/m, "Robots file points crawlers to the published sitemap");
+});
+
+test("a static 404 page is available to the hosting service", async () => {
+  const html = await readFile(new URL("out/404.html", projectRoot), "utf8");
+  assert.match(html, /<html\b/, "404 is a complete HTML document");
+  assert.match(textContent(html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")), /404/, "404 identifies the missing-page condition");
+  assert(openingElements(html, "meta").some((element) => attribute(element, "name") === "robots" && /noindex/.test(attribute(element, "content") ?? "")), "Missing pages are not indexed");
 });
