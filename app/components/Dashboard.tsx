@@ -211,7 +211,7 @@ const copy = {
     openIndicator: "Apri la scheda completa",
     backToData: "Torna a tutti i dati",
     searchLabel: "Cerca un indicatore",
-    searchPlaceholder: "Prova “quanti giovani non lavorano”",
+    searchPlaceholder: "Prova “quanti giovani sono disoccupati”",
     allSections: "Tutti gli indicatori",
     topicOverview: "Temi",
     topicIndicators: "indicatori",
