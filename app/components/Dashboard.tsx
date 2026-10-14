@@ -3,6 +3,7 @@
 import { ShareLink } from "./ShareLink";
 import { MethodGuide } from "./MethodGuide";
 import { IndicatorReading } from "./IndicatorReading";
+import { createIndicatorSearch } from "./indicator-search.mjs";
 
 import {
   useEffect,
@@ -177,10 +178,7 @@ function withQuery(href: string, query: string, year?: number) {
   return `${href}${suffix ? `?${suffix}` : ""}`;
 }
 
-function normalizeSearch(value: string, locale: Locale) {
-  return value.normalize("NFD").replace(/\p{Diacritic}/gu, "")
-    .toLocaleLowerCase(locale).trim();
-}
+
 
 function selectedPoint(indicator: Indicator, year: string | null) {
   if (String(indicator.latest.year) === year) return indicator.latest;
@@ -213,7 +211,7 @@ const copy = {
     openIndicator: "Apri la scheda completa",
     backToData: "Torna a tutti i dati",
     searchLabel: "Cerca un indicatore",
-    searchPlaceholder: "Prova pensioni, lavoro, scuola",
+    searchPlaceholder: "Prova “quanti giovani non lavorano”",
     allSections: "Tutti gli indicatori",
     topicOverview: "Temi",
     topicIndicators: "indicatori",
@@ -310,7 +308,7 @@ const copy = {
     backToTopic: "Torna al tema: {topic}",
     backToResults: "Torna ai risultati",
     trendCoverage: "Paesi nella mediana",
-    searchHint: "La ricerca cerca in tutti i temi. Puoi poi restringere i risultati con i filtri.",
+    searchHint: "Puoi usare parole comuni o una breve frase. I risultati sono ordinati per rilevanza; i filtri restringono il tema.",
     dataSectionTitle: "Scegli un tema",
     dataSectionBody:
       "Scegli una delle domande qui sotto oppure cerca un indicatore. Ogni scheda contiene una spiegazione, il confronto europeo, l’andamento nel tempo e la fonte.",
@@ -478,7 +476,7 @@ const copy = {
     openIndicator: "Open the full indicator",
     backToData: "Back to all data",
     searchLabel: "Search indicators",
-    searchPlaceholder: "Try pensions, work, education",
+    searchPlaceholder: "Try “how many young people are unemployed”",
     allSections: "All indicators",
     topicOverview: "Topics",
     topicIndicators: "indicators",
@@ -575,7 +573,7 @@ const copy = {
     backToTopic: "Back to topic: {topic}",
     backToResults: "Back to results",
     trendCoverage: "Countries in median",
-    searchHint: "Search covers all topics. You can then narrow the results with the filters.",
+    searchHint: "Use everyday words or a short phrase. Results are ranked by relevance; topic filters narrow the search.",
     dataSectionTitle: "Choose a topic",
     dataSectionBody:
       "Choose a question below or search for an indicator. Each page includes an explanation, a European comparison, the historical series and its source.",
@@ -2251,27 +2249,8 @@ export function Dashboard({
     }
   };
 
-  const searchTerms = normalizeSearch(search, locale).split(/\s+/).filter(Boolean);
-  const filteredIndicators = data.indicators.filter((indicator) => {
-      const matchesSection =
-        activeSection === "all" ||
-        (activeSection !== "overview" &&
-          indicator.section === activeSection);
-      const searchableText = [
-        indicator.title.it,
-        indicator.title.en,
-        indicator.plain.it,
-        indicator.plain.en,
-        indicator.technical[locale],
-        indicator.source.datasetCode,
-      ]
-        .join(" ");
-
-      return (
-        matchesSection &&
-        searchTerms.every((term) => normalizeSearch(searchableText, locale).includes(term))
-      );
-  });
+  const searchIndex = useMemo(() => createIndicatorSearch(data.indicators), [data.indicators]);
+  const filteredIndicators = searchIndex(search, activeSection);
 
   const sources = useMemo(() => {
     const unique = new Map<string, Source>();

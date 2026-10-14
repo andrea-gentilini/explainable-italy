@@ -16,6 +16,13 @@ export function MethodGuide({ locale, sourcesHref, catalogueHref }: { locale: "i
         </div>
       </details>
       <details>
+        <summary>{it ? "Come funziona la ricerca" : "How search works"}</summary>
+        <div className="method-guide-body">
+          <p>{it ? "La ricerca confronta la domanda con titoli, descrizioni e termini associati agli indicatori. Riconosce alcuni sinonimi ed errori di battitura e ordina le schede per rilevanza. La corrispondenza con il titolo ha più peso di una parola presente nei dettagli tecnici." : "Search compares your query with indicator titles, descriptions and associated terms. It recognises some synonyms and spelling errors and ranks indicators by relevance. A title match carries more weight than a word in the technical details."}</p>
+          <p>{it ? "Il calcolo avviene nel browser. Apri i risultati per verificare che la definizione dell’indicatore corrisponda alla domanda che ti interessa." : "The calculation runs in your browser. Open a result to check that the indicator’s definition matches the question you want to explore."}</p>
+        </div>
+      </details>
+      <details>
         <summary>{it ? "Scegliere l’anno e leggere le segnalazioni" : "Choosing a year and reading the flags"}</summary>
         <div className="method-guide-body">
           <p>{it ? "L’anno accanto al valore è il periodo descritto dal dato. Italia, UE e mediana si riferiscono allo stesso anno." : "The year beside a value is the period that the figure describes. Italy, the EU and the median refer to the same year."}</p>
