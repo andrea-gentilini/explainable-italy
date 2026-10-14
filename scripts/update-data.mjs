@@ -485,7 +485,7 @@ const datasetSpecs = [
         id: "gdp-per-capita-pps",
         section: "economy",
         selector: { unit: "PC_EU27_2020_HAB_MPPS_CP" },
-        title: { it: "PIL pro capite a parità di potere d’acquisto", en: "GDP per capita in purchasing power standards" },
+        title: { it: "PIL per abitante: confronto con l’UE", en: "GDP per person: comparison with the EU" },
         plain: {
           it: "La produzione economica per persona, corretta per le differenze di prezzo tra Paesi. Il valore UE è posto uguale a 100.",
           en: "Economic output per person, adjusted for price differences between countries. The EU value is set to 100.",

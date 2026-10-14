@@ -123757,8 +123757,8 @@
       "id": "gdp-per-capita-pps",
       "section": "economy",
       "title": {
-        "it": "PIL pro capite a parità di potere d’acquisto",
-        "en": "GDP per capita in purchasing power standards"
+        "it": "PIL per abitante: confronto con l’UE",
+        "en": "GDP per person: comparison with the EU"
       },
       "plain": {
         "it": "La produzione economica per persona, corretta per le differenze di prezzo tra Paesi. Il valore UE è posto uguale a 100.",

@@ -99,8 +99,8 @@ const templates = {
     it: "Nel {year}, il PIL per abitante dell’Italia valeva {value} su una scala in cui l’UE è 100, tenendo conto delle differenze di prezzo tra Paesi.",
     en: "In {year}, Italy’s GDP per person was {value} on a scale where the EU equals 100, accounting for price differences between countries.",
     caution: {
-      it: "L’indice è relativo all’UE dello stesso anno. Le sue variazioni dipendono anche dal riferimento europeo.",
-      en: "The index is relative to the EU in the same year. Changes also depend on that European reference.",
+      it: "L’indice è relativo all’UE dello stesso anno. Un aumento indica un cambiamento rispetto al riferimento europeo; per misurare la crescita reale del PIL servono altri dati. I redditi delle famiglie e la loro distribuzione richiedono misure specifiche.",
+      en: "The index is relative to the EU in the same year. An increase reflects a change relative to that European reference; measuring real GDP growth requires other data. Household incomes and their distribution require specific measures.",
     },
   },
   "poverty-or-exclusion": {
