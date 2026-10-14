@@ -19,6 +19,8 @@ test('everyday phrases find relevant indicators across languages',()=>{
 });
 test('typos and accents preserve useful results',()=>{
   assert(top('disocupazione').includes('unemployment-rate'));
+  assert(!search('pensoni').some(i=>i.id==='gdp-per-capita-pps'));
+  assert.equal(top('pensoni')[0],'pension-expenditure');
   assert(top('sanità').includes('spending-health'));
   assert(top('rinnovab').includes('renewable-energy'));
 });

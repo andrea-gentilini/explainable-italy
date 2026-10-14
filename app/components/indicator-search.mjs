@@ -56,7 +56,7 @@ function similarity(query, word) {
   if (query.length >= 3 && word.startsWith(query)) return 0.8;
   if (query.length < 4 || word.length < 4 || query[0] !== word[0]) return 0;
   const errors = distance(query, word);
-  return errors <= (query.length >= 7 ? 2 : 1) ? 0.65 : 0;
+  return errors <= (query.length >= 10 ? 2 : 1) ? 0.65 : 0;
 }
 /** @typedef {{id:string,section:string,title:{it:string,en:string},plain:{it:string,en:string},technical:{it:string,en:string},source:{datasetCode:string}} SearchIndicator */
 /** @template {SearchIndicator} T @param {T[]} indicators @returns {(query:string,section?:string)=>T[]} */
