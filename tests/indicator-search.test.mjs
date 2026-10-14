@@ -39,3 +39,15 @@ test('unavailable concepts and incidental partial matches are not forced',()=>{
   assert.equal(search('stipendio medici').length,0);
   assert.equal(search('xyzqplm').length,0);
 });
+
+test('unknown wording does not veto strong matches, without adding aliases',()=>{
+  for(const phrase of ['please explain pensions allocations','roughly estimate money for pensions',
+    'quanti soldi vengono destinati alle pensioni']) {
+    assert.equal(top(phrase)[0],'pension-expenditure',phrase);
+  }
+  const synthetic={id:'new-unlisted-topic',section:'test',title:{it:'Zaffiro',en:'Sapphire'},
+    plain:{it:'',en:''},technical:{it:'',en:''},source:{datasetCode:'test_fixture'}};
+  const custom=createIndicatorSearch([synthetic]);
+  assert.equal(custom('please explain mysterious sapphire statistics')[0].id,synthetic.id);
+  assert.equal(custom('entirely unknown subject').length,0);
+});

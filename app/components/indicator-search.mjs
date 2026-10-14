@@ -65,8 +65,6 @@ export function createIndicatorSearch(indicators) {
     fields: [
       {words:tokens(indicator.title.it+' '+indicator.title.en),weight:4},
       {words:tokens(aliases[indicator.id] ?? ''),weight:3},
-      {words:tokens(indicator.section === 'spending' || indicator.id === 'pension-expenditure'
-        ? 'money funds funding soldi denaro fondi finanziamento' : ''),weight:1},
       {words:tokens(indicator.plain.it+' '+indicator.plain.en),weight:1.5},
       {words:tokens(indicator.technical.it+' '+indicator.technical.en),weight:0.5},
       {words:tokens(indicator.source.datasetCode),weight:5},
@@ -76,21 +74,24 @@ export function createIndicatorSearch(indicators) {
   return (query, section = 'all') => {
     const candidates = documents.filter(doc=>section==='all'||doc.indicator.section===section);
     if (!query.trim()) return candidates.map(doc=>doc.indicator);
-    const terms = tokens(query).slice(0,24);
+    // Unknown words carry no evidence; they must not veto a strong known match.
+    const vocabulary = [...frequencies.keys()];
+    const terms = tokens(query).slice(0,24).filter(term => vocabulary.some(word => similarity(term,word)>0));
     if (!terms.length) return [];
     const scored = candidates.map(doc=>{
-      let score=0, matches=0;
+      let score=0, matches=0, anchor=false;
       for (const term of terms) {
         let best=0;
         for (const field of doc.fields) for (const word of field.words) {
           const match=similarity(term,word);
+          if (match*field.weight>=1.9) anchor=true;
           const rarity=1+Math.log(1+indicators.length/(frequencies.get(word)??1));
           best=Math.max(best,match*field.weight*rarity);
         }
         if (best) {matches++;score+=best;}
       }
-      return {...doc,score:score*matches/terms.length,coverage:matches/terms.length};
-    }).filter(doc=>doc.coverage>=0.65 && doc.score>0);
+      return {...doc,score:score*matches/terms.length,coverage:matches/terms.length,anchor};
+    }).filter(doc=>doc.anchor && doc.coverage>=0.65 && doc.score>0);
     scored.sort((a,b)=>b.score-a.score||a.order-b.order);
     // Keep weak, incidental matches out of otherwise relevant result sets.
     const threshold=(scored[0]?.score??0)*0.3;
