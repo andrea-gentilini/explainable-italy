@@ -1,11 +1,20 @@
 import type { CSSProperties } from "react";
 
-export function MethodGuide({ locale, sourcesHref }: { locale: "it" | "en"; sourcesHref: string }) {
+export function MethodGuide({ locale, sourcesHref, catalogueHref }: { locale: "it" | "en"; sourcesHref: string; catalogueHref: string }) {
   const it = locale === "it";
   return (
     <section className="method-guide" aria-labelledby="reading-guide">
       <h2 id="reading-guide">{it ? "Come leggere questi dati" : "How to read these figures"}</h2>
       <p>{it ? "Apri una scheda, scegli un anno e confronta il valore italiano con quello dell’UE e con la mediana dei Paesi. Qui trovi le indicazioni per leggere il confronto e risalire alla fonte." : "Open an indicator, choose a year and compare Italy with the EU and the median across countries. This guide explains how to read the comparison and check the source."}</p>
+      <details id="indicator-selection">
+        <summary>{it ? "Come scegliamo gli indicatori in evidenza" : "How we choose the indicators in focus"}</summary>
+        <div className="method-guide-body">
+          <p>{it ? "La homepage propone un percorso iniziale attraverso produzione per abitante, età della popolazione, speranza di vita e occupazione. La selezione è una scelta editoriale del progetto e copre solo una parte dei temi disponibili." : "The homepage offers a starting point through output per person, population age, life expectancy and employment. This is an editorial choice by the project and covers only some of the available topics."}</p>
+          <p>{it ? "Per questa scelta consideriamo aspetti diversi della vita del Paese, definizioni comprensibili, serie storiche e confronti europei disponibili. Gli indicatori sono scelti manualmente e restano gli stessi quando i valori vengono aggiornati." : "We consider different aspects of life in the country, understandable definitions, historical series and available European comparisons. The indicators are selected manually and stay the same when values are updated."}</p>
+          <p>{it ? "Mettere alcuni dati in primo piano orienta l’attenzione. Queste schede offrono una visione parziale, senza rappresentare il peso o l’importanza di ciascun tema. Nel catalogo trovi anche istruzione, ambiente e gli altri ambiti del progetto, con ricerca e filtri per esplorarli." : "Giving some figures more prominence directs attention. These indicators provide a partial view and do not represent the weight or importance of each topic. The catalogue also includes education, the environment and the project’s other topics, with search and filters to explore them."}</p>
+          <a href={catalogueHref}>{it ? "Vedi tutti gli indicatori" : "View all indicators"} <span aria-hidden="true">→</span></a>
+        </div>
+      </details>
       <details>
         <summary>{it ? "Scegliere l’anno e leggere le segnalazioni" : "Choosing a year and reading the flags"}</summary>
         <div className="method-guide-body">

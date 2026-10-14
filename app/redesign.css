@@ -2127,7 +2127,7 @@ footer a:hover {
 
 .snapshot-heading {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.34fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(2rem, 7vw, 7rem);
   align-items: end;
   margin-bottom: clamp(2rem, 4vw, 3.5rem);
@@ -2143,44 +2143,6 @@ footer a:hover {
   margin: 1.4rem 0 0;
   color: var(--muted);
   font-size: clamp(0.98rem, 1.4vw, 1.15rem);
-}
-
-.snapshot-method {
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-
-.snapshot-method summary {
-  display: flex;
-  min-height: 3.2rem;
-  cursor: pointer;
-  align-items: center;
-  gap: 0.65rem;
-  font-size: 0.72rem;
-  font-weight: 760;
-  list-style: none;
-}
-
-.snapshot-method summary::-webkit-details-marker {
-  display: none;
-}
-
-.snapshot-method summary::after {
-  margin-left: auto;
-  color: var(--accent);
-  content: "+";
-  font-size: 1rem;
-}
-
-.snapshot-method[open] summary::after {
-  content: "−";
-}
-
-.snapshot-method p {
-  margin: 0;
-  padding: 0 0 1rem 1.85rem;
-  color: var(--muted);
-  font-size: 0.72rem;
 }
 
 .snapshot-grid {
@@ -2499,10 +2461,6 @@ footer a:hover {
   .snapshot-heading {
     grid-template-columns: 1fr;
     gap: 1.4rem;
-  }
-
-  .snapshot-method {
-    max-width: 34rem;
   }
 
   .spending-visual {
@@ -2868,7 +2826,6 @@ button.trend-column[aria-pressed="true"] small { color: var(--accent-strong); fo
 .snapshot-heading { margin-bottom: 2rem; }
 .snapshot-heading h1 { font-size: clamp(3rem, 6.5vw, 5.75rem); }
 .snapshot-heading > div > p { max-width: 42rem; color: var(--muted); font-size: 1rem; }
-.snapshot-method summary, .snapshot-method p { font-size: 0.9rem; }
 .snapshot-definition { margin: 0.8rem 0 0.6rem; color: var(--muted); font-size: 0.9rem; line-height: 1.55; }
 .snapshot-grid em { margin-top: auto; padding-top: 0.8rem; }
 .snapshot-newer { margin-bottom: 0.5rem; }

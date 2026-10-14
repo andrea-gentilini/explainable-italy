@@ -197,13 +197,9 @@ const copy = {
     navSources: "Fonti",
     navAbout: "Il progetto",
     navContribute: "Contribuisci",
-    snapshotEyebrow: "Italia in quattro numeri",
-    snapshotTitle: "L’Italia, in breve",
+    snapshotTitle: "In evidenza",
     snapshotBody:
-      "Quattro indicatori per cominciare. Apri una scheda per leggere il dato, seguirlo nel tempo e confrontarlo con l’Unione europea.",
-    snapshotWhy: "Perché proprio questi quattro?",
-    snapshotWhyBody:
-      "Abbiamo scelto produzione per abitante, età della popolazione, speranza di vita e occupazione come primo percorso fra i temi del sito. La selezione copre alcuni aspetti dell’Italia.",
+      "Alcuni punti di partenza per esplorare i dati sull’Italia. Apri una scheda per seguire il dato nel tempo e confrontarlo con l’Unione europea.",
     snapshotGdp: "PIL per abitante",
     snapshotGdpUnit: "Indice · UE = 100",
     snapshotMedianAge: "Età mediana della popolazione",
@@ -302,7 +298,7 @@ const copy = {
     yearUnflagged: "nessun contrassegno della fonte",
     edition: "Edizione del",
     editionNote: "Gli indicatori si riferiscono ad anni diversi. L’anno è indicato accanto a ogni numero.",
-    browseAll: "Esplora tutti gli indicatori",
+    browseAll: "Vedi tutti gli indicatori",
     snapshotDownload: "Scarica lo snapshot utilizzato",
     snapshotHash: "Impronta SHA-256 dello snapshot",
     trendRange: "Serie completa: {start}–{end}",
@@ -465,13 +461,9 @@ const copy = {
     navSources: "Sources",
     navAbout: "About",
     navContribute: "Contribute",
-    snapshotEyebrow: "Italy in four numbers",
-    snapshotTitle: "Italy, at a glance",
+    snapshotTitle: "In focus",
     snapshotBody:
-      "Four indicators to get started. Open a page to understand the figure, follow it over time and compare it with the European Union.",
-    snapshotWhy: "Why these four?",
-    snapshotWhyBody:
-      "We chose output per person, population age, life expectancy and employment as a first route through the site. This selection covers a few aspects of Italy.",
+      "A few starting points for exploring Italy through data. Open an indicator to follow it over time and compare it with the European Union.",
     snapshotGdp: "GDP per person",
     snapshotGdpUnit: "Index · EU = 100",
     snapshotMedianAge: "Median age of the population",
@@ -570,7 +562,7 @@ const copy = {
     yearUnflagged: "no source flags",
     edition: "Edition dated",
     editionNote: "The indicators refer to different years. The year is shown beside each figure.",
-    browseAll: "Explore all indicators",
+    browseAll: "View all indicators",
     snapshotDownload: "Download the snapshot used",
     snapshotHash: "Snapshot SHA-256 fingerprint",
     trendRange: "Full series: {start}–{end}",
@@ -2420,23 +2412,12 @@ export function Dashboard({
             >
               <div className="snapshot-heading">
                 <div>
-                  <p className="eyebrow">{labels.snapshotEyebrow}</p>
                   <h1 id="country-snapshot-title">{labels.snapshotTitle}</h1>
                   <p>{labels.snapshotBody}</p>
-                  <a className="snapshot-explore" href={pageHref(locale, "data")}>{labels.browseAll} <span aria-hidden="true">→</span></a>
                 </div>
-                <details className="snapshot-method">
-                  <summary>
-                    <span className="info-badge" aria-hidden="true">
-                      i
-                    </span>
-                    {labels.snapshotWhy}
-                  </summary>
-                  <p>{labels.snapshotWhyBody}</p>
-                </details>
               </div>
 
-              <div className="edition-strip"><span>{data.indicators.length} {locale === "it" ? "indicatori" : "indicators"} · {data.sections.length} {locale === "it" ? "temi" : "topics"}</span><span>{labels.edition} <time dateTime={data.generatedAt}>{formatDate(data.generatedAt, locale)}</time></span><p>{labels.editionNote}</p></div>
+              <div className="edition-strip"><span>{labels.edition} <time dateTime={data.generatedAt}>{formatDate(data.generatedAt, locale)}</time></span><p>{labels.editionNote}</p></div>
               <div className="snapshot-grid">
                 {snapshotIndicators.map((indicator) => (
                   <a
@@ -2473,6 +2454,9 @@ export function Dashboard({
                   </a>
                 ))}
               </div>
+              <a className="snapshot-explore" href={pageHref(locale, "data") + "?topic=all"}>
+                {labels.browseAll} ({data.indicators.length}) <span aria-hidden="true">→</span>
+              </a>
             </section>
 
             <section className="question-directory" aria-labelledby="questions-title">
@@ -2819,7 +2803,7 @@ export function Dashboard({
             <h1>{labels.methodTitle}</h1>
             <p>{labels.methodBody}</p>
           </div>
-          <MethodGuide locale={locale} sourcesHref={pageHref(locale, "sources")} />
+          <MethodGuide locale={locale} sourcesHref={pageHref(locale, "sources")} catalogueHref={pageHref(locale, "data") + "?topic=all"} />
           <h2 className="method-principles-title">{locale === "it" ? "Come prepariamo le schede" : "How we prepare the indicator pages"}</h2>
           <div className="method-rules">
             {labels.rules.map((rule, index) => (
