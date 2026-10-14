@@ -1,6 +1,8 @@
 name: Propose a data refresh
 
 on:
+  schedule:
+    - cron: '23 5 * * 2'
   workflow_dispatch:
 
 permissions:
@@ -12,32 +14,116 @@ concurrency:
 
 jobs:
   refresh:
+    if: github.repository == 'andrea-gentilini/explainable-italy' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    outputs:
+      changed: ${{ steps.report.outputs.changed }}
     env:
       NEXT_TELEMETRY_DISABLED: 1
       NEXT_PUBLIC_BASE_PATH: /explainable-italy
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
         with:
           version: 11.9.0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '24'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Fetch and validate official snapshots
         run: pnpm data:update
-      - name: Verify the refreshed edition
+      - name: Summarise changes from the published edition
+        id: report
+        run: node scripts/data-refresh-report.mjs
+      - name: Verify the complete candidate
         run: pnpm check
-      - name: Prepare reviewable changes
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level=high
+      - name: Link the verified report to this run
         run: |
-          git diff --stat
-          git diff --binary -- data public/data > data-refresh.patch
-      - name: Save the validated update for review
-        uses: actions/upload-artifact@v4
+          node --input-type=module <<'JS'
+          import { appendFile } from 'node:fs/promises';
+          const url = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+          await appendFile('.data-refresh/report.md', `\nThe candidate passed data validation, the full test suite, the production build and the production-dependency audit in [this workflow run](${url}).\n\n- [ ] Review the official definitions and methodological notes before publishing.\n`);
+          JS
+          cat .data-refresh/report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Save the verified candidate for the proposal job
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: validated-data-refresh
-          path: data-refresh.patch
+          name: verified-data-refresh
+          path: |
+            data/
+            public/data/
+            .data-refresh/report.json
+            .data-refresh/report.md
+          include-hidden-files: true
+          if-no-files-found: error
           retention-days: 14
+
+  propose:
+    needs: refresh
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      proposal-url: ${{ steps.proposal.outputs.pull-request-url }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: verified-data-refresh
+      - name: Protect concurrent work and the managed proposal branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/data-refresh-proposal.mjs
+      - name: Ignore acquisition dates when source data are unchanged
+        if: needs.refresh.outputs.changed == 'false'
+        run: git restore -- data public/data
+      - name: Open or update the data proposal
+        id: proposal
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          branch: automation/data-refresh
+          base: main
+          add-paths: |
+            data/
+            public/data/
+          commit-message: Refresh official data snapshots
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          title: Update official data snapshots
+          body-path: .data-refresh/report.md
+          assignees: andrea-gentilini
+          draft: always-true
+          maintainer-can-modify: false
+
+  record:
+    if: always() && github.repository == 'andrea-gentilini/explainable-italy' && github.ref == 'refs/heads/main'
+    needs: [refresh, propose]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        id: candidate
+        if: needs.refresh.result == 'success'
+        with:
+          name: verified-data-refresh
+      - name: Record this check without changing published data
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REFRESH_RESULT: ${{ needs.refresh.result == 'success' && needs.propose.result == 'success' && steps.candidate.outcome == 'success' && 'success' || 'failure' }}
+          PROPOSAL_URL: ${{ needs.propose.outputs.proposal-url }}
+        run: node scripts/data-refresh-status.mjs

@@ -46,3 +46,6 @@ next-env.d.ts
 
 # Recoverable data refresh staging
 /.data-update-*/
+
+# Temporary validated refresh candidates and reports
+/.data-refresh/

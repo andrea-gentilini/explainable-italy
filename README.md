@@ -80,7 +80,9 @@ NEXT_PUBLIC_BASE_PATH=/explainable-italy pnpm build
 
 The [Verify and deploy workflow](.github/workflows/ci.yml) checks pull requests and `main`. Publication from `main` runs only after the checks and production-dependency audit pass; it deploys the verified static output.
 
-The manual [Propose a data refresh workflow](.github/workflows/refresh-data.yml) fetches the sources, runs the checks and produces a `validated-data-refresh` artifact containing `data-refresh.patch`. It does not commit or publish the update automatically. Review and apply the patch through the normal contribution process.
+The [Propose a data refresh workflow](.github/workflows/refresh-data.yml) checks the official sources every **Tuesday at 05:23 UTC**, or on a manual run. It runs the full validation and security checks before opening or updating a draft pull request. Changes to acquisition or build timestamps alone do not create a data proposal. A maintainer reviews source definitions, revisions and flags before merging an update.
+
+Each attempt records its outcome in [the refresh status file](.github/data-refresh-status.json), preserving the last successful check if a later run fails. These audit commits keep the repository active during months without development. Everything runs on GitHub, so no local computer needs to stay on and the local checkout can be deleted. See [how data updates work](docs/DATA_REFRESH.md) for the review process, failure handling and schedule limitations.
 
 ## Contribute and reuse
 

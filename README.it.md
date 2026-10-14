@@ -80,7 +80,9 @@ NEXT_PUBLIC_BASE_PATH=/explainable-italy pnpm build
 
 Il workflow [Verify and deploy](.github/workflows/ci.yml) verifica le pull request e `main`. La pubblicazione da `main` parte soltanto dopo il superamento dei controlli e dell’audit delle dipendenze di produzione; distribuisce l’esportazione statica verificata.
 
-Il workflow manuale [Propose a data refresh](.github/workflows/refresh-data.yml) acquisisce le fonti, esegue i controlli e produce un artefatto `validated-data-refresh` contenente `data-refresh.patch`. Non esegue commit e non pubblica automaticamente l’aggiornamento. La patch va verificata e applicata attraverso il normale percorso di contribuzione.
+Il workflow [Propose a data refresh](.github/workflows/refresh-data.yml) controlla le fonti ufficiali ogni **martedì alle 05:23 UTC**, oppure su avvio manuale. In Italia sono le 07:23 con l’ora legale e le 06:23 con l’ora solare. Esegue tutti i controlli sui dati, sul sito e sulla sicurezza delle dipendenze prima di aprire o aggiornare una pull request in bozza. Una variazione delle sole date di acquisizione o compilazione non genera una proposta. Prima di approvare l’aggiornamento, chi mantiene il progetto verifica definizioni delle fonti, revisioni e contrassegni.
+
+Ogni tentativo registra il proprio esito nel [file di stato degli aggiornamenti](.github/data-refresh-status.json), conservando l’ultimo controllo riuscito se un’esecuzione successiva fallisce. Questi commit documentano i controlli e mantengono attiva la repository anche nei mesi senza sviluppo. Tutto funziona su GitHub, senza computer locali da tenere accesi. La cartella locale può essere eliminata. La [guida agli aggiornamenti](docs/DATA_REFRESH.md), in inglese, descrive la revisione, la gestione degli errori e i limiti della pianificazione.
 
 ## Contributi e riuso
 
