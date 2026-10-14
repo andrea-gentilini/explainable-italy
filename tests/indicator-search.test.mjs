@@ -10,6 +10,9 @@ test('everyday phrases find relevant indicators across languages',()=>{
   assert(top('raccolta differenziata').includes('municipal-waste-recycling'));
   assert(top('quanti giovani hanno una laurea').includes('tertiary-education'));
   assert(top('cost of living').includes('inflation'));
+  assert.equal(top('how many money for pensions')[0],'pension-expenditure');
+  assert.equal(top('how much money for pensions')[0],'pension-expenditure');
+  assert.equal(top('quanti soldi per le pensioni')[0],'pension-expenditure');
   assert(top('how many children are born').includes('fertility-rate'));
   assert.equal(top('quanto spendiamo per le pensoni')[0],'pension-expenditure');
   assert.equal(top('how many young people cannot find a job')[0],'youth-unemployment');
@@ -31,6 +34,7 @@ test('empty search preserves catalogue order and topic filters',()=>{
 });
 test('unavailable concepts and incidental partial matches are not forced',()=>{
   assert.equal(search('stipendio medio').length,0);
+  assert.equal(search('money for salaries').length,0);
   assert.equal(search('affitto medio').length,0);
   assert.equal(search('stipendio medici').length,0);
   assert.equal(search('xyzqplm').length,0);

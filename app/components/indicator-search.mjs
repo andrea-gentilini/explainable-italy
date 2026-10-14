@@ -65,6 +65,8 @@ export function createIndicatorSearch(indicators) {
     fields: [
       {words:tokens(indicator.title.it+' '+indicator.title.en),weight:4},
       {words:tokens(aliases[indicator.id] ?? ''),weight:3},
+      {words:tokens(indicator.section === 'spending' || indicator.id === 'pension-expenditure'
+        ? 'money funds funding soldi denaro fondi finanziamento' : ''),weight:1},
       {words:tokens(indicator.plain.it+' '+indicator.plain.en),weight:1.5},
       {words:tokens(indicator.technical.it+' '+indicator.technical.en),weight:0.5},
       {words:tokens(indicator.source.datasetCode),weight:5},
