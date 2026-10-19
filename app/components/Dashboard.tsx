@@ -416,7 +416,7 @@ const copy = {
     independence:
       "Explainable Italy è un progetto indipendente. Non rappresenta e non è approvato dalle istituzioni citate. Le elaborazioni sono indicate come tali.",
     privacy:
-      "Il progetto non integra cookie, pubblicità, profilazione, analytics o altri tracker. L’infrastruttura che ospita il sito può conservare i normali log tecnici di accesso.",
+      "Quando configurato, il sito usa Cloudflare Web Analytics per misurare in forma aggregata visite, pagine consultate, provenienza del traffico, Paese, categoria di dispositivo e tempi di caricamento. Non usa cookie di analytics, pubblicità, profilazione, fingerprinting, tracciamento tra siti o identificazione delle persone, e non raccoglie dati personali o ricerche effettuate. L’infrastruttura che ospita il sito può conservare i normali log tecnici di accesso.",
     futureTitle: "Cosa potremo aggiungere",
     futureBody:
       "Aggiungeremo nuovi temi quando avremo fonti adatte e confronti verificabili.",
@@ -681,7 +681,7 @@ const copy = {
     independence:
       "Explainable Italy is an independent project. It does not represent and is not endorsed by the institutions cited. Project calculations are identified as such.",
     privacy:
-      "The project integrates no cookies, advertising, profiling, analytics or other trackers. The hosting infrastructure may retain normal technical access logs.",
+      "When configured, the site uses Cloudflare Web Analytics to measure aggregate visits, pages viewed, traffic referrers, country, device category and load times. It uses no analytics cookies, advertising, profiling, fingerprinting, cross-site tracking or identification of individuals, and collects no personal data or search queries. The hosting infrastructure may retain normal technical access logs.",
     futureTitle: "What we can add next",
     futureBody:
       "We will add topics when suitable sources and verifiable comparisons are available.",

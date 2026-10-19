@@ -62,7 +62,7 @@ Next.js e React producono un’**esportazione statica** in `out/`. Ricerca, sele
 | `public/data/` | Snapshot, JSON e CSV scaricabili |
 | `tests/` | Test di regressione della pipeline dati e delle pagine esportate |
 
-Il progetto non aggiunge analytics, pubblicità, cookie di tracciamento o account utente. La preferenza del tema viene salvata localmente nel browser tramite `localStorage`. GitHub Pages può conservare normali log tecnici di hosting; seguendo un collegamento esterno si apre il sito dell’istituzione interessata.
+Quando `NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN` è impostata in fase di build, il sito include il beacon gratuito di Cloudflare Web Analytics per misurare in forma aggregata visite, pagine consultate, provenienza del traffico (referrer), Paese, categoria di dispositivo o browser e prestazioni di caricamento. Non usa cookie di analytics, pubblicità, profilazione, fingerprinting, tracciamento tra siti, account utente o dati personali, e non registra le stringhe di ricerca né conserva gli indirizzi IP dei visitatori. Senza il token, il beacon non viene inserito nell’HTML esportato. La preferenza del tema viene salvata localmente nel browser tramite `localStorage`. GitHub Pages può conservare normali log tecnici di hosting; seguendo un collegamento esterno si apre il sito dell’istituzione interessata.
 
 ## Pubblicazione e aggiornamento
 
@@ -77,6 +77,8 @@ Il controllo include la build di produzione. Per ricompilare separatamente una v
 ```sh
 NEXT_PUBLIC_BASE_PATH=/explainable-italy pnpm build
 ```
+
+Consulta [`.env.example`](.env.example) per le variabili pubbliche opzionali di compilazione. Imposta `NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN` nelle variabili del repository GitHub Actions (o nell’ambiente locale) solo quando vuoi includere il beacon di Cloudflare Web Analytics nell’esportazione statica; non salvare mai un token reale nel repository.
 
 Il workflow [Verify and deploy](.github/workflows/ci.yml) verifica le pull request e `main`. La pubblicazione da `main` parte soltanto dopo il superamento dei controlli e dell’audit delle dipendenze di produzione; distribuisce l’esportazione statica verificata.
 

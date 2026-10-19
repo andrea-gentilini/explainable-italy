@@ -62,7 +62,7 @@ Next.js and React produce a **static export** in `out/`. Search, year selection 
 | `public/data/` | Downloadable snapshots, JSON and CSV files |
 | `tests/` | Data-pipeline and exported-page regression tests |
 
-The project adds no analytics, advertising, tracking cookies or user accounts. The theme preference is stored locally in the browser using `localStorage`. GitHub Pages may retain normal technical hosting logs; following an external source link opens that institution’s website.
+When `NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN` is set at build time, the site includes the free Cloudflare Web Analytics beacon to measure aggregate visits, consulted pages, referrers, country, device or browser category, and page-load performance. It uses no analytics cookies, advertising, profiling, fingerprinting, cross-site tracking, user accounts or personal data, and does not log search query strings or store visitor IP addresses. Without the token, no beacon is emitted. The theme preference is stored locally in the browser using `localStorage`. GitHub Pages may retain normal technical hosting logs; following an external source link opens that institution’s website.
 
 ## Publish and refresh
 
@@ -77,6 +77,8 @@ This includes the production build. To rebuild an already checked edition separa
 ```sh
 NEXT_PUBLIC_BASE_PATH=/explainable-italy pnpm build
 ```
+
+See [`.env.example`](.env.example) for the optional public build variables. Set `NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN` in the GitHub Actions repository variables (or local environment) only when you want the static export to include the Cloudflare Web Analytics beacon; never commit a real token to the repository.
 
 The [Verify and deploy workflow](.github/workflows/ci.yml) checks pull requests and `main`. Publication from `main` runs only after the checks and production-dependency audit pass; it deploys the verified static output.
 
