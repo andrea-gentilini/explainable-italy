@@ -19,6 +19,7 @@ jobs:
     timeout-minutes: 15
     env:
       NEXT_PUBLIC_BASE_PATH: /explainable-italy
+      NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN: ${{ vars.NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN || secrets.NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN }}
       NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/checkout@v4

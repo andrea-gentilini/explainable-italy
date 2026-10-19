@@ -1,6 +1,5 @@
-import "../globals.css";
-import "../redesign.css";
+import { RootDocument } from "../root-layout";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" suppressHydrationWarning><body>{children}</body></html>;
+  return <RootDocument lang="en">{children}</RootDocument>;
 }
