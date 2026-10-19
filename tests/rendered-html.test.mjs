@@ -124,8 +124,43 @@ for (const locale of locales) {
       requireLink(rendered, `${prefix}${localizedRoute(oppositeLocale, path)}`, `${route}: language switch keeps the same page`);
       assert.match(rendered.html, new RegExp(`<html\\b[^>]*\\blang="${locale}"`), `${route}: document declares its language`);
       assert.doesNotMatch(rendered.fullHtml, /googletagmanager|google-analytics|plausible\.io|posthog|connect\.facebook\.net/i, `${route}: no tracking integrations`);
+      const cloudflareToken = process.env.NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN?.trim();
+      if (cloudflareToken) {
+        const beacons = elements(rendered.fullHtml, "script").filter(
+          (script) =>
+            attribute(script, "src") === "https://static.cloudflareinsights.com/beacon.min.js" ||
+            attribute(script, "data-cf-beacon") !== null,
+        );
+        assert.equal(beacons.length, 1, `${route}: includes the Cloudflare Web Analytics beacon once`);
+        assert.equal(
+          attribute(beacons[0], "src"),
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          `${route}: loads official Cloudflare beacon`,
+        );
+        assert.match(beacons[0].attributes, /\bdefer(?:=""|\b)/i, `${route}: defers beacon execution`);
+        assert.deepEqual(
+          JSON.parse(attribute(beacons[0], "data-cf-beacon")),
+          { token: cloudflareToken },
+          `${route}: passes configured token to beacon`,
+        );
+      } else {
+        assert.doesNotMatch(
+          rendered.fullHtml,
+          /cloudflareinsights\.com\/beacon\.min\.js|data-cf-beacon/i,
+          `${route}: no analytics beacon when token is unset`,
+        );
+      }
       assert.match(rendered.text, locale === "it" ? /Nessun tracciamento/ : /No tracking/, `${route}: privacy statement`);
     }
+    const aboutPage = await page(localizedRoute(locale, "about"));
+    assert.match(aboutPage.text, /Cloudflare Web Analytics/, `${locale}: about page discloses Cloudflare Web Analytics`);
+    assert.match(
+      aboutPage.text,
+      locale === "it"
+        ? /Non usa cookie di analytics, pubblicità, profilazione, fingerprinting/
+        : /It uses no analytics cookies, advertising, profiling, fingerprinting/,
+      `${locale}: about page states what is not collected`,
+    );
   });
 }
 
