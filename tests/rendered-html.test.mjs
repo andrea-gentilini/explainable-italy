@@ -603,4 +603,59 @@ for (const locale of locales) {
     assert.match(rendered.text, locale === "it" ? /Serve un account/ : /You need an account/);
     assert.match(rendered.text, locale === "it" ? /sono pubbliche/ : /are public/);
   });
+
+  test(`${locale}: source directory and indicator cards expose clickable provenance, metadata and downloads`, async () => {
+    const prefix = await basePath();
+    const sourcesPage = await page(localizedRoute(locale, "sources"));
+    requireLink(sourcesPage, `${prefix}/data/manifest.json`, `${locale}: source register is downloadable`);
+    requireLink(sourcesPage, `${prefix}/data/dashboard.csv`, `${locale}: full CSV is downloadable`);
+    requireLink(sourcesPage, `${prefix}/data/dashboard.json`, `${locale}: full JSON is downloadable`);
+
+    const uniqueDatasets = new Map();
+    for (const indicator of data.indicators) {
+      const list = uniqueDatasets.get(indicator.source.datasetCode) ?? [];
+      list.push(indicator);
+      uniqueDatasets.set(indicator.source.datasetCode, list);
+    }
+
+    for (const [datasetCode, indicators] of uniqueDatasets) {
+      const sample = indicators[0];
+      const methodologyUrl = sample.source.metadataUrl ?? sample.definitionSourceUrl;
+      requireLink(sourcesPage, sample.source.dataBrowserUrl, `${locale}: ${datasetCode} links to Eurostat Data Browser`);
+      if (methodologyUrl) {
+        requireLink(sourcesPage, methodologyUrl, `${locale}: ${datasetCode} links to official metadata`);
+      }
+      requireLink(sourcesPage, `${prefix}/${sample.source.snapshotPath}`, `${locale}: ${datasetCode} links to raw snapshot`);
+      for (const indicator of indicators) {
+        requireLink(
+          sourcesPage,
+          `${prefix}${localizedRoute(locale, `data/${indicator.id}`)}`,
+          `${locale}: ${datasetCode} links to indicator ${indicator.id}`,
+        );
+        requireLink(
+          sourcesPage,
+          `${prefix}${localizedRoute(locale, `data/${indicator.id}/source`)}`,
+          `${locale}: ${datasetCode} links to verification page for ${indicator.id}`,
+        );
+      }
+    }
+
+    for (const indicator of data.indicators) {
+      const cardRoute = localizedRoute(locale, `data/${indicator.id}`);
+      const sourceRoute = localizedRoute(locale, `data/${indicator.id}/source`);
+      const [card, source] = await Promise.all([page(cardRoute), page(sourceRoute)]);
+      const sourceBox = card.links.find((link) => hasClass(link, "source-box"));
+      assert(sourceBox, `${cardRoute}: source box is a clickable link`);
+      if (indicator.source.originalInstitution !== indicator.source.institution) {
+        assert(sourceBox.text.includes(indicator.source.originalInstitution), `${cardRoute}: source box discloses original institution`);
+      }
+      const methodologyUrl = indicator.source.metadataUrl ?? indicator.definitionSourceUrl;
+      requireLink(card, methodologyUrl, `${cardRoute}: card actions link to official methodology`);
+      const technicalDetails = classRegions(source.html, "source-technical-links")[0];
+      assert(technicalDetails, `${sourceRoute}: technical links section exists`);
+      assert.match(technicalDetails.attributes, /\bopen(?:=""|\b)/i, `${sourceRoute}: technical links are visible by default`);
+      assert.match(technicalDetails.text, /\bKB\b/, `${sourceRoute}: snapshot size is disclosed alongside SHA-256`);
+      requireLink(source, `${prefix}${localizedRoute(locale, "sources")}`, `${sourceRoute}: links back to the source directory`);
+    }
+  });
 }

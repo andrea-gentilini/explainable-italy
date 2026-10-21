@@ -2323,12 +2323,24 @@ export function Dashboard({
   const filteredIndicators = searchIndex(search, activeSection);
 
   const sources = useMemo(() => {
-    const unique = new Map<string, Source>();
+    const unique = new Map<string, { source: Source; indicators: Indicator[]; methodologyUrl: string | null }>();
     for (const indicator of data.indicators) {
-      unique.set(indicator.source.datasetCode, indicator.source);
+      const existing = unique.get(indicator.source.datasetCode);
+      if (existing) {
+        existing.indicators.push(indicator);
+        if (!existing.methodologyUrl && indicator.definitionSourceUrl) {
+          existing.methodologyUrl = indicator.definitionSourceUrl;
+        }
+      } else {
+        unique.set(indicator.source.datasetCode, {
+          source: indicator.source,
+          indicators: [indicator],
+          methodologyUrl: indicator.source.metadataUrl ?? indicator.definitionSourceUrl,
+        });
+      }
     }
     return [...unique.values()].sort((left, right) =>
-      left.datasetCode.localeCompare(right.datasetCode),
+      left.source.datasetCode.localeCompare(right.source.datasetCode),
     );
   }, [data.indicators]);
 
@@ -2884,9 +2896,13 @@ export function Dashboard({
           </div>
 
           <div className="source-actions">
-            <a href={`${basePath}/data/manifest.json`}>{labels.manifest}</a>
+            <a href={`${basePath}/data/manifest.json`}>{labels.manifest} (JSON)</a>
             <a href={`${basePath}/data/dashboard.csv`} download>
-              {labels.downloadAll}
+              {labels.downloadAll} <span aria-hidden="true">↓</span>
+            </a>
+            <a href={`${basePath}/data/dashboard.json`} download>
+              {locale === "it" ? "Scarica tutti i dati in JSON" : "Download all data as JSON"}{" "}
+              <span aria-hidden="true">↓</span>
             </a>
           </div>
 
@@ -2898,26 +2914,85 @@ export function Dashboard({
               <strong>{labels.sourceDirectory}</strong>
             </summary>
             <div className="source-list">
-              {sources.map((source) => (
-                <article key={source.datasetCode}>
-                  <div>
-                    <span>{source.datasetCode}</span>
-                    <h3>{source.datasetLabel}</h3>
-                    {source.originalInstitution !== source.institution ? (
-                      <small>
-                        {labels.originalInstitution}:{" "}
-                        {source.originalInstitution}
-                      </small>
-                    ) : null}
+              {sources.map(({ source, indicators: sourceIndicators, methodologyUrl }) => (
+                <article key={source.datasetCode} id={`dataset-${source.datasetCode}`}>
+                  <div className="source-card-body">
+                    <div className="source-card-header">
+                      <span>{source.datasetCode}</span>
+                      <a
+                        className="source-external-icon"
+                        href={source.dataBrowserUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`${labels.sourceBrowser}: ${source.datasetCode}`}
+                      >
+                        ↗
+                      </a>
+                    </div>
+                    <h3>
+                      <a
+                        href={source.dataBrowserUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {source.datasetLabel}
+                      </a>
+                    </h3>
+                    <small>
+                      {source.institution}
+                      {source.originalInstitution !== source.institution
+                        ? ` (${labels.originalInstitution}: ${source.originalInstitution})`
+                        : ""}{" "}
+                      · {labels.sourceUpdated}: {formatDate(source.sourceUpdatedAt, locale)}
+                    </small>
+                    <div className="source-card-indicators">
+                      <span className="source-card-sublabel">
+                        {locale === "it" ? "Indicatori nel sito" : "Indicators on this site"}
+                      </span>
+                      <ul>
+                        {sourceIndicators.map((indicator) => (
+                          <li key={indicator.id}>
+                            <a href={pageHref(locale, `data/${indicator.id}`)}>
+                              {indicator.title[locale]}
+                            </a>
+                            {" · "}
+                            <a
+                              className="source-card-verify"
+                              href={pageHref(locale, `data/${indicator.id}/source`)}
+                            >
+                              {locale === "it" ? "verifica" : "verify"} <span aria-hidden="true">→</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="source-card-links">
+                      <a
+                        href={source.dataBrowserUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Data Browser <span aria-hidden="true">↗</span>
+                      </a>
+                      {methodologyUrl ? (
+                        <a
+                          href={methodologyUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {locale === "it" ? "Metadati" : "Metadata"} <span aria-hidden="true">↗</span>
+                        </a>
+                      ) : null}
+                      {source.snapshotPath ? (
+                        <a
+                          href={`${basePath}/${source.snapshotPath}`}
+                          download
+                        >
+                          Snapshot (JSON{source.bytes ? `, ${formatBytes(source.bytes, locale)}` : ""}) <span aria-hidden="true">↓</span>
+                        </a>
+                      ) : null}
+                    </div>
                   </div>
-                  <a
-                    href={source.dataBrowserUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`${labels.openData}: ${source.datasetCode}`}
-                  >
-                    ↗
-                  </a>
                 </article>
               ))}
             </div>
