@@ -879,6 +879,11 @@ function formatDate(date: string, locale: Locale) {
   }).format(new Date(date));
 }
 
+function formatBytes(bytes: number, locale: Locale) {
+  const kb = Math.max(1, Math.round(bytes / 1024));
+  return `${new Intl.NumberFormat(locale === "it" ? "it-IT" : "en-GB").format(kb)} KB`;
+}
+
 const sourceDimensionLabels: Record<Locale, Record<string, string>> = {
   it: {
     freq: "Frequenza",
@@ -1323,7 +1328,20 @@ function YearSelection({ indicator, point, locale }: {
 
 function YearContext({ indicator, point, locale }: { indicator: Indicator; point: DataPoint; locale: Locale }) {
   const newer = indicator.newerEstimate;
-  if (!newer || point.year !== indicator.latest.year) return null;
+  if (!newer) return null;
+  if (point.year === newer.year) {
+    return <p className="year-context">
+      <span>
+        {locale === "it"
+          ? `Stai leggendo il dato del ${newer.year}, ${statusDescription(newer.status, locale, false)}. L’ultimo anno non provvisorio è il ${indicator.latest.year}.`
+          : `You are viewing the ${newer.year} figure, which is ${statusDescription(newer.status, locale, false)}. The latest non-provisional year is ${indicator.latest.year}.`}
+      </span>{" "}
+      <button type="button" onClick={() => updateQuery({ year: String(indicator.latest.year) })}>
+        {locale === "it" ? `Torna al ${indicator.latest.year}` : `Back to ${indicator.latest.year}`} <span aria-hidden="true">→</span>
+      </button>
+    </p>;
+  }
+  if (point.year !== indicator.latest.year) return null;
   return <p className="year-context">
     {locale === "it"
       ? `Il dato del ${newer.year} è ${statusDescription(newer.status, locale, false)}. Per questo la scheda si apre sul ${indicator.latest.year}. Puoi scegliere l’anno dal menu.`
@@ -1434,6 +1452,7 @@ function IndicatorCard({
   const labels = copy[locale];
   const breakYears = getBreakYears(indicator);
   const point = expanded ? selectedPoint(indicator, year) : indicator.latest;
+  const metadataHref = indicator.source.metadataUrl ?? indicator.definitionSourceUrl;
   const Heading = expanded ? "h1" : "h3";
 
   return (
@@ -1450,7 +1469,15 @@ function IndicatorCard({
       <div className="indicator-card-top">
         <div className="indicator-copy">
           <p className="indicator-kicker">{sectionTitle}</p>
-          <Heading>{indicator.title[locale]}</Heading>
+          <Heading>
+            {expanded ? (
+              indicator.title[locale]
+            ) : (
+              <a className="indicator-title-link" href={withQuery(pageHref(locale, `data/${indicator.id}`), query)}>
+                {indicator.title[locale]}
+              </a>
+            )}
+          </Heading>
           <p className="indicator-summary">{indicator.plain[locale]}</p>
         </div>
         <div className="indicator-reading">
@@ -1490,7 +1517,11 @@ function IndicatorCard({
               false,
             )}
           </span>
-          {expanded ? <button type="button" onClick={() => updateQuery({ year: String(indicator.newerEstimate!.year) })}>{locale === "it" ? `Vedi il ${indicator.newerEstimate.year}` : `View ${indicator.newerEstimate.year}`} <span aria-hidden="true">→</span></button> : null}
+          {expanded ? (
+            <button type="button" onClick={() => updateQuery({ year: String(indicator.newerEstimate!.year) })}>{locale === "it" ? `Vedi il ${indicator.newerEstimate.year}` : `View ${indicator.newerEstimate.year}`} <span aria-hidden="true">→</span></button>
+          ) : (
+            <a href={withQuery(pageHref(locale, `data/${indicator.id}`), query, indicator.newerEstimate.year)}>{locale === "it" ? `Vedi il ${indicator.newerEstimate.year}` : `View ${indicator.newerEstimate.year}`} <span aria-hidden="true">→</span></a>
+          )}
         </p>
       ) : null}
 
@@ -1552,11 +1583,17 @@ function IndicatorCard({
               </p>
             </details>
 
-            <div className="source-box">
+            <a
+              className="source-box"
+              href={withQuery(pageHref(locale, `data/${indicator.id}/source`), query, point.year)}
+            >
               <div>
                 <span>{labels.source}</span>
                 <strong>
-                  {indicator.source.institution}, {indicator.source.datasetCode}
+                  {indicator.source.institution}
+                  {indicator.source.originalInstitution !== indicator.source.institution
+                    ? ` (${indicator.source.originalInstitution})`
+                    : ""}, {indicator.source.datasetCode}
                 </strong>
               </div>
               <div>
@@ -1565,7 +1602,7 @@ function IndicatorCard({
                   {formatDate(indicator.source.sourceUpdatedAt, locale)}
                 </strong>
               </div>
-            </div>
+            </a>
 
             <div className="card-actions">
               <a
@@ -1573,9 +1610,9 @@ function IndicatorCard({
               >
                 {labels.openData} <span aria-hidden="true">→</span>
               </a>
-              {indicator.source.metadataUrl ? (
+              {metadataHref ? (
                 <a
-                  href={indicator.source.metadataUrl}
+                  href={metadataHref}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -1583,7 +1620,7 @@ function IndicatorCard({
                 </a>
               ) : null}
               <a href={`${basePath}/data/indicators/${indicator.id}.csv`} download={`${indicator.id}.csv`}>
-                {labels.downloadIndicator}
+                {labels.downloadIndicator} (CSV) <span aria-hidden="true">↓</span>
               </a>
             </div>
 
@@ -1673,7 +1710,7 @@ function SourceVerification({
         <p>{labels.sourcePageBody}</p>
       </header>
 
-      <div className="indicator-toolbar"><YearSelection indicator={indicator} point={displayedPoint} locale={locale} /><ShareLink locale={locale} key={`${query}-${displayedPoint.year}`} />{indicator.source.snapshotPath ? <a className="compact-download" href={`${basePath}/${indicator.source.snapshotPath}`} download>{labels.snapshotDownload} <span aria-hidden="true">↓</span></a> : null}</div>
+      <div className="indicator-toolbar"><YearSelection indicator={indicator} point={displayedPoint} locale={locale} /><ShareLink locale={locale} key={`${query}-${displayedPoint.year}`} />{indicator.source.snapshotPath ? <a className="compact-download" href={`${basePath}/${indicator.source.snapshotPath}`} download>{labels.snapshotDownload} (JSON) <span aria-hidden="true">↓</span></a> : null}</div>
       <div className="source-value-panel">
         <span>{labels.sourceDisplayed}</span>
         <strong>{displayedValue}</strong>
@@ -1693,8 +1730,15 @@ function SourceVerification({
             <div>
               <dt>{labels.dataset}</dt>
               <dd>
-                {indicator.source.datasetLabel}{" "}
-                <code>{indicator.source.datasetCode}</code>
+                <a
+                  href={indicator.source.dataBrowserUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {indicator.source.datasetLabel}{" "}
+                  <code>{indicator.source.datasetCode}</code>{" "}
+                  <span aria-hidden="true">↗</span>
+                </a>
               </dd>
             </div>
             <div>
@@ -1911,7 +1955,7 @@ function SourceVerification({
         </p>
       </section>
 
-      <details className="source-technical-links">
+      <details className="source-technical-links" open>
         <summary>{labels.sourceTechnicalSummary}</summary>
         <p>{labels.sourceTechnicalBody}</p>
         <div>
@@ -1946,11 +1990,25 @@ function SourceVerification({
             {labels.sourceDoi} <span aria-hidden="true">↗</span>
           </a>
           <a href={`${basePath}/data/indicators/${indicator.id}.csv`} download={`${indicator.id}.csv`}>
-            {labels.downloadIndicator}
+            {labels.downloadIndicator} (CSV) <span aria-hidden="true">↓</span>
           </a>
-          {indicator.source.snapshotPath ? <a href={`${basePath}/${indicator.source.snapshotPath}`} download>{labels.snapshotDownload}</a> : null}
+          {indicator.source.snapshotPath ? (
+            <a href={`${basePath}/${indicator.source.snapshotPath}`} download>
+              {labels.snapshotDownload} (JSON) <span aria-hidden="true">↓</span>
+            </a>
+          ) : null}
+          <a href={pageHref(locale, "sources")}>
+            {locale === "it" ? "Tutte le fonti e i download" : "All sources and downloads"}{" "}
+            <span aria-hidden="true">→</span>
+          </a>
         </div>
-        {indicator.source.sha256 ? <p className="source-hash">{labels.snapshotHash}: <code>{indicator.source.sha256}</code></p> : null}
+        {indicator.source.sha256 ? (
+          <p className="source-hash">
+            {labels.snapshotHash}
+            {indicator.source.bytes ? ` (${formatBytes(indicator.source.bytes, locale)})` : ""}:{" "}
+            <code>{indicator.source.sha256}</code>
+          </p>
+        ) : null}
       </details>
     </section>
   );
@@ -1975,8 +2033,7 @@ function SocialProtectionDetail({
     ...oldAge,
     latest: oldAgePoint,
   };
-  const pensionPoint =
-    pensionExpenditure.newerEstimate ?? pensionExpenditure.latest;
+  const pensionPoint = selectedPoint(pensionExpenditure, year);
   const pensionComparison = {
     ...pensionExpenditure,
     latest: pensionPoint,
@@ -2006,7 +2063,11 @@ function SocialProtectionDetail({
       <div className="related-detail-stack">
         <article className="old-age-definition">
           <p className="indicator-kicker">{labels.oldAgeMeasure}</p>
-          <h3>{labels.oldAgeMeasureTitle}</h3>
+          <h3>
+            <a href={withQuery(pageHref(locale, `data/${oldAge.id}`), query, oldAgePoint.year)}>
+              {labels.oldAgeMeasureTitle}
+            </a>
+          </h3>
           <p className="related-detail-value">
             {new Intl.NumberFormat(locale === "it" ? "it-IT" : "en-GB", {
               minimumFractionDigits: 1,
@@ -2041,11 +2102,16 @@ function SocialProtectionDetail({
             <span>{labels.selectionUsed}</span>
             <strong>Eurostat · gov_10a_exp</strong>
             <small>{oldAgeFilter}</small>
-            <a
-              href={withQuery(pageHref(locale, `data/${oldAge.id}/source`), query, oldAgePoint.year)}
-            >
-              {labels.verifyNumber} <span aria-hidden="true">→</span>
-            </a>
+            <div>
+              <a href={withQuery(pageHref(locale, `data/${oldAge.id}`), query, oldAgePoint.year)}>
+                {locale === "it" ? "Apri l’indicatore sulla funzione vecchiaia" : "Open the old-age function indicator"} <span aria-hidden="true">→</span>
+              </a>
+              <a
+                href={withQuery(pageHref(locale, `data/${oldAge.id}/source`), query, oldAgePoint.year)}
+              >
+                {labels.verifyNumber} <span aria-hidden="true">→</span>
+              </a>
+            </div>
           </div>
         </article>
 
@@ -2053,7 +2119,11 @@ function SocialProtectionDetail({
           <div className="pension-boundary-heading">
             <div>
               <p className="indicator-kicker">{labels.pensionMeasure}</p>
-              <h3>{labels.pensionMeasureTitle}</h3>
+              <h3>
+                <a href={withQuery(pageHref(locale, `data/${pensionExpenditure.id}`), query, pensionPoint.year)}>
+                  {labels.pensionMeasureTitle}
+                </a>
+              </h3>
             </div>
             <p className="related-detail-value">
               {formatValue(
@@ -2444,7 +2514,7 @@ export function Dashboard({
               <h2 id="questions-title">{locale === "it" ? "Da cosa vuoi partire?" : "What would you like to explore?"}</h2>
               <div className="question-grid">
                 {data.sections.map((section) => <article key={section.id}>
-                  <h3>{section.title[locale]}</h3>
+                  <h3><a className="question-topic-link" href={pageHref(locale, "data") + `?topic=${section.id}`}>{section.title[locale]}</a></h3>
                   <a className="question-link" href={pageHref(locale, `data/${topicQuestions[section.id][0].id}`)}>{topicQuestions[section.id][0].text[locale]} <span aria-hidden="true">→</span></a>
                   <a className="topic-all-link" href={pageHref(locale, "data") + `?topic=${section.id}`}>{locale === "it" ? "Tutti gli indicatori del tema" : "All indicators in this topic"}</a>
                 </article>)}
@@ -2483,7 +2553,10 @@ export function Dashboard({
                             `data/${activeSpending.id}/source`,
                           ) + `?year=${getDisplayedPoint(activeSpending).year}`}
                         >
-                          {labels.heroOpenSource}{" "}
+                          {labels.heroOpenSource}:{" "}
+                          {activeSpending.id === "spending-social-protection"
+                            ? labels.socialProtectionHero
+                            : activeSpending.title[locale]}{" "}
                           <span aria-hidden="true">→</span>
                         </a>
                       </div>
@@ -2511,10 +2584,7 @@ export function Dashboard({
                 </a>
               </div>
 
-              <div
-                className="hundred-euro-card"
-                onMouseLeave={() => setActiveSpendingId(null)}
-              >
+              <div className="hundred-euro-card">
                 <div className="hundred-euro-heading">
                   <span>100 €</span>
                   <small>{heroCardLabel}</small>
@@ -2684,7 +2754,7 @@ export function Dashboard({
             </div>
           </div>
 
-          <div className="catalog-tools"><ShareLink locale={locale} key={locationQuery} /><a href={`${basePath}/data/dashboard.csv`} download>{labels.downloadAll} <span aria-hidden="true">↓</span></a></div>
+          <div className="catalog-tools"><ShareLink locale={locale} key={locationQuery} /><a href={`${basePath}/data/dashboard.csv`} download>{labels.downloadAll} (CSV) <span aria-hidden="true">↓</span></a></div>
           <div className="section-filters" role="group" aria-label={labels.navData}>
             <button
               type="button"
@@ -2742,7 +2812,7 @@ export function Dashboard({
                 return (
                   <article key={section.id} style={{ "--topic-color": sectionColors[section.id] } as CSSProperties}>
                     <span className="topic-count">{sectionIndicators.length} {labels.topicIndicators}</span>
-                    <h2>{section.title[locale]}</h2>
+                    <h2><button type="button" className="topic-title-button" onClick={() => setActiveSection(section.id)}>{section.title[locale]}</button></h2>
                     <p>{section.description[locale]}</p>
                     <div className="topic-questions">
                       {topicQuestions[section.id].map((question) => <a key={question.id} href={pageHref(locale, `data/${question.id}`) + `?topic=${section.id}`}>{question.text[locale]} <span aria-hidden="true">→</span></a>)}
@@ -2921,9 +2991,11 @@ export function Dashboard({
           </span>
         </div>
         <nav className="footer-links" aria-label={locale === "it" ? "Informazioni sul progetto" : "Project information"}>
+          <a href={pageHref(locale, "data")}>{labels.navData}</a>
+          <a href={pageHref(locale, "method")}>{labels.navMethod}</a>
+          <a href={pageHref(locale, "sources")}>{labels.navSources}</a>
           <a href={pageHref(locale, "about")}>{labels.navAbout}</a>
           <a href={pageHref(locale, "contribute")}>{labels.navContribute}</a>
-          <a href={pageHref(locale, "method")}>{labels.navMethod}</a>
         </nav>
         <p>
           {labels.latestUpdate} {formatDate(data.generatedAt, locale)}
