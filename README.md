@@ -1,10 +1,10 @@
 # Explainable Italy
 
-**[Italiano](README.it.md) · [English](#english)** | **Website / Sito:** **[Italiano (predefinito)](https://andrea-gentilini.github.io/explainable-italy/) · [English](https://andrea-gentilini.github.io/explainable-italy/en/)**
+You are reading the English version. Switch to **[Italiano](README.it.md)**. 
 
-> **IT** — Explainable Italy rende più facili da leggere, confrontare e verificare i dati ufficiali sull’Italia: **39 indicatori in 6 temi** basati su **20 dataset ufficiali Eurostat** (e EEA per le emissioni), con confronto europeo, serie storica dal 2000 e snapshot originali certificati con SHA256. È un progetto indipendente e open source (versione **1.0.0**), con l’italiano come lingua predefinita del sito e traduzione inglese completa. **[Leggi la guida in italiano →](README.it.md)**
->
-> **EN** — Explainable Italy makes official statistics about Italy easier to read, compare and verify: **39 indicators across 6 themes** built from **20 official Eurostat datasets** (and the EEA for greenhouse-gas emissions), with EU comparisons, historical series since 2000 and SHA256-verified source snapshots. It is an independent, open-source project (version **1.0.0**), with Italian as the default site language and a complete English edition.
+**Website:** **[Italiano](https://andrea-gentilini.github.io/explainable-italy/) · [English](https://andrea-gentilini.github.io/explainable-italy/en/)**
+
+Explainable Italy makes official statistics about Italy easier to read, compare and verify: **39 indicators across 6 themes** built from **20 official Eurostat datasets** (and the EEA for greenhouse-gas emissions), with EU comparisons, historical series since 2000 and SHA256-verified source snapshots. It is an independent, open-source project (version **1.0.0**), with Italian as the default site language and a complete English edition.
 
 ![Explainable Italy dashboard](docs/images/dashboard.jpg)
 
