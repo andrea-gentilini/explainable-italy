@@ -24,7 +24,7 @@ You can open a pull request directly. Describe the change and how you checked it
 
 Puoi aprire direttamente una pull request. Descrivi la modifica e come l’hai verificata. Per dati e definizioni, includi una fonte ufficiale che permetta di controllare il risultato.
 
-Follow the setup instructions in the [English README](README.md#run-locally) or [README italiano](README.it.md). Run the project checks before opening a pull request:
+Follow the setup instructions in the [English README](README.md#run-locally) (linked also from the [Italian guide](README.it.md#per-chi-contribuisce--segnalazioni-codice-e-manutenzione-tecnica)). Run the project checks before opening a pull request:
 
 ```sh
 pnpm check

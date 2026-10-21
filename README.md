@@ -1,33 +1,73 @@
 # Explainable Italy
 
-[Open the website](https://andrea-gentilini.github.io/explainable-italy/en/) · [Leggi in italiano](README.it.md)
+**[Italiano](README.it.md) · [English](#english)** | **Website / Sito:** **[Italiano (predefinito)](https://andrea-gentilini.github.io/explainable-italy/) · [English](https://andrea-gentilini.github.io/explainable-italy/en/)**
 
-Explainable Italy makes official statistics about Italy easier to read and verify. Explore **39 indicators across six themes**, compare Italy with the official EU aggregate and the country median, and follow each number back to its source.
-
-This is an independent, open-source project, not an official institutional website. Version **1.0.0** is available in Italian and English.
+> **IT** — Explainable Italy rende più facili da leggere, confrontare e verificare i dati ufficiali sull’Italia: **39 indicatori in 6 temi** basati su **20 dataset ufficiali Eurostat** (e EEA per le emissioni), con confronto europeo, serie storica dal 2000 e snapshot originali certificati con SHA256. È un progetto indipendente e open source (versione **1.0.0**), con l’italiano come lingua predefinita del sito e traduzione inglese completa. **[Leggi la guida in italiano →](README.it.md)**
+>
+> **EN** — Explainable Italy makes official statistics about Italy easier to read, compare and verify: **39 indicators across 6 themes** built from **20 official Eurostat datasets** (and the EEA for greenhouse-gas emissions), with EU comparisons, historical series since 2000 and SHA256-verified source snapshots. It is an independent, open-source project (version **1.0.0**), with Italian as the default site language and a complete English edition.
 
 ![Explainable Italy dashboard](docs/images/dashboard.jpg)
 
-## Explore
+---
 
-The six themes cover public finances, population, work and the economy, welfare and health, education, and environment and energy. Search, choose a year, inspect the historical series, or open the source page to check definitions, country observations and quality flags. Shareable links preserve the selected year and search context.
+<a id="english"></a>
+
+## Where to start
+
+| Audience | What you need | Where to go |
+| --- | --- | --- |
+| **Visitors & readers** | Browse the 39 indicators, understand comparisons and caveats, check privacy | [Italian site (default)](https://andrea-gentilini.github.io/explainable-italy/) · [English site](https://andrea-gentilini.github.io/explainable-italy/en/) · [How to read the comparisons](#for-visitors--explore-and-read-the-comparisons) |
+| **Data reusers & researchers** | Download CSV/JSON series, verify raw Eurostat snapshots and SHA256 checksums, check reuse terms | [Sources & downloads page](https://andrea-gentilini.github.io/explainable-italy/en/sources/) · [`data/manifest.json`](data/manifest.json) · [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md#english) · [`DATA_LICENSE.md`](DATA_LICENSE.md#english) |
+| **Technical contributors** | Run and test the project locally, inspect the data pipeline, review automated refreshes | [Run locally](#run-locally) · [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`docs/DATA_REFRESH.md`](docs/DATA_REFRESH.md) · [`SECURITY.md`](SECURITY.md#english) |
+
+---
+
+## For visitors — Explore and read the comparisons
+
+The six themes cover **public spending**, **population**, **work and the economy**, **welfare and health**, **education**, and **environment and energy**. You can search in everyday language, pick any available year, inspect the full historical series as a chart or accessible table, and open each indicator’s verification page to inspect definitions, national observations and source quality flags. Shareable URLs preserve the selected year and search context.
 
 For example, open [life expectancy in 2010](https://andrea-gentilini.github.io/explainable-italy/en/data/life-expectancy/?year=2010) and [verify its source and calculation](https://andrea-gentilini.github.io/explainable-italy/en/data/life-expectancy/source/?year=2010).
 
-Download an indicator as CSV, the complete dataset as CSV or JSON, or the exact source snapshot used by the site. Snapshot downloads include a SHA256 fingerprint and acquisition date; links to the current Eurostat API are identified separately.
+### How to read the numbers
 
-## How to read the comparisons
+- **Italy and EU:** the EU value is Eurostat’s official aggregate (`EU27_2020`) with the same scope. It is not a simple unweighted average of countries. When no comparable official EU aggregate exists, the site leaves it blank and explains why.
+- **Country median:** each available Member State has equal weight. The calculation includes Italy and requires at least **24 of the current 27 EU Member States**. Exact country coverage and missing countries are always disclosed. This is the median across countries, not the median European resident.
+- **Years and status:** Italy, the EU aggregate and the country median are always compared in the same year and with the same selection, never before 2000. Indicator cards open by default on the latest Italian observation without an estimated (`e`), provisional (`p`) or forecast (`f`) flag, when available. Newer flagged observations remain visible and selectable so you can compare the same year on both the indicator card and its source page. An unflagged observation can still be revised by the source; EU and national flags are reported separately.
+- **Scope and limits:** the site publishes verified snapshots, not a live feed. Check the observation year, Eurostat dataset update date and project acquisition date shown on every page. Missing years are never interpolated; revisions and methodological breaks (`b`) can affect trends. The project provides neither country rankings nor policy scores.
 
-- **Italy and EU:** the EU value is Eurostat’s official aggregate with the same scope. It is not the simple average of countries. If a comparable aggregate is unavailable, the site leaves it missing.
-- **Country median:** each available country has equal weight. It includes Italy and requires at least **24 of the current 27 EU members**. Coverage and missing countries are shown. This is not the median European resident.
-- **Years and status:** comparisons use the same year and selection, never before 2000. The default is the latest Italian observation without an estimated, provisional or forecast flag, when available. Newer flagged observations remain distinct and selectable. An unflagged value is not guaranteed to be final; EU and national flags are reported separately.
-- **Limits:** these are published snapshots, not live statistics. Check the observation year, source update date and acquisition date. Missing years are not interpolated; revisions and methodological breaks can affect trends. The project provides neither country rankings nor causal conclusions.
+### Independence and privacy
 
-The data comes from **20 official datasets published by Eurostat**. For greenhouse-gas emissions, the original source is the European Environment Agency, based on UNFCCC inventories. Accessible explanations and translations are project paraphrases, with links to the official definitions.
+Explainable Italy is an independent civic project and does not represent or carry endorsement from Eurostat, the European Environment Agency or any other cited institution. Accessible explanations and translations are project paraphrases linked to the official definitions.
 
-Read the [methodology](docs/METHODOLOGY.md), browse the [source manifest](data/manifest.json), or use the website’s [method](https://andrea-gentilini.github.io/explainable-italy/en/method/) and [sources](https://andrea-gentilini.github.io/explainable-italy/en/sources/) pages.
+When `NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN` is set at build time, the site includes the official Cloudflare Web Analytics beacon to measure aggregate visits, consulted pages, referrers, country, device or browser category, and page-load performance. It uses no analytics cookies, advertising, profiling, fingerprinting, cross-site tracking, user accounts or personal data, and does not log search query strings or store visitor IP addresses. Without the token, no beacon is emitted. Theme preference is saved locally in `localStorage`. GitHub Pages may retain standard technical access logs; following an external source link opens that institution’s website.
 
-## Run locally
+---
+
+## For data reusers — Sources, downloads and licences
+
+All indicators are built from **20 official datasets disseminated by Eurostat** (for greenhouse-gas emissions, the original source is the **European Environment Agency** based on UNFCCC inventories).
+
+### Available downloads and provenance
+
+Every figure on the site can be traced and reproduced offline:
+
+- **Per-indicator CSV:** `/data/indicators/<id>.csv` (linked on every indicator card and verification page), containing the historical series for Italy, the official EU aggregate and the EU country median, with units, dataset code, coverage, missing countries and quality flags.
+- **Complete dataset in CSV and JSON:** [`public/data/dashboard.csv`](public/data/dashboard.csv) and [`public/data/dashboard.json`](public/data/dashboard.json) (both downloadable from the [Sources page](https://andrea-gentilini.github.io/explainable-italy/en/sources/)).
+- **Source register (`manifest.json`):** [`data/manifest.json`](data/manifest.json) (exported at `/data/manifest.json`), listing for all 20 datasets the exact API query URL, Eurostat Data Browser URL, official metadata URL, permanent DOI, source update date, project acquisition date, byte size and SHA256 checksum.
+- **Exact raw snapshots:** [`data/raw/eurostat/`](data/raw/eurostat/) (exported byte-for-byte at `/data/raw/eurostat/<code>.json`), containing the exact JSON-stat responses used to compute the published edition. Links to the live Eurostat API are kept separate because upstream datasets can be revised after acquisition.
+
+### Methodology and licensing
+
+- **Methodology (IT / EN):** see [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md) or the website’s [Method](https://andrea-gentilini.github.io/explainable-italy/en/method/) and [Sources](https://andrea-gentilini.github.io/explainable-italy/en/sources/) pages.
+- **Code and data licences (IT / EN):** the [MIT License](LICENSE) covers the repository’s code and original documentation. Underlying statistics remain subject to the Eurostat reuse policy and, where applicable, the EEA reuse terms; see [`DATA_LICENSE.md`](DATA_LICENSE.md). If you cite the project, please also cite the original datasets listed in [`CITATION.cff`](CITATION.cff) and `data/manifest.json`.
+
+---
+
+## For technical contributors — Local development, architecture and maintenance
+
+<a id="run-locally"></a>
+
+### Run locally
 
 Requires **Node.js 22.13 or newer** and **pnpm 11.9.0**.
 
@@ -38,58 +78,56 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open [localhost:3000](http://localhost:3000/) for Italian or [localhost:3000/en/](http://localhost:3000/en/) for English. The committed snapshots are sufficient; no source download is needed to run or build the site.
+Open [localhost:3000](http://localhost:3000/) for Italian (default) or [localhost:3000/en/](http://localhost:3000/en/) for English. The committed snapshots are self-contained; no network fetch from Eurostat is required to run or build the site.
 
 ```sh
-pnpm check                  # Lint, validate data, build, and test exported pages
-pnpm validate:data          # Reproduce values and check snapshots and downloads
-pnpm data:update            # Fetch all official selections; network required
-pnpm data:update:offline    # Rebuild from snapshots, preserving acquisition dates
+pnpm check                  # Lint, validate data, build static export, and test rendered HTML
+pnpm validate:data          # Reproduce all values and verify snapshots, manifest, CSVs and JSON
+pnpm data:update            # Fetch all 20 official Eurostat selections (network required)
+pnpm data:update:offline    # Rebuild processed files from local snapshots, preserving access dates
 ```
 
-An update validates the complete candidate before replacing published files. Review the resulting diff before committing: new observations can also revise earlier years. Offline reconstruction is deterministic with the same code and snapshots.
+`pnpm data:update` stages and validates the entire candidate dataset before replacing any published file. Always inspect the diff before committing, as new releases may also revise earlier years. Offline reconstruction (`pnpm data:update:offline`) is deterministic for a given code and snapshot state.
 
-## Architecture and privacy
+### Architecture
 
-Next.js and React produce a **static export** in `out/`. Search, year selection and charts run in the browser; viewing the site does not require a database or a live statistics API.
+Next.js and React generate a **static export** in `out/`. Search, year selection and interactive charts run client-side without a backend database or live statistics API.
 
 | Location | Contents |
 | --- | --- |
-| `app/` | Bilingual pages, interface and source verification |
-| `scripts/` | Data acquisition, transformations and validation |
-| `data/raw/eurostat/` | Exact, minimal official data selections |
-| `data/processed/` and `data/manifest.json` | Interface data and source provenance |
-| `public/data/` | Downloadable snapshots, JSON and CSV files |
-| `tests/` | Data-pipeline and exported-page regression tests |
+| `app/` | Bilingual routes (`app/(it)/` default Italian, `app/en/` English), UI components and verification views |
+| `scripts/` | Eurostat JSON-stat acquisition, metadata rules, series processing, validation and refresh reporting |
+| `data/raw/eurostat/` | Committed JSON-stat source snapshots |
+| `data/processed/` & `data/manifest.json` | Processed dashboard data and dataset provenance register |
+| `public/data/` | Publicly downloadable snapshots, `manifest.json`, `dashboard.json`, `dashboard.csv` and per-indicator CSVs |
+| `tests/` | Unit and integration tests for the data pipeline, search, readings and exported static HTML |
 
-When `NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN` is set at build time, the site includes the free Cloudflare Web Analytics beacon to measure aggregate visits, consulted pages, referrers, country, device or browser category, and page-load performance. It uses no analytics cookies, advertising, profiling, fingerprinting, cross-site tracking, user accounts or personal data, and does not log search query strings or store visitor IP addresses. Without the token, no beacon is emitted. The theme preference is stored locally in the browser using `localStorage`. GitHub Pages may retain normal technical hosting logs; following an external source link opens that institution’s website.
+### Publish and refresh
 
-## Publish and refresh
-
-Build for the GitHub Pages project path:
+Build and test for the GitHub Pages project base path:
 
 ```sh
 NEXT_PUBLIC_BASE_PATH=/explainable-italy pnpm check
 ```
 
-This includes the production build. To rebuild an already checked edition separately:
+To run only the production static export on an already verified tree:
 
 ```sh
 NEXT_PUBLIC_BASE_PATH=/explainable-italy pnpm build
 ```
 
-See [`.env.example`](.env.example) for the optional public build variables. Set `NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN` in the GitHub Actions repository variables (or local environment) only when you want the static export to include the Cloudflare Web Analytics beacon; never commit a real token to the repository.
+See [`.env.example`](.env.example) for optional public build variables. Set `NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN` in GitHub Actions repository variables (or your local environment) only when you want the exported HTML to include the Cloudflare Web Analytics beacon; never commit a real token to the repository.
 
-The [Verify and deploy workflow](.github/workflows/ci.yml) checks pull requests and `main`. Publication from `main` runs only after the checks and production-dependency audit pass; it deploys the verified static output.
+- **Continuous integration and deployment:** [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on pull requests and `main`. Deployment to GitHub Pages runs from `main` only after `pnpm check` and `pnpm audit --prod --audit-level=high` pass.
+- **Automated weekly data refresh:** [`.github/workflows/refresh-data.yml`](.github/workflows/refresh-data.yml) checks official sources every **Tuesday at 05:23 UTC** (or via manual dispatch), runs the full validation and security suite, and opens or updates a draft pull request only when source data or metadata actually change. Every run records its audit status in [`.github/data-refresh-status.json`](.github/data-refresh-status.json). See [`docs/DATA_REFRESH.md`](docs/DATA_REFRESH.md) for the full operational guide.
 
-The [Propose a data refresh workflow](.github/workflows/refresh-data.yml) checks the official sources every **Tuesday at 05:23 UTC**, or on a manual run. It runs the full validation and security checks before opening or updating a draft pull request. Changes to acquisition or build timestamps alone do not create a data proposal. A maintainer reviews source definitions, revisions and flags before merging an update.
+### Documentation and language policy
 
-Each attempt records its outcome in [the refresh status file](.github/data-refresh-status.json), preserving the last successful check if a later run fails. These audit commits keep the repository active during months without development. Everything runs on GitHub, so no local computer needs to stay on and the local checkout can be deleted. See [how data updates work](docs/DATA_REFRESH.md) for the review process, failure handling and schedule limitations.
+To keep public trust high without duplicating technical maintenance instructions that could drift apart:
 
-## Contribute and reuse
-
-Report a data issue, improve an explanation or translation, or contribute accessibility and code fixes. Include an official source for proposed data changes. See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
-
-The [MIT license](LICENSE) covers the code and original documentation. Third-party data retains its source terms; see [DATA_LICENSE.md](DATA_LICENSE.md). Eurostat and EEA are not responsible for the project’s translations, summaries or calculated medians.
+- **Website:** Italian by default (`/`) and complete in English (`/en/`), with no language popups or forced redirects.
+- **GitHub entry point:** bilingual header and orientation in `README.md` (English primary) paired with [`README.it.md`](README.it.md) (Italian guide for visitors, data reusers and contributors).
+- **Methodology, data reuse, roadmap and security:** bilingual (Italian and English) in [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md), [`DATA_LICENSE.md`](DATA_LICENSE.md), [`docs/ROADMAP.md`](docs/ROADMAP.md), [`SECURITY.md`](SECURITY.md) and [`CONTRIBUTING.md`](CONTRIBUTING.md).
+- **Technical maintenance and automation internals:** single-language in English ([`README.md#for-technical-contributors--local-development-architecture-and-maintenance`](#for-technical-contributors--local-development-architecture-and-maintenance) and [`docs/DATA_REFRESH.md`](docs/DATA_REFRESH.md)).
 
 Created by [Andrea Gentilini](https://github.com/andrea-gentilini).
