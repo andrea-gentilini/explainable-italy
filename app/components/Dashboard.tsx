@@ -195,15 +195,15 @@ const copy = {
     navSources: "Fonti",
     navAbout: "Il progetto",
     navContribute: "Contribuisci",
-    snapshotTitle: "In evidenza",
+    snapshotTitle: "L’Italia attraverso i dati ufficiali",
     snapshotBody:
-      "Alcuni punti di partenza per esplorare i dati sull’Italia. Apri una scheda per seguire il dato nel tempo e confrontarlo con l’Unione europea.",
+      "Qui trovi statistiche pubbliche su conti pubblici, popolazione, lavoro, welfare, istruzione e ambiente, confrontate con l’Unione europea e verificabili fino alla fonte. L’obiettivo è un’informazione accessibile, completa e imparziale.",
     snapshotGdp: "PIL per abitante",
     snapshotGdpUnit: "Indice · UE = 100",
     snapshotMedianAge: "Età mediana della popolazione",
     snapshotLifeExpectancy: "Speranza di vita alla nascita",
     snapshotEmployment: "Occupazione, 20–64 anni",
-    snapshotOpen: "Leggi il dato",
+    snapshotOpen: "Apri l’esempio",
     exploreTitle: "Per approfondire",
     exploreBody:
       "La guida spiega come leggere i confronti. Le fonti permettono di ripercorrere ogni passaggio.",
@@ -295,8 +295,7 @@ const copy = {
     trendInteraction: "Clicca sulla barra di un anno per vedere i dati di quel periodo.",
     trendKeyboardHelp: "Con la tastiera, usa le frecce destra e sinistra per scegliere un anno.",
     yearUnflagged: "nessun contrassegno della fonte",
-    edition: "Edizione del",
-    editionNote: "Gli indicatori si riferiscono ad anni diversi. L’anno è indicato accanto a ogni numero.",
+    snapshotExamples: "Quattro esempi per iniziare",
     browseAll: "Vedi tutti gli indicatori",
     snapshotDownload: "Scarica lo snapshot utilizzato",
     snapshotHash: "Impronta SHA-256 dello snapshot",
@@ -460,15 +459,15 @@ const copy = {
     navSources: "Sources",
     navAbout: "About",
     navContribute: "Contribute",
-    snapshotTitle: "In focus",
+    snapshotTitle: "Italy through official data",
     snapshotBody:
-      "A few starting points for exploring Italy through data. Open an indicator to follow it over time and compare it with the European Union.",
+      "Public statistics on public finances, population, work, welfare, education and the environment, compared with the European Union and traceable to the source. The goal is accessible, complete and impartial information.",
     snapshotGdp: "GDP per person",
     snapshotGdpUnit: "Index · EU = 100",
     snapshotMedianAge: "Median age of the population",
     snapshotLifeExpectancy: "Life expectancy at birth",
     snapshotEmployment: "Employment, ages 20–64",
-    snapshotOpen: "Read the figure",
+    snapshotOpen: "Open example",
     exploreTitle: "Explore further",
     exploreBody:
       "The guide explains how to read the comparisons. The sources let you trace each step.",
@@ -560,8 +559,7 @@ const copy = {
     trendInteraction: "Click a year’s bar to see the figures for that period.",
     trendKeyboardHelp: "Use the left and right arrow keys to choose a year by keyboard.",
     yearUnflagged: "no source flags",
-    edition: "Edition dated",
-    editionNote: "The indicators refer to different years. The year is shown beside each figure.",
+    snapshotExamples: "Four examples to start with",
     browseAll: "View all indicators",
     snapshotDownload: "Download the snapshot used",
     snapshotHash: "Snapshot SHA-256 fingerprint",
@@ -2480,7 +2478,12 @@ export function Dashboard({
                 </div>
               </div>
 
-              <div className="edition-strip"><span>{labels.edition} <time dateTime={data.generatedAt}>{formatDate(data.generatedAt, locale)}</time></span><p>{labels.editionNote}</p></div>
+              <div className="snapshot-examples-bar">
+                <span>{labels.snapshotExamples}</span>
+                <a className="snapshot-explore" href={pageHref(locale, "data") + "?topic=all"}>
+                  {labels.browseAll} ({data.indicators.length}) <span aria-hidden="true">→</span>
+                </a>
+              </div>
               <div className="snapshot-grid">
                 {snapshotIndicators.map((indicator) => (
                   <a
@@ -2510,16 +2513,12 @@ export function Dashboard({
                           : labels.noAggregate}
                     </small>
                     <p className="snapshot-definition">{snapshotDefinitions[indicator.id][locale]}</p>
-                    {indicator.newerEstimate ? <small className="snapshot-newer">{locale === "it" ? "Disponibile anche" : "Also available"}{" "}{indicator.newerEstimate.year}, {statusDescription(indicator.newerEstimate.status, locale, false)}</small> : null}
                     <em>
                       {labels.snapshotOpen} <span aria-hidden="true">→</span>
                     </em>
                   </a>
                 ))}
               </div>
-              <a className="snapshot-explore" href={pageHref(locale, "data") + "?topic=all"}>
-                {labels.browseAll} ({data.indicators.length}) <span aria-hidden="true">→</span>
-              </a>
             </section>
 
             <section className="question-directory" aria-labelledby="questions-title">
