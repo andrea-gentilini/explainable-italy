@@ -342,8 +342,8 @@ const datasetSpecs = [
         selector: { indic_de: "OLDDEP1" },
         title: { it: "Indice di dipendenza degli anziani", en: "Old age dependency ratio" },
         plain: {
-          it: "Quante persone di 65 anni o più ci sono ogni 100 persone tra 15 e 64 anni. Non misura quante persone lavorano davvero.",
-          en: "How many people aged 65 or over there are for every 100 people aged 15 to 64. It does not measure how many people actually work.",
+          it: "Il numero di residenti di 65 anni o più ogni 100 residenti in età lavorativa (15–64 anni). Confronta solo le fasce d’età, non i pensionati con gli occupati.",
+          en: "The number of residents aged 65 or over for every 100 residents of traditional working age (15 to 64). It compares age groups only, not pensioners with employed people.",
         },
         technical: {
           it: "Rapporto tra popolazione di 65 anni o più e popolazione tra 15 e 64 anni, moltiplicato per 100.",
