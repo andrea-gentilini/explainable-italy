@@ -1,6 +1,7 @@
-# Explainable Italy — Guida in italiano
+# Explainable Italy
 
-**[Italiano](#per-chi-visita-il-sito--esplorare-e-leggere-i-confronti) · [English (README.md)](README.md)** | **Sito web:** **[Apri il sito in italiano (predefinito)](https://andrea-gentilini.github.io/explainable-italy/) · [English version](https://andrea-gentilini.github.io/explainable-italy/en/)**
+Stai leggendo la versione in italiano. Switch to **[English](README.md)**.
+**Sito web:** **[Italiano](https://andrea-gentilini.github.io/explainable-italy/) · [English](https://andrea-gentilini.github.io/explainable-italy/en/)**
 
 Explainable Italy rende più facili da leggere, confrontare e verificare i dati ufficiali sull’Italia. Raccoglie **39 indicatori in 6 temi** a partire da **20 dataset ufficiali Eurostat** (e dell’Agenzia europea dell’ambiente per le emissioni di gas serra), affiancando a ogni numero il confronto con l’Unione europea, la serie storica dal 2000 e lo snapshot esatto usato per il calcolo.
 
