@@ -374,7 +374,7 @@ const copy = {
     sourceOfficialDefinition: "Apri la fonte della definizione",
     sourceDoi: "Apri l’identificatore permanente del dataset",
     dataStatusBreak:
-      "La fonte segnala un cambio nella serie negli anni {years}. Il confronto attraverso questi passaggi richiede cautela.",
+      "La fonte segnala un cambio nella serie {years}. Il confronto attraverso questi passaggi richiede cautela.",
     dataNotesTitle: "Da sapere prima del confronto",
     statusProvisional: "provvisorio",
     statusEstimated: "stimato",
@@ -897,6 +897,19 @@ function formatEuro(amount: number, locale: Locale, digits = 1): string {
     maximumFractionDigits: digits,
   }).format(amount);
   return locale === "it" ? `${formatted} €` : `€${formatted}`;
+}
+
+function formatYearsList(years: number[], locale: Locale): string {
+  if (years.length === 0) return "";
+  if (locale === "it") {
+    if (years.length === 1) return `nel ${years[0]}`;
+    return new Intl.ListFormat("it-IT", { style: "long", type: "conjunction" }).format(
+      years.map((y) => `nel ${y}`),
+    );
+  }
+  return new Intl.ListFormat("en-GB", { style: "long", type: "conjunction" }).format(
+    years.map(String),
+  );
 }
 
 const sourceDimensionLabels: Record<Locale, Record<string, string>> = {
@@ -1555,7 +1568,7 @@ function IndicatorCard({
                   <p className="status-note">
                     {labels.dataStatusBreak.replace(
                       "{years}",
-                      breakYears.join(", "),
+                      formatYearsList(breakYears, locale),
                     )}
                   </p>
                 ) : null}
@@ -1677,8 +1690,16 @@ function SourceVerification({
         countryList(displayedPoint.missingCountries, locale),
       )
     : null;
-  const countryObservations = displayedPoint.countries ?? [];
-  const flaggedCountries = displayedPoint.countryStatuses;
+  const countryObservations = [...(displayedPoint.countries ?? [])].sort((a, b) => {
+    const nameA = countryNames[locale][a.geo] ?? a.geo;
+    const nameB = countryNames[locale][b.geo] ?? b.geo;
+    return nameA.localeCompare(nameB, locale === "it" ? "it" : "en");
+  });
+  const flaggedCountries = [...displayedPoint.countryStatuses].sort((a, b) => {
+    const nameA = countryNames[locale][a.geo] ?? a.geo;
+    const nameB = countryNames[locale][b.geo] ?? b.geo;
+    return nameA.localeCompare(nameB, locale === "it" ? "it" : "en");
+  });
   const displayedValue = formatValue(
     displayedPoint.italy,
     indicator.unitKey,
