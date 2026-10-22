@@ -218,7 +218,10 @@ for (const locale of locales) {
       requireLink(source, indicator.definitionSourceUrl, `${sourceRoute}: official definition`);
       requireLink(card, indicator.definitionSourceUrl, `${indicatorRoute}: definition attribution`);
       assert(source.text.includes(indicator.source.datasetCode), `${sourceRoute}: dataset identifier`);
-      assert(source.text.includes(indicator.source.originalInstitution), `${sourceRoute}: original institution`);
+      const expectedInstitution = locale === "it" && indicator.source.originalInstitution.includes("European Environment Agency")
+        ? "Agenzia europea dell’ambiente (EEA)"
+        : indicator.source.originalInstitution;
+      assert(source.text.includes(expectedInstitution), `${sourceRoute}: original institution`);
       assert(card.text.includes(indicator.plain[locale]), `${indicatorRoute}: readable definition`);
       assert(card.text.includes(indicator.technical[locale]), `${indicatorRoute}: precise definition`);
       assert.match(card.text, locale === "it" ? /parafrasi del progetto/ : /project paraphrases/, `${indicatorRoute}: distinguishes the project's wording from the official definition`);
@@ -647,7 +650,10 @@ for (const locale of locales) {
       const sourceBox = card.links.find((link) => hasClass(link, "source-box"));
       assert(sourceBox, `${cardRoute}: source box is a clickable link`);
       if (indicator.source.originalInstitution !== indicator.source.institution) {
-        assert(sourceBox.text.includes(indicator.source.originalInstitution), `${cardRoute}: source box discloses original institution`);
+        const expectedInstitution = locale === "it" && indicator.source.originalInstitution.includes("European Environment Agency")
+          ? "Agenzia europea dell’ambiente (EEA)"
+          : indicator.source.originalInstitution;
+        assert(sourceBox.text.includes(expectedInstitution), `${cardRoute}: source box discloses original institution`);
       }
       const methodologyUrl = indicator.source.metadataUrl ?? indicator.definitionSourceUrl;
       requireLink(card, methodologyUrl, `${cardRoute}: card actions link to official methodology`);

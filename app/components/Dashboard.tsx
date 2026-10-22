@@ -882,6 +882,23 @@ function formatBytes(bytes: number, locale: Locale) {
   return `${new Intl.NumberFormat(locale === "it" ? "it-IT" : "en-GB").format(kb)} KB`;
 }
 
+function formatOriginalInstitution(name: string, locale: Locale): string {
+  if (name.includes("European Environment Agency")) {
+    return locale === "it"
+      ? "Agenzia europea dell’ambiente (EEA), su dati d’inventario UNFCCC"
+      : name;
+  }
+  return name;
+}
+
+function formatEuro(amount: number, locale: Locale, digits = 1): string {
+  const formatted = new Intl.NumberFormat(locale === "it" ? "it-IT" : "en-GB", {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(amount);
+  return locale === "it" ? `${formatted} €` : `€${formatted}`;
+}
+
 const sourceDimensionLabels: Record<Locale, Record<string, string>> = {
   it: {
     freq: "Frequenza",
@@ -1590,7 +1607,7 @@ function IndicatorCard({
                 <strong>
                   {indicator.source.institution}
                   {indicator.source.originalInstitution !== indicator.source.institution
-                    ? ` (${indicator.source.originalInstitution})`
+                    ? ` (${formatOriginalInstitution(indicator.source.originalInstitution, locale)})`
                     : ""}, {indicator.source.datasetCode}
                 </strong>
               </div>
@@ -1761,7 +1778,7 @@ function SourceVerification({
             indicator.source.institution ? (
               <div>
                 <dt>{labels.originalInstitution}</dt>
-                <dd>{indicator.source.originalInstitution}</dd>
+                <dd>{formatOriginalInstitution(indicator.source.originalInstitution, locale)}</dd>
               </div>
             ) : null}
             {selection.map((entry) => (
@@ -2067,11 +2084,7 @@ function SocialProtectionDetail({
             </a>
           </h3>
           <p className="related-detail-value">
-            {new Intl.NumberFormat(locale === "it" ? "it-IT" : "en-GB", {
-              minimumFractionDigits: 1,
-              maximumFractionDigits: 1,
-            }).format(oldAgePoint.italy)}
-            €
+            {formatEuro(oldAgePoint.italy, locale, 1)}
             <small>
               {locale === "it" ? "su 100" : "out of 100"} ·{" "}
               {oldAgePoint.year} ·{" "}
@@ -2242,13 +2255,6 @@ export function Dashboard({
     ? getDisplayedPoint(spendingBreakdown[0])
     : null;
   const spendingYear = spendingPoint?.year;
-  const spendingNumberFormatter = new Intl.NumberFormat(
-    locale === "it" ? "it-IT" : "en-GB",
-    {
-      minimumFractionDigits: 1,
-      maximumFractionDigits: 1,
-    },
-  );
   const snapshotIds = [
     "gdp-per-capita-pps",
     "median-age",
@@ -2599,7 +2605,7 @@ export function Dashboard({
 
               <div className="hundred-euro-card">
                 <div className="hundred-euro-heading">
-                  <span>100 €</span>
+                  <span>{locale === "it" ? "100 €" : "€100"}</span>
                   <small>{heroCardLabel}</small>
                 </div>
 
@@ -2626,10 +2632,11 @@ export function Dashboard({
                     >
                       <span className="spending-donut-center">
                         <strong>
-                          {spendingNumberFormatter.format(
+                          {formatEuro(
                             getDisplayedPoint(activeSpending).italy,
+                            locale,
+                            1,
                           )}
-                          €
                         </strong>
                         <small>
                           {activeSpending.id ===
@@ -2664,10 +2671,11 @@ export function Dashboard({
                             : indicator.title[locale]}
                         </span>
                         <strong>
-                          {spendingNumberFormatter.format(
+                          {formatEuro(
                             getDisplayedPoint(indicator).italy,
+                            locale,
+                            1,
                           )}
-                          €
                         </strong>
                       </a>
                     ))}
@@ -2942,7 +2950,7 @@ export function Dashboard({
                     <small>
                       {source.institution}
                       {source.originalInstitution !== source.institution
-                        ? ` (${labels.originalInstitution}: ${source.originalInstitution})`
+                        ? ` (${labels.originalInstitution}: ${formatOriginalInstitution(source.originalInstitution, locale)})`
                         : ""}{" "}
                       · {labels.sourceUpdated}: {formatDate(source.sourceUpdatedAt, locale)}
                     </small>
