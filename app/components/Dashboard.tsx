@@ -197,13 +197,13 @@ const copy = {
     navContribute: "Contribuisci",
     snapshotTitle: "L’Italia attraverso i dati ufficiali",
     snapshotBody:
-      "Qui trovi statistiche pubbliche su conti pubblici, popolazione, lavoro, welfare, istruzione e ambiente, confrontate con l’Unione europea e verificabili fino alla fonte. L’obiettivo è un’informazione accessibile, completa e imparziale.",
+      "Qui trovi statistiche pubbliche su conti pubblici, popolazione, lavoro, welfare, istruzione e ambiente, confrontate con l’Unione europea e verificabili fino alla fonte. L’obiettivo è un’informazione accessibile, verificabile e imparziale.",
     snapshotGdp: "PIL per abitante",
     snapshotGdpUnit: "Indice · UE = 100",
     snapshotMedianAge: "Età mediana della popolazione",
     snapshotLifeExpectancy: "Speranza di vita alla nascita",
     snapshotEmployment: "Occupazione, 20–64 anni",
-    snapshotOpen: "Apri l’esempio",
+    snapshotOpen: "Apri la scheda",
     exploreTitle: "Per approfondire",
     exploreBody:
       "La guida spiega come leggere i confronti. Le fonti permettono di ripercorrere ogni passaggio.",
@@ -461,13 +461,13 @@ const copy = {
     navContribute: "Contribute",
     snapshotTitle: "Italy through official data",
     snapshotBody:
-      "Public statistics on public finances, population, work, welfare, education and the environment, compared with the European Union and traceable to the source. The goal is accessible, complete and impartial information.",
+      "Public statistics on public finances, population, work, welfare, education and the environment, compared with the European Union and traceable to the source. The goal is accessible, verifiable and impartial information.",
     snapshotGdp: "GDP per person",
     snapshotGdpUnit: "Index · EU = 100",
     snapshotMedianAge: "Median age of the population",
     snapshotLifeExpectancy: "Life expectancy at birth",
     snapshotEmployment: "Employment, ages 20–64",
-    snapshotOpen: "Open example",
+    snapshotOpen: "Open indicator",
     exploreTitle: "Explore further",
     exploreBody:
       "The guide explains how to read the comparisons. The sources let you trace each step.",
@@ -746,33 +746,33 @@ const topicQuestions: Record<string, Array<{ id: string; text: LocalizedText }>>
   ],
   "people": [
     {
-      "id": "median-age",
-      "text": {
-        "it": "Qual è l’età mediana della popolazione?",
-        "en": "What is the median age of the population?"
-      }
-    },
-    {
       "id": "population-65-plus",
       "text": {
         "it": "Su 100 residenti, quanti hanno almeno 65 anni?",
         "en": "What percentage of residents are aged 65 or over?"
       }
+    },
+    {
+      "id": "median-age",
+      "text": {
+        "it": "Qual è l’età mediana della popolazione?",
+        "en": "What is the median age of the population?"
+      }
     }
   ],
   "economy": [
-    {
-      "id": "employment-rate",
-      "text": {
-        "it": "Su 100 persone tra 20 e 64 anni, quante lavorano?",
-        "en": "What percentage of people aged 20 to 64 are in work?"
-      }
-    },
     {
       "id": "inflation",
       "text": {
         "it": "Come sono cambiati i prezzi al consumo?",
         "en": "How have consumer prices changed?"
+      }
+    },
+    {
+      "id": "employment-rate",
+      "text": {
+        "it": "Su 100 persone tra 20 e 64 anni, quante lavorano?",
+        "en": "What percentage of people aged 20 to 64 are in work?"
       }
     }
   ],
@@ -2479,7 +2479,9 @@ export function Dashboard({
               </div>
 
               <div className="snapshot-examples-bar">
-                <span>{labels.snapshotExamples}</span>
+                <a className="snapshot-examples-label" href={pageHref(locale, "method") + "#indicator-selection"}>
+                  {labels.snapshotExamples}
+                </a>
                 <a className="snapshot-explore" href={pageHref(locale, "data") + "?topic=all"}>
                   {labels.browseAll} ({data.indicators.length}) <span aria-hidden="true">→</span>
                 </a>
