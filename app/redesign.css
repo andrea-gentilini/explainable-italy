@@ -2732,18 +2732,10 @@ button, input, select, summary { touch-action: manipulation; }
   gap: 0.5rem 1.5rem;
   margin-bottom: 0.75rem;
 }
-.snapshot-examples-bar > span,
-.snapshot-examples-bar > .snapshot-examples-label {
+.snapshot-examples-bar > span {
   color: var(--muted);
   font-size: 0.85rem;
   font-weight: 650;
-  text-decoration: none;
-}
-.snapshot-examples-bar > .snapshot-examples-label:hover,
-.snapshot-examples-bar > .snapshot-examples-label:focus-visible {
-  color: var(--accent-strong);
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
 }
 .catalog-tools, .indicator-toolbar {
   display: flex;

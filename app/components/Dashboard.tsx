@@ -197,7 +197,7 @@ const copy = {
     navContribute: "Contribuisci",
     snapshotTitle: "L’Italia attraverso i dati ufficiali",
     snapshotBody:
-      "Qui trovi statistiche pubbliche su conti pubblici, popolazione, lavoro, welfare, istruzione e ambiente, confrontate con l’Unione europea e verificabili fino alla fonte. L’obiettivo è un’informazione accessibile, verificabile e imparziale.",
+      "Qui trovi statistiche pubbliche su conti pubblici, popolazione, lavoro, welfare, istruzione e ambiente, confrontate con l’Unione europea e tracciabili fino alla fonte. L’obiettivo è un’informazione accessibile, verificabile e imparziale.",
     snapshotGdp: "PIL per abitante",
     snapshotGdpUnit: "Indice · UE = 100",
     snapshotMedianAge: "Età mediana della popolazione",
@@ -317,7 +317,7 @@ const copy = {
     technicalDefinition: "Selezione tecnica utilizzata",
     definitionAttribution:
       "Le spiegazioni sono parafrasi del progetto basate sulle definizioni ufficiali.",
-    definitionSource: "Apri la metodologia Eurostat (in inglese)",
+    definitionSource: "Apri la fonte della definizione (in inglese)",
     trend: "Andamento dell’Italia",
     from: "dal",
     source: "Fonte",
@@ -371,7 +371,7 @@ const copy = {
       "Qui trovi la risposta API corrente, la copia utilizzata e i riferimenti per riprodurre il dato.",
     sourceBrowser: "Apri il dataset nel Data Browser Eurostat",
     sourceRaw: "Consulta i dati correnti nell’API",
-    sourceOfficialDefinition: "Metodologia Eurostat (in inglese)",
+    sourceOfficialDefinition: "Apri la fonte della definizione (in inglese)",
     sourceDoi: "Apri l’identificatore permanente del dataset",
     dataStatusBreak:
       "La fonte segnala un cambio nella serie {years}. Il confronto attraverso questi passaggi richiede cautela.",
@@ -581,7 +581,7 @@ const copy = {
     technicalDefinition: "Technical selection used",
     definitionAttribution:
       "These explanations are project paraphrases based on official definitions.",
-    definitionSource: "Open Eurostat methodology",
+    definitionSource: "Open the definition source",
     trend: "Italy over time",
     from: "from",
     source: "Source",
@@ -635,7 +635,7 @@ const copy = {
       "Here you can find the current API response, the copy used and references for reproducing the figure.",
     sourceBrowser: "Open the dataset in Eurostat Data Browser",
     sourceRaw: "View current data in the API",
-    sourceOfficialDefinition: "Eurostat methodology",
+    sourceOfficialDefinition: "Open the definition source",
     sourceDoi: "Open the dataset’s permanent identifier",
     dataStatusBreak:
       "The source records a change in the series in {years}. Comparisons across these changes need care.",
@@ -1152,7 +1152,11 @@ function countryList(codes: string[], locale: Locale) {
   return new Intl.ListFormat(locale === "it" ? "it-IT" : "en-GB", {
     style: "long",
     type: "conjunction",
-  }).format(codes.map((code) => countryNames[locale][code] ?? code));
+  }).format(
+    codes
+      .map((code) => countryNames[locale][code] ?? code)
+      .sort((a, b) => a.localeCompare(b, locale === "it" ? "it" : "en")),
+  );
 }
 
 function statusDescription(
@@ -1421,7 +1425,7 @@ function TrendBars({ indicator, locale, selectedYear }: {
     <>
       <div className="trend-reading" aria-live="polite"><span>{labels.italy} · {selected.year}</span><strong>{value(selected.italy)}</strong></div>
       <p className="trend-interaction" id={`trend-help-${indicator.id}`}>{labels.trendInteraction}<span className="visually-hidden"> {labels.trendKeyboardHelp}</span></p>
-      <p className="trend-scale">{labels.trendScale}: {value(minimum)} – {value(maximum)}</p>
+      <p className="trend-scale">{labels.trendScale}: {formatRange(minimum, maximum, indicator.unitKey, indicator.precision, locale)}</p>
       <div className="trend-scroll" ref={scrollRef} role="region" aria-label={`${labels.trend}. ${rangeLabel}`}>
         <div className="trend-chart" role="group" aria-label={labels.trend} aria-describedby={`trend-help-${indicator.id}`} style={{ minWidth: `${(lastYear - firstYear + 1) * 1.8}rem`, gridTemplateColumns: `repeat(${lastYear - firstYear + 1}, minmax(0, 1fr))` }}>
           <span className="trend-zero" style={{ top: `${zeroPosition}%` }} aria-hidden="true" />
@@ -1621,8 +1625,21 @@ function IndicatorCard({
               <summary>{labels.understand}</summary>
               <h3>{labels.technicalDefinition}</h3>
               <p>{indicator.technical[locale]}</p>
-              <p className="definition-attribution">{labels.definitionAttribution}{" "}
-                {indicator.definitionSourceUrl ? <a href={indicator.definitionSourceUrl} target="_blank" rel="noreferrer">{labels.definitionSource} <span aria-hidden="true">↗</span></a> : null}
+              <p className="definition-attribution">
+                {labels.definitionAttribution}
+                {indicator.definitionSourceUrl &&
+                indicator.definitionSourceUrl !== metadataHref ? (
+                  <>
+                    {" "}
+                    <a
+                      href={indicator.definitionSourceUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {labels.definitionSource} <span aria-hidden="true">↗</span>
+                    </a>
+                  </>
+                ) : null}
               </p>
             </details>
 
@@ -1635,7 +1652,7 @@ function IndicatorCard({
                 <strong>
                   {indicator.source.institution}
                   {indicator.source.originalInstitution !== indicator.source.institution
-                    ? ` (${formatOriginalInstitution(indicator.source.originalInstitution, locale)})`
+                    ? ` · ${labels.originalInstitution}: ${formatOriginalInstitution(indicator.source.originalInstitution, locale)}`
                     : ""}, {indicator.source.datasetCode}
                 </strong>
               </div>
@@ -1695,6 +1712,8 @@ function SourceVerification({
   const labels = copy[locale];
   const displayedPoint = selectedPoint(indicator, year);
   const selection = getSourceSelection(indicator, locale);
+  const sourceMetadataHref =
+    indicator.source.metadataUrl ?? indicator.definitionSourceUrl;
   const coverageLabel = fillCount(
     labels.sourceMedianCalculated,
     displayedPoint.coverage,
@@ -2017,7 +2036,8 @@ function SourceVerification({
           >
             {labels.sourceRaw} <span aria-hidden="true">↗</span>
           </a>
-          {indicator.definitionSourceUrl ? (
+          {indicator.definitionSourceUrl &&
+          indicator.definitionSourceUrl !== sourceMetadataHref ? (
             <a
               href={indicator.definitionSourceUrl}
               target="_blank"
@@ -2027,10 +2047,9 @@ function SourceVerification({
               <span aria-hidden="true">↗</span>
             </a>
           ) : null}
-          {indicator.source.metadataUrl &&
-          indicator.source.metadataUrl !== indicator.definitionSourceUrl ? (
+          {sourceMetadataHref ? (
             <a
-              href={indicator.source.metadataUrl}
+              href={sourceMetadataHref}
               target="_blank"
               rel="noreferrer"
             >
@@ -2521,9 +2540,7 @@ export function Dashboard({
               </div>
 
               <div className="snapshot-examples-bar">
-                <a className="snapshot-examples-label" href={pageHref(locale, "method") + "#indicator-selection"}>
-                  {labels.snapshotExamples}
-                </a>
+                <span>{labels.snapshotExamples}</span>
                 <a className="snapshot-explore" href={pageHref(locale, "data") + "?topic=all"}>
                   {labels.browseAll} ({data.indicators.length}) <span aria-hidden="true">→</span>
                 </a>
@@ -2986,7 +3003,7 @@ export function Dashboard({
                     <small>
                       {source.institution}
                       {source.originalInstitution !== source.institution
-                        ? ` (${labels.originalInstitution}: ${formatOriginalInstitution(source.originalInstitution, locale)})`
+                        ? ` · ${labels.originalInstitution}: ${formatOriginalInstitution(source.originalInstitution, locale)}`
                         : ""}{" "}
                       · {labels.sourceUpdated}: {formatDate(source.sourceUpdatedAt, locale)}
                     </small>
