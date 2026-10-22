@@ -317,7 +317,7 @@ const copy = {
     technicalDefinition: "Selezione tecnica utilizzata",
     definitionAttribution:
       "Le spiegazioni sono parafrasi del progetto basate sulle definizioni ufficiali.",
-    definitionSource: "Apri la metodologia alla base della definizione",
+    definitionSource: "Apri la metodologia Eurostat (in inglese)",
     trend: "Andamento dell’Italia",
     from: "dal",
     source: "Fonte",
@@ -326,7 +326,7 @@ const copy = {
     originalInstitution: "Fonte originaria",
     dataset: "Dataset",
     openData: "Verifica fonte e calcolo",
-    openMetadata: "Leggi la metodologia Eurostat",
+    openMetadata: "Leggi la metodologia Eurostat (in inglese)",
     downloadIndicator: "Scarica questo indicatore",
     sourcePageEyebrow: "Fonte verificabile",
     sourcePageTitle: "Da dove viene questo numero",
@@ -357,7 +357,7 @@ const copy = {
     sourceItalyStatus: "Stato del dato italiano",
     sourceEuStatus: "Stato dell’aggregato UE",
     sourceCountryFlags: "Paesi con contrassegni",
-    sourceNoFlags: "Nessun contrassegno associato al dato",
+    sourceNoFlags: "Nessun contrassegno della fonte",
     sourceCountryValues: "Vedi i Paesi usati per la mediana",
     sourceCountryValuesBody:
       "Valori ufficiali dell’anno selezionato. Il sito li ordina soltanto per calcolare la mediana.",
@@ -371,7 +371,7 @@ const copy = {
       "Qui trovi la risposta API corrente, la copia utilizzata e i riferimenti per riprodurre il dato.",
     sourceBrowser: "Apri il dataset nel Data Browser Eurostat",
     sourceRaw: "Consulta i dati correnti nell’API",
-    sourceOfficialDefinition: "Apri la fonte della definizione",
+    sourceOfficialDefinition: "Metodologia Eurostat (in inglese)",
     sourceDoi: "Apri l’identificatore permanente del dataset",
     dataStatusBreak:
       "La fonte segnala un cambio nella serie {years}. Il confronto attraverso questi passaggi richiede cautela.",
@@ -404,7 +404,7 @@ const copy = {
       "I dati provengono da Eurostat. Per le emissioni, la fonte originaria è l’Agenzia europea dell’ambiente. In ogni scheda trovi il collegamento alla fonte e la copia esatta usata dal sito.",
     sourceCount: "dataset ufficiali",
     sourceDirectory: "Consulta l’elenco completo",
-    localSize: "Dati scaricabili, fonti verificabili",
+    localSize: "Snapshot e serie storiche complete",
     manifest: "Apri il registro delle fonti",
     downloadAll: "Scarica tutti i dati in CSV",
     aboutEyebrow: "Il progetto",
@@ -581,7 +581,7 @@ const copy = {
     technicalDefinition: "Technical selection used",
     definitionAttribution:
       "These explanations are project paraphrases based on official definitions.",
-    definitionSource: "Open the methodology behind the definition",
+    definitionSource: "Open Eurostat methodology",
     trend: "Italy over time",
     from: "from",
     source: "Source",
@@ -621,7 +621,7 @@ const copy = {
     sourceItalyStatus: "Status of the Italian value",
     sourceEuStatus: "Status of the EU aggregate",
     sourceCountryFlags: "Countries with flags",
-    sourceNoFlags: "No flag attached to the observation",
+    sourceNoFlags: "No source flags",
     sourceCountryValues: "See the countries used for the median",
     sourceCountryValuesBody:
       "Official values for the selected year. The site only orders them to calculate the median.",
@@ -635,7 +635,7 @@ const copy = {
       "Here you can find the current API response, the copy used and references for reproducing the figure.",
     sourceBrowser: "Open the dataset in Eurostat Data Browser",
     sourceRaw: "View current data in the API",
-    sourceOfficialDefinition: "Open the definition source",
+    sourceOfficialDefinition: "Eurostat methodology",
     sourceDoi: "Open the dataset’s permanent identifier",
     dataStatusBreak:
       "The source records a change in the series in {years}. Comparisons across these changes need care.",
@@ -668,7 +668,7 @@ const copy = {
       "The data come from Eurostat. For emissions, the original source is the European Environment Agency. Each indicator links to its source and the exact copy used by the site.",
     sourceCount: "official datasets",
     sourceDirectory: "Browse the full directory",
-    localSize: "Downloadable data, verifiable sources",
+    localSize: "Snapshots and full time series",
     manifest: "Open the source register",
     downloadAll: "Download all data as CSV",
     aboutEyebrow: "About",
@@ -910,6 +910,21 @@ function formatYearsList(years: number[], locale: Locale): string {
   return new Intl.ListFormat("en-GB", { style: "long", type: "conjunction" }).format(
     years.map(String),
   );
+}
+
+function formatRange(
+  minimum: number,
+  maximum: number,
+  unitKey: string,
+  precision: number,
+  locale: Locale,
+): string {
+  const minNum = new Intl.NumberFormat(locale === "it" ? "it-IT" : "en-GB", {
+    minimumFractionDigits: precision,
+    maximumFractionDigits: precision,
+  }).format(minimum);
+  const maxFormatted = formatValue(maximum, unitKey, precision, locale);
+  return `${minNum} – ${maxFormatted}`;
 }
 
 const sourceDimensionLabels: Record<Locale, Record<string, string>> = {
@@ -1321,7 +1336,7 @@ function ComparisonPlot({
           </strong>
         </div>
       ))}
-      {visual ? <p className="comparison-scale">{locale === "it" ? "Scala comune" : "Shared scale"}: {formatValue(minimum, indicator.unitKey, indicator.precision, locale)} – {formatValue(maximum, indicator.unitKey, indicator.precision, locale)}</p> : null}
+      {visual ? <p className="comparison-scale">{locale === "it" ? "Scala comune" : "Shared scale"}: {formatRange(minimum, maximum, indicator.unitKey, indicator.precision, locale)}</p> : null}
       <p className="comparison-method">
         {methodLabel}
         {missingLabel ? ` ${missingLabel}.` : ""}
@@ -2291,7 +2306,7 @@ export function Dashboard({
     "life-expectancy": labels.snapshotLifeExpectancy,
     "employment-rate": labels.snapshotEmployment,
   };
-  const snapshotDefinitions: Record<string, LocalizedText> = {"gdp-per-capita-pps": {"it": "Produzione per persona, corretta per le differenze di prezzo tra Paesi.", "en": "Output per person, adjusted for differences in prices between countries."}, "median-age": {"it": "L’età che divide la popolazione in due metà, al 1° gennaio.", "en": "The age that divides the population into two halves, on 1 January."}, "life-expectancy": {"it": "Basata sui livelli di mortalità dell’anno, mantenuti costanti per tutta la vita.", "en": "Based on the year’s mortality rates, held constant throughout life."}, "employment-rate": {"it": "Percentuale degli occupati nella popolazione di questa fascia d’età.", "en": "The percentage of people in this age group who are employed."}};
+  const snapshotDefinitions: Record<string, LocalizedText> = {"gdp-per-capita-pps": {"it": "Produzione per persona, corretta per le differenze di prezzo tra Paesi.", "en": "Output per person, adjusted for differences in prices between countries."}, "median-age": {"it": "L’età che divide la popolazione in due metà, al 1º gennaio.", "en": "The age that divides the population into two halves, on 1 January."}, "life-expectancy": {"it": "Basata sui livelli di mortalità dell’anno, mantenuti costanti per tutta la vita.", "en": "Based on the year’s mortality rates, held constant throughout life."}, "employment-rate": {"it": "Percentuale degli occupati nella popolazione di questa fascia d’età.", "en": "The percentage of people in this age group who are employed."}};
   const activeSpending =
     spendingBreakdown.find((indicator) => indicator.id === activeSpendingId) ??
     spendingBreakdown[0];
@@ -2796,7 +2811,7 @@ export function Dashboard({
             </div>
           </div>
 
-          <div className="catalog-tools"><ShareLink locale={locale} key={locationQuery} /><a href={`${basePath}/data/dashboard.csv`} download>{labels.downloadAll} (CSV) <span aria-hidden="true">↓</span></a></div>
+          <div className="catalog-tools"><ShareLink locale={locale} key={locationQuery} /><a href={`${basePath}/data/dashboard.csv`} download>{labels.downloadAll} <span aria-hidden="true">↓</span></a></div>
           <div className="section-filters" role="group" aria-label={labels.navData}>
             <button
               type="button"

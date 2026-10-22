@@ -133,7 +133,7 @@ const datasetSpecs = [
         type: "provisional",
         year: 2024,
         text: {
-          it: "I contrassegni includono le note Eurostat sui dati provvisori: Italia e UE 2024, alcuni anni di Belgio, Germania, Spagna, Francia e Portogallo, tutti gli anni della Slovacchia e i gruppi di dettaglio della Bulgaria. I flag originali restano disponibili.",
+          it: "I contrassegni includono le note Eurostat sui dati provvisori: Italia e UE 2024, alcuni anni di Belgio, Germania, Spagna, Francia e Portogallo, tutti gli anni della Slovacchia e i gruppi di dettaglio della Bulgaria. I contrassegni originali restano disponibili.",
           en: "Flags include Eurostat’s provisional-data notes: Italy and EU 2024, selected years for Belgium, Germany, Spain, France and Portugal, all Slovak years, and Bulgarian detail groups. Original flags remain available.",
         },
         sourceUrl:
