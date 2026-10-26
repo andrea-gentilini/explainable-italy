@@ -3,6 +3,7 @@
 import { ShareLink } from "./ShareLink";
 import { MethodGuide } from "./MethodGuide";
 import { IndicatorReading } from "./IndicatorReading";
+import { buildCumulativeIndexSeries } from "./indicator-reading.mjs";
 import { createIndicatorSearch } from "./indicator-search.mjs";
 
 import {
@@ -1377,23 +1378,32 @@ function YearContext({ indicator, point, locale }: { indicator: Indicator; point
   const newer = indicator.newerEstimate;
   if (!newer) return null;
   if (point.year === newer.year) {
-    return <p className="year-context">
-      <span>
-        {locale === "it"
-          ? `Stai leggendo il dato del ${newer.year}, ${statusDescription(newer.status, locale, false)}. L’ultimo anno non provvisorio è il ${indicator.latest.year}.`
-          : `You are viewing the ${newer.year} figure, which is ${statusDescription(newer.status, locale, false)}. The latest non-provisional year is ${indicator.latest.year}.`}
-      </span>{" "}
-      <button type="button" onClick={() => updateQuery({ year: String(indicator.latest.year) })}>
-        {locale === "it" ? `Torna al ${indicator.latest.year}` : `Back to ${indicator.latest.year}`} <span aria-hidden="true">→</span>
-      </button>
-    </p>;
+    return (
+      <p className="year-context">
+        <span>
+          {locale === "it"
+            ? `La scheda si apre sul dato più recente disponibile (${newer.year}, ${statusDescription(newer.status, locale, false)}). L’ultimo anno senza contrassegni provvisori o stimati è il ${indicator.latest.year}.`
+            : `The page opens on the most recent available figure (${newer.year}, ${statusDescription(newer.status, locale, false)}). The latest year without provisional or estimated flags is ${indicator.latest.year}.`}
+        </span>{" "}
+        <button type="button" onClick={() => updateQuery({ year: String(indicator.latest.year) })}>
+          {locale === "it" ? `Vedi il ${indicator.latest.year}` : `View ${indicator.latest.year}`} <span aria-hidden="true">→</span>
+        </button>
+      </p>
+    );
   }
   if (point.year !== indicator.latest.year) return null;
-  return <p className="year-context">
-    {locale === "it"
-      ? `Il dato del ${newer.year} è ${statusDescription(newer.status, locale, false)}. Per questo la scheda si apre sul ${indicator.latest.year}. Puoi scegliere l’anno dal menu.`
-      : `The ${newer.year} figure is ${statusDescription(newer.status, locale, false)}. The page therefore opens on ${indicator.latest.year}. You can choose a year from the menu.`}
-  </p>;
+  return (
+    <p className="year-context">
+      <span>
+        {locale === "it"
+          ? `Stai leggendo il ${indicator.latest.year} (ultimo anno non provvisorio). È disponibile anche il dato più recente del ${newer.year}, ${statusDescription(newer.status, locale, false)}.`
+          : `You are viewing ${indicator.latest.year} (the latest non-provisional year). A more recent ${newer.year} figure (${statusDescription(newer.status, locale, false)}) is also available.`}
+      </span>{" "}
+      <button type="button" onClick={() => updateQuery({ year: String(newer.year) })}>
+        {locale === "it" ? `Torna al ${newer.year}` : `Back to ${newer.year}`} <span aria-hidden="true">→</span>
+      </button>
+    </p>
+  );
 }
 
 function TrendBars({ indicator, locale, selectedYear }: {
@@ -1403,14 +1413,32 @@ function TrendBars({ indicator, locale, selectedYear }: {
   const points = indicator.series;
   const firstYear = points[0].year;
   const lastYear = points[points.length - 1].year;
-  const values = points.map((point) => point.italy);
-  const minimum = Math.min(0, ...values);
-  const maximum = Math.max(0, ...values);
+  const isPercentChange = indicator.unitKey === "percent_change";
+  const defaultBaseYear = firstYear - 1;
+  const [trendMode, setTrendMode] = useState<"rate" | "index">("rate");
+  const [baseYear, setBaseYear] = useState<number>(defaultBaseYear);
+  const cumulative = useMemo(
+    () => (isPercentChange ? buildCumulativeIndexSeries(points, baseYear) : null),
+    [isPercentChange, points, baseYear],
+  );
+  const cumulativeByYear = useMemo(
+    () => new Map((cumulative?.points ?? []).map((entry) => [entry.year, entry])),
+    [cumulative],
+  );
+  const showingIndex = Boolean(cumulative && trendMode === "index");
+  const values = showingIndex
+    ? (cumulative?.points ?? []).map((entry) => entry.italyIndex)
+    : points.map((point) => point.italy);
+  const minimum = showingIndex ? 0 : Math.min(0, ...values);
+  const maximum = showingIndex ? Math.max(100, ...values) : Math.max(0, ...values);
   const range = maximum - minimum || 1;
-  const zeroPosition = (maximum / range) * 100;
+  const zeroPosition = showingIndex
+    ? ((maximum - 100) / range) * 100
+    : (maximum / range) * 100;
   const breakYears = new Set(getBreakYears(indicator));
   const rangeLabel = labels.trendRange.replace("{start}", String(firstYear)).replace("{end}", String(lastYear));
   const selected = points.find((point) => point.year === selectedYear) ?? getDisplayedPoint(indicator);
+  const selectedCumulative = cumulativeByYear.get(selected.year) ?? null;
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const container = scrollRef.current;
@@ -1420,22 +1448,103 @@ function TrendBars({ indicator, locale, selectedYear }: {
     }
   }, [selectedYear]);
   const value = (number: number) => formatValue(number, indicator.unitKey, indicator.precision, locale);
+  const formatIndexNumber = (number: number) =>
+    new Intl.NumberFormat(locale === "it" ? "it-IT" : "en-GB", {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }).format(number);
+  const formatIndexWithBase = (number: number) =>
+    `${formatIndexNumber(number)} (${cumulative?.baseYear ?? defaultBaseYear} = 100)`;
 
   return (
     <>
-      <div className="trend-reading" aria-live="polite"><span>{labels.italy} · {selected.year}</span>{" "}<strong>{value(selected.italy)}</strong></div>
+      {cumulative ? (
+        <div className="trend-mode-toolbar">
+          <div
+            className="trend-mode-switch"
+            role="group"
+            aria-label={locale === "it" ? "Misura del grafico storico" : "Historical chart measure"}
+          >
+            <button
+              type="button"
+              aria-pressed={!showingIndex}
+              onClick={() => setTrendMode("rate")}
+            >
+              {locale === "it" ? "Variazione annua (%)" : "Annual change (%)"}
+            </button>
+            <button
+              type="button"
+              aria-pressed={showingIndex}
+              onClick={() => setTrendMode("index")}
+            >
+              {locale === "it"
+                ? `Indice cumulato (${cumulative.baseYear} = 100)`
+                : `Cumulative index (${cumulative.baseYear} = 100)`}
+            </button>
+          </div>
+          <label className="trend-base-select">
+            <span>{locale === "it" ? "Anno base (= 100)" : "Base year (= 100)"}</span>{" "}
+            <select
+              value={cumulative.baseYear}
+              onChange={(event) => {
+                setBaseYear(Number(event.target.value));
+                setTrendMode("index");
+              }}
+            >
+              {cumulative.availableBaseYears.map((yr) => (
+                <option key={yr} value={yr}>
+                  {yr} = 100
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      ) : null}
+      <div className="trend-reading" aria-live="polite">
+        <span>{labels.italy} · {selected.year}</span>{" "}
+        <strong>
+          {showingIndex && selectedCumulative
+            ? formatIndexWithBase(selectedCumulative.italyIndex)
+            : value(selected.italy)}
+        </strong>
+        {cumulative && selectedCumulative ? (
+          <>
+            {" "}
+            <small>
+              {showingIndex
+                ? `${locale === "it" ? "Variazione annua" : "Annual change"}: ${value(selected.italy)}`
+                : `${locale === "it" ? "Indice cumulato" : "Cumulative index"}: ${formatIndexWithBase(selectedCumulative.italyIndex)}`}
+            </small>
+          </>
+        ) : null}
+      </div>
       <p className="trend-interaction" id={`trend-help-${indicator.id}`}>{labels.trendInteraction}<span className="visually-hidden"> {labels.trendKeyboardHelp}</span></p>
-      <p className="trend-scale">{labels.trendScale}: {formatRange(minimum, maximum, indicator.unitKey, indicator.precision, locale)}</p>
+      <p className="trend-scale">
+        {labels.trendScale}:{" "}
+        {showingIndex
+          ? `${formatIndexNumber(minimum)} – ${formatIndexWithBase(maximum)}`
+          : formatRange(minimum, maximum, indicator.unitKey, indicator.precision, locale)}
+      </p>
       <div className="trend-scroll" ref={scrollRef} role="region" aria-label={`${labels.trend}. ${rangeLabel}`}>
         <div className="trend-chart" role="group" aria-label={labels.trend} aria-describedby={`trend-help-${indicator.id}`} style={{ minWidth: `${(lastYear - firstYear + 1) * 1.8}rem`, gridTemplateColumns: `repeat(${lastYear - firstYear + 1}, minmax(0, 1fr))` }}>
           <span className="trend-zero" style={{ top: `${zeroPosition}%` }} aria-hidden="true" />
           {points.map((point, index) => {
             const hasBreak = breakYears.has(point.year);
             const uncertain = /[pef]/.test(point.status ?? "");
-            const top = point.italy >= 0 ? ((maximum - point.italy) / range) * 100 : zeroPosition;
-            const height = (Math.abs(point.italy) / range) * 100;
+            const cumulativeEntry = cumulativeByYear.get(point.year);
+            const plottedValue = showingIndex && cumulativeEntry ? cumulativeEntry.italyIndex : point.italy;
+            const top = showingIndex
+              ? ((maximum - plottedValue) / range) * 100
+              : plottedValue >= 0
+                ? ((maximum - plottedValue) / range) * 100
+                : zeroPosition;
+            const height = showingIndex
+              ? (plottedValue / range) * 100
+              : (Math.abs(plottedValue) / range) * 100;
             const methodNote = hasBreak && !point.status?.includes("b") ? ` · ${labels.statusMethodNote}` : "";
-            const description = `${point.year}: ${value(point.italy)} · ${statusDescription(point.status, locale, false)}${methodNote}`;
+            const description = showingIndex && cumulativeEntry
+              ? `${point.year}: ${formatIndexWithBase(cumulativeEntry.italyIndex)} (${value(point.italy)}) · ${statusDescription(point.status, locale, false)}${methodNote}`
+              : `${point.year}: ${value(point.italy)} · ${statusDescription(point.status, locale, false)}${methodNote}`;
             return (
               <button className="trend-column" type="button" key={point.year}
                 style={{ gridColumn: point.year - firstYear + 1 }}
@@ -1451,7 +1560,7 @@ function TrendBars({ indicator, locale, selectedYear }: {
                   updateQuery({ year: String(points[next].year) });
                   event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>("button")[next]?.focus();
                 }}>
-                <span aria-hidden="true" className={`trend-bar ${point.italy < 0 ? "negative" : ""} ${hasBreak ? "has-break" : ""} ${uncertain ? "uncertain" : ""}`} style={{ top: `${top}%`, height: `${height}%` }} />
+                <span aria-hidden="true" className={`trend-bar ${!showingIndex && point.italy < 0 ? "negative" : ""} ${hasBreak ? "has-break" : ""} ${uncertain ? "uncertain" : ""}`} style={{ top: `${top}%`, height: `${height}%` }} />
                 <small aria-hidden="true">{String(point.year).slice(2)}{hasBreak ? <sup>*</sup> : null}</small>
               </button>
             );
@@ -1466,14 +1575,37 @@ function TrendBars({ indicator, locale, selectedYear }: {
             <caption>{indicator.title[locale]} · {rangeLabel}</caption>
             <thead><tr>
               <th scope="col">{labels.sourceYear}</th><th scope="col">{labels.italy}</th><th scope="col">{labels.eu}</th><th scope="col">{labels.median}</th><th scope="col">{labels.trendCoverage}</th><th scope="col">{labels.sourceItalyStatus}</th>
+              {cumulative ? (
+                <>
+                  <th scope="col">
+                    {locale === "it"
+                      ? `Indice Italia (${cumulative.baseYear} = 100)`
+                      : `Italy index (${cumulative.baseYear} = 100)`}
+                  </th>
+                  <th scope="col">
+                    {locale === "it"
+                      ? `Indice UE (${cumulative.baseYear} = 100)`
+                      : `EU index (${cumulative.baseYear} = 100)`}
+                  </th>
+                </>
+              ) : null}
             </tr></thead>
-            <tbody>{[...points].reverse().map((point) => (
-              <tr key={point.year} data-selected={point.year === selectedYear}>
-                <th scope="row">{point.year}</th>
-                {[point.italy, point.eu, point.median].map((entry, index) => <td key={index}>{entry === null ? "—" : value(entry)}</td>)}
-                <td>{point.coverage}/27</td><td>{statusDescription(point.status, locale, false)}</td>
-              </tr>
-            ))}</tbody>
+            <tbody>{[...points].reverse().map((point) => {
+              const cumulativeEntry = cumulativeByYear.get(point.year);
+              return (
+                <tr key={point.year} data-selected={point.year === selectedYear}>
+                  <th scope="row">{point.year}</th>
+                  {[point.italy, point.eu, point.median].map((entry, index) => <td key={index}>{entry === null ? "—" : value(entry)}</td>)}
+                  <td>{point.coverage}/27</td><td>{statusDescription(point.status, locale, false)}</td>
+                  {cumulative ? (
+                    <>
+                      <td>{cumulativeEntry ? formatIndexNumber(cumulativeEntry.italyIndex) : "—"}</td>
+                      <td>{cumulativeEntry?.euIndex !== null && cumulativeEntry?.euIndex !== undefined ? formatIndexNumber(cumulativeEntry.euIndex) : "—"}</td>
+                    </>
+                  ) : null}
+                </tr>
+              );
+            })}</tbody>
           </table>
         </div>
       </details>
@@ -1545,31 +1677,55 @@ function IndicatorCard({
         </div>
       </div>
 
-      {indicator.newerEstimate && point.year !== indicator.newerEstimate.year ? (
-        <p className="estimate-note">
-          <span>{labels.estimate}</span>
-          <strong>
-            {formatValue(
-              indicator.newerEstimate.italy,
-              indicator.unitKey,
-              indicator.precision,
-              locale,
+      {indicator.newerEstimate ? (
+        point.year === indicator.newerEstimate.year ? (
+          <p className="estimate-note">
+            <span>
+              {locale === "it"
+                ? `Il ${indicator.newerEstimate.year} è ${statusDescription(indicator.newerEstimate.status, locale, false)} · Ultimo dato non provvisorio:`
+                : `${indicator.newerEstimate.year} is ${statusDescription(indicator.newerEstimate.status, locale, false)} · Latest non-provisional value:`}
+            </span>{" "}
+            <strong>
+              {formatValue(
+                indicator.latest.italy,
+                indicator.unitKey,
+                indicator.precision,
+                locale,
+              )}
+            </strong>{" "}
+            <span>({indicator.latest.year})</span>{" "}
+            {expanded ? (
+              <button type="button" onClick={() => updateQuery({ year: String(indicator.latest.year) })}>{locale === "it" ? `Vedi il ${indicator.latest.year}` : `View ${indicator.latest.year}`} <span aria-hidden="true">→</span></button>
+            ) : (
+              <a href={withQuery(pageHref(locale, `data/${indicator.id}`), query, indicator.latest.year)}>{locale === "it" ? `Vedi il ${indicator.latest.year}` : `View ${indicator.latest.year}`} <span aria-hidden="true">→</span></a>
             )}
-          </strong>
-          <span>
-            {indicator.newerEstimate.year},{" "}
-            {statusDescription(
-              indicator.newerEstimate.status,
-              locale,
-              false,
+          </p>
+        ) : (
+          <p className="estimate-note">
+            <span>{labels.estimate}</span>{" "}
+            <strong>
+              {formatValue(
+                indicator.newerEstimate.italy,
+                indicator.unitKey,
+                indicator.precision,
+                locale,
+              )}
+            </strong>{" "}
+            <span>
+              {indicator.newerEstimate.year},{" "}
+              {statusDescription(
+                indicator.newerEstimate.status,
+                locale,
+                false,
+              )}
+            </span>{" "}
+            {expanded ? (
+              <button type="button" onClick={() => updateQuery({ year: String(indicator.newerEstimate!.year) })}>{locale === "it" ? `Vedi il ${indicator.newerEstimate.year}` : `View ${indicator.newerEstimate.year}`} <span aria-hidden="true">→</span></button>
+            ) : (
+              <a href={withQuery(pageHref(locale, `data/${indicator.id}`), query, indicator.newerEstimate.year)}>{locale === "it" ? `Vedi il ${indicator.newerEstimate.year}` : `View ${indicator.newerEstimate.year}`} <span aria-hidden="true">→</span></a>
             )}
-          </span>
-          {expanded ? (
-            <button type="button" onClick={() => updateQuery({ year: String(indicator.newerEstimate!.year) })}>{locale === "it" ? `Vedi il ${indicator.newerEstimate.year}` : `View ${indicator.newerEstimate.year}`} <span aria-hidden="true">→</span></button>
-          ) : (
-            <a href={withQuery(pageHref(locale, `data/${indicator.id}`), query, indicator.newerEstimate.year)}>{locale === "it" ? `Vedi il ${indicator.newerEstimate.year}` : `View ${indicator.newerEstimate.year}`} <span aria-hidden="true">→</span></a>
-          )}
-        </p>
+          </p>
+        )
       ) : null}
 
       {expanded ? <div className="indicator-toolbar"><YearSelection indicator={indicator} point={point} locale={locale} /><ShareLink locale={locale} key={`${query}-${point.year}`} /><a className="compact-download" href={`${basePath}/data/indicators/${indicator.id}.csv`} download={`${indicator.id}.csv`}>CSV <span aria-hidden="true">↓</span><span className="visually-hidden"> · {labels.downloadIndicator}</span></a></div> : null}
@@ -1854,7 +2010,7 @@ function SourceVerification({
           <h2>{labels.sourceObservations}</h2>
           <div className="source-observation-list">
             <div>
-              <span>{labels.italy}</span>
+              <span>{labels.italy}</span>{" "}
               <strong>
                 {formatValue(
                   displayedPoint.italy,
@@ -1862,12 +2018,12 @@ function SourceVerification({
                   indicator.precision,
                   locale,
                 )}
-              </strong>
+              </strong>{" "}
               <small>Eurostat · IT</small>
             </div>
             {displayedPoint.eu !== null ? (
               <div>
-                <span>{labels.eu}</span>
+                <span>{labels.eu}</span>{" "}
                 <strong>
                   {formatValue(
                     displayedPoint.eu,
@@ -1875,7 +2031,7 @@ function SourceVerification({
                     indicator.precision,
                     locale,
                   )}
-                </strong>
+                </strong>{" "}
                 <small>
                   Eurostat · EU27_2020
                   {displayedPoint.euStatus
@@ -1885,13 +2041,13 @@ function SourceVerification({
               </div>
             ) : (
               <div>
-                <span>{labels.eu}</span>
-                <strong>—</strong>
+                <span>{labels.eu}</span>{" "}
+                <strong>—</strong>{" "}
                 <small>{labels.sourceEuUnavailable}</small>
               </div>
             )}
             <div>
-              <span>{labels.median}</span>
+              <span>{labels.median}</span>{" "}
               <strong>
                 {formatValue(
                   displayedPoint.median,
@@ -1899,7 +2055,7 @@ function SourceVerification({
                   indicator.precision,
                   locale,
                 )}
-              </strong>
+              </strong>{" "}
               <small>
                 {coverageLabel}
                 {missingLabel ? ` · ${missingLabel}` : ""}
@@ -2139,7 +2295,7 @@ function SocialProtectionDetail({
             </a>
           </h3>
           <p className="related-detail-value">
-            {formatEuro(oldAgePoint.italy, locale, 1)}
+            {formatEuro(oldAgePoint.italy, locale, 1)}{" "}
             <small>
               {locale === "it" ? "su 100" : "out of 100"} ·{" "}
               {oldAgePoint.year} ·{" "}
@@ -2163,10 +2319,10 @@ function SocialProtectionDetail({
               <span aria-hidden="true">↗</span>
             </a>
           </div>
-          <ComparisonPlot indicator={oldAgeComparison} locale={locale} />
+          <ComparisonPlot indicator={oldAgeComparison} point={oldAgePoint} locale={locale} />
           <div className="related-source">
-            <span>{labels.selectionUsed}</span>
-            <strong>Eurostat · gov_10a_exp</strong>
+            <span>{labels.selectionUsed}</span>{" "}
+            <strong>Eurostat · gov_10a_exp</strong>{" "}
             <small>{oldAgeFilter}</small>
             <div>
               <a href={withQuery(pageHref(locale, `data/${oldAge.id}`), query, oldAgePoint.year)}>
@@ -2197,7 +2353,7 @@ function SocialProtectionDetail({
                 pensionExpenditure.unitKey,
                 pensionExpenditure.precision,
                 locale,
-              )}
+              )}{" "}
               <small>
                 {pensionPoint.year} ·{" "}
                 {statusDescription(pensionPoint.status, locale, false)}
@@ -2209,10 +2365,10 @@ function SocialProtectionDetail({
             <h4>{labels.pensionIncludesTitle}</h4>
             <p>{labels.pensionIncludes}</p>
           </div>
-          <ComparisonPlot indicator={pensionComparison} locale={locale} />
+          <ComparisonPlot indicator={pensionComparison} point={pensionPoint} locale={locale} />
           <div className="related-source">
-            <span>{labels.selectionUsed}</span>
-            <strong>Eurostat · spr_exp_pens · ESSPROS</strong>
+            <span>{labels.selectionUsed}</span>{" "}
+            <strong>Eurostat · spr_exp_pens · ESSPROS</strong>{" "}
             <small>{pensionFilter}</small>
             <div>
               <a href={withQuery(pageHref(locale, `data/${pensionExpenditure.id}`), query, pensionPoint.year)}>
@@ -2546,39 +2702,46 @@ export function Dashboard({
                 </a>
               </div>
               <div className="snapshot-grid">
-                {snapshotIndicators.map((indicator) => (
-                  <a
-                    href={pageHref(locale, `data/${indicator.id}`)}
-                    key={indicator.id}
-                  >
-                    <span>{snapshotTitles[indicator.id]}</span>
-                    <strong>
-                      {formatValue(
-                        indicator.latest.italy,
-                        indicator.unitKey,
-                        indicator.precision,
-                        locale,
-                      )}
-                    </strong>
-                    <small>
-                      {indicator.latest.year} ·{" "}
-                      {indicator.id === "gdp-per-capita-pps"
-                        ? labels.snapshotGdpUnit
-                        : indicator.latest.eu !== null
-                          ? `${labels.eu}: ${formatValue(
-                              indicator.latest.eu,
-                              indicator.unitKey,
-                              indicator.precision,
-                              locale,
-                            )}`
-                          : labels.noAggregate}
-                    </small>
-                    <p className="snapshot-definition">{snapshotDefinitions[indicator.id][locale]}</p>
-                    <em>
-                      {labels.snapshotOpen} <span aria-hidden="true">→</span>
-                    </em>
-                  </a>
-                ))}
+                {snapshotIndicators.map((indicator) => {
+                  const point = getDisplayedPoint(indicator);
+                  return (
+                    <a
+                      href={pageHref(locale, `data/${indicator.id}`)}
+                      key={indicator.id}
+                    >
+                      <span>{snapshotTitles[indicator.id]}</span>{" "}
+                      <strong>
+                        {formatValue(
+                          point.italy,
+                          indicator.unitKey,
+                          indicator.precision,
+                          locale,
+                        )}
+                      </strong>{" "}
+                      <small>
+                        {locale === "it" ? `Anno ${point.year}` : `Year ${point.year}`}
+                        {point.status
+                          ? ` (${statusDescription(point.status, locale, false)})`
+                          : ""}{" "}
+                        ·{" "}
+                        {indicator.id === "gdp-per-capita-pps"
+                          ? labels.snapshotGdpUnit
+                          : point.eu !== null
+                            ? `${labels.eu}: ${formatValue(
+                                point.eu,
+                                indicator.unitKey,
+                                indicator.precision,
+                                locale,
+                              )}`
+                            : labels.noAggregate}
+                      </small>{" "}
+                      <p className="snapshot-definition">{snapshotDefinitions[indicator.id][locale]}</p>{" "}
+                      <em>
+                        {labels.snapshotOpen} <span aria-hidden="true">→</span>
+                      </em>
+                    </a>
+                  );
+                })}
               </div>
             </section>
 
@@ -2600,8 +2763,8 @@ export function Dashboard({
                 <p className="hero-intro">{labels.heroBody}</p>
                 <div className="hero-facts">
                   <div>
-                    <span>{labels.heroYear}</span>
-                    <strong>{spendingYear}</strong>
+                    <span>{labels.heroYear}</span>{" "}
+                    <strong>{spendingYear}</strong>{" "}
                     <small>
                       {heroLatest}
                       {spendingPoint?.status
@@ -2614,8 +2777,8 @@ export function Dashboard({
                     </small>
                   </div>
                   <div>
-                    <span>{labels.heroSource}</span>
-                    <strong>{labels.heroSourceName} · COFOG</strong>
+                    <span>{labels.heroSource}</span>{" "}
+                    <strong>{labels.heroSourceName} · COFOG</strong>{" "}
                     <small>{heroSourceUpdated}</small>
                     {spendingSource && activeSpending ? (
                       <div className="hero-source-links">
@@ -2690,7 +2853,7 @@ export function Dashboard({
                             locale,
                             1,
                           )}
-                        </strong>
+                        </strong>{" "}
                         <small>
                           {activeSpending.id ===
                           "spending-social-protection"
@@ -2722,7 +2885,7 @@ export function Dashboard({
                           {indicator.id === "spending-social-protection"
                             ? labels.socialProtectionHero
                             : indicator.title[locale]}
-                        </span>
+                        </span>{" "}
                         <strong>
                           {formatEuro(
                             getDisplayedPoint(indicator).italy,
@@ -2838,7 +3001,7 @@ export function Dashboard({
                 setActiveSection("overview");
               }}
             >
-              {labels.topicOverview}
+              {labels.topicOverview}{" "}
               <span>{data.sections.length}</span>
             </button>
             <button
@@ -2847,7 +3010,7 @@ export function Dashboard({
               aria-pressed={activeSection === "all"}
               onClick={() => setActiveSection("all")}
             >
-              {labels.allSections}
+              {labels.allSections}{" "}
               <span>{data.indicators.length}</span>
             </button>
             {data.sections.map((section) => (
@@ -2858,7 +3021,7 @@ export function Dashboard({
                 onClick={() => setActiveSection(section.id)}
                 key={section.id}
               >
-                {section.title[locale]}
+                {section.title[locale]}{" "}
                 <span>
                   {
                     data.indicators.filter(
@@ -2951,8 +3114,8 @@ export function Dashboard({
               <p>{labels.sourcesBody}</p>
             </div>
             <div className="source-stats">
-              <strong>{sources.length}</strong>
-              <span>{labels.sourceCount}</span>
+              <strong>{sources.length}</strong>{" "}
+              <span>{labels.sourceCount}</span>{" "}
               <small>{labels.localSize}</small>
             </div>
           </div>
@@ -2972,7 +3135,7 @@ export function Dashboard({
             <summary>
               <span>
                 {sources.length} {labels.sourceCount}
-              </span>
+              </span>{" "}
               <strong>{labels.sourceDirectory}</strong>
             </summary>
             <div className="source-list">
@@ -3078,9 +3241,9 @@ export function Dashboard({
           <details className="roadmap">
             <summary>
               <span>
-                <strong>{labels.futureTitle}</strong>
+                <strong>{labels.futureTitle}</strong>{" "}
                 <small>{labels.futureBody}</small>
-              </span>
+              </span>{" "}
               <span>{labels.futureToggle}</span>
             </summary>
             <ol>
@@ -3110,7 +3273,7 @@ export function Dashboard({
             {labels.contributionWays.map((way) => (
               <li key={way.template}>
                 <a className="contribution-link" href={`https://github.com/andrea-gentilini/explainable-italy/issues/new?template=${way.template}`}>
-                  <div><strong>{way.title}</strong><small>{way.detail}</small></div>
+                  <div><strong>{way.title}</strong>{" "}<small>{way.detail}</small></div>
                   <span className="contribution-arrow" aria-hidden="true">↗</span>
                 </a>
               </li>

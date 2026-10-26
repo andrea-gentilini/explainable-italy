@@ -190,12 +190,83 @@ const annualChanges = {
   "real-gdp-growth-per-capita": {
     it: "il PIL reale per abitante",
     en: "real GDP per person",
+    caution: {
+      it: "Il grafico principale mostra il tasso di variazione annuo (%), non il livello del PIL reale per abitante. Una variazione positiva dopo un calo non significa aver già recuperato il livello precedente.",
+      en: "The main chart shows the annual rate of change (%), not the level of real GDP per person. A positive rate after a decline does not mean output has already returned to its earlier level.",
+    },
   },
   inflation: {
     it: "i prezzi al consumo misurati dall’indice armonizzato",
     en: "consumer prices measured by the harmonised index",
+    caution: {
+      it: "Il grafico principale mostra il tasso di variazione annuo (%), non il livello dell’indice dei prezzi. Un tasso positivo più basso (disinflazione) significa che i prezzi continuano ad aumentare ma più lentamente; i prezzi scendono solo quando la variazione è negativa.",
+      en: "The main chart shows the annual rate of change (%), not the price index level. A lower positive rate (disinflation) means prices are still rising, only more slowly; prices fall only when the rate is negative.",
+    },
   },
 };
+
+/**
+ * Builds a chain-linked cumulative index (baseYear = 100) from annual percentage rates of change.
+ * @param {Array<{year: number, italy: number, eu: number|null, status?: string|null}>} series
+ * @param {number} [requestedBaseYear]
+ */
+export function buildCumulativeIndexSeries(series, requestedBaseYear) {
+  if (!Array.isArray(series) || series.length === 0) {
+    return null;
+  }
+  const sorted = [...series].sort((left, right) => left.year - right.year);
+  const initialBaseYear = sorted[0].year - 1;
+  const rawPoints = [
+    { year: initialBaseYear, italyRaw: 100, euRaw: 100, status: null, isBaseline: true },
+  ];
+  let italyCursor = 100;
+  let euCursor = 100;
+
+  for (const point of sorted) {
+    italyCursor *= 1 + point.italy / 100;
+    euCursor =
+      euCursor !== null && point.eu !== null && Number.isFinite(point.eu)
+        ? euCursor * (1 + point.eu / 100)
+        : null;
+    rawPoints.push({
+      year: point.year,
+      italyRaw: italyCursor,
+      euRaw: euCursor,
+      status: point.status ?? null,
+      isBaseline: false,
+    });
+  }
+
+  const availableBaseYears = rawPoints.map((entry) => entry.year);
+  const baseEntry =
+    rawPoints.find((entry) => entry.year === requestedBaseYear) ?? rawPoints[0];
+
+  const points = rawPoints
+    .filter((entry) => !entry.isBaseline)
+    .map((entry) => {
+      const italy = Number(((entry.italyRaw / baseEntry.italyRaw) * 100).toFixed(10));
+      const eu =
+        entry.euRaw !== null && baseEntry.euRaw !== null && baseEntry.euRaw > 0
+          ? Number(((entry.euRaw / baseEntry.euRaw) * 100).toFixed(10))
+          : null;
+      return {
+        year: entry.year,
+        italy,
+        eu,
+        italyIndex: italy,
+        euIndex: eu,
+        italyCumulativeChange: Number((italy - 100).toFixed(10)),
+        euCumulativeChange: eu !== null ? Number((eu - 100).toFixed(10)) : null,
+        status: entry.status,
+      };
+    });
+
+  return {
+    baseYear: baseEntry.year,
+    availableBaseYears,
+    points,
+  };
+}
 
 export const supportedReadingIds = Object.freeze([
   ...Object.keys(templates),
@@ -337,6 +408,6 @@ export function getIndicatorReading(indicator, point, locale) {
   return {
     description,
     comparison: comparison(safeIndicator, point, locale),
-    caution: template?.caution?.[locale] ?? null,
+    caution: (template?.caution ?? change?.caution)?.[locale] ?? null,
   };
 }

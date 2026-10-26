@@ -129096,12 +129096,12 @@
         "en": "Real GDP growth per capita"
       },
       "plain": {
-        "it": "Quanto cambia in un anno la produzione economica per persona, dopo avere rimosso l’effetto dei prezzi.",
-        "en": "How much economic output per person changes in one year after removing the effect of prices."
+        "it": "Quanto cambia in un anno la produzione economica per persona, al netto dell’inflazione (tasso di variazione annuo, non livello del PIL).",
+        "en": "How much economic output per person changes in one year after removing inflation (annual rate of change, not GDP level)."
       },
       "technical": {
-        "it": "Variazione percentuale annua del PIL B1GQ pro capite a volumi concatenati.",
-        "en": "Annual percentage change in GDP B1GQ per capita in chain linked volumes."
+        "it": "Tasso di variazione percentuale annuo (CLV_PCH_PRE_HAB) del PIL B1GQ pro capite a volumi concatenati. Misura la variazione reale rispetto all’anno precedente, non il livello cumulato.",
+        "en": "Annual percentage rate of change (CLV_PCH_PRE_HAB) in GDP B1GQ per capita in chain-linked volumes. It measures the real change from the previous year, not the cumulative level."
       },
       "unitKey": "percent_change",
       "precision": 1,
@@ -134347,12 +134347,12 @@
         "en": "Inflation"
       },
       "plain": {
-        "it": "Quanto sono aumentati o diminuiti in media i prezzi pagati dalle famiglie rispetto all’anno precedente.",
-        "en": "How much prices paid by households increased or decreased on average compared with the previous year."
+        "it": "Quanto sono aumentati o diminuiti in media i prezzi pagati dalle famiglie rispetto all’anno precedente (tasso di variazione annuo, non livello dell’indice dei prezzi).",
+        "en": "How much prices paid by households increased or decreased on average compared with the previous year (annual rate of change, not the price index level)."
       },
       "technical": {
-        "it": "Tasso medio annuo di variazione dell’indice armonizzato dei prezzi al consumo, totale COICOP.",
-        "en": "Annual average rate of change of the harmonised index of consumer prices, total COICOP."
+        "it": "Tasso medio annuo di variazione percentuale (RCH_A_AVG) dell’indice armonizzato dei prezzi al consumo (IPCA/HICP), totale COICOP. Misura il ritmo di variazione rispetto all’anno precedente, non il livello dell’indice.",
+        "en": "Annual average percentage rate of change (RCH_A_AVG) of the harmonised index of consumer prices (HICP), total COICOP. It measures the rate of change from the previous year, not the index level."
       },
       "unitKey": "percent_change",
       "precision": 1,

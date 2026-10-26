@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
+  buildCumulativeIndexSeries,
   getIndicatorReading,
   supportedReadingIds,
 } from "../app/components/indicator-reading.mjs";
@@ -139,4 +140,34 @@ test("change magnitudes and rounding thresholds also follow Intl", () => {
   assert.doesNotMatch(distinct.comparison, /stesso valore/);
   const same = reading("employment-rate", {year: 2031, italy: 13.95, eu: 14});
   assert.match(same.comparison, /alla precisione mostrata/);
+});
+
+test("annual rate-of-change indicators include a caution distinguishing rates from index levels", () => {
+  const inflationIt = reading("inflation", { year: 2025, italy: 1.7, eu: 2.4 }, "it");
+  const inflationEn = reading("inflation", { year: 2025, italy: 1.7, eu: 2.4 }, "en");
+  assert.match(inflationIt.caution, /disinflazione/);
+  assert.match(inflationEn.caution, /disinflation/);
+  const gdpIt = reading("real-gdp-growth-per-capita", { year: 2025, italy: 0.7, eu: 1.4 }, "it");
+  const gdpEn = reading("real-gdp-growth-per-capita", { year: 2025, italy: 0.7, eu: 1.4 }, "en");
+  assert.match(gdpIt.caution, /tasso di variazione annuo/);
+  assert.match(gdpEn.caution, /annual rate of change/);
+});
+
+test("buildCumulativeIndexSeries computes chain-linked indices and supports rebasing", () => {
+  const sample = [
+    { year: 2021, italy: 10, eu: 5 },
+    { year: 2022, italy: 10, eu: 10 },
+  ];
+  const defaultSeries = buildCumulativeIndexSeries(sample);
+  assert.equal(defaultSeries.baseYear, 2020);
+  assert.deepEqual(defaultSeries.availableBaseYears, [2020, 2021, 2022]);
+  assert.ok(Math.abs(defaultSeries.points[0].italyIndex - 110) < 1e-9);
+  assert.ok(Math.abs(defaultSeries.points[1].italyIndex - 121) < 1e-9);
+  assert.ok(Math.abs(defaultSeries.points[0].euIndex - 105) < 1e-9);
+  assert.ok(Math.abs(defaultSeries.points[1].euIndex - 115.5) < 1e-9);
+
+  const rebased = buildCumulativeIndexSeries(sample, 2021);
+  assert.equal(rebased.baseYear, 2021);
+  assert.ok(Math.abs(rebased.points[0].italyIndex - 100) < 1e-9);
+  assert.ok(Math.abs(rebased.points[1].italyIndex - 110) < 1e-9);
 });

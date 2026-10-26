@@ -201,6 +201,7 @@ for (const locale of locales) {
   test(`${locale}: sources reproduce the main card and disclose current coverage, notes and official provenance`, async () => {
     const prefix = await basePath();
     for (const indicator of data.indicators) {
+      const defaultPoint = indicator.newerEstimate ?? indicator.latest;
       const indicatorRoute = localizedRoute(locale, `data/${indicator.id}`);
       const sourceRoute = localizedRoute(locale, `data/${indicator.id}/source`);
       const [card, source] = await Promise.all([page(indicatorRoute), page(sourceRoute)]);
@@ -209,9 +210,9 @@ for (const locale of locales) {
       assert(reading && panel, `${sourceRoute}: main value and source value are present`);
       const sourceValue = elements(panel.html, "strong")[0];
       assert.equal(sourceValue?.text, reading.text, `${sourceRoute}: the source defaults to the value on the card`);
-      assert(elements(panel.html, "small")[0]?.text.includes(String(indicator.latest.year)), `${sourceRoute}: default year is the main observation`);
-      assert(sourceValue.text.includes(number(indicator.latest.italy, indicator, locale)), `${sourceRoute}: main value matches the snapshot`);
-      requireLink(card, `${prefix}${sourceRoute}?year=${indicator.latest.year}`, `${indicatorRoute}: opens its own source for the year displayed`);
+      assert(elements(panel.html, "small")[0]?.text.includes(String(defaultPoint.year)), `${sourceRoute}: default year is the main observation`);
+      assert(sourceValue.text.includes(number(defaultPoint.italy, indicator, locale)), `${sourceRoute}: main value matches the snapshot`);
+      requireLink(card, `${prefix}${sourceRoute}?year=${defaultPoint.year}`, `${indicatorRoute}: opens its own source for the year displayed`);
       requireLink(source, indicator.source.apiUrl, `${sourceRoute}: exact original query`);
       requireLink(source, indicator.source.dataBrowserUrl, `${sourceRoute}: official data browser`);
       requireLink(source, indicator.source.doi, `${sourceRoute}: permanent dataset identifier`);
@@ -230,19 +231,19 @@ for (const locale of locales) {
         assert(card.text.includes(note.text[locale]), `${indicatorRoute}: source caveat ${note.type}`);
         requireLink(source, note.sourceUrl, `${sourceRoute}: note is verifiable`);
       }
-      assert.match(source.text, new RegExp(`${indicator.latest.coverage} (?:Paesi UE disponibili su 27|available EU countries out of 27)`), `${sourceRoute}: coverage derives from the selected data`);
+      assert.match(source.text, new RegExp(`${defaultPoint.coverage} (?:Paesi UE disponibili su 27|available EU countries out of 27)`), `${sourceRoute}: coverage derives from the selected data`);
       const countryTable = elements(source.html, "table")[0];
       assert(countryTable, `${sourceRoute}: observations behind the median`);
       const countryCodes = [...countryTable.html.matchAll(/<code>([A-Z]{2})<\/code>/g)].map((match) => match[1]).sort();
-      assert.deepEqual(countryCodes, indicator.latest.countries.map((country) => country.geo).sort(), `${sourceRoute}: the displayed countries reproduce the main observation`);
+      assert.deepEqual(countryCodes, defaultPoint.countries.map((country) => country.geo).sort(), `${sourceRoute}: the displayed countries reproduce the main observation`);
       const selectedOptions = elements(source.html, "option").filter((option) => /\bselected(?:="")?(?:\s|$)/.test(option.attributes));
       if (indicator.newerEstimate) {
         assert.equal(selectedOptions.length, 1, `${sourceRoute}: one default comparison year`);
-        assert.equal(attribute(selectedOptions[0], "value"), String(indicator.latest.year), `${sourceRoute}: the main observation is selected`);
+        assert.equal(attribute(selectedOptions[0], "value"), String(defaultPoint.year), `${sourceRoute}: the most recent comparable observation is selected`);
         const options = elements(source.html, "option").map((option) => attribute(option, "value"));
-        assert(options.includes(String(indicator.newerEstimate.year)), `${sourceRoute}: newer provisional or estimated year is available separately`);
+        assert(options.includes(String(indicator.latest.year)) && options.includes(String(indicator.newerEstimate.year)), `${sourceRoute}: both latest non-provisional and newer provisional years are selectable`);
       }
-      if (indicator.latest.eu === null) {
+      if (defaultPoint.eu === null) {
         assert.match(source.text, locale === "it" ? /non pubblica un aggregato UE con lo stesso perimetro/ : /does not publish an EU aggregate with the same scope/, `${sourceRoute}: no invented EU aggregate`);
         assert(!elements(source.html, "small").some((element) => element.text.includes("Eurostat · EU27_2020")), `${sourceRoute}: no unavailable figure attributed to Eurostat`);
       } else {
@@ -393,6 +394,7 @@ for (const locale of locales) {
   test(`${locale}: historical controls expose every available year and the local source snapshot`, async () => {
     const prefix = await basePath();
     for (const indicator of data.indicators) {
+      const defaultPoint = indicator.newerEstimate ?? indicator.latest;
       const years = [...new Set([
         ...indicator.series.map((point) => point.year),
         indicator.latest.year,
@@ -408,7 +410,7 @@ for (const locale of locales) {
           assert.deepEqual(options.map((option) => Number(attribute(option, "value"))).sort((a, b) => a - b), years, `${route}: all available years are selectable exactly once`);
           const selected = options.filter((option) => /\bselected(?:="")?(?:\s|$)/.test(option.attributes));
           assert.equal(selected.length, 1, `${route}: one default year`);
-          assert.equal(Number(attribute(selected[0], "value")), indicator.latest.year, `${route}: default remains the main non-estimated observation`);
+          assert.equal(Number(attribute(selected[0], "value")), defaultPoint.year, `${route}: default is the most recent comparable observation`);
         }
         if (suffix === "/source") {
           assert.match(indicator.source.snapshotPath, /^data\/raw\/eurostat\/[a-z0-9_]+\.json$/i, `${route}: has a local raw-data snapshot`);
@@ -425,7 +427,7 @@ for (const locale of locales) {
       assert(bars.every((button) => ["true", "false"].includes(attribute(button, "aria-pressed"))), `${route}: every chart control exposes selection state`);
       const selected = bars.filter((button) => attribute(button, "aria-pressed") === "true");
       assert.equal(selected.length, 1, `${route}: one selected observation`);
-      assert(attribute(selected[0], "aria-label")?.startsWith(`${indicator.latest.year}:`), `${route}: selected chart observation matches the main year`);
+      assert(attribute(selected[0], "aria-label")?.startsWith(`${defaultPoint.year}:`), `${route}: selected chart observation matches the default year`);
       assert(bars.every((button) => attribute(button, "aria-label")?.trim()), `${route}: chart controls have meaningful accessible names`);
     }
   });
@@ -662,6 +664,30 @@ for (const locale of locales) {
       assert.match(technicalDetails.attributes, /\bopen(?:=""|\b)/i, `${sourceRoute}: technical links are visible by default`);
       assert.match(technicalDetails.text, /\bKB\b/, `${sourceRoute}: snapshot size is disclosed alongside SHA-256`);
       requireLink(source, `${prefix}${localizedRoute(locale, "sources")}`, `${sourceRoute}: links back to the source directory`);
+    }
+  });
+
+  test(`${locale}: index indicators display explicit bases, rate-of-change pages expose cumulative indices, and values never concatenate with years`, async () => {
+    const home = await page(localizedRoute(locale, ""));
+    const rawConcatenatedText = decode(home.html.replace(/<[^>]*>/g, "")).replace(/\s+/g, " ").trim();
+    assert.doesNotMatch(rawConcatenatedText, /\d(?:%|anni|years)?20\d{2}/, `${locale}: homepage never concatenates metric values with years when tags are stripped`);
+    assert.match(home.text, locale === "it" ? /96 \(UE = 100\)/ : /96 \(EU = 100\)/, `${locale}: homepage GDP snapshot displays 2025 index with explicit EU = 100 unit`);
+    assert.match(home.text, locale === "it" ? /Anno 2025/ : /Year 2025/, `${locale}: homepage snapshot prefixes years explicitly`);
+
+    const ghgPage = await page(localizedRoute(locale, "data/greenhouse-gas-emissions"));
+    assert.match(ghgPage.text, /\(1990 = 100\)/, `${locale}: greenhouse gas emissions page displays explicit 1990 = 100 index unit`);
+
+    for (const id of ["inflation", "real-gdp-growth-per-capita"]) {
+      const ratePage = await page(localizedRoute(locale, `data/${id}`));
+      const guide = classRegions(ratePage.html, "index-vs-rate-guide");
+      assert.equal(guide.length, 1, `${locale} ${id}: displays index vs. rate of change guide`);
+      assert.match(guide[0].text, /= 100/, `${locale} ${id}: guide includes cumulative index base`);
+      const toolbar = classRegions(ratePage.html, "trend-mode-toolbar");
+      assert.equal(toolbar.length, 1, `${locale} ${id}: historical chart includes mode toggle and base-year selector`);
+      const modeButtons = elements(toolbar[0].html, "button");
+      assert.equal(modeButtons.length, 2, `${locale} ${id}: toggle between annual rate and cumulative index`);
+      const baseSelect = elements(toolbar[0].html, "select");
+      assert.equal(baseSelect.length, 1, `${locale} ${id}: base-year selector is present`);
     }
   });
 }
