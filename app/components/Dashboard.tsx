@@ -183,7 +183,7 @@ function withQuery(href: string, query: string, year?: number) {
 function selectedPoint(indicator: Indicator, year: string | null) {
   if (String(indicator.latest.year) === year) return indicator.latest;
   if (indicator.newerEstimate && String(indicator.newerEstimate.year) === year) return indicator.newerEstimate;
-  return indicator.series.find((point) => String(point.year) === year) ?? indicator.latest;
+  return indicator.series.find((point) => String(point.year) === year) ?? getDisplayedPoint(indicator);
 }
 
 const copy = {
@@ -1237,7 +1237,7 @@ function getSourceSelection(indicator: Indicator, locale: Locale) {
 function ComparisonPlot({
   indicator,
   locale,
-  point = indicator.latest,
+  point = getDisplayedPoint(indicator),
   visual = false,
 }: {
   indicator: Indicator;
@@ -1410,7 +1410,7 @@ function TrendBars({ indicator, locale, selectedYear }: {
   const zeroPosition = (maximum / range) * 100;
   const breakYears = new Set(getBreakYears(indicator));
   const rangeLabel = labels.trendRange.replace("{start}", String(firstYear)).replace("{end}", String(lastYear));
-  const selected = points.find((point) => point.year === selectedYear) ?? indicator.latest;
+  const selected = points.find((point) => point.year === selectedYear) ?? getDisplayedPoint(indicator);
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const container = scrollRef.current;
@@ -1498,7 +1498,7 @@ function IndicatorCard({
 }) {
   const labels = copy[locale];
   const breakYears = getBreakYears(indicator);
-  const point = expanded ? selectedPoint(indicator, year) : indicator.latest;
+  const point = expanded ? selectedPoint(indicator, year) : getDisplayedPoint(indicator);
   const metadataHref = indicator.source.metadataUrl ?? indicator.definitionSourceUrl;
   const Heading = expanded ? "h1" : "h3";
 
