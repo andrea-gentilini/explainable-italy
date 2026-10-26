@@ -846,8 +846,8 @@ function formatValue(
       years: " anni",
       children_per_woman: " figli per donna",
       per_100: " ogni 100",
-      eu_index: "",
-      index_1990: "",
+      eu_index: " (UE = 100)",
+      index_1990: " (1990 = 100)",
       tonnes_co2e: " t CO₂e per persona",
       toe_per_capita: " tep per persona",
     },
@@ -859,8 +859,8 @@ function formatValue(
       years: " years",
       children_per_woman: " children per woman",
       per_100: " per 100",
-      eu_index: "",
-      index_1990: "",
+      eu_index: " (EU = 100)",
+      index_1990: " (1990 = 100)",
       tonnes_co2e: " t CO₂e per person",
       toe_per_capita: " toe per person",
     },
@@ -1423,7 +1423,7 @@ function TrendBars({ indicator, locale, selectedYear }: {
 
   return (
     <>
-      <div className="trend-reading" aria-live="polite"><span>{labels.italy} · {selected.year}</span><strong>{value(selected.italy)}</strong></div>
+      <div className="trend-reading" aria-live="polite"><span>{labels.italy} · {selected.year}</span>{" "}<strong>{value(selected.italy)}</strong></div>
       <p className="trend-interaction" id={`trend-help-${indicator.id}`}>{labels.trendInteraction}<span className="visually-hidden"> {labels.trendKeyboardHelp}</span></p>
       <p className="trend-scale">{labels.trendScale}: {formatRange(minimum, maximum, indicator.unitKey, indicator.precision, locale)}</p>
       <div className="trend-scroll" ref={scrollRef} role="region" aria-label={`${labels.trend}. ${rangeLabel}`}>
@@ -1535,7 +1535,7 @@ function IndicatorCard({
               indicator.precision,
               locale,
             )}
-          </p>
+          </p>{" "}
           <span>
             {labels.italy} · {point.year}
             {point.status
@@ -1648,7 +1648,7 @@ function IndicatorCard({
               href={withQuery(pageHref(locale, `data/${indicator.id}/source`), query, point.year)}
             >
               <div>
-                <span>{labels.source}</span>
+                <span>{labels.source}</span>{" "}
                 <strong>
                   {indicator.source.institution}
                   {indicator.source.originalInstitution !== indicator.source.institution
@@ -1657,7 +1657,7 @@ function IndicatorCard({
                 </strong>
               </div>
               <div>
-                <span>{labels.sourceUpdated}</span>
+                <span>{labels.sourceUpdated}</span>{" "}
                 <strong>
                   {formatDate(indicator.source.sourceUpdatedAt, locale)}
                 </strong>
@@ -1782,8 +1782,8 @@ function SourceVerification({
 
       <div className="indicator-toolbar"><YearSelection indicator={indicator} point={displayedPoint} locale={locale} /><ShareLink locale={locale} key={`${query}-${displayedPoint.year}`} />{indicator.source.snapshotPath ? <a className="compact-download" href={`${basePath}/${indicator.source.snapshotPath}`} download>{labels.snapshotDownload} (JSON) <span aria-hidden="true">↓</span></a> : null}</div>
       <div className="source-value-panel">
-        <span>{labels.sourceDisplayed}</span>
-        <strong>{displayedValue}</strong>
+        <span>{labels.sourceDisplayed}</span>{" "}
+        <strong>{displayedValue}</strong>{" "}
         <small>
           {labels.italy} · {displayedPoint.year} ·{" "}
           {displayedPoint.status
@@ -2465,7 +2465,7 @@ export function Dashboard({
       <header className="site-header">
         <a className="brand" href={pageHref(locale)}>
           <span>
-            <strong>Explainable Italy</strong>
+            <strong>Explainable Italy</strong>{" "}
             <small>{labels.subtitle}</small>
           </span>
         </a>
@@ -2658,7 +2658,7 @@ export function Dashboard({
 
               <div className="hundred-euro-card">
                 <div className="hundred-euro-heading">
-                  <span>{locale === "it" ? "100 €" : "€100"}</span>
+                  <span>{locale === "it" ? "100 €" : "€100"}</span>{" "}
                   <small>{heroCardLabel}</small>
                 </div>
 
@@ -3123,7 +3123,7 @@ export function Dashboard({
       <footer>
         <div className="brand footer-brand">
           <span>
-            <strong>Explainable Italy</strong>
+            <strong>Explainable Italy</strong>{" "}
             <small>{labels.footer}</small>
           </span>
         </div>

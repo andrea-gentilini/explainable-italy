@@ -3148,3 +3148,9 @@ a.source-box:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+/* Index vs. rate of change controls and explicit index units */
+.snapshot-grid strong {
+  font-size: clamp(1.85rem, 3vw, 2.75rem);
+  line-height: 1.08;
+}

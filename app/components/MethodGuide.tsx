@@ -44,7 +44,7 @@ export function MethodGuide({ locale, sourcesHref, catalogueHref }: { locale: "i
                 <span key={value} data-middle={index === 2} style={{ "--example-height": `${value / 40 * 100}%` } as CSSProperties}>
                   <i aria-hidden="true" />
                   <strong>{value}</strong>
-                  {index === 2 ? <small>{it ? "mediana" : "median"}</small> : null}
+                  {index === 2 ? <>{" "}<small>{it ? "mediana" : "median"}</small></> : null}
                 </span>
               ))}
             </div>
