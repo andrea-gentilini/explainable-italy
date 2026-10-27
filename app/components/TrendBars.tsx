@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { buildCumulativeIndexSeries } from "./indicator-reading.mjs";
+import {
+  buildCumulativeIndexSeries,
+  computeTrendScale,
+} from "./indicator-reading.mjs";
 import { copy } from "./dashboard-copy";
 import type { Indicator, Locale } from "./dashboard-types";
 import {
@@ -30,6 +33,7 @@ export function TrendBars({
   const defaultBaseYear = firstYear - 1;
   const [trendMode, setTrendMode] = useState<"rate" | "index">("rate");
   const [baseYear, setBaseYear] = useState<number>(defaultBaseYear);
+  const [scaleMode, setScaleMode] = useState<"focused" | "zero">("focused");
   const cumulative = useMemo(
     () => (isPercentChange ? buildCumulativeIndexSeries(points, baseYear) : null),
     [isPercentChange, points, baseYear],
@@ -41,16 +45,34 @@ export function TrendBars({
   );
   const showingIndex = Boolean(cumulative && trendMode === "index");
   const values = showingIndex
-    ? (cumulative?.points ?? []).map((entry) => entry.italyIndex)
-    : points.map((point) => point.italy);
-  const minimum = showingIndex ? 0 : Math.min(0, ...values);
-  const maximum = showingIndex
-    ? Math.max(100, ...values)
-    : Math.max(0, ...values);
+    ? [
+        100,
+        ...(cumulative?.points ?? []).flatMap((entry) => [
+          entry.italyIndex,
+          ...(entry.euIndex !== null ? [entry.euIndex] : []),
+        ]),
+      ]
+    : points.flatMap((point) => [
+        point.italy,
+        ...(point.eu !== null ? [point.eu] : []),
+      ]);
+  const scale = computeTrendScale(
+    values,
+    showingIndex ? "eu_index" : indicator.unitKey,
+    showingIndex ? 1 : indicator.precision,
+    scaleMode,
+  );
+  const { minimum, maximum } = scale;
   const range = maximum - minimum || 1;
   const zeroPosition = showingIndex
-    ? ((maximum - 100) / range) * 100
-    : (maximum / range) * 100;
+    ? minimum <= 100 && maximum >= 100
+      ? ((maximum - 100) / range) * 100
+      : 100
+    : minimum < 0 && maximum > 0
+      ? (maximum / range) * 100
+      : maximum <= 0
+        ? 0
+        : 100;
   const breakYears = new Set(getBreakYears(indicator));
   const rangeLabel = labels.trendRange
     .replace("{start}", String(firstYear))
@@ -63,7 +85,7 @@ export function TrendBars({
   useEffect(() => {
     const container = scrollRef.current;
     const active = container?.querySelector<HTMLButtonElement>(
-      'button[aria-pressed="true"]',
+      'button.trend-column[aria-pressed="true"]',
     );
     if (container && active) {
       container.scrollLeft =
@@ -139,33 +161,82 @@ export function TrendBars({
             ? formatIndexWithBase(selectedCumulative.italyIndex)
             : value(selected.italy)}
         </strong>
-        {cumulative && selectedCumulative ? (
-          <>
-            {" "}
+        {showingIndex && selectedCumulative ? (
+          <span className="trend-reading-peers">
+            {selectedCumulative.euIndex !== null ? (
+              <span className="trend-reading-peer">
+                {labels.eu}:{" "}
+                <strong>{formatIndexNumber(selectedCumulative.euIndex)}</strong>
+              </span>
+            ) : null}
             <small>
-              {showingIndex
-                ? `${locale === "it" ? "Variazione annua" : "Annual change"}: ${value(selected.italy)}`
-                : `${locale === "it" ? "Indice cumulato" : "Cumulative index"}: ${formatIndexWithBase(selectedCumulative.italyIndex)}`}
+              {locale === "it" ? "Variazione annua" : "Annual change"}:{" "}
+              {value(selected.italy)}
             </small>
-          </>
-        ) : null}
+          </span>
+        ) : (
+          <span className="trend-reading-peers">
+            {selected.eu !== null ? (
+              <span className="trend-reading-peer">
+                {labels.eu}: <strong>{value(selected.eu)}</strong>
+              </span>
+            ) : null}
+            <span className="trend-reading-peer">
+              {labels.median}: <strong>{value(selected.median)}</strong>
+            </span>
+            {cumulative && selectedCumulative ? (
+              <small>
+                {locale === "it" ? "Indice cumulato" : "Cumulative index"}:{" "}
+                {formatIndexWithBase(selectedCumulative.italyIndex)}
+              </small>
+            ) : null}
+          </span>
+        )}
       </div>
       <p className="trend-interaction" id={`trend-help-${indicator.id}`}>
         {labels.trendInteraction}
         <span className="visually-hidden"> {labels.trendKeyboardHelp}</span>
       </p>
-      <p className="trend-scale">
-        {labels.trendScale}:{" "}
-        {showingIndex
-          ? `${formatIndexNumber(minimum)} – ${formatIndexWithBase(maximum)}`
-          : formatRange(
-              minimum,
-              maximum,
-              indicator.unitKey,
-              indicator.precision,
-              locale,
-            )}
-      </p>
+      <div className="trend-scale-row">
+        <p className="trend-scale">
+          {labels.trendScale}:{" "}
+          {showingIndex
+            ? `${formatIndexNumber(minimum)} – ${formatIndexWithBase(maximum)}`
+            : formatRange(
+                minimum,
+                maximum,
+                indicator.unitKey,
+                indicator.precision,
+                locale,
+              )}
+        </p>
+        {scale.canFocus ? (
+          <div
+            className="trend-scale-switch"
+            role="group"
+            aria-label={
+              locale === "it"
+                ? "Scala verticale del grafico"
+                : "Chart vertical scale"
+            }
+          >
+            <button
+              type="button"
+              aria-pressed={scale.focused}
+              onClick={() => setScaleMode("focused")}
+            >
+              {locale === "it" ? "Intervallo dati" : "Data range"}
+            </button>
+            <button
+              type="button"
+              aria-pressed={!scale.focused}
+              onClick={() => setScaleMode("zero")}
+            >
+              {locale === "it" ? "Da zero" : "From zero"}
+            </button>
+          </div>
+        ) : null}
+      </div>
       <div
         className="trend-scroll"
         ref={scrollRef}
@@ -195,22 +266,36 @@ export function TrendBars({
               showingIndex && cumulativeEntry
                 ? cumulativeEntry.italyIndex
                 : point.italy;
-            const top = showingIndex
-              ? ((maximum - plottedValue) / range) * 100
-              : plottedValue >= 0
-                ? ((maximum - plottedValue) / range) * 100
-                : zeroPosition;
-            const height = showingIndex
-              ? (plottedValue / range) * 100
-              : (Math.abs(plottedValue) / range) * 100;
+            const plottedEu =
+              showingIndex && cumulativeEntry
+                ? cumulativeEntry.euIndex
+                : point.eu;
+            const height =
+              minimum < 0 && maximum > 0
+                ? (Math.abs(plottedValue) / range) * 100
+                : maximum <= 0
+                  ? (Math.abs(plottedValue) / range) * 100
+                  : Math.max(0, ((plottedValue - minimum) / range) * 100);
+            const top =
+              minimum < 0 && maximum > 0
+                ? plottedValue >= 0
+                  ? ((maximum - plottedValue) / range) * 100
+                  : zeroPosition
+                : maximum <= 0
+                  ? 0
+                  : 100 - height;
+            const euTop =
+              plottedEu !== null && Number.isFinite(plottedEu)
+                ? Math.min(100, Math.max(0, ((maximum - plottedEu) / range) * 100))
+                : null;
             const methodNote =
               hasBreak && !point.status?.includes("b")
                 ? ` · ${labels.statusMethodNote}`
                 : "";
             const description =
               showingIndex && cumulativeEntry
-                ? `${point.year}: ${formatIndexWithBase(cumulativeEntry.italyIndex)} (${value(point.italy)}) · ${statusDescription(point.status, locale, false)}${methodNote}`
-                : `${point.year}: ${value(point.italy)} · ${statusDescription(point.status, locale, false)}${methodNote}`;
+                ? `${point.year}: ${formatIndexWithBase(cumulativeEntry.italyIndex)} (${value(point.italy)})${cumulativeEntry.euIndex !== null ? ` · ${labels.eu}: ${formatIndexNumber(cumulativeEntry.euIndex)}` : ""} · ${statusDescription(point.status, locale, false)}${methodNote}`
+                : `${point.year}: ${value(point.italy)}${point.eu !== null ? ` (${labels.eu}: ${value(point.eu)})` : ""} · ${statusDescription(point.status, locale, false)}${methodNote}`;
             return (
               <button
                 className="trend-column"
@@ -237,7 +322,7 @@ export function TrendBars({
                   event.preventDefault();
                   updateQuery({ year: String(points[next].year) });
                   event.currentTarget.parentElement
-                    ?.querySelectorAll<HTMLButtonElement>("button")
+                    ?.querySelectorAll<HTMLButtonElement>("button.trend-column")
                     [next]?.focus();
                 }}
               >
@@ -246,6 +331,13 @@ export function TrendBars({
                   className={`trend-bar ${!showingIndex && point.italy < 0 ? "negative" : ""} ${hasBreak ? "has-break" : ""} ${uncertain ? "uncertain" : ""}`}
                   style={{ top: `${top}%`, height: `${height}%` }}
                 />
+                {euTop !== null ? (
+                  <span
+                    aria-hidden="true"
+                    className="trend-eu-marker"
+                    style={{ top: `${euTop}%` }}
+                  />
+                ) : null}
                 <small aria-hidden="true">
                   {String(point.year).slice(2)}
                   {hasBreak ? <sup>*</sup> : null}

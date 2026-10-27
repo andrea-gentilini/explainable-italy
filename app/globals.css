@@ -3863,6 +3863,78 @@ a.source-box:focus-visible {
   font-size: 0.85rem;
 }
 
+.trend-reading-peers {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.45rem 0.9rem;
+  margin-left: 0.35rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--line);
+}
+
+.trend-reading-peer {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.trend-reading-peer strong {
+  color: var(--foreground);
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.trend-scale-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin: 0.45rem 0;
+}
+
+.trend-scale-row .trend-scale {
+  margin: 0;
+}
+
+.trend-scale-switch {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.trend-scale-switch button {
+  min-height: 2rem;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0.3rem;
+  background: var(--background);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.trend-scale-switch button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.trend-eu-marker {
+  position: absolute;
+  right: 4%;
+  left: 4%;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--blue);
+  box-shadow: 0 0 0 1px var(--surface);
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
 @media (max-width: 1180px) {
   .site-header nav {
     display: none;

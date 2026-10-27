@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
   buildCumulativeIndexSeries,
+  computeComparisonScale,
+  computeTrendScale,
   getIndicatorReading,
   supportedReadingIds,
 } from "../app/components/indicator-reading.mjs";
@@ -195,4 +197,41 @@ test("buildCumulativeIndexSeries computes chain-linked indices and supports reba
   assert.equal(rebased.baseYear, 2021);
   assert.ok(Math.abs(rebased.points[0].italyIndex - 100) < 1e-9);
   assert.ok(Math.abs(rebased.points[1].italyIndex - 110) < 1e-9);
+});
+
+test("computeComparisonScale and computeTrendScale prevent squashed dots and support focused and zero-anchored scales", () => {
+  for (const indicator of dashboard.indicators) {
+    const point = indicator.newerEstimate ?? indicator.latest;
+    const values = [point.italy, ...(point.eu !== null ? [point.eu] : []), point.median];
+    const scale = computeComparisonScale(values, indicator.unitKey, indicator.precision);
+    assert.ok(scale.maximum > scale.minimum, `${indicator.id}: comparison scale has positive range`);
+    for (const val of values) {
+      const pos = ((val - scale.minimum) / (scale.maximum - scale.minimum)) * 100;
+      assert.ok(pos > 5 && pos < 95, `${indicator.id}: comparison dot at ${pos.toFixed(1)}% is not glued to track edges`);
+    }
+
+    const seriesValues = indicator.series.flatMap((entry) => [
+      entry.italy,
+      ...(entry.eu !== null ? [entry.eu] : []),
+    ]);
+    const trendFocused = computeTrendScale(seriesValues, indicator.unitKey, indicator.precision, "focused");
+    const trendZero = computeTrendScale(seriesValues, indicator.unitKey, indicator.precision, "zero");
+    assert.ok(trendFocused.minimum <= Math.min(...seriesValues), `${indicator.id}: trend scale minimum covers series min`);
+    assert.ok(trendFocused.maximum >= Math.max(...seriesValues), `${indicator.id}: trend scale maximum covers series max`);
+    if (trendFocused.canFocus) {
+      assert.ok(trendFocused.focused && trendFocused.minimum > 0, `${indicator.id}: focused trend scale starts above zero`);
+      assert.equal(trendZero.minimum, 0, `${indicator.id}: zero mode anchors trend scale at 0`);
+      assert.equal(trendZero.focused, false, `${indicator.id}: zero mode disables focused flag`);
+    }
+  }
+
+  const lifeExpectancy = byId.get("life-expectancy");
+  const lifePoint = lifeExpectancy.newerEstimate ?? lifeExpectancy.latest;
+  const lifeScale = computeComparisonScale(
+    [lifePoint.italy, lifePoint.eu, lifePoint.median],
+    lifeExpectancy.unitKey,
+    lifeExpectancy.precision,
+  );
+  assert.equal(lifeScale.focused, true);
+  assert.ok(lifeScale.minimum >= 70, "life-expectancy comparison scale focuses on realistic lifespan range");
 });

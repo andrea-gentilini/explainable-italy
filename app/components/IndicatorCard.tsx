@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import { ShareLink } from "./ShareLink";
 import { IndicatorReading } from "./IndicatorReading";
+import { computeComparisonScale } from "./indicator-reading.mjs";
 import { TrendBars } from "./TrendBars";
 import { copy, sectionColors } from "./dashboard-copy";
 import type { DataPoint, Indicator, Locale } from "./dashboard-types";
@@ -45,13 +46,14 @@ export function ComparisonPlot({
       : []),
     { id: "median", label: labels.median, value: point.median },
   ];
-  const minimum = Math.min(0, ...values.map((entry) => entry.value));
-  const maximum = Math.max(
-    ["percent", "percent_spending"].includes(indicator.unitKey) ? 100 : 0,
-    ...values.map((entry) => entry.value),
+  const { minimum, maximum, focused } = computeComparisonScale(
+    values.map((entry) => entry.value),
+    indicator.unitKey,
+    indicator.precision,
   );
   const range = maximum - minimum || 1;
-  const position = (value: number) => ((value - minimum) / range) * 100;
+  const position = (value: number) =>
+    Math.min(100, Math.max(0, ((value - minimum) / range) * 100));
   const methodLabel =
     point.euMethod === "official_aggregate"
       ? labels.officialAggregate
@@ -151,6 +153,11 @@ export function ComparisonPlot({
             indicator.precision,
             locale,
           )}
+          {focused
+            ? locale === "it"
+              ? " (intervallo focalizzato)"
+              : " (focused range)"
+            : ""}
         </p>
       ) : null}
       <p className="comparison-method">

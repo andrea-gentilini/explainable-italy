@@ -136,7 +136,7 @@ export const copy = {
     trendRange: "Serie completa: {start}–{end}",
     trendScale: "Scala del grafico",
     trendLegend:
-      "Barre tratteggiate: dati provvisori, stime o previsioni. *: discontinuità. Anni senza dato lasciati vuoti. Tutti i valori e i contrassegni sono nella tabella.",
+      "Barre: Italia. Trattino blu: UE (quando disponibile). Barre tratteggiate: dati provvisori, stime o previsioni. *: discontinuità. Anni senza dato lasciati vuoti. Tutti i valori e i contrassegni sono nella tabella.",
     resetSearch: "Azzera ricerca e filtri",
     clearSearch: "Cancella ricerca",
     backToTopic: "Torna al tema: {topic}",
@@ -436,7 +436,7 @@ export const copy = {
     trendRange: "Full series: {start}–{end}",
     trendScale: "Chart scale",
     trendLegend:
-      "Hatched bars: provisional data, estimates or forecasts. *: break in series. Years without data are left blank. All values and flags are in the table.",
+      "Bars: Italy. Blue tick: EU (when available). Hatched bars: provisional data, estimates or forecasts. *: break in series. Years without data are left blank. All values and flags are in the table.",
     resetSearch: "Reset search and filters",
     clearSearch: "Clear search",
     backToTopic: "Back to topic: {topic}",

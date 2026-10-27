@@ -81,6 +81,171 @@ export const supportedReadingIds = Object.freeze([
   ...Object.keys(annualChanges),
 ]);
 
+/**
+ * Computes a human-readable decimal step for chart scales.
+ * @param {number} span
+ * @param {number} [precision=1]
+ */
+function niceStep(span, precision = 1) {
+  const minStep = 10 ** -Math.max(0, Math.min(4, Math.trunc(precision)));
+  if (!Number.isFinite(span) || span <= 0) return minStep;
+  const rough = span / 5;
+  const magnitude = 10 ** Math.floor(Math.log10(Math.max(rough, minStep)));
+  const residual = rough / magnitude;
+  const nice = residual <= 1 ? 1 : residual <= 2 ? 2 : residual <= 5 ? 5 : 10;
+  return Math.max(minStep, Number((nice * magnitude).toFixed(6)));
+}
+
+/**
+ * Computes a clean, readable scale [minimum, maximum] for the horizontal ComparisonPlot
+ * so dots are neither glued to the 100% right edge nor squashed into a tiny sliver on
+ * high-baseline structural indicators (such as life expectancy or median age).
+ *
+ * @param {number[]} values
+ * @param {string} unitKey
+ * @param {number} [precision=1]
+ * @returns {{minimum: number, maximum: number, focused: boolean}}
+ */
+export function computeComparisonScale(values, unitKey, precision = 1) {
+  const finite = values.filter(Number.isFinite);
+  const minStep = 10 ** -Math.max(0, Math.min(4, Math.trunc(precision)));
+  if (!finite.length) return { minimum: 0, maximum: 1, focused: false };
+  const minVal = Math.min(...finite);
+  const maxVal = Math.max(...finite);
+  const spread = maxVal - minVal;
+
+  if (minVal < 0 && maxVal > 0) {
+    const pad = Math.max(spread * 0.2, minStep * 2);
+    const step = niceStep(spread + pad * 2, precision);
+    return {
+      minimum: Number((Math.floor((minVal - pad) / step) * step).toFixed(6)),
+      maximum: Number((Math.ceil((maxVal + pad) / step) * step).toFixed(6)),
+      focused: false,
+    };
+  }
+
+  if (maxVal <= 0) {
+    const absMax = Math.abs(minVal);
+    const pad = Math.max(absMax * 0.18, spread * 0.35, minStep * 2);
+    const step = niceStep(absMax + pad, precision);
+    return {
+      minimum: Number((Math.floor((minVal - pad) / step) * step).toFixed(6)),
+      maximum: 0,
+      focused: false,
+    };
+  }
+
+  // High-baseline structural indicators (e.g. life expectancy, median age, employment rate, GDP PPS)
+  if (minVal > 0 && maxVal > 15 && minVal / maxVal >= 0.5) {
+    const effectiveSpread = Math.max(spread, maxVal * 0.08);
+    const mid = (minVal + maxVal) / 2;
+    const halfSpan = Math.max(effectiveSpread * 0.9, minStep * 2);
+    const step = niceStep(halfSpan * 2, precision);
+    const minimum = Math.max(
+      0,
+      Number((Math.floor((mid - halfSpan) / step) * step).toFixed(6)),
+    );
+    let maximum = Number((Math.ceil((mid + halfSpan) / step) * step).toFixed(6));
+    if (
+      ["percent", "percent_spending"].includes(unitKey) &&
+      maxVal <= 100 &&
+      maximum > 100
+    ) {
+      maximum = 100;
+    }
+    return { minimum, maximum, focused: minimum > 0 };
+  }
+
+  const pad = Math.max(maxVal * 0.15, spread * 0.25, minStep * 2);
+  const step = niceStep(maxVal + pad, precision);
+  let maximum = Number((Math.ceil((maxVal + pad) / step) * step).toFixed(6));
+  if (
+    ["percent", "percent_spending"].includes(unitKey) &&
+    maxVal <= 100 &&
+    maximum > 100
+  ) {
+    maximum = 100;
+  }
+  return { minimum: 0, maximum, focused: false };
+}
+
+/**
+ * Computes a clean vertical scale [minimum, maximum] for the historical TrendBars chart,
+ * supporting both a focused data-range scale and a zero-anchored scale for high-baseline series.
+ *
+ * @param {number[]} values
+ * @param {string} unitKey
+ * @param {number} [precision=1]
+ * @param {'auto'|'focused'|'zero'} [mode='auto']
+ * @returns {{minimum: number, maximum: number, canFocus: boolean, focused: boolean}}
+ */
+export function computeTrendScale(values, unitKey, precision = 1, mode = "auto") {
+  const finite = values.filter(Number.isFinite);
+  const minStep = 10 ** -Math.max(0, Math.min(4, Math.trunc(precision)));
+  if (!finite.length) {
+    return { minimum: 0, maximum: 1, canFocus: false, focused: false };
+  }
+  const minVal = Math.min(...finite);
+  const maxVal = Math.max(...finite);
+  const spread = maxVal - minVal;
+  const canFocus = minVal > 0 && minVal / maxVal >= 0.55;
+  const useFocus = canFocus && mode !== "zero";
+
+  if (minVal < 0 && maxVal > 0) {
+    const pad = Math.max(spread * 0.1, minStep);
+    const step = niceStep(spread + pad * 2, precision);
+    return {
+      minimum: Number((Math.floor((minVal - pad) / step) * step).toFixed(6)),
+      maximum: Number((Math.ceil((maxVal + pad) / step) * step).toFixed(6)),
+      canFocus: false,
+      focused: false,
+    };
+  }
+
+  if (maxVal <= 0) {
+    const absMax = Math.abs(minVal);
+    const pad = Math.max(absMax * 0.1, spread * 0.15, minStep);
+    const step = niceStep(absMax + pad, precision);
+    return {
+      minimum: Number((Math.floor((minVal - pad) / step) * step).toFixed(6)),
+      maximum: 0,
+      canFocus: false,
+      focused: false,
+    };
+  }
+
+  if (useFocus) {
+    const padBottom = Math.max(spread * 0.25, maxVal * 0.02, minStep * 2);
+    const padTop = Math.max(spread * 0.18, maxVal * 0.015, minStep);
+    const step = niceStep(spread + padBottom + padTop, precision);
+    const minimum = Math.max(
+      0,
+      Number((Math.floor((minVal - padBottom) / step) * step).toFixed(6)),
+    );
+    let maximum = Number((Math.ceil((maxVal + padTop) / step) * step).toFixed(6));
+    if (
+      ["percent", "percent_spending"].includes(unitKey) &&
+      maxVal <= 100 &&
+      maximum > 100
+    ) {
+      maximum = 100;
+    }
+    return { minimum, maximum, canFocus, focused: minimum > 0 };
+  }
+
+  const padTop = Math.max(maxVal * 0.08, spread * 0.15, minStep);
+  const step = niceStep(maxVal + padTop, precision);
+  let maximum = Number((Math.ceil((maxVal + padTop) / step) * step).toFixed(6));
+  if (
+    ["percent", "percent_spending"].includes(unitKey) &&
+    maxVal <= 100 &&
+    maximum > 100
+  ) {
+    maximum = 100;
+  }
+  return { minimum: 0, maximum, canFocus, focused: false };
+}
+
 /** @param {number} value @param {number} precision */
 function rounded(value, precision) {
   // Match the card’s Intl decimal rounding, including halfway values.

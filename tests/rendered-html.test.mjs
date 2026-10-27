@@ -677,6 +677,22 @@ for (const locale of locales) {
     const ghgPage = await page(localizedRoute(locale, "data/greenhouse-gas-emissions"));
     assert.match(ghgPage.text, /\(1990 = 100\)/, `${locale}: greenhouse gas emissions page displays explicit 1990 = 100 index unit`);
 
+    const lifePage = await page(localizedRoute(locale, "data/life-expectancy"));
+    const compScale = classRegions(lifePage.html, "comparison-scale");
+    assert.equal(compScale.length, 1, `${locale}: life-expectancy displays comparison scale`);
+    assert.match(
+      compScale[0].text,
+      locale === "it" ? /intervallo focalizzato/ : /focused range/,
+      `${locale}: high-baseline comparison plot discloses focused range`,
+    );
+    const scaleSwitch = classRegions(lifePage.html, "trend-scale-switch");
+    assert.equal(scaleSwitch.length, 1, `${locale}: life-expectancy historical chart includes scale switch`);
+    assert.equal(elements(scaleSwitch[0].html, "button").length, 2, `${locale}: scale switch offers data range and from-zero buttons`);
+    const euMarkers = classRegions(lifePage.html, "trend-eu-marker");
+    assert.ok(euMarkers.length > 0, `${locale}: historical chart renders EU reference markers on columns`);
+    const readingPeers = classRegions(lifePage.html, "trend-reading-peers");
+    assert.equal(readingPeers.length, 1, `${locale}: historical chart reading displays EU and median peers for the selected year`);
+
     for (const id of ["inflation", "real-gdp-growth-per-capita"]) {
       const ratePage = await page(localizedRoute(locale, `data/${id}`));
       const guide = classRegions(ratePage.html, "index-vs-rate-guide");
