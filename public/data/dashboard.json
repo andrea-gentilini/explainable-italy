@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-21T14:37:10.434Z",
+  "generatedAt": "2026-10-27T16:53:34.368Z",
   "methodologyVersion": "1.3.0",
   "comparison": {
     "it": "Quando disponibile, il valore UE è l’aggregato ufficiale Eurostat. Se non esiste un aggregato con lo stesso perimetro, non ne costruiamo uno. La mediana è calcolata ordinando i valori dei Paesi disponibili e prendendo quello centrale; con un numero pari di Paesi è la media dei due valori centrali. Vicino al confronto sono indicati copertura, valori mancanti e contrassegni di qualità.",
@@ -5042,7 +5042,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:12.079Z",
+        "accessedAt": "2026-10-27T16:53:35.502Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -10012,7 +10012,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:12.079Z",
+        "accessedAt": "2026-10-27T16:53:35.502Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -14986,7 +14986,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:12.079Z",
+        "accessedAt": "2026-10-27T16:53:35.502Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -19960,7 +19960,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:12.079Z",
+        "accessedAt": "2026-10-27T16:53:35.502Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -24934,7 +24934,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:12.079Z",
+        "accessedAt": "2026-10-27T16:53:35.502Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -29908,7 +29908,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:12.079Z",
+        "accessedAt": "2026-10-27T16:53:35.502Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -34882,7 +34882,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:12.079Z",
+        "accessedAt": "2026-10-27T16:53:35.502Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -39856,7 +39856,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:12.079Z",
+        "accessedAt": "2026-10-27T16:53:35.502Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -44830,7 +44830,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:12.079Z",
+        "accessedAt": "2026-10-27T16:53:35.502Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -49804,7 +49804,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:12.079Z",
+        "accessedAt": "2026-10-27T16:53:35.502Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -54717,7 +54717,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:12.079Z",
+        "accessedAt": "2026-10-27T16:53:35.502Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -59598,7 +59598,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_main_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_MAIN",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:13.363Z",
+        "accessedAt": "2026-10-27T16:53:36.270Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_main.json",
         "sha256": "28fc4aecbf5386f421e5ad9082616b461b87150c8aaf6071417d3688c835defc",
         "bytes": 54340
@@ -64467,7 +64467,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_main_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_MAIN",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:13.363Z",
+        "accessedAt": "2026-10-27T16:53:36.270Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_main.json",
         "sha256": "28fc4aecbf5386f421e5ad9082616b461b87150c8aaf6071417d3688c835defc",
         "bytes": 54340
@@ -69331,7 +69331,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_main_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_MAIN",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:13.363Z",
+        "accessedAt": "2026-10-27T16:53:36.270Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_main.json",
         "sha256": "28fc4aecbf5386f421e5ad9082616b461b87150c8aaf6071417d3688c835defc",
         "bytes": 54340
@@ -74207,7 +74207,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_main_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_MAIN",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:13.363Z",
+        "accessedAt": "2026-10-27T16:53:36.270Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_main.json",
         "sha256": "28fc4aecbf5386f421e5ad9082616b461b87150c8aaf6071417d3688c835defc",
         "bytes": 54340
@@ -79083,7 +79083,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_main_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_MAIN",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:13.363Z",
+        "accessedAt": "2026-10-27T16:53:36.270Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_main.json",
         "sha256": "28fc4aecbf5386f421e5ad9082616b461b87150c8aaf6071417d3688c835defc",
         "bytes": 54340
@@ -83959,7 +83959,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_main_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_MAIN",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:13.363Z",
+        "accessedAt": "2026-10-27T16:53:36.270Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_main.json",
         "sha256": "28fc4aecbf5386f421e5ad9082616b461b87150c8aaf6071417d3688c835defc",
         "bytes": 54340
@@ -88807,7 +88807,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10dd_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10DD_EDPT1",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:14.246Z",
+        "accessedAt": "2026-10-27T16:53:36.475Z",
         "snapshotPath": "data/raw/eurostat/gov_10dd_edpt1.json",
         "sha256": "c0622fd688b49b14faa40a55affaff2f088949471e7cb3f2db67a318e05c8fb4",
         "bytes": 11994
@@ -93804,7 +93804,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/demo_pop_esms.htm",
         "doi": "https://doi.org/10.2908/DEMO_PJANIND",
         "sourceUpdatedAt": "2026-09-25T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:14.393Z",
+        "accessedAt": "2026-10-27T16:53:36.657Z",
         "snapshotPath": "data/raw/eurostat/demo_pjanind.json",
         "sha256": "2e5cd8463e5099a1f3657f9814f8e9aa6bd0d3e3ac1a426b98660cd9d608f8db",
         "bytes": 30736
@@ -98810,7 +98810,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/demo_pop_esms.htm",
         "doi": "https://doi.org/10.2908/DEMO_PJANIND",
         "sourceUpdatedAt": "2026-09-25T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:14.393Z",
+        "accessedAt": "2026-10-27T16:53:36.657Z",
         "snapshotPath": "data/raw/eurostat/demo_pjanind.json",
         "sha256": "2e5cd8463e5099a1f3657f9814f8e9aa6bd0d3e3ac1a426b98660cd9d608f8db",
         "bytes": 30736
@@ -103816,7 +103816,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/demo_pop_esms.htm",
         "doi": "https://doi.org/10.2908/DEMO_PJANIND",
         "sourceUpdatedAt": "2026-09-25T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:14.393Z",
+        "accessedAt": "2026-10-27T16:53:36.657Z",
         "snapshotPath": "data/raw/eurostat/demo_pjanind.json",
         "sha256": "2e5cd8463e5099a1f3657f9814f8e9aa6bd0d3e3ac1a426b98660cd9d608f8db",
         "bytes": 30736
@@ -108634,7 +108634,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/demo_fer_esms.htm",
         "doi": "https://doi.org/10.2908/DEMO_FIND",
         "sourceUpdatedAt": "2026-09-30T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:14.525Z",
+        "accessedAt": "2026-10-27T16:53:36.844Z",
         "snapshotPath": "data/raw/eurostat/demo_find.json",
         "sha256": "3f9ce58b175956d6200c68c92b3dfb5beda385aac70778817e6df13d3fdc5712",
         "bytes": 12034
@@ -113579,7 +113579,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/demo_mor_esms.htm",
         "doi": "https://doi.org/10.2908/DEMO_MLEXPEC",
         "sourceUpdatedAt": "2026-09-25T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:14.658Z",
+        "accessedAt": "2026-10-27T16:53:37.019Z",
         "snapshotPath": "data/raw/eurostat/demo_mlexpec.json",
         "sha256": "a5778e1649f0247dc2d737bce15b67893b0453ac67a308c0177bc516e5fc3dc2",
         "bytes": 12347
@@ -113735,7 +113735,7 @@
           },
           {
             "geo": "LU",
-            "value": 73.9,
+            "value": 73.6,
             "status": null,
             "sourceStatus": null
           },
@@ -116892,7 +116892,7 @@
             },
             {
               "geo": "LU",
-              "value": 73.9,
+              "value": 73.6,
               "status": null,
               "sourceStatus": null
             },
@@ -116962,10 +116962,10 @@
         "apiUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/lfsi_emp_a?lang=en&sinceTimePeriod=2000&freq=A&indic_em=EMP_LFS&sex=T&age=Y20-64&unit=PC_POP&geo=AT&geo=BE&geo=BG&geo=HR&geo=CY&geo=CZ&geo=DK&geo=EE&geo=FI&geo=FR&geo=DE&geo=EL&geo=HU&geo=IE&geo=IT&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=PL&geo=PT&geo=RO&geo=SK&geo=SI&geo=ES&geo=SE&geo=EU27_2020",
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/lfsi_esms.htm",
         "doi": "https://doi.org/10.2908/LFSI_EMP_A",
-        "sourceUpdatedAt": "2026-09-10T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:14.782Z",
+        "sourceUpdatedAt": "2026-10-26T23:00:00+0100",
+        "accessedAt": "2026-10-27T16:53:37.198Z",
         "snapshotPath": "data/raw/eurostat/lfsi_emp_a.json",
-        "sha256": "a527f958f1b44a0e5efef9b8797bbabd2f31220cc8c334a6aa55ee55b0857ae0",
+        "sha256": "fe38b7c9069d4015c19f2d9ca1543fd50c33db1d45468aacdefac647ac3636ae",
         "bytes": 10249
       }
     },
@@ -120346,11 +120346,11 @@
         "apiUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/une_rt_a?lang=en&sinceTimePeriod=2000&freq=A&age=Y15-74&unit=PC_ACT&sex=T&geo=AT&geo=BE&geo=BG&geo=HR&geo=CY&geo=CZ&geo=DK&geo=EE&geo=FI&geo=FR&geo=DE&geo=EL&geo=HU&geo=IE&geo=IT&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=PL&geo=PT&geo=RO&geo=SK&geo=SI&geo=ES&geo=SE&geo=EU27_2020",
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/lfsi_esms.htm",
         "doi": "https://doi.org/10.2908/UNE_RT_A",
-        "sourceUpdatedAt": "2026-09-10T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:14.908Z",
+        "sourceUpdatedAt": "2026-10-26T23:00:00+0100",
+        "accessedAt": "2026-10-27T16:53:37.384Z",
         "snapshotPath": "data/raw/eurostat/une_rt_a.json",
-        "sha256": "97213b04072dcfa5dd88179ab7fa3aa62d8627b593c509ee4b45240377024fec",
-        "bytes": 15566
+        "sha256": "4d8cf0cd9086e15f8db3f850d22cef1fc619fce98362d9674c44336a96cbe723",
+        "bytes": 15545
       }
     },
     {
@@ -120380,8 +120380,8 @@
         "year": 2025,
         "italy": 20.6,
         "eu": 15.2,
-        "median": 14.45,
-        "coverage": 26,
+        "median": 14.8,
+        "coverage": 27,
         "euMethod": "official_aggregate",
         "status": null,
         "sourceStatus": null,
@@ -120397,9 +120397,7 @@
             "status": "d"
           }
         ],
-        "missingCountries": [
-          "LU"
-        ],
+        "missingCountries": [],
         "countries": [
           {
             "geo": "AT",
@@ -120500,6 +120498,12 @@
           {
             "geo": "LT",
             "value": 14.1,
+            "status": null,
+            "sourceStatus": null
+          },
+          {
+            "geo": "LU",
+            "value": 19.4,
             "status": null,
             "sourceStatus": null
           },
@@ -123533,8 +123537,8 @@
           "year": 2025,
           "italy": 20.6,
           "eu": 15.2,
-          "median": 14.45,
-          "coverage": 26,
+          "median": 14.8,
+          "coverage": 27,
           "euMethod": "official_aggregate",
           "status": null,
           "sourceStatus": null,
@@ -123550,9 +123554,7 @@
               "status": "d"
             }
           ],
-          "missingCountries": [
-            "LU"
-          ],
+          "missingCountries": [],
           "countries": [
             {
               "geo": "AT",
@@ -123657,6 +123659,12 @@
               "sourceStatus": null
             },
             {
+              "geo": "LU",
+              "value": 19.4,
+              "status": null,
+              "sourceStatus": null
+            },
+            {
               "geo": "MT",
               "value": 9.6,
               "status": null,
@@ -123722,11 +123730,11 @@
         "apiUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/une_rt_a?lang=en&sinceTimePeriod=2000&freq=A&age=Y15-24&unit=PC_ACT&sex=T&geo=AT&geo=BE&geo=BG&geo=HR&geo=CY&geo=CZ&geo=DK&geo=EE&geo=FI&geo=FR&geo=DE&geo=EL&geo=HU&geo=IE&geo=IT&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=PL&geo=PT&geo=RO&geo=SK&geo=SI&geo=ES&geo=SE&geo=EU27_2020",
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/lfsi_esms.htm",
         "doi": "https://doi.org/10.2908/UNE_RT_A",
-        "sourceUpdatedAt": "2026-09-10T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:14.908Z",
+        "sourceUpdatedAt": "2026-10-26T23:00:00+0100",
+        "accessedAt": "2026-10-27T16:53:37.384Z",
         "snapshotPath": "data/raw/eurostat/une_rt_a.json",
-        "sha256": "97213b04072dcfa5dd88179ab7fa3aa62d8627b593c509ee4b45240377024fec",
-        "bytes": 15566
+        "sha256": "4d8cf0cd9086e15f8db3f850d22cef1fc619fce98362d9674c44336a96cbe723",
+        "bytes": 15545
       }
     },
     {
@@ -129081,10 +129089,10 @@
         "apiUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10_pc?lang=en&sinceTimePeriod=2000&freq=A&unit=PC_EU27_2020_HAB_MPPS_CP&na_item=B1GQ&geo=AT&geo=BE&geo=BG&geo=HR&geo=CY&geo=CZ&geo=DK&geo=EE&geo=FI&geo=FR&geo=DE&geo=EL&geo=HU&geo=IE&geo=IT&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=PL&geo=PT&geo=RO&geo=SK&geo=SI&geo=ES&geo=SE&geo=EU27_2020",
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/nama_10_gdp_esms.htm",
         "doi": "https://doi.org/10.2908/NAMA_10_PC",
-        "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:16.337Z",
+        "sourceUpdatedAt": "2026-10-22T23:00:00+0200",
+        "accessedAt": "2026-10-27T16:53:37.559Z",
         "snapshotPath": "data/raw/eurostat/nama_10_pc.json",
-        "sha256": "98f76bb3c2d3459579614b68200f085843a860f5ce22dacb9b3d26be0a80ee21",
+        "sha256": "544e2afb616fea8f3e564abbaf447bbcccaa25b3fcfe8ba4fb251ac229b9440f",
         "bytes": 21293
       }
     },
@@ -134332,10 +134340,10 @@
         "apiUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10_pc?lang=en&sinceTimePeriod=2000&freq=A&unit=CLV_PCH_PRE_HAB&na_item=B1GQ&geo=AT&geo=BE&geo=BG&geo=HR&geo=CY&geo=CZ&geo=DK&geo=EE&geo=FI&geo=FR&geo=DE&geo=EL&geo=HU&geo=IE&geo=IT&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=PL&geo=PT&geo=RO&geo=SK&geo=SI&geo=ES&geo=SE&geo=EU27_2020",
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/nama_10_gdp_esms.htm",
         "doi": "https://doi.org/10.2908/NAMA_10_PC",
-        "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:16.337Z",
+        "sourceUpdatedAt": "2026-10-22T23:00:00+0200",
+        "accessedAt": "2026-10-27T16:53:37.559Z",
         "snapshotPath": "data/raw/eurostat/nama_10_pc.json",
-        "sha256": "98f76bb3c2d3459579614b68200f085843a860f5ce22dacb9b3d26be0a80ee21",
+        "sha256": "544e2afb616fea8f3e564abbaf447bbcccaa25b3fcfe8ba4fb251ac229b9440f",
         "bytes": 21293
       }
     },
@@ -136689,7 +136697,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/prc_hicp_esms.htm",
         "doi": "https://doi.org/10.2908/TEC00118",
         "sourceUpdatedAt": "2026-09-17T11:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:16.472Z",
+        "accessedAt": "2026-10-27T16:53:37.745Z",
         "snapshotPath": "data/raw/eurostat/tec00118.json",
         "sha256": "08925d78799c3a09a13d22ffe5820f7ad78c101b75dc332adf06e6e66c27d7d9",
         "bytes": 8592
@@ -138985,7 +138993,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/ilc_sieusilc.htm",
         "doi": "https://doi.org/10.2908/ILC_PEPS01N",
         "sourceUpdatedAt": "2026-10-20T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:16.600Z",
+        "accessedAt": "2026-10-27T16:53:37.919Z",
         "snapshotPath": "data/raw/eurostat/ilc_peps01n.json",
         "sha256": "fdc3a05a09e4c5d8e3aeab1ee00d0eb262baff6b4c1f16aa3a2d0f7857c9dedc",
         "bytes": 7662
@@ -139016,9 +139024,9 @@
       "startYear": 2000,
       "latest": {
         "year": 2024,
-        "italy": 15.91,
-        "eu": 12.62,
-        "median": 10.39,
+        "italy": 15.85,
+        "eu": 12.57,
+        "median": 10.26,
         "coverage": 27,
         "euMethod": "official_aggregate",
         "status": null,
@@ -139039,7 +139047,7 @@
         "countries": [
           {
             "geo": "AT",
-            "value": 15.56,
+            "value": 15.38,
             "status": null,
             "sourceStatus": null
           },
@@ -139069,37 +139077,37 @@
           },
           {
             "geo": "CZ",
-            "value": 9.03,
+            "value": 9.02,
             "status": null,
             "sourceStatus": null
           },
           {
             "geo": "DK",
-            "value": 11.38,
+            "value": 11.16,
             "status": null,
             "sourceStatus": null
           },
           {
             "geo": "EE",
-            "value": 8.67,
+            "value": 8.66,
             "status": null,
             "sourceStatus": null
           },
           {
             "geo": "FI",
-            "value": 14.46,
+            "value": 14.45,
             "status": null,
             "sourceStatus": null
           },
           {
             "geo": "FR",
-            "value": 15.06,
+            "value": 14.98,
             "status": null,
             "sourceStatus": null
           },
           {
             "geo": "DE",
-            "value": 11.83,
+            "value": 11.67,
             "status": "p",
             "sourceStatus": "p"
           },
@@ -139117,43 +139125,43 @@
           },
           {
             "geo": "IE",
-            "value": 4.04,
+            "value": 4.05,
             "status": null,
             "sourceStatus": null
           },
           {
             "geo": "IT",
-            "value": 15.91,
+            "value": 15.85,
             "status": null,
             "sourceStatus": null
           },
           {
             "geo": "LV",
-            "value": 9.03,
+            "value": 8.93,
             "status": "e",
             "sourceStatus": "e"
           },
           {
             "geo": "LT",
-            "value": 7.38,
+            "value": 7.31,
             "status": null,
             "sourceStatus": null
           },
           {
             "geo": "LU",
-            "value": 10.39,
+            "value": 10.26,
             "status": null,
             "sourceStatus": null
           },
           {
             "geo": "MT",
-            "value": 5.08,
+            "value": 5.09,
             "status": null,
             "sourceStatus": null
           },
           {
             "geo": "NL",
-            "value": 11.18,
+            "value": 11.25,
             "status": null,
             "sourceStatus": null
           },
@@ -139165,7 +139173,7 @@
           },
           {
             "geo": "PT",
-            "value": 13,
+            "value": 12.94,
             "status": null,
             "sourceStatus": null
           },
@@ -139189,13 +139197,13 @@
           },
           {
             "geo": "ES",
-            "value": 13.23,
+            "value": 13.19,
             "status": null,
             "sourceStatus": null
           },
           {
             "geo": "SE",
-            "value": 10.81,
+            "value": 10.72,
             "status": null,
             "sourceStatus": null
           }
@@ -140037,7 +140045,7 @@
             },
             {
               "geo": "IE",
-              "value": 5.65,
+              "value": 5.66,
               "status": null,
               "sourceStatus": null
             },
@@ -140224,7 +140232,7 @@
             },
             {
               "geo": "IE",
-              "value": 5.68,
+              "value": 5.69,
               "status": null,
               "sourceStatus": null
             },
@@ -140797,7 +140805,7 @@
             },
             {
               "geo": "IE",
-              "value": 6.82,
+              "value": 6.83,
               "status": null,
               "sourceStatus": null
             },
@@ -141078,7 +141086,7 @@
         },
         {
           "year": 2010,
-          "italy": 15.36,
+          "italy": 15.39,
           "eu": 12.72,
           "median": 10.63,
           "coverage": 27,
@@ -141187,13 +141195,13 @@
             },
             {
               "geo": "IE",
-              "value": 8.08,
+              "value": 8.09,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "IT",
-              "value": 15.36,
+              "value": 15.39,
               "status": null,
               "sourceStatus": null
             },
@@ -141273,7 +141281,7 @@
         },
         {
           "year": 2011,
-          "italy": 15.35,
+          "italy": 15.37,
           "eu": 12.67,
           "median": 11.08,
           "coverage": 27,
@@ -141382,13 +141390,13 @@
             },
             {
               "geo": "IE",
-              "value": 7.86,
+              "value": 7.87,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "IT",
-              "value": 15.35,
+              "value": 15.37,
               "status": null,
               "sourceStatus": null
             },
@@ -141468,7 +141476,7 @@
         },
         {
           "year": 2012,
-          "italy": 15.93,
+          "italy": 15.95,
           "eu": 12.93,
           "median": 11.38,
           "coverage": 27,
@@ -141583,7 +141591,7 @@
             },
             {
               "geo": "IT",
-              "value": 15.93,
+              "value": 15.95,
               "status": null,
               "sourceStatus": null
             },
@@ -141663,7 +141671,7 @@
         },
         {
           "year": 2013,
-          "italy": 16.39,
+          "italy": 16.41,
           "eu": 13.15,
           "median": 11.62,
           "coverage": 27,
@@ -141754,7 +141762,7 @@
             },
             {
               "geo": "DE",
-              "value": 11.67,
+              "value": 11.66,
               "status": null,
               "sourceStatus": null
             },
@@ -141772,13 +141780,13 @@
             },
             {
               "geo": "IE",
-              "value": 7.93,
+              "value": 7.94,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "IT",
-              "value": 16.39,
+              "value": 16.41,
               "status": null,
               "sourceStatus": null
             },
@@ -141858,8 +141866,8 @@
         },
         {
           "year": 2014,
-          "italy": 16.36,
-          "eu": 13.12,
+          "italy": 16.39,
+          "eu": 13.11,
           "median": 11.27,
           "coverage": 27,
           "euMethod": "official_aggregate",
@@ -141949,7 +141957,7 @@
             },
             {
               "geo": "DE",
-              "value": 11.56,
+              "value": 11.54,
               "status": null,
               "sourceStatus": null
             },
@@ -141967,13 +141975,13 @@
             },
             {
               "geo": "IE",
-              "value": 7.38,
+              "value": 7.39,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "IT",
-              "value": 16.36,
+              "value": 16.39,
               "status": null,
               "sourceStatus": null
             },
@@ -142053,8 +142061,8 @@
         },
         {
           "year": 2015,
-          "italy": 16.35,
-          "eu": 12.97,
+          "italy": 16.37,
+          "eu": 12.96,
           "median": 10.97,
           "coverage": 27,
           "euMethod": "official_aggregate",
@@ -142148,7 +142156,7 @@
             },
             {
               "geo": "DE",
-              "value": 11.64,
+              "value": 11.61,
               "status": null,
               "sourceStatus": null
             },
@@ -142166,13 +142174,13 @@
             },
             {
               "geo": "IE",
-              "value": 5.57,
+              "value": 5.58,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "IT",
-              "value": 16.35,
+              "value": 16.37,
               "status": null,
               "sourceStatus": null
             },
@@ -142252,8 +142260,8 @@
         },
         {
           "year": 2016,
-          "italy": 15.92,
-          "eu": 12.88,
+          "italy": 15.95,
+          "eu": 12.87,
           "median": 10.69,
           "coverage": 27,
           "euMethod": "official_aggregate",
@@ -142339,7 +142347,7 @@
             },
             {
               "geo": "DE",
-              "value": 11.69,
+              "value": 11.65,
               "status": null,
               "sourceStatus": null
             },
@@ -142363,7 +142371,7 @@
             },
             {
               "geo": "IT",
-              "value": 15.92,
+              "value": 15.95,
               "status": null,
               "sourceStatus": null
             },
@@ -142443,8 +142451,8 @@
         },
         {
           "year": 2017,
-          "italy": 15.72,
-          "eu": 12.68,
+          "italy": 15.75,
+          "eu": 12.66,
           "median": 10.18,
           "coverage": 27,
           "euMethod": "official_aggregate",
@@ -142530,7 +142538,7 @@
             },
             {
               "geo": "DE",
-              "value": 11.59,
+              "value": 11.54,
               "status": null,
               "sourceStatus": null
             },
@@ -142554,7 +142562,7 @@
             },
             {
               "geo": "IT",
-              "value": 15.72,
+              "value": 15.75,
               "status": null,
               "sourceStatus": null
             },
@@ -142634,8 +142642,8 @@
         },
         {
           "year": 2018,
-          "italy": 15.71,
-          "eu": 12.6,
+          "italy": 15.74,
+          "eu": 12.58,
           "median": 9.93,
           "coverage": 27,
           "euMethod": "official_aggregate",
@@ -142717,7 +142725,7 @@
             },
             {
               "geo": "DE",
-              "value": 11.63,
+              "value": 11.58,
               "status": null,
               "sourceStatus": null
             },
@@ -142741,7 +142749,7 @@
             },
             {
               "geo": "IT",
-              "value": 15.71,
+              "value": 15.74,
               "status": null,
               "sourceStatus": null
             },
@@ -142753,7 +142761,7 @@
             },
             {
               "geo": "LT",
-              "value": 6.92,
+              "value": 6.94,
               "status": "e",
               "sourceStatus": "e"
             },
@@ -142821,8 +142829,8 @@
         },
         {
           "year": 2019,
-          "italy": 15.83,
-          "eu": 12.59,
+          "italy": 15.86,
+          "eu": 12.58,
           "median": 9.85,
           "coverage": 27,
           "euMethod": "official_aggregate",
@@ -142904,7 +142912,7 @@
             },
             {
               "geo": "DE",
-              "value": 11.81,
+              "value": 11.74,
               "status": null,
               "sourceStatus": null
             },
@@ -142928,19 +142936,19 @@
             },
             {
               "geo": "IT",
-              "value": 15.83,
+              "value": 15.86,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "LV",
-              "value": 7.74,
+              "value": 7.75,
               "status": "e",
               "sourceStatus": "e"
             },
             {
               "geo": "LT",
-              "value": 6.95,
+              "value": 6.9,
               "status": "e",
               "sourceStatus": "e"
             },
@@ -143008,8 +143016,8 @@
         },
         {
           "year": 2020,
-          "italy": 17.53,
-          "eu": 13.53,
+          "italy": 17.57,
+          "eu": 13.51,
           "median": 10.99,
           "coverage": 27,
           "euMethod": "official_aggregate",
@@ -143095,7 +143103,7 @@
             },
             {
               "geo": "DE",
-              "value": 12.57,
+              "value": 12.47,
               "status": null,
               "sourceStatus": null
             },
@@ -143113,25 +143121,25 @@
             },
             {
               "geo": "IE",
-              "value": 4.92,
+              "value": 4.93,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "IT",
-              "value": 17.53,
+              "value": 17.57,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "LV",
-              "value": 8.43,
+              "value": 8.44,
               "status": "e",
               "sourceStatus": "e"
             },
             {
               "geo": "LT",
-              "value": 7.38,
+              "value": 7.23,
               "status": "p",
               "sourceStatus": "p"
             },
@@ -143199,8 +143207,8 @@
         },
         {
           "year": 2021,
-          "italy": 16.19,
-          "eu": 12.78,
+          "italy": 16.23,
+          "eu": 12.75,
           "median": 10.05,
           "coverage": 27,
           "euMethod": "official_aggregate",
@@ -143286,7 +143294,7 @@
             },
             {
               "geo": "DE",
-              "value": 12.11,
+              "value": 12.01,
               "status": null,
               "sourceStatus": null
             },
@@ -143310,7 +143318,7 @@
             },
             {
               "geo": "IT",
-              "value": 16.19,
+              "value": 16.23,
               "status": null,
               "sourceStatus": null
             },
@@ -143334,7 +143342,7 @@
             },
             {
               "geo": "MT",
-              "value": 5.83,
+              "value": 5.82,
               "status": null,
               "sourceStatus": null
             },
@@ -143391,7 +143399,7 @@
         {
           "year": 2022,
           "italy": 15.48,
-          "eu": 12.22,
+          "eu": 12.2,
           "median": 9.97,
           "coverage": 27,
           "euMethod": "official_aggregate",
@@ -143409,13 +143417,13 @@
           "countries": [
             {
               "geo": "AT",
-              "value": 14.19,
+              "value": 14.18,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "BE",
-              "value": 12.61,
+              "value": 12.6,
               "status": null,
               "sourceStatus": null
             },
@@ -143451,13 +143459,13 @@
             },
             {
               "geo": "EE",
-              "value": 7.37,
+              "value": 7.34,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "FI",
-              "value": 13.01,
+              "value": 13.04,
               "status": null,
               "sourceStatus": null
             },
@@ -143469,7 +143477,7 @@
             },
             {
               "geo": "DE",
-              "value": 11.59,
+              "value": 11.52,
               "status": null,
               "sourceStatus": null
             },
@@ -143487,7 +143495,7 @@
             },
             {
               "geo": "IE",
-              "value": 3.9,
+              "value": 3.88,
               "status": null,
               "sourceStatus": null
             },
@@ -143499,13 +143507,13 @@
             },
             {
               "geo": "LV",
-              "value": 8.24,
+              "value": 8.26,
               "status": "e",
               "sourceStatus": "e"
             },
             {
               "geo": "LT",
-              "value": 6.79,
+              "value": 6.95,
               "status": null,
               "sourceStatus": null
             },
@@ -143517,7 +143525,7 @@
             },
             {
               "geo": "MT",
-              "value": 5.67,
+              "value": 5.66,
               "status": null,
               "sourceStatus": null
             },
@@ -143574,7 +143582,7 @@
         {
           "year": 2023,
           "italy": 15.49,
-          "eu": 12.31,
+          "eu": 12.28,
           "median": 10.18,
           "coverage": 27,
           "euMethod": "official_aggregate",
@@ -143592,13 +143600,13 @@
           "countries": [
             {
               "geo": "AT",
-              "value": 14.44,
+              "value": 14.37,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "BE",
-              "value": 12.81,
+              "value": 12.82,
               "status": null,
               "sourceStatus": null
             },
@@ -143628,31 +143636,31 @@
             },
             {
               "geo": "DK",
-              "value": 11.5,
+              "value": 11.53,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "EE",
-              "value": 8.06,
+              "value": 8.1,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "FI",
-              "value": 13.73,
+              "value": 13.74,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "FR",
-              "value": 14.62,
+              "value": 14.58,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "DE",
-              "value": 11.51,
+              "value": 11.41,
               "status": null,
               "sourceStatus": null
             },
@@ -143664,13 +143672,13 @@
             },
             {
               "geo": "HU",
-              "value": 7.07,
+              "value": 7.06,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "IE",
-              "value": 4.24,
+              "value": 4.27,
               "status": null,
               "sourceStatus": null
             },
@@ -143682,13 +143690,13 @@
             },
             {
               "geo": "LV",
-              "value": 8.58,
+              "value": 8.6,
               "status": "e",
               "sourceStatus": "e"
             },
             {
               "geo": "LT",
-              "value": 6.86,
+              "value": 6.75,
               "status": null,
               "sourceStatus": null
             },
@@ -143736,13 +143744,13 @@
             },
             {
               "geo": "SI",
-              "value": 9.46,
+              "value": 9.45,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "ES",
-              "value": 13.16,
+              "value": 13.17,
               "status": null,
               "sourceStatus": null
             },
@@ -143756,9 +143764,9 @@
         },
         {
           "year": 2024,
-          "italy": 15.91,
-          "eu": 12.62,
-          "median": 10.39,
+          "italy": 15.85,
+          "eu": 12.57,
+          "median": 10.26,
           "coverage": 27,
           "euMethod": "official_aggregate",
           "status": null,
@@ -143779,7 +143787,7 @@
           "countries": [
             {
               "geo": "AT",
-              "value": 15.56,
+              "value": 15.38,
               "status": null,
               "sourceStatus": null
             },
@@ -143809,37 +143817,37 @@
             },
             {
               "geo": "CZ",
-              "value": 9.03,
+              "value": 9.02,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "DK",
-              "value": 11.38,
+              "value": 11.16,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "EE",
-              "value": 8.67,
+              "value": 8.66,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "FI",
-              "value": 14.46,
+              "value": 14.45,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "FR",
-              "value": 15.06,
+              "value": 14.98,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "DE",
-              "value": 11.83,
+              "value": 11.67,
               "status": "p",
               "sourceStatus": "p"
             },
@@ -143857,43 +143865,43 @@
             },
             {
               "geo": "IE",
-              "value": 4.04,
+              "value": 4.05,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "IT",
-              "value": 15.91,
+              "value": 15.85,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "LV",
-              "value": 9.03,
+              "value": 8.93,
               "status": "e",
               "sourceStatus": "e"
             },
             {
               "geo": "LT",
-              "value": 7.38,
+              "value": 7.31,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "LU",
-              "value": 10.39,
+              "value": 10.26,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "MT",
-              "value": 5.08,
+              "value": 5.09,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "NL",
-              "value": 11.18,
+              "value": 11.25,
               "status": null,
               "sourceStatus": null
             },
@@ -143905,7 +143913,7 @@
             },
             {
               "geo": "PT",
-              "value": 13,
+              "value": 12.94,
               "status": null,
               "sourceStatus": null
             },
@@ -143929,13 +143937,13 @@
             },
             {
               "geo": "ES",
-              "value": 13.23,
+              "value": 13.19,
               "status": null,
               "sourceStatus": null
             },
             {
               "geo": "SE",
-              "value": 10.81,
+              "value": 10.72,
               "status": null,
               "sourceStatus": null
             }
@@ -143951,11 +143959,11 @@
         "apiUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/spr_exp_pens?lang=en&sinceTimePeriod=2000&freq=A&spdepb=TOTAL&spdepm=TOTAL&unit=PC_GDP&geo=AT&geo=BE&geo=BG&geo=HR&geo=CY&geo=CZ&geo=DK&geo=EE&geo=FI&geo=FR&geo=DE&geo=EL&geo=HU&geo=IE&geo=IT&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=PL&geo=PT&geo=RO&geo=SK&geo=SI&geo=ES&geo=SE&geo=EU27_2020",
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/spr_esms.htm",
         "doi": "https://doi.org/10.2908/SPR_EXP_PENS",
-        "sourceUpdatedAt": "2026-10-07T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:16.727Z",
+        "sourceUpdatedAt": "2026-10-26T23:00:00+0100",
+        "accessedAt": "2026-10-27T16:53:38.103Z",
         "snapshotPath": "data/raw/eurostat/spr_exp_pens.json",
-        "sha256": "16b16cfa364d09ad3ea6fb5fd61f64a9826fdc255b7530ab0639404300be3c15",
-        "bytes": 13741
+        "sha256": "db7652d1bfb485b19303f609cbf6ea5423c29cb80625ee8015bc583af6c5221e",
+        "bytes": 13742
       }
     },
     {
@@ -147797,7 +147805,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/hlth_hlye_esms.htm",
         "doi": "https://doi.org/10.2908/HLTH_HLYE",
         "sourceUpdatedAt": "2026-07-17T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:16.852Z",
+        "accessedAt": "2026-10-27T16:53:38.299Z",
         "snapshotPath": "data/raw/eurostat/hlth_hlye.json",
         "sha256": "dc6024d54810183eb2a29a08deff479a3c0aeb6dc9470afbb55e59ef15071126",
         "bytes": 10842
@@ -153139,7 +153147,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm",
         "doi": "https://doi.org/10.2908/EDAT_LFSE_03",
         "sourceUpdatedAt": "2026-09-10T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:16.972Z",
+        "accessedAt": "2026-10-27T16:53:38.477Z",
         "snapshotPath": "data/raw/eurostat/edat_lfse_03.json",
         "sha256": "7f28090ffd5368179f63402f1d6df514247a0c398110eb20d050d1850d46733b",
         "bytes": 13302
@@ -158400,7 +158408,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm",
         "doi": "https://doi.org/10.2908/EDAT_LFSE_14",
         "sourceUpdatedAt": "2026-09-10T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:17.100Z",
+        "accessedAt": "2026-10-27T16:53:38.665Z",
         "snapshotPath": "data/raw/eurostat/edat_lfse_14.json",
         "sha256": "5b0a67e15c03c0501426e22ae8c0138d10f3024f243de832029c198e5effc70b",
         "bytes": 13605
@@ -163441,7 +163449,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/trng_lfs_4w_esms.htm",
         "doi": "https://doi.org/10.2908/TRNG_LFSE_01",
         "sourceUpdatedAt": "2026-09-10T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:17.229Z",
+        "accessedAt": "2026-10-27T16:53:38.854Z",
         "snapshotPath": "data/raw/eurostat/trng_lfse_01.json",
         "sha256": "38d9b7a219bb175bfa0e74dba1c5964249bced409536c2e7c95ba02b4615bb25",
         "bytes": 12661
@@ -168546,7 +168554,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm",
         "doi": "https://doi.org/10.2908/EDAT_LFSE_20",
         "sourceUpdatedAt": "2026-09-10T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:17.355Z",
+        "accessedAt": "2026-10-27T16:53:39.031Z",
         "snapshotPath": "data/raw/eurostat/edat_lfse_20.json",
         "sha256": "f285a03a00584c80fc5682d2d4341476fd4e643dcd6dc26d7ea4e8b89973a915",
         "bytes": 13496
@@ -173096,7 +173104,7 @@
         "metadataUrl": null,
         "doi": "https://doi.org/10.2908/NRG_IND_REN",
         "sourceUpdatedAt": "2026-09-15T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:17.486Z",
+        "accessedAt": "2026-10-27T16:53:39.201Z",
         "snapshotPath": "data/raw/eurostat/nrg_ind_ren.json",
         "sha256": "1aaa28e0eed4ac0d6f4ba2bdf57130aad5f651302a72a8a1f61729d91d91ccbb",
         "bytes": 11644
@@ -178253,7 +178261,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/cei_wm011_esmsip2.htm",
         "doi": "https://doi.org/10.2908/CEI_WM011",
         "sourceUpdatedAt": "2026-10-15T11:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:17.613Z",
+        "accessedAt": "2026-10-27T16:53:39.377Z",
         "snapshotPath": "data/raw/eurostat/cei_wm011.json",
         "sha256": "8eaceefba9e0862443ac48bd6ded74d579b308b806bd084a28edb29bc782de28",
         "bytes": 14224
@@ -182932,7 +182940,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/sdg_13_10_esmsip2.htm",
         "doi": "https://doi.org/10.2908/SDG_13_10",
         "sourceUpdatedAt": "2026-04-22T23:00:00+0200",
-        "accessedAt": "2026-10-21T14:37:17.742Z",
+        "accessedAt": "2026-10-27T16:53:39.552Z",
         "snapshotPath": "data/raw/eurostat/sdg_13_10.json",
         "sha256": "77d9b554b057c0535b6fc4417a107f138a7fd5ed42deaa0526577ad1ad930ec3",
         "bytes": 12834
