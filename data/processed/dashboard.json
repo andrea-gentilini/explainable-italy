@@ -86,8 +86,8 @@
         "en": "The general operation of public institutions. It includes legislative and executive bodies, fiscal affairs, basic research and public debt interest."
       },
       "technical": {
-        "it": "Classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale. Unità PC_TOT, percentuale della spesa complessiva.",
-        "en": "COFOG 1999 classification. Sector S13, general government. Item TE, total general government expenditure. Unit PC_TOT, percentage of total expenditure."
+        "it": "Conti nazionali annuali SEC 2010, classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale consolidata sull’anno solare. Unità PC_TOT, quota percentuale della spesa complessiva.",
+        "en": "ESA 2010 annual national accounts, COFOG 1999 classification. Sector S13, general government. Item TE, consolidated total general government expenditure over the calendar year. Unit PC_TOT, percentage share of total expenditure."
       },
       "unitKey": "percent_spending",
       "precision": 1,
@@ -5060,8 +5060,8 @@
         "en": "Military and civil defence activities, including foreign military aid and related research."
       },
       "technical": {
-        "it": "Classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale. Unità PC_TOT, percentuale della spesa complessiva.",
-        "en": "COFOG 1999 classification. Sector S13, general government. Item TE, total general government expenditure. Unit PC_TOT, percentage of total expenditure."
+        "it": "Conti nazionali annuali SEC 2010, classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale consolidata sull’anno solare. Unità PC_TOT, quota percentuale della spesa complessiva.",
+        "en": "ESA 2010 annual national accounts, COFOG 1999 classification. Sector S13, general government. Item TE, consolidated total general government expenditure over the calendar year. Unit PC_TOT, percentage share of total expenditure."
       },
       "unitKey": "percent_spending",
       "precision": 1,
@@ -10030,8 +10030,8 @@
         "en": "Police, fire services, courts, prisons and other public activities related to safety and justice."
       },
       "technical": {
-        "it": "Classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale. Unità PC_TOT, percentuale della spesa complessiva.",
-        "en": "COFOG 1999 classification. Sector S13, general government. Item TE, total general government expenditure. Unit PC_TOT, percentage of total expenditure."
+        "it": "Conti nazionali annuali SEC 2010, classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale consolidata sull’anno solare. Unità PC_TOT, quota percentuale della spesa complessiva.",
+        "en": "ESA 2010 annual national accounts, COFOG 1999 classification. Sector S13, general government. Item TE, consolidated total general government expenditure over the calendar year. Unit PC_TOT, percentage share of total expenditure."
       },
       "unitKey": "percent_spending",
       "precision": 1,
@@ -15004,8 +15004,8 @@
         "en": "Public action for the economy, labour, agriculture, energy, industry, transport and communications."
       },
       "technical": {
-        "it": "Classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale. Unità PC_TOT, percentuale della spesa complessiva.",
-        "en": "COFOG 1999 classification. Sector S13, general government. Item TE, total general government expenditure. Unit PC_TOT, percentage of total expenditure."
+        "it": "Conti nazionali annuali SEC 2010, classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale consolidata sull’anno solare. Unità PC_TOT, quota percentuale della spesa complessiva.",
+        "en": "ESA 2010 annual national accounts, COFOG 1999 classification. Sector S13, general government. Item TE, consolidated total general government expenditure over the calendar year. Unit PC_TOT, percentage share of total expenditure."
       },
       "unitKey": "percent_spending",
       "precision": 1,
@@ -19978,8 +19978,8 @@
         "en": "Waste and wastewater management, pollution abatement, biodiversity protection and environmental research."
       },
       "technical": {
-        "it": "Classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale. Unità PC_TOT, percentuale della spesa complessiva.",
-        "en": "COFOG 1999 classification. Sector S13, general government. Item TE, total general government expenditure. Unit PC_TOT, percentage of total expenditure."
+        "it": "Conti nazionali annuali SEC 2010, classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale consolidata sull’anno solare. Unità PC_TOT, quota percentuale della spesa complessiva.",
+        "en": "ESA 2010 annual national accounts, COFOG 1999 classification. Sector S13, general government. Item TE, consolidated total general government expenditure over the calendar year. Unit PC_TOT, percentage share of total expenditure."
       },
       "unitKey": "percent_spending",
       "precision": 1,
@@ -24952,8 +24952,8 @@
         "en": "Housing policy, community development, water supply and street lighting."
       },
       "technical": {
-        "it": "Classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale. Unità PC_TOT, percentuale della spesa complessiva.",
-        "en": "COFOG 1999 classification. Sector S13, general government. Item TE, total general government expenditure. Unit PC_TOT, percentage of total expenditure."
+        "it": "Conti nazionali annuali SEC 2010, classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale consolidata sull’anno solare. Unità PC_TOT, quota percentuale della spesa complessiva.",
+        "en": "ESA 2010 annual national accounts, COFOG 1999 classification. Sector S13, general government. Item TE, consolidated total general government expenditure over the calendar year. Unit PC_TOT, percentage share of total expenditure."
       },
       "unitKey": "percent_spending",
       "precision": 1,
@@ -29926,8 +29926,8 @@
         "en": "Medical products, outpatient and hospital services, prevention, public health and health research."
       },
       "technical": {
-        "it": "Classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale. Unità PC_TOT, percentuale della spesa complessiva.",
-        "en": "COFOG 1999 classification. Sector S13, general government. Item TE, total general government expenditure. Unit PC_TOT, percentage of total expenditure."
+        "it": "Conti nazionali annuali SEC 2010, classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale consolidata sull’anno solare. Unità PC_TOT, quota percentuale della spesa complessiva.",
+        "en": "ESA 2010 annual national accounts, COFOG 1999 classification. Sector S13, general government. Item TE, consolidated total general government expenditure over the calendar year. Unit PC_TOT, percentage share of total expenditure."
       },
       "unitKey": "percent_spending",
       "precision": 1,
@@ -34900,8 +34900,8 @@
         "en": "Recreational and sporting services, culture, public broadcasting, religious services and related activities."
       },
       "technical": {
-        "it": "Classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale. Unità PC_TOT, percentuale della spesa complessiva.",
-        "en": "COFOG 1999 classification. Sector S13, general government. Item TE, total general government expenditure. Unit PC_TOT, percentage of total expenditure."
+        "it": "Conti nazionali annuali SEC 2010, classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale consolidata sull’anno solare. Unità PC_TOT, quota percentuale della spesa complessiva.",
+        "en": "ESA 2010 annual national accounts, COFOG 1999 classification. Sector S13, general government. Item TE, consolidated total general government expenditure over the calendar year. Unit PC_TOT, percentage share of total expenditure."
       },
       "unitKey": "percent_spending",
       "precision": 1,
@@ -39874,8 +39874,8 @@
         "en": "Schools and universities at every level, support services, research and education spending not assigned to one level."
       },
       "technical": {
-        "it": "Classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale. Unità PC_TOT, percentuale della spesa complessiva.",
-        "en": "COFOG 1999 classification. Sector S13, general government. Item TE, total general government expenditure. Unit PC_TOT, percentage of total expenditure."
+        "it": "Conti nazionali annuali SEC 2010, classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale consolidata sull’anno solare. Unità PC_TOT, quota percentuale della spesa complessiva.",
+        "en": "ESA 2010 annual national accounts, COFOG 1999 classification. Sector S13, general government. Item TE, consolidated total general government expenditure over the calendar year. Unit PC_TOT, percentage share of total expenditure."
       },
       "unitKey": "percent_spending",
       "precision": 1,
@@ -44848,8 +44848,8 @@
         "en": "Benefits for sickness, disability, old age, survivors, families, unemployment, housing and social exclusion."
       },
       "technical": {
-        "it": "Classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale. Unità PC_TOT, percentuale della spesa complessiva.",
-        "en": "COFOG 1999 classification. Sector S13, general government. Item TE, total general government expenditure. Unit PC_TOT, percentage of total expenditure."
+        "it": "Conti nazionali annuali SEC 2010, classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale consolidata sull’anno solare. Unità PC_TOT, quota percentuale della spesa complessiva.",
+        "en": "ESA 2010 annual national accounts, COFOG 1999 classification. Sector S13, general government. Item TE, consolidated total general government expenditure over the calendar year. Unit PC_TOT, percentage share of total expenditure."
       },
       "unitKey": "percent_spending",
       "precision": 1,
@@ -49822,8 +49822,8 @@
         "en": "The COFOG old-age function: old-age, age-related early-retirement and partial pensions; care allowances and other payments linked to retirement or old age; accommodation, home help, transport and other services for older people."
       },
       "technical": {
-        "it": "Classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale. Unità PC_TOT, percentuale della spesa complessiva.",
-        "en": "COFOG 1999 classification. Sector S13, general government. Item TE, total general government expenditure. Unit PC_TOT, percentage of total expenditure."
+        "it": "Conti nazionali annuali SEC 2010, classificazione COFOG 1999. Settore S13, Amministrazioni pubbliche. Voce TE, spesa pubblica totale consolidata sull’anno solare. Unità PC_TOT, quota percentuale della spesa complessiva.",
+        "en": "ESA 2010 annual national accounts, COFOG 1999 classification. Sector S13, general government. Item TE, consolidated total general government expenditure over the calendar year. Unit PC_TOT, percentage share of total expenditure."
       },
       "unitKey": "percent_spending",
       "precision": 1,
@@ -54735,8 +54735,8 @@
         "en": "Everything general government spends in one year, after eliminating transfers between public bodies."
       },
       "technical": {
-        "it": "Spesa totale consolidata delle Amministrazioni pubbliche, settore S13, espressa in percentuale del PIL.",
-        "en": "Consolidated total expenditure of general government, sector S13, expressed as a percentage of GDP."
+        "it": "Spesa annua totale consolidata (TE) delle Amministrazioni pubbliche, settore S13 (conti nazionali SEC 2010), espressa in quota percentuale del PIL (PC_GDP).",
+        "en": "Annual consolidated total expenditure (TE) of general government, sector S13 (ESA 2010 national accounts), expressed as a percentage share of GDP (PC_GDP)."
       },
       "unitKey": "percent_gdp",
       "precision": 1,
@@ -59616,8 +59616,8 @@
         "en": "Resources received by general government. They include taxes, social contributions and other revenue."
       },
       "technical": {
-        "it": "Entrate totali consolidate delle Amministrazioni pubbliche, settore S13, in percentuale del PIL.",
-        "en": "Consolidated total revenue of general government, sector S13, as a percentage of GDP."
+        "it": "Entrate annue totali consolidate (TR) delle Amministrazioni pubbliche, settore S13 (conti nazionali SEC 2010), in quota percentuale del PIL (PC_GDP).",
+        "en": "Annual consolidated total revenue (TR) of general government, sector S13 (ESA 2010 national accounts), as a percentage share of GDP (PC_GDP)."
       },
       "unitKey": "percent_gdp",
       "precision": 1,
@@ -64485,8 +64485,8 @@
         "en": "The difference between revenue and expenditure. A negative value means net borrowing, commonly called a deficit."
       },
       "technical": {
-        "it": "Accreditamento netto o indebitamento netto B9 delle Amministrazioni pubbliche, settore S13, in percentuale del PIL.",
-        "en": "General government net lending or net borrowing B9, sector S13, as a percentage of GDP."
+        "it": "Saldo contabile annuo di accreditamento netto o indebitamento netto (B9) delle Amministrazioni pubbliche, settore S13 (conti nazionali SEC 2010), in percentuale del PIL (PC_GDP).",
+        "en": "Annual net lending or net borrowing (B9) of general government, sector S13 (ESA 2010 national accounts), as a percentage of GDP (PC_GDP)."
       },
       "unitKey": "percent_gdp",
       "precision": 1,
@@ -69349,8 +69349,8 @@
         "en": "Interest paid by general government on its debt. It does not include repayment of principal."
       },
       "technical": {
-        "it": "Interessi passivi D41PAY del settore S13 in percentuale del PIL.",
-        "en": "Interest expenditure D41PAY of sector S13 as a percentage of GDP."
+        "it": "Interessi passivi annui consolidati (D41PAY) del settore S13 secondo il SEC 2010, registrati per competenza economica, in quota percentuale del PIL (PC_GDP).",
+        "en": "Annual consolidated interest payable (D41PAY) of sector S13 under ESA 2010 on an accrual basis, as a percentage share of GDP (PC_GDP)."
       },
       "unitKey": "percent_gdp",
       "precision": 1,
@@ -74225,8 +74225,8 @@
         "en": "Purchases and creation of durable assets used by government, such as infrastructure, buildings and equipment."
       },
       "technical": {
-        "it": "Investimenti fissi lordi P51G delle Amministrazioni pubbliche in percentuale del PIL.",
-        "en": "General government gross fixed capital formation P51G as a percentage of GDP."
+        "it": "Investimenti fissi lordi annui (P51G) delle Amministrazioni pubbliche, settore S13 (conti nazionali SEC 2010), in quota percentuale del PIL (PC_GDP).",
+        "en": "Annual gross fixed capital formation (P51G) of general government, sector S13 (ESA 2010 national accounts), as a percentage share of GDP (PC_GDP)."
       },
       "unitKey": "percent_gdp",
       "precision": 1,
@@ -79101,8 +79101,8 @@
         "en": "Cash transfers and services purchased for people, such as pensions, allowances and some health or care benefits."
       },
       "technical": {
-        "it": "Somma D62 e D632. Comprende prestazioni sociali diverse dai trasferimenti sociali in natura e trasferimenti in natura acquistati sul mercato.",
-        "en": "Sum of D62 and D632. It includes social benefits other than social transfers in kind and purchased market production."
+        "it": "Somma annua delle voci SEC 2010 D62 e D632 del settore S13 (prestazioni sociali diverse dai trasferimenti sociali in natura e trasferimenti in natura acquistati sul mercato), in quota percentuale del PIL (PC_GDP).",
+        "en": "Annual sum of ESA 2010 items D62 and D632 of sector S13 (social benefits other than social transfers in kind and purchased market production), as a percentage share of GDP (PC_GDP)."
       },
       "unitKey": "percent_gdp",
       "precision": 1,
@@ -83977,8 +83977,8 @@
         "en": "The consolidated gross debt of general government. It is measured under the European Maastricht debt rules."
       },
       "technical": {
-        "it": "Debito lordo consolidato GD del settore S13 al valore nominale e a fine anno, espresso in percentuale del PIL.",
-        "en": "Consolidated gross debt GD of sector S13 at nominal value and at year end, expressed as a percentage of GDP."
+        "it": "Consistenza (stock) a fine anno del debito lordo consolidato (GD) del settore S13 al valore nominale facciale secondo le regole della procedura per i disavanzi eccessivi (Maastricht), in rapporto percentuale al PIL nominale dell’anno (PC_GDP).",
+        "en": "Year-end stock of consolidated gross debt (GD) of sector S13 at nominal face value under the Excessive Deficit Procedure (Maastricht) rules, expressed as a percentage ratio to annual nominal GDP (PC_GDP)."
       },
       "unitKey": "percent_gdp",
       "precision": 1,
@@ -88825,8 +88825,8 @@
         "en": "The age that divides the population into two equal groups. Half of people are younger and half are older."
       },
       "technical": {
-        "it": "Mediana della distribuzione per età della popolazione residente al primo gennaio.",
-        "en": "Median of the age distribution of the resident population on 1 January."
+        "it": "Mediana (MEDAGEPOP) della distribuzione per età della popolazione abitualmente residente rilevata al primo gennaio di ciascun anno.",
+        "en": "Median (MEDAGEPOP) of the age distribution of the usually resident population measured on 1 January of each year."
       },
       "unitKey": "years",
       "precision": 1,
@@ -93822,8 +93822,8 @@
         "en": "The share of residents who are at least 65 years old."
       },
       "technical": {
-        "it": "Popolazione residente di 65 anni o più divisa per la popolazione residente totale al primo gennaio.",
-        "en": "Resident population aged 65 or over divided by the total resident population on 1 January."
+        "it": "Quota percentuale (PC_Y65_MAX) della popolazione abitualmente residente di 65 anni o più divisa per la popolazione residente totale al primo gennaio.",
+        "en": "Percentage share (PC_Y65_MAX) of the usually resident population aged 65 or over divided by the total resident population on 1 January."
       },
       "unitKey": "percent",
       "precision": 1,
@@ -98828,8 +98828,8 @@
         "en": "The number of residents aged 65 or over for every 100 residents of traditional working age (15 to 64). It compares age groups only, not pensioners with employed people."
       },
       "technical": {
-        "it": "Rapporto tra popolazione di 65 anni o più e popolazione tra 15 e 64 anni, moltiplicato per 100.",
-        "en": "Population aged 65 or over divided by population aged 15 to 64, multiplied by 100."
+        "it": "Rapporto demografico (OLDDEP1) tra popolazione residente di 65 anni o più e popolazione tra 15 e 64 anni al primo gennaio, moltiplicato per 100. Nonostante la denominazione italiana corrente di «indice», misura un rapporto tra due fasce di popolazione (ogni 100 residenti di 15–64 anni) e non un numero indice a base 100.",
+        "en": "Demographic ratio (OLDDEP1) of the resident population aged 65 or over to the population aged 15 to 64 on 1 January, multiplied by 100. It measures a ratio between two population age groups (per 100 residents aged 15–64), not a base-100 index number."
       },
       "unitKey": "per_100",
       "precision": 1,
@@ -103834,8 +103834,8 @@
         "en": "The average number of children a woman would have if she experienced that year’s fertility rates throughout her life."
       },
       "technical": {
-        "it": "Somma dei tassi di fecondità specifici per età osservati nell’anno. È un indicatore sintetico, non il numero reale di figli per ogni donna.",
-        "en": "Sum of age specific fertility rates observed in the year. It is a synthetic measure, not the actual number of children per woman."
+        "it": "Tasso di fecondità totale (TOTFERRT): somma dei tassi di fecondità specifici per età osservati nell’anno solare. È un indicatore sintetico per contemporanei, non il numero reale di figli di una generazione.",
+        "en": "Total fertility rate (TOTFERRT): sum of age-specific fertility rates observed in the calendar year. It is a synthetic period measure, not the actual completed fertility of a birth cohort."
       },
       "unitKey": "children_per_woman",
       "precision": 2,
@@ -108652,8 +108652,8 @@
         "en": "The years a newborn would live on average if that year’s mortality rates remained unchanged throughout life."
       },
       "technical": {
-        "it": "Indicatore di tavola di mortalità calcolato per il totale della popolazione alla nascita.",
-        "en": "Life table indicator calculated for the total population at birth."
+        "it": "Speranza di vita alla nascita (Y_LT1) da tavola di mortalità contemporanea annua calcolata per il totale della popolazione sui quozienti specifici di mortalità dell’anno solare.",
+        "en": "Period life expectancy at birth (Y_LT1) from the annual life table calculated for the total population from the age-specific mortality rates of the calendar year."
       },
       "unitKey": "years",
       "precision": 1,
@@ -113597,8 +113597,8 @@
         "en": "The share of people aged 20 to 64 who have a job."
       },
       "technical": {
-        "it": "Occupati residenti tra 20 e 64 anni divisi per la popolazione della stessa età. Fonte EU Labour Force Survey.",
-        "en": "Employed residents aged 20 to 64 divided by the population of the same age. Source EU Labour Force Survey."
+        "it": "Quota percentuale (PC_POP) degli occupati residenti tra 20 e 64 anni (EMP_LFS, definizione ILO) divisi per la popolazione della stessa età. Media annua delle rilevazioni trimestrali continue dell’indagine EU Labour Force Survey.",
+        "en": "Percentage share (PC_POP) of employed residents aged 20 to 64 (EMP_LFS, ILO definition) divided by the population of the same age. Annual average of the continuous quarterly surveys of the EU Labour Force Survey."
       },
       "unitKey": "percent",
       "precision": 1,
@@ -116981,8 +116981,8 @@
         "en": "The share of the labour force without a job who sought work during the previous four weeks and can start within two weeks."
       },
       "technical": {
-        "it": "Disoccupati tra 15 e 74 anni secondo la definizione ILO divisi per la forza lavoro della stessa età. Chi non cerca attivamente lavoro non è contato tra i disoccupati.",
-        "en": "Unemployed people aged 15 to 74 under the ILO definition divided by the labour force of the same age. People not actively seeking work are not counted as unemployed."
+        "it": "Quota percentuale (PC_ACT) dei disoccupati tra 15 e 74 anni secondo la definizione ILO divisi per la forza lavoro della stessa età, calcolata come media annua delle rilevazioni trimestrali continue EU Labour Force Survey. Chi non cerca attivamente lavoro non è contato tra i disoccupati.",
+        "en": "Percentage share (PC_ACT) of unemployed people aged 15 to 74 under the ILO definition divided by the labour force of the same age, calculated as the annual average of continuous quarterly EU Labour Force Survey data. People not actively seeking work are not counted as unemployed."
       },
       "unitKey": "percent",
       "precision": 1,
@@ -120365,8 +120365,8 @@
         "en": "The share of active young people aged 15 to 24 without a job who sought work during the previous four weeks and can start within two weeks."
       },
       "technical": {
-        "it": "Disoccupati tra 15 e 24 anni divisi per la forza lavoro della stessa età. Non è la percentuale di tutti i giovani.",
-        "en": "Unemployed people aged 15 to 24 divided by the labour force of the same age. It is not a percentage of all young people."
+        "it": "Quota percentuale (PC_ACT) dei disoccupati tra 15 e 24 anni secondo la definizione ILO divisi per la forza lavoro della stessa età, come media annua delle rilevazioni trimestrali EU Labour Force Survey. Non è la percentuale di tutti i giovani.",
+        "en": "Percentage share (PC_ACT) of unemployed people aged 15 to 24 under the ILO definition divided by the labour force of the same age, as the annual average of quarterly EU Labour Force Survey data. It is not a percentage of all young people."
       },
       "unitKey": "percent",
       "precision": 1,
@@ -123741,8 +123741,8 @@
         "en": "Economic output per person, adjusted for price differences between countries. The EU value is set to 100."
       },
       "technical": {
-        "it": "PIL B1GQ pro capite in standard di potere d’acquisto, espresso come percentuale del totale UE27 pro capite.",
-        "en": "GDP B1GQ per capita in purchasing power standards, expressed as a percentage of the EU27 per capita total."
+        "it": "Numero indice spaziale del PIL B1GQ pro capite in standard di potere d’acquisto (SPA/PPS), espresso ponendo il totale UE27 pro capite uguale a 100 in ciascun anno (PC_EU27_2020_HAB_MPPS_CP, conti nazionali annuali SEC 2010).",
+        "en": "Spatial volume index of GDP B1GQ per capita in purchasing power standards (PPS), expressed with the EU27 per capita total set to 100 in each year (PC_EU27_2020_HAB_MPPS_CP, ESA 2010 annual national accounts)."
       },
       "unitKey": "eu_index",
       "precision": 0,
@@ -129100,8 +129100,8 @@
         "en": "How much economic output per person changes in one year after removing inflation (annual rate of change, not GDP level)."
       },
       "technical": {
-        "it": "Tasso di variazione percentuale annuo (CLV_PCH_PRE_HAB) del PIL B1GQ pro capite a volumi concatenati. Misura la variazione reale rispetto all’anno precedente, non il livello cumulato.",
-        "en": "Annual percentage rate of change (CLV_PCH_PRE_HAB) in GDP B1GQ per capita in chain-linked volumes. It measures the real change from the previous year, not the cumulative level."
+        "it": "Tasso di variazione percentuale annuo (CLV_PCH_PRE_HAB) del PIL B1GQ pro capite a volumi concatenati (conti nazionali annuali SEC 2010). Misura la variazione reale rispetto all’anno precedente; l’indice cumulato mostrato nella scheda è ricostruito dal progetto concatenando i tassi annui ufficiali arrotondati al decimo di punto.",
+        "en": "Annual percentage rate of change (CLV_PCH_PRE_HAB) in GDP B1GQ per capita in chain-linked volumes (ESA 2010 annual national accounts). It measures the real change from the previous year; the cumulative index shown on the card is reconstructed by the project by chaining the official annual rates rounded to one decimal place."
       },
       "unitKey": "percent_change",
       "precision": 1,
@@ -134351,8 +134351,8 @@
         "en": "How much prices paid by households increased or decreased on average compared with the previous year (annual rate of change, not the price index level)."
       },
       "technical": {
-        "it": "Tasso medio annuo di variazione percentuale (RCH_A_AVG) dell’indice armonizzato dei prezzi al consumo (IPCA/HICP), totale COICOP. Misura il ritmo di variazione rispetto all’anno precedente, non il livello dell’indice.",
-        "en": "Annual average percentage rate of change (RCH_A_AVG) of the harmonised index of consumer prices (HICP), total COICOP. It measures the rate of change from the previous year, not the index level."
+        "it": "Tasso medio annuo di variazione percentuale (RCH_A_AVG) dell’indice armonizzato dei prezzi al consumo (IPCA/HICP), totale COICOP. Misura la variazione della media annua rispetto all’anno precedente; l’indice cumulato mostrato nella scheda è ricostruito dal progetto concatenando i tassi medi annui ufficiali arrotondati al decimo di punto.",
+        "en": "Annual average percentage rate of change (RCH_A_AVG) of the harmonised index of consumer prices (HICP), total COICOP. It measures the change in the annual average from the previous year; the cumulative index shown on the card is reconstructed by the project by chaining the official annual average rates rounded to one decimal place."
       },
       "unitKey": "percent_change",
       "precision": 1,
@@ -136707,8 +136707,8 @@
         "en": "The share of people living in at least one of three conditions: low income, severe material and social deprivation, or very low work intensity."
       },
       "technical": {
-        "it": "Indicatore AROPE secondo la definizione Europa 2030, calcolato con EU-SILC sulle persone che vivono in famiglie private. Per la componente reddituale, l’anno di riferimento del reddito è normalmente quello precedente all’indagine.",
-        "en": "AROPE indicator under the Europe 2030 definition, calculated from EU-SILC for people living in private households. For the income component, the income reference year is normally the year before the survey."
+        "it": "Quota percentuale (PC) della popolazione in famiglie private secondo l’indicatore composito AROPE (definizione Europa 2030, indagine annuale EU-SILC). Per la componente reddituale, l’anno di riferimento del reddito è normalmente quello precedente all’indagine.",
+        "en": "Percentage share (PC) of people living in private households under the composite AROPE indicator (Europe 2030 definition, annual EU-SILC survey). For the income component, the income reference year is normally the year before the survey."
       },
       "unitKey": "percent",
       "precision": 1,
@@ -139003,8 +139003,8 @@
         "en": "Spending on old age, anticipated, disability and survivors’ pensions, together with the other types included in European statistics."
       },
       "technical": {
-        "it": "Spesa pensionistica totale del sistema ESSPROS, con e senza prova dei mezzi, in percentuale del PIL.",
-        "en": "Total ESSPROS pension expenditure, means tested and non means tested, as a percentage of GDP."
+        "it": "Spesa pensionistica annua lorda totale del sistema ESSPROS (regimi pubblici e privati, con e senza prova dei mezzi), espressa in quota percentuale del PIL (PC_GDP).",
+        "en": "Total annual gross ESSPROS pension expenditure (public and private schemes, means tested and non means tested), expressed as a percentage share of GDP (PC_GDP)."
       },
       "unitKey": "percent_gdp",
       "precision": 1,
@@ -143970,8 +143970,8 @@
         "en": "The years a person can expect to live without long-standing limitations in usual activities, based on survey responses."
       },
       "technical": {
-        "it": "Indicatore HLY alla nascita per il totale della popolazione. Combina tavole di mortalità e la domanda GALI di EU-SILC sulle limitazioni durate almeno sei mesi. Le persone in istituzioni non rientrano normalmente nel campione EU-SILC.",
-        "en": "Healthy life years at birth for the total population. It combines life tables with the EU-SILC GALI question on limitations lasting at least six months. People living in institutions are normally outside the EU-SILC sample."
+        "it": "Indicatore HLY alla nascita (HLY_Y0) per il totale della popolazione. Combina tavole di mortalità annue e la domanda GALI di EU-SILC sulle limitazioni durate almeno sei mesi. Le persone in istituzioni non rientrano normalmente nel campione EU-SILC.",
+        "en": "Healthy life years at birth (HLY_Y0) for the total population. It combines annual life tables with the EU-SILC GALI question on limitations lasting at least six months. People living in institutions are normally outside the EU-SILC sample."
       },
       "unitKey": "years",
       "precision": 1,
@@ -147815,8 +147815,8 @@
         "en": "The share of people aged 25 to 34 who completed university or an equivalent tertiary programme."
       },
       "technical": {
-        "it": "Popolazione tra 25 e 34 anni con livello ISCED 5 fino a 8, in percentuale della popolazione della stessa età.",
-        "en": "Population aged 25 to 34 with ISCED levels 5 to 8 as a percentage of the population of the same age."
+        "it": "Quota percentuale (PC) della popolazione tra 25 e 34 anni in famiglie private con livello ISCED 2011 da 5 a 8. Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
+        "en": "Percentage share (PC) of the population aged 25 to 34 in private households with ISCED 2011 levels 5 to 8. Annual average of quarterly EU Labour Force Survey data."
       },
       "unitKey": "percent",
       "precision": 1,
@@ -153157,8 +153157,8 @@
         "en": "The share of young people aged 18 to 24 with at most lower secondary education who are not in education or training."
       },
       "technical": {
-        "it": "Persone tra 18 e 24 anni con al massimo un titolo ISCED 0–2 che non hanno partecipato a istruzione o formazione nelle quattro settimane precedenti l’indagine.",
-        "en": "People aged 18 to 24 with at most ISCED levels 0–2 who did not participate in education or training during the four weeks before the survey."
+        "it": "Quota percentuale (PC) delle persone tra 18 e 24 anni con al massimo un titolo ISCED 0–2 che non hanno partecipato a istruzione o formazione nelle quattro settimane precedenti l’indagine. Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
+        "en": "Percentage share (PC) of people aged 18 to 24 with at most ISCED levels 0–2 who did not participate in education or training during the four weeks before the survey. Annual average of quarterly EU Labour Force Survey data."
       },
       "unitKey": "percent",
       "precision": 1,
@@ -158418,8 +158418,8 @@
         "en": "The share of people aged 25 to 64 who took part in education or training during the previous four weeks."
       },
       "technical": {
-        "it": "Partecipazione a istruzione formale o non formale nelle ultime quattro settimane, fonte EU Labour Force Survey.",
-        "en": "Participation in formal or non formal education during the previous four weeks, source EU Labour Force Survey."
+        "it": "Quota percentuale (PC) di partecipazione a istruzione o formazione formale o non formale nelle ultime quattro settimane tra 25 e 64 anni. Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
+        "en": "Percentage share (PC) of participation in formal or non-formal education or training during the previous four weeks among people aged 25 to 64. Annual average of quarterly EU Labour Force Survey data."
       },
       "unitKey": "percent",
       "precision": 1,
@@ -163459,8 +163459,8 @@
         "en": "The share of people aged 15 to 29 who are not employed and are not in education or training."
       },
       "technical": {
-        "it": "Tasso NEET tra 15 e 29 anni. Comprende disoccupati e persone fuori dalla forza lavoro che non partecipano a istruzione formale o non formale.",
-        "en": "NEET rate among people aged 15 to 29. It includes unemployed and inactive people not participating in formal or non formal education."
+        "it": "Quota percentuale (PC, tasso NEET) tra 15 e 29 anni. Comprende disoccupati e persone fuori dalla forza lavoro (NEMP) che non partecipano a istruzione o formazione formale o non formale (NO_FE_NO_NFE). Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
+        "en": "Percentage share (PC, NEET rate) among people aged 15 to 29. It includes unemployed and inactive people (NEMP) not participating in formal or non-formal education or training (NO_FE_NO_NFE). Annual average of quarterly EU Labour Force Survey data."
       },
       "unitKey": "percent",
       "precision": 1,
@@ -168564,8 +168564,8 @@
         "en": "The share of gross final energy consumption supplied by renewable sources."
       },
       "technical": {
-        "it": "Quota complessiva di energia rinnovabile calcolata secondo la metodologia della direttiva europea sulle rinnovabili.",
-        "en": "Overall renewable energy share calculated under the methodology of the European renewable energy directive."
+        "it": "Quota percentuale (PC, bilancio REN) di energia rinnovabile sui consumi finali lordi annui di energia, calcolata secondo la metodologia della direttiva europea sulle rinnovabili vigente nell’anno.",
+        "en": "Percentage share (PC, balance REN) of renewable energy in annual gross final energy consumption, calculated under the methodology of the European renewable energy directive in force for the year."
       },
       "unitKey": "percent",
       "precision": 1,
@@ -173114,8 +173114,8 @@
         "en": "The share of waste produced by households and similar activities that is recycled."
       },
       "technical": {
-        "it": "Rifiuti urbani riciclati e preparati per il riutilizzo divisi per i rifiuti urbani generati, secondo il metodo Eurostat vigente per l’anno osservato.",
-        "en": "Municipal waste recycled and prepared for reuse divided by municipal waste generated, under the Eurostat method applying to the observed year."
+        "it": "Quota percentuale (PC, operazione RCY) dei rifiuti urbani riciclati e preparati per il riutilizzo divisi per i rifiuti urbani generati nell’anno solare, secondo il metodo Eurostat vigente per l’anno osservato.",
+        "en": "Percentage share (PC, operation RCY) of municipal waste recycled and prepared for reuse divided by municipal waste generated over the calendar year, under the Eurostat method applying to the observed year."
       },
       "unitKey": "percent",
       "precision": 1,
@@ -178271,8 +178271,8 @@
         "en": "How emissions produced within the territory have changed since 1990. The 1990 value is set to 100."
       },
       "technical": {
-        "it": "Indice delle emissioni territoriali secondo l’inventario UNFCCC, escluse le attività di uso del suolo, cambiamento di uso del suolo e foreste e, per i valori nazionali, l’aviazione e la navigazione internazionali. Base 1990 uguale a 100.",
-        "en": "Index of territorial emissions under the UNFCCC inventory, excluding land use, land-use change and forestry and, for national values, international aviation and navigation. Base 1990 equals 100."
+        "it": "Numero indice annuo (unità I90, base 1990 = 100) delle emissioni nette territoriali di gas serra (TOTX4_MEMO) secondo l’inventario UNFCCC, escluse le attività di uso del suolo, cambiamento di uso del suolo e foreste e, per i valori nazionali, l’aviazione e la navigazione internazionali.",
+        "en": "Annual index number (unit I90, base 1990 = 100) of net territorial greenhouse-gas emissions (TOTX4_MEMO) under the UNFCCC inventory, excluding land use, land-use change and forestry and, for national values, international aviation and navigation."
       },
       "unitKey": "index_1990",
       "precision": 1,
