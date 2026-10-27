@@ -23,6 +23,7 @@ test("all published indicators have a specific bilingual reading for every year"
         assert.ok(result?.description.includes(String(point.year)), indicator.id);
         assert.doesNotMatch(result.description, /undefined|NaN|\{year\}|\{value\}/);
         assert.doesNotMatch(result.description, /nell’unità riportata|in the unit shown/);
+        assert.ok(result?.caution && result.caution.length > 20, `${indicator.id} (${locale}): has a neutral methodological caution`);
         if (point.eu === null) assert.equal(result.comparison, null);
       }
     }

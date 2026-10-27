@@ -682,6 +682,16 @@ for (const locale of locales) {
       const guide = classRegions(ratePage.html, "index-vs-rate-guide");
       assert.equal(guide.length, 1, `${locale} ${id}: displays index vs. rate of change guide`);
       assert.match(guide[0].text, /= 100/, `${locale} ${id}: guide includes cumulative index base`);
+      assert.match(
+        guide[0].text,
+        locale === "it" ? /Esempi illustrativi/ : /Illustrative examples/,
+        `${locale} ${id}: guide uses illustrative examples instead of repeating live chart numbers`,
+      );
+      assert.doesNotMatch(
+        guide[0].text,
+        /2025 su 2024|2025 vs 2024/,
+        `${locale} ${id}: guide does not duplicate live year-on-year numbers`,
+      );
       const toolbar = classRegions(ratePage.html, "trend-mode-toolbar");
       assert.equal(toolbar.length, 1, `${locale} ${id}: historical chart includes mode toggle and base-year selector`);
       const modeButtons = elements(toolbar[0].html, "button");

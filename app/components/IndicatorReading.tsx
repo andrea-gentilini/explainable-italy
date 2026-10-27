@@ -19,22 +19,6 @@ type IndicatorReadingProps = {
   locale: "it" | "en";
 };
 
-function formatSignedPercent(value: number, locale: "it" | "en", precision = 1) {
-  const formatter = new Intl.NumberFormat(locale === "it" ? "it-IT" : "en-GB", {
-    minimumFractionDigits: precision,
-    maximumFractionDigits: precision,
-  });
-  const sign = value > 0 ? "+" : "";
-  return `${sign}${formatter.format(value)}%`;
-}
-
-function formatIndexNumber(value: number, locale: "it" | "en", precision = 1) {
-  return new Intl.NumberFormat(locale === "it" ? "it-IT" : "en-GB", {
-    minimumFractionDigits: precision,
-    maximumFractionDigits: precision,
-  }).format(value);
-}
-
 export function IndicatorReading({ indicator, point, locale }: IndicatorReadingProps) {
   const reading = getIndicatorReading(indicator, point, locale);
   if (!reading) return null;
@@ -43,9 +27,6 @@ export function IndicatorReading({ indicator, point, locale }: IndicatorReadingP
     indicator.unitKey === "percent_change" && indicator.series?.length
       ? buildCumulativeIndexSeries(indicator.series)
       : null;
-  const cumulativePoint = cumulative?.points.find(
-    (entry) => entry.year === point.year,
-  );
 
   return (
     <aside className="reading-context" aria-label={locale === "it" ? "Come leggere il dato" : "Reading this value"}>
@@ -68,86 +49,55 @@ export function IndicatorReading({ indicator, point, locale }: IndicatorReadingP
           <p><a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=GDP_per_capita,_consumption_per_capita_and_price_level_indices" target="_blank" rel="noreferrer">{locale === "it" ? "La spiegazione di Eurostat" : "Eurostat’s explanation"} <span aria-hidden="true">↗</span></a></p>
         </div>
       ) : null}
-      {cumulative && cumulativePoint && cumulative.baseYear !== null ? (
+      {cumulative && cumulative.baseYear !== null ? (
         <div className="pps-guide index-vs-rate-guide">
           <h3>
             {locale === "it"
-              ? `Variazione annua (%) e indice cumulato (${cumulative.baseYear} = 100)`
-              : `Annual rate of change (%) and cumulative index (${cumulative.baseYear} = 100)`}
+              ? `Come funzionano tasso annuo (%) e indice cumulato (${cumulative.baseYear} = 100)`
+              : `How the annual rate (%) and cumulative index (${cumulative.baseYear} = 100) work`}
           </h3>
           <p>
-            {indicator.id === "inflation"
-              ? locale === "it"
-                ? `Il tasso annuo misura la velocità con cui i prezzi cambiano rispetto all’anno precedente; l’indice cumulato misura invece il livello raggiunto dai prezzi ponendo uguale a 100 la base iniziale (${cumulative.baseYear} = 100).`
-                : `The annual rate measures how fast prices change compared with the previous year; the cumulative index measures the resulting price level when the starting base is set to 100 (${cumulative.baseYear} = 100).`
-              : locale === "it"
-                ? `Il tasso annuo misura la variazione rispetto all’anno precedente; l’indice cumulato mostra invece il livello raggiunto dal PIL reale per abitante ponendo uguale a 100 la base iniziale (${cumulative.baseYear} = 100).`
-                : `The annual rate measures the change from the previous year; the cumulative index shows the resulting level of real GDP per person when the starting base is set to 100 (${cumulative.baseYear} = 100).`}
+            {locale === "it"
+              ? `Il tasso di variazione annuo (%) misura la variazione rispetto all’anno precedente; l’indice cumulato fissa uguale a 100 l’anno base (${cumulative.baseYear} = 100 di default) e mostra il livello complessivo raggiunto concatenando le variazioni annue successive.`
+              : `The annual rate of change (%) measures the change compared with the previous year; the cumulative index sets the base year to 100 (${cumulative.baseYear} = 100 by default) and shows the overall level reached by chaining subsequent annual changes.`}
           </p>
           <dl
             className="pps-examples index-vs-rate-cards"
             aria-label={
               locale === "it"
-                ? `Confronto tra tasso annuo e indice cumulato nel ${point.year}`
-                : `Comparison between annual rate and cumulative index in ${point.year}`
+                ? "Esempi illustrativi di tasso annuo e indice cumulato"
+                : "Illustrative examples of annual rate and cumulative index"
             }
           >
             <div>
-              <dt>
-                {locale === "it"
-                  ? `Tasso annuo (${point.year} su ${point.year - 1})`
-                  : `Annual rate (${point.year} vs ${point.year - 1})`}
-              </dt>
+              <dt>{locale === "it" ? "+5% poi +2%" : "+5% then +2%"}</dt>
               <dd>
-                <strong>
-                  {locale === "it" ? "Italia" : "Italy"}:{" "}
-                  {formatSignedPercent(point.italy, locale, indicator.precision)}
-                </strong>
-                {point.eu !== null ? (
-                  <span>
-                    {" "}
-                    · {locale === "it" ? "UE" : "EU"}:{" "}
-                    {formatSignedPercent(point.eu, locale, indicator.precision)}
-                  </span>
-                ) : null}
+                {locale === "it"
+                  ? "Il tasso annuo rallenta, ma il livello dell’indice continua a salire (da 100 a 105,0 e poi a 107,1)"
+                  : "The annual rate slows down, but the index level keeps rising (from 100 to 105.0, then 107.1)"}
               </dd>
             </div>
             <div>
-              <dt>
-                {locale === "it"
-                  ? `Indice cumulato Italia (${cumulative.baseYear} = 100)`
-                  : `Italy cumulative index (${cumulative.baseYear} = 100)`}
-              </dt>
+              <dt>{locale === "it" ? "0,0%" : "0.0%"}</dt>
               <dd>
-                <strong>{formatIndexNumber(cumulativePoint.italy, locale, 1)}</strong>{" "}
-                <span>
-                  ({formatSignedPercent(cumulativePoint.italyCumulativeChange, locale, 1)}{" "}
-                  {locale === "it" ? `dal ${cumulative.baseYear}` : `since ${cumulative.baseYear}`})
-                </span>
+                {locale === "it"
+                  ? "Variazione annua nulla: il livello dell’indice resta invariato rispetto all’anno precedente"
+                  : "Zero annual change: the index level remains unchanged from the previous year"}
               </dd>
             </div>
-            {cumulativePoint.eu !== null &&
-            cumulativePoint.euCumulativeChange !== null ? (
-              <div>
-                <dt>
-                  {locale === "it"
-                    ? `Indice cumulato UE (${cumulative.baseYear} = 100)`
-                    : `EU cumulative index (${cumulative.baseYear} = 100)`}
-                </dt>
-                <dd>
-                  <strong>{formatIndexNumber(cumulativePoint.eu, locale, 1)}</strong>{" "}
-                  <span>
-                    ({formatSignedPercent(cumulativePoint.euCumulativeChange, locale, 1)}{" "}
-                    {locale === "it" ? `dal ${cumulative.baseYear}` : `since ${cumulative.baseYear}`})
-                  </span>
-                </dd>
-              </div>
-            ) : null}
+            <div>
+              <dt>{locale === "it" ? "−2,0%" : "−2.0%"}</dt>
+              <dd>
+                {locale === "it"
+                  ? "Tasso annuo negativo: il livello dell’indice scende rispetto all’anno precedente"
+                  : "Negative annual rate: the index level falls compared with the previous year"}
+              </dd>
+            </div>
           </dl>
           <small>
             {locale === "it"
-              ? `Il tasso annuo è l’osservazione ufficiale Eurostat. L’indice cumulato è un’elaborazione del progetto ottenuta concatenando le variazioni annue ufficiali (arrotondate al decimo di punto; su periodi lunghi può quindi differire di pochi decimi da un indice calcolato sulle serie non arrotondate). Nel grafico storico qui sotto puoi anche scegliere un altro anno base (= 100).`
-              : `The annual rate is Eurostat’s official observation. The cumulative index is a project calculation obtained by chaining the official annual rates (rounded to one decimal place; over long periods it may therefore differ by a few tenths from an index computed on unrounded series). In the historical chart below you can also rebase the index to another year (= 100).`}
+              ? "Esempi illustrativi. Il tasso annuo è l’osservazione ufficiale Eurostat; l’indice cumulato nel grafico storico qui sotto è un’elaborazione del progetto ottenuta concatenando i tassi annui ufficiali (arrotondati al decimo di punto; su periodi lunghi può quindi differire di pochi decimi da un indice calcolato sulle serie non arrotondate)."
+              : "Illustrative examples. The annual rate is Eurostat’s official observation; the cumulative index in the historical chart below is a project calculation obtained by chaining the official annual rates (rounded to one decimal place; over long periods it may therefore differ by a few tenths from an index computed on unrounded series)."}
           </small>
         </div>
       ) : null}
