@@ -283,12 +283,26 @@ export function IndicatorCard({
   const metadataHref =
     indicator.source.metadataUrl ?? indicator.definitionSourceUrl;
   const Heading = expanded ? "h1" : "h3";
+  const scopeBadge = indicator.isDetail
+    ? locale === "it"
+      ? "Dettaglio di Protezione sociale (COFOG 10.2)"
+      : "Detail of Social protection (COFOG 10.2)"
+    : indicator.unitKey === "percent_spending"
+      ? locale === "it"
+        ? "Quota dei 100 € (% della spesa)"
+        : "Share of €100 (% of spending)"
+      : indicator.unitKey === "percent_gdp"
+        ? locale === "it"
+          ? "% del PIL"
+          : "% of GDP"
+        : null;
 
   return (
     <article
       className="indicator-card"
       id={indicator.id}
       data-expanded={expanded}
+      data-detail={indicator.isDetail || undefined}
       style={
         {
           "--section-color": sectionColors[indicator.section],
@@ -297,7 +311,12 @@ export function IndicatorCard({
     >
       <div className="indicator-card-top">
         <div className="indicator-copy">
-          <p className="indicator-kicker">{sectionTitle}</p>
+          <p className="indicator-kicker">
+            <span>{sectionTitle}</span>
+            {scopeBadge ? (
+              <span className="indicator-scope-badge">{scopeBadge}</span>
+            ) : null}
+          </p>
           <Heading>
             {expanded ? (
               indicator.title[locale]

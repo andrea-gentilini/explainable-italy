@@ -2201,13 +2201,59 @@ footer a:hover {
 }
 
 .indicator-kicker {
-  margin: 0 0 0.42rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
+  margin: 0 0 0.35rem;
   font-weight: 720;
-  margin-bottom: 0.35rem;
   color: var(--section-color);
   letter-spacing: 0.07em;
   text-transform: uppercase;
   font-size: 0.8rem;
+}
+
+.indicator-scope-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--background);
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 660;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.indicator-card[data-detail="true"]:not([data-expanded="true"]) {
+  border-left-style: dashed;
+  background: color-mix(in srgb, var(--surface), var(--background) 35%);
+}
+
+.catalog-all-section {
+  margin-top: 3rem;
+}
+
+.catalog-all-heading {
+  margin-bottom: 1.25rem;
+}
+
+.catalog-all-heading h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.6rem, 3vw, 2.35rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.empty-state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
 }
 
 .indicator-card-top {

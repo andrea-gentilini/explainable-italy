@@ -678,6 +678,14 @@ for (const locale of locales) {
     const activeCta = classRegions(home.html, "spending-active-cta");
     assert.equal(activeCta.length, 1, `${locale}: 100-euro donut card includes an accessible CTA link for touch and keyboard users`);
 
+    const catalogPage = await page(localizedRoute(locale, "data"));
+    const catalogCards = classRegions(catalogPage.html, "indicator-card");
+    assert.equal(catalogCards.length, data.indicators.length, `${locale}: /data exposes all ${data.indicators.length} indicator cards alongside topic overview`);
+    const oldAgePage = await page(localizedRoute(locale, "data/spending-old-age"));
+    const scopeBadge = classRegions(oldAgePage.html, "indicator-scope-badge");
+    assert.equal(scopeBadge.length, 1, `${locale}: spending-old-age displays an explicit COFOG 10.2 sub-category scope badge`);
+    assert.match(scopeBadge[0].text, /COFOG 10\.2/, `${locale}: spending-old-age badge identifies COFOG 10.2 parent relationship`);
+
     const ghgPage = await page(localizedRoute(locale, "data/greenhouse-gas-emissions"));
     assert.match(ghgPage.text, /\(1990 = 100\)/, `${locale}: greenhouse gas emissions page displays explicit 1990 = 100 index unit`);
 

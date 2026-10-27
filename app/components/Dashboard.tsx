@@ -382,10 +382,11 @@ export function Dashboard({
                     const nextSearch = event.target.value;
                     updateQuery({
                       q: nextSearch || null,
-                      topic: nextSearch.trim()
-                        ? "all"
-                        : activeSection === "overview"
-                          ? null
+                      topic:
+                        activeSection === "overview"
+                          ? nextSearch.trim()
+                            ? "all"
+                            : null
                           : activeSection,
                     });
                   }}
@@ -460,59 +461,83 @@ export function Dashboard({
             </div>
 
             {activeSection === "overview" ? (
-              <div className="topic-grid">
-                {data.sections.map((section) => {
-                  const sectionIndicators = data.indicators.filter(
-                    (indicator) => indicator.section === section.id,
-                  );
+              <>
+                <div className="topic-grid">
+                  {data.sections.map((section) => {
+                    const sectionIndicators = data.indicators.filter(
+                      (indicator) => indicator.section === section.id,
+                    );
 
-                  return (
-                    <article
-                      key={section.id}
-                      style={
-                        {
-                          "--topic-color": sectionColors[section.id],
-                        } as CSSProperties
-                      }
-                    >
-                      <span className="topic-count">
-                        {sectionIndicators.length} {labels.topicIndicators}
-                      </span>
-                      <h2>
+                    return (
+                      <article
+                        key={section.id}
+                        style={
+                          {
+                            "--topic-color": sectionColors[section.id],
+                          } as CSSProperties
+                        }
+                      >
+                        <span className="topic-count">
+                          {sectionIndicators.length} {labels.topicIndicators}
+                        </span>
+                        <h2>
+                          <button
+                            type="button"
+                            className="topic-title-button"
+                            onClick={() => setActiveSection(section.id)}
+                          >
+                            {section.title[locale]}
+                          </button>
+                        </h2>
+                        <p>{section.description[locale]}</p>
+                        <div className="topic-questions">
+                          {topicQuestions[section.id].map((question) => (
+                            <a
+                              key={question.id}
+                              href={
+                                pageHref(locale, `data/${question.id}`) +
+                                `?topic=${section.id}`
+                              }
+                            >
+                              {question.text[locale]}{" "}
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          ))}
+                        </div>
                         <button
                           type="button"
-                          className="topic-title-button"
+                          className="topic-open"
                           onClick={() => setActiveSection(section.id)}
                         >
-                          {section.title[locale]}
+                          {labels.topicOpen} <span aria-hidden="true">→</span>
                         </button>
-                      </h2>
-                      <p>{section.description[locale]}</p>
-                      <div className="topic-questions">
-                        {topicQuestions[section.id].map((question) => (
-                          <a
-                            key={question.id}
-                            href={
-                              pageHref(locale, `data/${question.id}`) +
-                              `?topic=${section.id}`
-                            }
-                          >
-                            {question.text[locale]}{" "}
-                            <span aria-hidden="true">→</span>
-                          </a>
-                        ))}
-                      </div>
-                      <button
-                        type="button"
-                        className="topic-open"
-                        onClick={() => setActiveSection(section.id)}
-                      >
-                        {labels.topicOpen} <span aria-hidden="true">→</span>
-                      </button>
-                    </article>
-                  );
-                })}
-              </div>
+                      </article>
+                    );
+                  })}
+                </div>
+                <div className="catalog-all-section">
+                  <div className="catalog-all-heading">
+                    <h2>
+                      {labels.allSections} ({data.indicators.length})
+                    </h2>
+                  </div>
+                  <div className="indicator-grid">
+                    {data.indicators.map((indicator) => (
+                      <IndicatorCard
+                        indicator={indicator}
+                        locale={locale}
+                        sectionTitle={
+                          data.sections.find(
+                            (section) => section.id === indicator.section,
+                          )?.title[locale] ?? ""
+                        }
+                        key={indicator.id}
+                        query={catalogQuery}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </>
             ) : (
               <>
                 {activeSection === "spending" && !search.trim() ? (
@@ -558,12 +583,24 @@ export function Dashboard({
             {activeSection !== "overview" && filteredIndicators.length === 0 ? (
               <div className="empty-state" role="status">
                 <p>{labels.noResults}</p>
-                <button
-                  type="button"
-                  onClick={() => updateQuery({ q: null, topic: "all" }, true)}
-                >
-                  {labels.resetSearch}
-                </button>
+                <div className="empty-state-actions">
+                  {activeSection !== "all" ? (
+                    <button
+                      type="button"
+                      onClick={() => updateQuery({ topic: "all" }, true)}
+                    >
+                      {locale === "it"
+                        ? "Cerca in tutti i temi"
+                        : "Search across all topics"}
+                    </button>
+                  ) : null}
+                  <button
+                    type="button"
+                    onClick={() => updateQuery({ q: null, topic: "all" }, true)}
+                  >
+                    {labels.resetSearch}
+                  </button>
+                </div>
               </div>
             ) : null}
           </section>
