@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "attemptedAt": "2026-10-27T10:43:51.153Z",
-  "outcome": "failure",
-  "runUrl": "https://github.com/andrea-gentilini/explainable-italy/actions/runs/40490614068/attempts/1",
-  "sourceCommit": "7301300c822326b0b26e2fe4c377a54585640588",
-  "repositoryCommit": "7301300c822326b0b26e2fe4c377a54585640588",
-  "proposalUrl": null,
+  "attemptedAt": "2026-10-27T16:54:23.831Z",
+  "outcome": "success",
+  "runUrl": "https://github.com/andrea-gentilini/explainable-italy/actions/runs/40545292836/attempts/1",
+  "sourceCommit": "22d9c796c815ba92d653fd68ee5c6a6850be182d",
+  "repositoryCommit": "22d9c796c815ba92d653fd68ee5c6a6850be182d",
+  "proposalUrl": "https://github.com/andrea-gentilini/explainable-italy/pull/7",
   "lastSuccessfulCheck": {
-    "checkedAt": "2026-10-21T14:38:28.314Z",
-    "sourceCommit": "0169e004eb2c99704d7ffe661256a86f0cc5b2ae",
+    "checkedAt": "2026-10-27T16:54:23.831Z",
+    "sourceCommit": "22d9c796c815ba92d653fd68ee5c6a6850be182d",
     "datasets": {
       "cei_wm011": "8eaceefba9e0862443ac48bd6ded74d579b308b806bd084a28edb29bc782de28",
       "demo_find": "3f9ce58b175956d6200c68c92b3dfb5beda385aac70778817e6df13d3fdc5712",
@@ -22,14 +22,14 @@
       "gov_10dd_edpt1": "c0622fd688b49b14faa40a55affaff2f088949471e7cb3f2db67a318e05c8fb4",
       "hlth_hlye": "dc6024d54810183eb2a29a08deff479a3c0aeb6dc9470afbb55e59ef15071126",
       "ilc_peps01n": "fdc3a05a09e4c5d8e3aeab1ee00d0eb262baff6b4c1f16aa3a2d0f7857c9dedc",
-      "lfsi_emp_a": "a527f958f1b44a0e5efef9b8797bbabd2f31220cc8c334a6aa55ee55b0857ae0",
-      "nama_10_pc": "98f76bb3c2d3459579614b68200f085843a860f5ce22dacb9b3d26be0a80ee21",
+      "lfsi_emp_a": "fe38b7c9069d4015c19f2d9ca1543fd50c33db1d45468aacdefac647ac3636ae",
+      "nama_10_pc": "544e2afb616fea8f3e564abbaf447bbcccaa25b3fcfe8ba4fb251ac229b9440f",
       "nrg_ind_ren": "1aaa28e0eed4ac0d6f4ba2bdf57130aad5f651302a72a8a1f61729d91d91ccbb",
       "sdg_13_10": "77d9b554b057c0535b6fc4417a107f138a7fd5ed42deaa0526577ad1ad930ec3",
-      "spr_exp_pens": "16b16cfa364d09ad3ea6fb5fd61f64a9826fdc255b7530ab0639404300be3c15",
+      "spr_exp_pens": "db7652d1bfb485b19303f609cbf6ea5423c29cb80625ee8015bc583af6c5221e",
       "tec00118": "08925d78799c3a09a13d22ffe5820f7ad78c101b75dc332adf06e6e66c27d7d9",
       "trng_lfse_01": "38d9b7a219bb175bfa0e74dba1c5964249bced409536c2e7c95ba02b4615bb25",
-      "une_rt_a": "97213b04072dcfa5dd88179ab7fa3aa62d8627b593c509ee4b45240377024fec"
+      "une_rt_a": "4d8cf0cd9086e15f8db3f850d22cef1fc619fce98362d9674c44336a96cbe723"
     }
   }
 }
