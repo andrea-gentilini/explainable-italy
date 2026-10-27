@@ -3,6 +3,7 @@
 import {
   useEffect,
   useMemo,
+  useState,
   useSyncExternalStore,
   type CSSProperties,
 } from "react";
@@ -19,6 +20,7 @@ import type {
 import {
   basePath,
   formatDate,
+  getDisplayedPoint,
   getThemeSnapshot,
   pageHref,
   selectedPoint,
@@ -28,7 +30,7 @@ import {
   useLocationQuery,
   withQuery,
 } from "./dashboard-utils";
-import { HomeView } from "./HomeView";
+import { HomeView, SpendingBreakdownCard } from "./HomeView";
 import { IndicatorCard, SocialProtectionDetail } from "./IndicatorCard";
 import { SourceVerification } from "./SourceVerification";
 import {
@@ -118,6 +120,22 @@ export function Dashboard({
   );
   const pensionExpenditure = data.indicators.find(
     (indicator) => indicator.id === "pension-expenditure",
+  );
+  const [activeSpendingId, setActiveSpendingId] = useState<string | null>(null);
+  const spendingBreakdown = useMemo(
+    () =>
+      data.indicators
+        .filter(
+          (indicator) =>
+            indicator.section === "spending" &&
+            indicator.id.startsWith("spending-") &&
+            !indicator.isDetail,
+        )
+        .sort(
+          (left, right) =>
+            getDisplayedPoint(right).italy - getDisplayedPoint(left).italy,
+        ),
+    [data.indicators],
   );
 
   const searchIndex = useMemo(
@@ -496,21 +514,45 @@ export function Dashboard({
                 })}
               </div>
             ) : (
-              <div className="indicator-grid">
-                {filteredIndicators.map((indicator) => (
-                  <IndicatorCard
-                    indicator={indicator}
-                    locale={locale}
-                    sectionTitle={
-                      data.sections.find(
-                        (section) => section.id === indicator.section,
-                      )?.title[locale] ?? ""
-                    }
-                    key={indicator.id}
-                    query={catalogQuery}
-                  />
-                ))}
-              </div>
+              <>
+                {activeSection === "spending" && !search.trim() ? (
+                  <section
+                    className="spending-catalog-panel"
+                    aria-label={labels.heroTitle}
+                  >
+                    <div className="spending-catalog-intro">
+                      <h2>{labels.heroTitle}</h2>
+                      <p>
+                        {locale === "it"
+                          ? "Le 10 funzioni COFOG qui sotto ripartiscono 100 € di spesa pubblica complessiva (% della spesa). Le altre schede del tema misurano invece entrate, saldi e debito in rapporto all’economia (% del PIL)."
+                          : "The 10 COFOG functions below divide €100 of total government expenditure (% of spending). The remaining indicators in this topic measure revenue, balances and debt relative to the economy (% of GDP)."}
+                      </p>
+                    </div>
+                    <SpendingBreakdownCard
+                      spendingBreakdown={spendingBreakdown}
+                      locale={locale}
+                      activeSpendingId={activeSpendingId}
+                      onSelectSpending={setActiveSpendingId}
+                      query={catalogQuery}
+                    />
+                  </section>
+                ) : null}
+                <div className="indicator-grid">
+                  {filteredIndicators.map((indicator) => (
+                    <IndicatorCard
+                      indicator={indicator}
+                      locale={locale}
+                      sectionTitle={
+                        data.sections.find(
+                          (section) => section.id === indicator.section,
+                        )?.title[locale] ?? ""
+                      }
+                      key={indicator.id}
+                      query={catalogQuery}
+                    />
+                  ))}
+                </div>
+              </>
             )}
 
             {activeSection !== "overview" && filteredIndicators.length === 0 ? (

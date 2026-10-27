@@ -3935,6 +3935,85 @@ a.source-box:focus-visible {
   z-index: 2;
 }
 
+.spending-active-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem 1rem;
+  margin-top: 1rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, var(--accent-soft), transparent 45%);
+}
+
+.spending-active-figures {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.spending-active-figures strong {
+  color: var(--foreground);
+  font-size: 0.88rem;
+  font-weight: 720;
+}
+
+.spending-active-figures span {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.spending-active-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.3rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--accent-strong);
+  font-size: 0.8rem;
+  font-weight: 680;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.spending-active-cta:hover,
+.spending-active-cta:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.spending-catalog-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 1.5rem 2rem;
+  align-items: start;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.spending-catalog-intro h2 {
+  margin: 0 0 0.75rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+
+.spending-catalog-intro p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
 @media (max-width: 1180px) {
   .site-header nav {
     display: none;
@@ -3942,7 +4021,8 @@ a.source-box:focus-visible {
 }
 
 @media (max-width: 1040px) {
-  .hero {
+  .hero,
+  .spending-catalog-panel {
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }

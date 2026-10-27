@@ -2,8 +2,10 @@
 
 import {
   useMemo,
+  useRef,
   useState,
   type CSSProperties,
+  type MouseEvent as ReactMouseEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import {
@@ -22,6 +24,211 @@ import {
   statusDescription,
   withQuery,
 } from "./dashboard-utils";
+
+export function SpendingBreakdownCard({
+  spendingBreakdown,
+  locale,
+  activeSpendingId,
+  onSelectSpending,
+  query = "",
+}: {
+  spendingBreakdown: Indicator[];
+  locale: Locale;
+  activeSpendingId: string | null;
+  onSelectSpending: (id: string) => void;
+  query?: string;
+}) {
+  const labels = copy[locale];
+  const suppressNextClickRef = useRef(false);
+  const spendingPoint = spendingBreakdown[0]
+    ? getDisplayedPoint(spendingBreakdown[0])
+    : null;
+  const spendingYear = spendingPoint?.year;
+  const heroCardLabel = labels.heroCardLabel.replace(
+    "{year}",
+    String(spendingYear ?? ""),
+  );
+  const activeSpending =
+    spendingBreakdown.find((indicator) => indicator.id === activeSpendingId) ??
+    spendingBreakdown[0];
+  const activeSpendingIndex = Math.max(
+    0,
+    spendingBreakdown.findIndex(
+      (indicator) => indicator.id === activeSpending?.id,
+    ),
+  );
+  const spendingBoundaries = spendingBreakdown.map((_, index) =>
+    spendingBreakdown
+      .slice(0, index + 1)
+      .reduce((total, item) => total + getDisplayedPoint(item).italy, 0),
+  );
+  const spendingGradient = `conic-gradient(${spendingBreakdown
+    .map((_, index) => {
+      const start = index === 0 ? 0 : spendingBoundaries[index - 1];
+      const end =
+        index === spendingBreakdown.length - 1 ? 100 : spendingBoundaries[index];
+      return `var(--chart-${index + 1}) ${start}% ${end}%`;
+    })
+    .join(", ")})`;
+
+  const resolveSliceFromPointer = (
+    event: ReactPointerEvent<HTMLAnchorElement>,
+  ) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - (bounds.left + bounds.width / 2);
+    const y = event.clientY - (bounds.top + bounds.height / 2);
+    const distanceFromCenter = Math.hypot(x, y);
+
+    if (distanceFromCenter < bounds.width * 0.36) {
+      return null;
+    }
+
+    const angle = (Math.atan2(y, x) * 180) / Math.PI;
+    const share = ((angle + 450) % 360) / 3.6;
+    const selectedIndex = spendingBoundaries.findIndex(
+      (boundary) => share <= boundary,
+    );
+    return spendingBreakdown[selectedIndex] ?? null;
+  };
+
+  const handleDonutPointerMove = (
+    event: ReactPointerEvent<HTMLAnchorElement>,
+  ) => {
+    if (event.pointerType === "touch") return;
+    const selected = resolveSliceFromPointer(event);
+    if (selected && selected.id !== activeSpending?.id) {
+      onSelectSpending(selected.id);
+    }
+  };
+
+  const handleDonutPointerDown = (
+    event: ReactPointerEvent<HTMLAnchorElement>,
+  ) => {
+    const selected = resolveSliceFromPointer(event);
+    if (!selected) {
+      suppressNextClickRef.current = false;
+      return;
+    }
+    if (event.pointerType === "touch" && selected.id !== activeSpending?.id) {
+      suppressNextClickRef.current = true;
+      onSelectSpending(selected.id);
+      return;
+    }
+    suppressNextClickRef.current = false;
+    onSelectSpending(selected.id);
+  };
+
+  const handleDonutClick = (event: ReactMouseEvent<HTMLAnchorElement>) => {
+    if (suppressNextClickRef.current) {
+      event.preventDefault();
+      suppressNextClickRef.current = false;
+    }
+  };
+
+  const activePoint = activeSpending ? getDisplayedPoint(activeSpending) : null;
+  const activeTitle = activeSpending
+    ? activeSpending.id === "spending-social-protection"
+      ? labels.socialProtectionHero
+      : activeSpending.title[locale]
+    : "";
+
+  return (
+    <div className="hundred-euro-card">
+      <div className="hundred-euro-heading">
+        <span>{locale === "it" ? "100 €" : "€100"}</span>{" "}
+        <small>{heroCardLabel}</small>
+      </div>
+
+      <div className="spending-visual">
+        {activeSpending && activePoint ? (
+          <a
+            className="spending-donut"
+            href={withQuery(
+              pageHref(locale, `data/${activeSpending.id}`),
+              query,
+              activePoint.year,
+            )}
+            aria-label={`${labels.spendingDonutLabel}: ${activeTitle}`}
+            onPointerMove={handleDonutPointerMove}
+            onPointerDown={handleDonutPointerDown}
+            onClick={handleDonutClick}
+            style={
+              {
+                background: spendingGradient,
+                "--active-chart-color": `var(--chart-${
+                  activeSpendingIndex + 1
+                })`,
+              } as CSSProperties
+            }
+          >
+            <span className="spending-donut-center">
+              <strong>{formatEuro(activePoint.italy, locale, 1)}</strong>{" "}
+              <small>{activeTitle}</small>
+            </span>
+          </a>
+        ) : null}
+
+        <div className="spending-list">
+          {spendingBreakdown.map((indicator, index) => (
+            <a
+              href={withQuery(
+                pageHref(locale, `data/${indicator.id}`),
+                query,
+                getDisplayedPoint(indicator).year,
+              )}
+              key={indicator.id}
+              data-active={indicator.id === activeSpending?.id}
+              onMouseEnter={() => onSelectSpending(indicator.id)}
+              onFocus={() => onSelectSpending(indicator.id)}
+            >
+              <span
+                className="legend-dot"
+                style={{
+                  background: `var(--chart-${index + 1})`,
+                }}
+              />
+              <span>
+                {indicator.id === "spending-social-protection"
+                  ? labels.socialProtectionHero
+                  : indicator.title[locale]}
+              </span>{" "}
+              <strong>
+                {formatEuro(getDisplayedPoint(indicator).italy, locale, 1)}
+              </strong>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {activeSpending && activePoint ? (
+        <div className="spending-active-summary" aria-live="polite">
+          <div className="spending-active-figures">
+            <strong>{activeTitle}</strong>
+            <span>
+              {labels.italy}: {formatEuro(activePoint.italy, locale, 1)}
+              {activePoint.eu !== null
+                ? ` · ${labels.eu}: ${formatEuro(activePoint.eu, locale, 1)}`
+                : ""}
+              {` · ${labels.median}: ${formatEuro(activePoint.median, locale, 1)}`}
+            </span>
+          </div>
+          <a
+            className="spending-active-cta"
+            href={withQuery(
+              pageHref(locale, `data/${activeSpending.id}`),
+              query,
+              activePoint.year,
+            )}
+          >
+            {locale === "it" ? "Apri la scheda" : "Open indicator"}{" "}
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      ) : null}
+      <p className="spending-interaction">{labels.spendingInteract}</p>
+    </div>
+  );
+}
 
 export function HomeView({
   data,
@@ -68,57 +275,8 @@ export function HomeView({
   const activeSpending =
     spendingBreakdown.find((indicator) => indicator.id === activeSpendingId) ??
     spendingBreakdown[0];
-  const activeSpendingIndex = Math.max(
-    0,
-    spendingBreakdown.findIndex(
-      (indicator) => indicator.id === activeSpending?.id,
-    ),
-  );
-  const spendingBoundaries = spendingBreakdown.map((_, index) =>
-    spendingBreakdown
-      .slice(0, index + 1)
-      .reduce((total, item) => total + getDisplayedPoint(item).italy, 0),
-  );
-  const spendingGradient = `conic-gradient(${spendingBreakdown
-    .map((_, index) => {
-      const start = index === 0 ? 0 : spendingBoundaries[index - 1];
-      const end =
-        index === spendingBreakdown.length - 1 ? 100 : spendingBoundaries[index];
-      return `var(--chart-${index + 1}) ${start}% ${end}%`;
-    })
-    .join(", ")})`;
-  const selectSpendingSlice = (
-    event: ReactPointerEvent<HTMLAnchorElement>,
-  ) => {
-    const bounds = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - (bounds.left + bounds.width / 2);
-    const y = event.clientY - (bounds.top + bounds.height / 2);
-    const distanceFromCenter = Math.hypot(x, y);
-
-    if (distanceFromCenter < bounds.width * 0.36) {
-      return;
-    }
-
-    const angle = (Math.atan2(y, x) * 180) / Math.PI;
-    const share = ((angle + 450) % 360) / 3.6;
-    const selectedIndex = spendingBoundaries.findIndex(
-      (boundary) => share <= boundary,
-    );
-    const selected = spendingBreakdown[selectedIndex];
-
-    if (selected) {
-      event.currentTarget.href =
-        pageHref(locale, `data/${selected.id}`) +
-        `?year=${getDisplayedPoint(selected).year}`;
-      setActiveSpendingId(selected.id);
-    }
-  };
 
   const heroEyebrow = labels.heroEyebrow.replace(
-    "{year}",
-    String(spendingYear ?? ""),
-  );
-  const heroCardLabel = labels.heroCardLabel.replace(
     "{year}",
     String(spendingYear ?? ""),
   );
@@ -319,91 +477,12 @@ export function HomeView({
           </a>
         </div>
 
-        <div className="hundred-euro-card">
-          <div className="hundred-euro-heading">
-            <span>{locale === "it" ? "100 €" : "€100"}</span>{" "}
-            <small>{heroCardLabel}</small>
-          </div>
-
-          <div className="spending-visual">
-            {activeSpending ? (
-              <a
-                className="spending-donut"
-                href={withQuery(
-                  pageHref(locale, `data/${activeSpending.id}`),
-                  "",
-                  getDisplayedPoint(activeSpending).year,
-                )}
-                aria-label={`${labels.spendingDonutLabel}: ${
-                  activeSpending.id === "spending-social-protection"
-                    ? labels.socialProtectionHero
-                    : activeSpending.title[locale]
-                }`}
-                onPointerMove={selectSpendingSlice}
-                onPointerDown={selectSpendingSlice}
-                style={
-                  {
-                    background: spendingGradient,
-                    "--active-chart-color": `var(--chart-${
-                      activeSpendingIndex + 1
-                    })`,
-                  } as CSSProperties
-                }
-              >
-                <span className="spending-donut-center">
-                  <strong>
-                    {formatEuro(
-                      getDisplayedPoint(activeSpending).italy,
-                      locale,
-                      1,
-                    )}
-                  </strong>{" "}
-                  <small>
-                    {activeSpending.id === "spending-social-protection"
-                      ? labels.socialProtectionHero
-                      : activeSpending.title[locale]}
-                  </small>
-                </span>
-              </a>
-            ) : null}
-
-            <div className="spending-list">
-              {spendingBreakdown.map((indicator, index) => (
-                <a
-                  href={withQuery(
-                    pageHref(locale, `data/${indicator.id}`),
-                    "",
-                    getDisplayedPoint(indicator).year,
-                  )}
-                  key={indicator.id}
-                  data-active={indicator.id === activeSpending?.id}
-                  onMouseEnter={() => setActiveSpendingId(indicator.id)}
-                  onFocus={() => setActiveSpendingId(indicator.id)}
-                >
-                  <span
-                    className="legend-dot"
-                    style={{
-                      background: `var(--chart-${index + 1})`,
-                    }}
-                  />
-                  <span>
-                    {indicator.id === "spending-social-protection"
-                      ? labels.socialProtectionHero
-                      : indicator.title[locale]}
-                  </span>{" "}
-                  <strong>
-                    {formatEuro(
-                      getDisplayedPoint(indicator).italy,
-                      locale,
-                      1,
-                    )}
-                  </strong>
-                </a>
-              ))}
-            </div>
-          </div>
-          <p className="spending-interaction">{labels.spendingInteract}</p>
-        </div>
+        <SpendingBreakdownCard
+          spendingBreakdown={spendingBreakdown}
+          locale={locale}
+          activeSpendingId={activeSpendingId}
+          onSelectSpending={setActiveSpendingId}
+        />
       </section>
 
       <section className="landing-directory">

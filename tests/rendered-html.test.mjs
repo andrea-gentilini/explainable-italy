@@ -673,6 +673,10 @@ for (const locale of locales) {
     assert.doesNotMatch(rawConcatenatedText, /\d(?:%|anni|years)?20\d{2}/, `${locale}: homepage never concatenates metric values with years when tags are stripped`);
     assert.match(home.text, locale === "it" ? /96 \(UE = 100\)/ : /96 \(EU = 100\)/, `${locale}: homepage GDP snapshot displays 2025 index with explicit EU = 100 unit`);
     assert.match(home.text, locale === "it" ? /Anno 2025/ : /Year 2025/, `${locale}: homepage snapshot prefixes years explicitly`);
+    const activeSummary = classRegions(home.html, "spending-active-summary");
+    assert.equal(activeSummary.length, 1, `${locale}: 100-euro donut card renders an explicit summary and CTA for the selected slice`);
+    const activeCta = classRegions(home.html, "spending-active-cta");
+    assert.equal(activeCta.length, 1, `${locale}: 100-euro donut card includes an accessible CTA link for touch and keyboard users`);
 
     const ghgPage = await page(localizedRoute(locale, "data/greenhouse-gas-emissions"));
     assert.match(ghgPage.text, /\(1990 = 100\)/, `${locale}: greenhouse gas emissions page displays explicit 1990 = 100 index unit`);
