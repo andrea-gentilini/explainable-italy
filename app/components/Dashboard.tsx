@@ -389,14 +389,14 @@ const copy = {
     methodEyebrow: "Metodo pubblico",
     methodTitle: "Come lavoriamo sui dati",
     methodBody:
-      "Per leggere un confronto servono l’anno, la definizione e la popolazione a cui si riferisce. Qui spieghiamo come trovarli e come costruiamo le schede.",
+      "Il sito raccoglie serie storiche annuali dal 2000 per leggere i cambiamenti strutturali nel tempo, non le oscillazioni congiunturali mensili o trimestrali. Per interpretare un confronto servono l’anno, la definizione e la popolazione a cui si riferisce: qui spieghiamo come trovarli e come costruiamo le schede.",
     rules: [
       { title: "Fonti ufficiali", body: "Usiamo le serie armonizzate diffuse da Eurostat. Ogni indicatore collega i dati e la documentazione della fonte." },
       { title: "Confronti omogenei", body: "Italia, aggregato UE e mediana si riferiscono allo stesso anno e allo stesso perimetro. La mediana richiede almeno 24 Paesi su 27." },
       { title: "Stato e precisione", body: "Manteniamo i contrassegni della fonte e indichiamo stime, dati provvisori e discontinuità. I numeri sono arrotondati solo nella visualizzazione." },
       { title: "Dati verificabili", body: "Conserviamo la copia utilizzata, l’URL originale, la data di acquisizione e l’impronta del file. Puoi scaricarli dalla pagina della fonte." },
       { title: "Spiegazioni trasparenti", body: "Le definizioni accessibili e le mediane sono elaborazioni del progetto. Descriviamo le misure e i confronti, lasciando espliciti i limiti delle conclusioni possibili." },
-      { title: "Anni confrontabili", body: "Le serie partono dal primo anno con dati italiani e almeno 24 Paesi UE, a partire dal 2000. Gli anni mancanti restano vuoti." },
+      { title: "Anni confrontabili", body: "Le serie sono annuali e partono dal primo anno con dati italiani e almeno 24 Paesi UE, dal 2000 in poi. L’ultimo anno varia tra gli indicatori in base ai tempi di consolidamento europeo; gli anni mancanti restano vuoti." },
     ],
     medianTitle: "Perché mostriamo anche la mediana",
     sourcesEyebrow: "Tracciabilità",
@@ -653,14 +653,14 @@ const copy = {
     methodEyebrow: "Public method",
     methodTitle: "How we work with the data",
     methodBody:
-      "Reading a comparison starts with its year, definition and population. Here we explain where to find them and how we prepare the indicator pages.",
+      "The site brings together annual historical series from 2000 onwards to examine long-term structural trends rather than short-term monthly or quarterly fluctuations. Reading a comparison starts with its year, definition and population: here we explain where to find them and how we prepare the indicator pages.",
     rules: [
       { title: "Official sources", body: "We use harmonised series published by Eurostat. Each indicator links to the source data and documentation." },
       { title: "Comparable figures", body: "Italy, the EU aggregate and the median refer to the same year and scope. The median requires at least 24 of the 27 countries." },
       { title: "Status and precision", body: "We retain source flags and identify estimates, provisional figures and breaks. Numbers are rounded only for display." },
       { title: "Verifiable data", body: "We retain the copy used, its original URL, acquisition date and file checksum. You can download them from the source page." },
       { title: "Transparent explanations", body: "Accessible definitions and medians are prepared by the project. We describe the measures and comparisons and state the limits of what they can tell us." },
-      { title: "Comparable years", body: "Series start in the first year with Italian data and at least 24 EU countries, from 2000 onwards. Missing years are left empty." },
+      { title: "Comparable years", body: "Series are annual and start in the first year with Italian data and at least 24 EU countries, from 2000 onwards. The latest year varies by indicator according to European consolidation schedules; missing years are left empty." },
     ],
     medianTitle: "Why we also show the median",
     sourcesEyebrow: "Traceability",
