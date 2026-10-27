@@ -101,12 +101,36 @@ test("unavailable EU values and unknown units cannot produce a fabricated compar
 });
 
 test("historical pension halfway values match the card’s Intl rounding", () => {
+  // IEEE-754 binary float traps where Number.prototype.toFixed(1) or Math.round(v * 10) / 10
+  // diverges from decimal Intl.NumberFormat rounding ("13.9" vs "14.0", "15.3" vs "15.4").
+  for (const [year, raw, it, en] of [
+    [2004, 13.95, "14,0", "14.0"],
+    [2011, 15.35, "15,4", "15.4"],
+    [2015, 35.85, "35,9", "35.9"],
+  ]) {
+    const syntheticPoint = { year, italy: raw, eu: 12.3 };
+    assert.ok(reading("pension-expenditure", syntheticPoint, "it").description.includes(it + "%"));
+    assert.ok(reading("pension-expenditure", syntheticPoint, "en").description.includes(en + "%"));
+  }
+
+  // Also verify every real historical observation in pension-expenditure that has 2+ decimals
+  // in the source data rounds identically to the card's Intl formatter.
   const pension = byId.get("pension-expenditure");
-  for (const [year, raw, it, en] of [[2004, 13.95, "14,0", "14.0"], [2011, 15.35, "15,4", "15.4"]]) {
-    const point = pension.series.find((point) => point.year === year);
-    assert.equal(point.italy, raw);
-    assert.ok(reading("pension-expenditure", point, "it").description.includes(it + "%"));
-    assert.ok(reading("pension-expenditure", point, "en").description.includes(en + "%"));
+  const subTenthsPoints = pension.series.filter(
+    (point) => Math.round(point.italy * 10) / 10 !== point.italy,
+  );
+  assert.ok(subTenthsPoints.length > 0, "Expected sub-tenth observations in pension-expenditure series");
+  for (const point of subTenthsPoints) {
+    const itExpected = new Intl.NumberFormat("it-IT", {
+      minimumFractionDigits: pension.precision,
+      maximumFractionDigits: pension.precision,
+    }).format(point.italy);
+    const enExpected = new Intl.NumberFormat("en-GB", {
+      minimumFractionDigits: pension.precision,
+      maximumFractionDigits: pension.precision,
+    }).format(point.italy);
+    assert.ok(reading("pension-expenditure", point, "it").description.includes(itExpected + "%"));
+    assert.ok(reading("pension-expenditure", point, "en").description.includes(enExpected + "%"));
   }
 });
 

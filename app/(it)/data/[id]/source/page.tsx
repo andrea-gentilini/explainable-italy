@@ -1,44 +1,40 @@
-import { pageMetadata } from "../../../../metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import dashboardData from "../../../../../data/processed/dashboard.json";
+import { Dashboard } from "../../../../components/Dashboard";
 import {
-  Dashboard,
-  type DashboardData,
-} from "../../../../components/Dashboard";
-
-const data = dashboardData as DashboardData;
+  allIndicatorParams,
+  indicatorSourcePageData,
+  indicatorSourcePageMetadata,
+} from "../../../../page-data";
 
 type IndicatorSourcePageProps = {
   params: Promise<{ id: string }>;
 };
 
 export function generateStaticParams() {
-  return data.indicators.map((indicator) => ({ id: indicator.id }));
+  return allIndicatorParams();
 }
 
 export async function generateMetadata({
   params,
 }: IndicatorSourcePageProps): Promise<Metadata> {
   const { id } = await params;
-  const indicator = data.indicators.find((entry) => entry.id === id);
-
-  return pageMetadata("it", `data/${id}/source`, indicator ? `Fonte · ${indicator.title.it}` : "Fonte", indicator ? `Fonte, selezione e calcolo: ${indicator.title.it}.` : undefined);
+  return indicatorSourcePageMetadata("it", id);
 }
 
 export default async function IndicatorSourcePage({
   params,
 }: IndicatorSourcePageProps) {
   const { id } = await params;
-  const indicator = data.indicators.find((entry) => entry.id === id);
+  const data = indicatorSourcePageData(id);
 
-  if (!indicator) {
+  if (!data) {
     notFound();
   }
 
   return (
     <Dashboard
-      data={{ ...data, indicators: [indicator] }}
+      data={data}
       locale="it"
       view="indicatorSource"
       selectedIndicatorId={id}

@@ -1,8 +1,9 @@
 import "./globals.css";
-import "./redesign.css";
 
 const cloudflareAnalyticsToken =
   process.env.NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN?.trim() ?? "";
+
+const themeInitScript = `try{var t=localStorage.getItem("explainable-italy-theme");document.documentElement.dataset.theme=t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light"}catch(e){}`;
 
 export function RootDocument({
   lang,
@@ -14,6 +15,7 @@ export function RootDocument({
   return (
     <html lang={lang} suppressHydrationWarning>
       <body>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         {children}
         {cloudflareAnalyticsToken ? (
           <script

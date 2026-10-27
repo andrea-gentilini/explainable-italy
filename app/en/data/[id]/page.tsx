@@ -1,52 +1,40 @@
-import { pageMetadata } from "../../../metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import dashboardData from "../../../../data/processed/dashboard.json";
-import { Dashboard, type DashboardData } from "../../../components/Dashboard";
-
-const data = dashboardData as DashboardData;
+import { Dashboard } from "../../../components/Dashboard";
+import {
+  allIndicatorParams,
+  indicatorPageData,
+  indicatorPageMetadata,
+} from "../../../page-data";
 
 type IndicatorPageProps = {
   params: Promise<{ id: string }>;
 };
 
 export function generateStaticParams() {
-  return data.indicators.map((indicator) => ({ id: indicator.id }));
+  return allIndicatorParams();
 }
 
 export async function generateMetadata({
   params,
 }: IndicatorPageProps): Promise<Metadata> {
   const { id } = await params;
-  const indicator = data.indicators.find((entry) => entry.id === id);
-
-  return pageMetadata("en", `data/${id}`, indicator?.title.en ?? "Indicator", indicator?.plain.en);
+  return indicatorPageMetadata("en", id);
 }
 
 export default async function EnglishIndicatorPage({
   params,
 }: IndicatorPageProps) {
   const { id } = await params;
-  const indicator = data.indicators.find((entry) => entry.id === id);
+  const data = indicatorPageData(id);
 
-  if (!indicator) {
+  if (!data) {
     notFound();
   }
 
-  const pageIndicators =
-    id === "spending-social-protection"
-      ? data.indicators.filter((entry) =>
-          [
-            "spending-social-protection",
-            "spending-old-age",
-            "pension-expenditure",
-          ].includes(entry.id),
-        )
-      : [indicator];
-
   return (
     <Dashboard
-      data={{ ...data, indicators: pageIndicators }}
+      data={data}
       locale="en"
       view="indicator"
       selectedIndicatorId={id}
