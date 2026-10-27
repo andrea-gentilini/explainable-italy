@@ -245,4 +245,19 @@ test("3.5 orphan social preview assets are removed and anti-FOUC theme script is
       rootLayout.includes("document.documentElement.dataset.theme"),
     "Expected synchronous anti-FOUC theme initialization script in app/root-layout.tsx",
   );
+
+  for (const componentFile of [
+    "app/components/Dashboard.tsx",
+    "app/components/HomeView.tsx",
+    "app/components/IndicatorCard.tsx",
+    "app/components/SourceVerification.tsx",
+    "app/components/StaticViews.tsx",
+    "app/components/MethodGuide.tsx",
+  ]) {
+    const src = fs.readFileSync(path.join(rootDir, componentFile), "utf8");
+    assert.ok(
+      src.includes("AppLink"),
+      `Expected ${componentFile} to use AppLink (next/link) for client-side route navigation`,
+    );
+  }
 });

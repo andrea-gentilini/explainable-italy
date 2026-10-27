@@ -32,6 +32,10 @@ export function pageHref(locale: Locale, path = "") {
 // The URL keeps browsing context shareable and survives navigation and Back.
 const queryChangeEvent = "explainable-italy-query-change";
 
+export function notifyQueryChange() {
+  window.dispatchEvent(new Event(queryChangeEvent));
+}
+
 function subscribeToQuery(onChange: () => void) {
   window.addEventListener("popstate", onChange);
   window.addEventListener(queryChangeEvent, onChange);

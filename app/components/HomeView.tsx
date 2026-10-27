@@ -8,6 +8,7 @@ import {
   type MouseEvent as ReactMouseEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
+import { AppLink } from "./ShareLink";
 import {
   copy,
   snapshotDefinitions,
@@ -141,7 +142,7 @@ export function SpendingBreakdownCard({
 
       <div className="spending-visual">
         {activeSpending && activePoint ? (
-          <a
+          <AppLink
             className="spending-donut"
             href={withQuery(
               pageHref(locale, `data/${activeSpending.id}`),
@@ -165,12 +166,12 @@ export function SpendingBreakdownCard({
               <strong>{formatEuro(activePoint.italy, locale, 1)}</strong>{" "}
               <small>{activeTitle}</small>
             </span>
-          </a>
+          </AppLink>
         ) : null}
 
         <div className="spending-list">
           {spendingBreakdown.map((indicator, index) => (
-            <a
+            <AppLink
               href={withQuery(
                 pageHref(locale, `data/${indicator.id}`),
                 query,
@@ -195,7 +196,7 @@ export function SpendingBreakdownCard({
               <strong>
                 {formatEuro(getDisplayedPoint(indicator).italy, locale, 1)}
               </strong>
-            </a>
+            </AppLink>
           ))}
         </div>
       </div>
@@ -212,7 +213,7 @@ export function SpendingBreakdownCard({
               {` · ${labels.median}: ${formatEuro(activePoint.median, locale, 1)}`}
             </span>
           </div>
-          <a
+          <AppLink
             className="spending-active-cta"
             href={withQuery(
               pageHref(locale, `data/${activeSpending.id}`),
@@ -222,7 +223,7 @@ export function SpendingBreakdownCard({
           >
             {locale === "it" ? "Apri la scheda" : "Open indicator"}{" "}
             <span aria-hidden="true">→</span>
-          </a>
+          </AppLink>
         </div>
       ) : null}
       <p className="spending-interaction">{labels.spendingInteract}</p>
@@ -318,19 +319,19 @@ export function HomeView({
 
         <div className="snapshot-examples-bar">
           <span>{labels.snapshotExamples}</span>
-          <a
+          <AppLink
             className="snapshot-explore"
             href={pageHref(locale, "data") + "?topic=all"}
           >
             {labels.browseAll} ({data.indicators.length}){" "}
             <span aria-hidden="true">→</span>
-          </a>
+          </AppLink>
         </div>
         <div className="snapshot-grid">
           {snapshotIndicators.map((indicator) => {
             const point = getDisplayedPoint(indicator);
             return (
-              <a
+              <AppLink
                 href={pageHref(locale, `data/${indicator.id}`)}
                 key={indicator.id}
               >
@@ -366,7 +367,7 @@ export function HomeView({
                 <em>
                   {labels.snapshotOpen} <span aria-hidden="true">→</span>
                 </em>
-              </a>
+              </AppLink>
             );
           })}
         </div>
@@ -385,14 +386,14 @@ export function HomeView({
           {data.sections.map((section) => (
             <article key={section.id}>
               <h3>
-                <a
+                <AppLink
                   className="question-topic-link"
                   href={pageHref(locale, "data") + `?topic=${section.id}`}
                 >
                   {section.title[locale]}
-                </a>
+                </AppLink>
               </h3>
-              <a
+              <AppLink
                 className="question-link"
                 href={pageHref(
                   locale,
@@ -401,15 +402,15 @@ export function HomeView({
               >
                 {topicQuestions[section.id][0].text[locale]}{" "}
                 <span aria-hidden="true">→</span>
-              </a>
-              <a
+              </AppLink>
+              <AppLink
                 className="topic-all-link"
                 href={pageHref(locale, "data") + `?topic=${section.id}`}
               >
                 {locale === "it"
                   ? "Tutti gli indicatori del tema"
                   : "All indicators in this topic"}
-              </a>
+              </AppLink>
             </article>
           ))}
         </div>
@@ -441,7 +442,7 @@ export function HomeView({
               <small>{heroSourceUpdated}</small>
               {spendingSource && activeSpending ? (
                 <div className="hero-source-links">
-                  <a
+                  <AppLink
                     href={
                       pageHref(locale, `data/${activeSpending.id}/source`) +
                       `?year=${getDisplayedPoint(activeSpending).year}`
@@ -452,7 +453,7 @@ export function HomeView({
                       ? labels.socialProtectionHero
                       : activeSpending.title[locale]}{" "}
                     <span aria-hidden="true">→</span>
-                  </a>
+                  </AppLink>
                 </div>
               ) : null}
             </div>
@@ -467,14 +468,14 @@ export function HomeView({
             <div>
               <p>{labels.heroMethodBody}</p>
               <p>{labels.heroBudgetNote}</p>
-              <a href={pageHref(locale, "method")}>
+              <AppLink href={pageHref(locale, "method")}>
                 {labels.heroMethodLink} <span aria-hidden="true">→</span>
-              </a>
+              </AppLink>
             </div>
           </details>
-          <a className="primary-link" href={pageHref(locale, "data")}>
+          <AppLink className="primary-link" href={pageHref(locale, "data")}>
             {labels.readBreakdown} <span aria-hidden="true">→</span>
-          </a>
+          </AppLink>
         </div>
 
         <SpendingBreakdownCard
@@ -492,14 +493,14 @@ export function HomeView({
         </div>
         <div className="landing-page-grid">
           {pageCards.map((page) => (
-            <a href={pageHref(locale, page.path)} key={page.path}>
+            <AppLink href={pageHref(locale, page.path)} key={page.path}>
               <span>{page.eyebrow}</span>
               <h3>{page.title}</h3>
               <p>{page.body}</p>
               <strong>
                 {labels.openPage} <span aria-hidden="true">→</span>
               </strong>
-            </a>
+            </AppLink>
           ))}
         </div>
       </section>

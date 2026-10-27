@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { ShareLink } from "./ShareLink";
+import { AppLink, ShareLink } from "./ShareLink";
 import { IndicatorReading } from "./IndicatorReading";
 import { computeComparisonScale } from "./indicator-reading.mjs";
 import { TrendBars } from "./TrendBars";
@@ -321,12 +321,12 @@ export function IndicatorCard({
             {expanded ? (
               indicator.title[locale]
             ) : (
-              <a
+              <AppLink
                 className="indicator-title-link"
                 href={withQuery(pageHref(locale, `data/${indicator.id}`), query)}
               >
                 {indicator.title[locale]}
-              </a>
+              </AppLink>
             )}
           </Heading>
           <p className="indicator-summary">{indicator.plain[locale]}</p>
@@ -379,7 +379,7 @@ export function IndicatorCard({
                 <span aria-hidden="true">→</span>
               </button>
             ) : (
-              <a
+              <AppLink
                 href={withQuery(
                   pageHref(locale, `data/${indicator.id}`),
                   query,
@@ -390,7 +390,7 @@ export function IndicatorCard({
                   ? `Vedi il ${indicator.latest.year}`
                   : `View ${indicator.latest.year}`}{" "}
                 <span aria-hidden="true">→</span>
-              </a>
+              </AppLink>
             )}
           </p>
         ) : (
@@ -425,7 +425,7 @@ export function IndicatorCard({
                 <span aria-hidden="true">→</span>
               </button>
             ) : (
-              <a
+              <AppLink
                 href={withQuery(
                   pageHref(locale, `data/${indicator.id}`),
                   query,
@@ -436,7 +436,7 @@ export function IndicatorCard({
                   ? `Vedi il ${indicator.newerEstimate.year}`
                   : `View ${indicator.newerEstimate.year}`}{" "}
                 <span aria-hidden="true">→</span>
-              </a>
+              </AppLink>
             )}
           </p>
         )
@@ -559,7 +559,7 @@ export function IndicatorCard({
               </p>
             </details>
 
-            <a
+            <AppLink
               className="source-box"
               href={withQuery(
                 pageHref(locale, `data/${indicator.id}/source`),
@@ -584,10 +584,10 @@ export function IndicatorCard({
                   {formatDate(indicator.source.sourceUpdatedAt, locale)}
                 </strong>
               </div>
-            </a>
+            </AppLink>
 
             <div className="card-actions">
-              <a
+              <AppLink
                 href={withQuery(
                   pageHref(locale, `data/${indicator.id}/source`),
                   query,
@@ -595,7 +595,7 @@ export function IndicatorCard({
                 )}
               >
                 {labels.openData} <span aria-hidden="true">→</span>
-              </a>
+              </AppLink>
               {metadataHref ? (
                 <a href={metadataHref} target="_blank" rel="noreferrer">
                   {labels.openMetadata} <span aria-hidden="true">↗</span>
@@ -612,12 +612,12 @@ export function IndicatorCard({
           </div>
         </section>
       ) : (
-        <a
+        <AppLink
           className="indicator-page-link"
           href={withQuery(pageHref(locale, `data/${indicator.id}`), query)}
         >
           {labels.openIndicator} <span aria-hidden="true">→</span>
-        </a>
+        </AppLink>
       )}
     </article>
   );
@@ -672,7 +672,7 @@ export function SocialProtectionDetail({
         <article className="old-age-definition">
           <p className="indicator-kicker">{labels.oldAgeMeasure}</p>
           <h3>
-            <a
+            <AppLink
               href={withQuery(
                 pageHref(locale, `data/${oldAge.id}`),
                 query,
@@ -680,7 +680,7 @@ export function SocialProtectionDetail({
               )}
             >
               {labels.oldAgeMeasureTitle}
-            </a>
+            </AppLink>
           </h3>
           <p className="related-detail-value">
             {formatEuro(oldAgePoint.italy, locale, 1)}{" "}
@@ -715,7 +715,7 @@ export function SocialProtectionDetail({
             <strong>Eurostat · gov_10a_exp</strong>{" "}
             <small>{oldAgeFilter}</small>
             <div>
-              <a
+              <AppLink
                 href={withQuery(
                   pageHref(locale, `data/${oldAge.id}`),
                   query,
@@ -726,8 +726,8 @@ export function SocialProtectionDetail({
                   ? "Apri l’indicatore sulla funzione vecchiaia"
                   : "Open the old-age function indicator"}{" "}
                 <span aria-hidden="true">→</span>
-              </a>
-              <a
+              </AppLink>
+              <AppLink
                 href={withQuery(
                   pageHref(locale, `data/${oldAge.id}/source`),
                   query,
@@ -735,7 +735,7 @@ export function SocialProtectionDetail({
                 )}
               >
                 {labels.verifyNumber} <span aria-hidden="true">→</span>
-              </a>
+              </AppLink>
             </div>
           </div>
         </article>
@@ -745,7 +745,7 @@ export function SocialProtectionDetail({
             <div>
               <p className="indicator-kicker">{labels.pensionMeasure}</p>
               <h3>
-                <a
+                <AppLink
                   href={withQuery(
                     pageHref(locale, `data/${pensionExpenditure.id}`),
                     query,
@@ -753,7 +753,7 @@ export function SocialProtectionDetail({
                   )}
                 >
                   {labels.pensionMeasureTitle}
-                </a>
+                </AppLink>
               </h3>
             </div>
             <p className="related-detail-value">
@@ -784,7 +784,7 @@ export function SocialProtectionDetail({
             <strong>Eurostat · spr_exp_pens · ESSPROS</strong>{" "}
             <small>{pensionFilter}</small>
             <div>
-              <a
+              <AppLink
                 href={withQuery(
                   pageHref(locale, `data/${pensionExpenditure.id}`),
                   query,
@@ -792,8 +792,8 @@ export function SocialProtectionDetail({
                 )}
               >
                 {labels.openPensionPage} <span aria-hidden="true">→</span>
-              </a>
-              <a
+              </AppLink>
+              <AppLink
                 href={withQuery(
                   pageHref(locale, `data/${pensionExpenditure.id}/source`),
                   query,
@@ -801,7 +801,7 @@ export function SocialProtectionDetail({
                 )}
               >
                 {labels.verifyNumber} <span aria-hidden="true">→</span>
-              </a>
+              </AppLink>
             </div>
           </div>
         </article>

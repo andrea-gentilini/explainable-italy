@@ -1,6 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { useState, type AnchorHTMLAttributes } from "react";
+import { basePath, notifyQueryChange } from "./dashboard-utils";
+
+/** Client-side internal route link that normalizes basePath for Next.js Link. */
+export function AppLink({
+  href = "/",
+  onClick,
+  children,
+  ...props
+}: AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) {
+  const internalHref =
+    basePath && href.startsWith(basePath)
+      ? href.slice(basePath.length) || "/"
+      : href;
+  return (
+    <Link
+      href={internalHref}
+      prefetch={false}
+      onClick={(event) => {
+        onClick?.(event);
+        if (!event.defaultPrevented) {
+          window.setTimeout(notifyQueryChange, 0);
+        }
+      }}
+      {...props}
+    >
+      {children}
+    </Link>
+  );
+}
 
 /** Copy the current view, including topic, search and selected year. */
 export function ShareLink({ locale }: { locale: "it" | "en" }) {

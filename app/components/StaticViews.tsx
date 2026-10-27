@@ -1,6 +1,7 @@
 "use client";
 
 import { MethodGuide } from "./MethodGuide";
+import { AppLink } from "./ShareLink";
 import { copy } from "./dashboard-copy";
 import type { Indicator, Locale, Source } from "./dashboard-types";
 import {
@@ -136,11 +137,11 @@ export function SourcesView({
                     <ul>
                       {sourceIndicators.map((indicator) => (
                         <li key={indicator.id}>
-                          <a href={pageHref(locale, `data/${indicator.id}`)}>
+                          <AppLink href={pageHref(locale, `data/${indicator.id}`)}>
                             {indicator.title[locale]}
-                          </a>
+                          </AppLink>
                           {" · "}
-                          <a
+                          <AppLink
                             className="source-card-verify"
                             href={pageHref(
                               locale,
@@ -149,7 +150,7 @@ export function SourcesView({
                           >
                             {locale === "it" ? "verifica" : "verify"}{" "}
                             <span aria-hidden="true">→</span>
-                          </a>
+                          </AppLink>
                         </li>
                       ))}
                     </ul>

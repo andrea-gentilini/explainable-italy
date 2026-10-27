@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { AppLink } from "./ShareLink";
 
 export function MethodGuide({ locale, sourcesHref, catalogueHref }: { locale: "it" | "en"; sourcesHref: string; catalogueHref: string }) {
   const it = locale === "it";
@@ -12,7 +13,7 @@ export function MethodGuide({ locale, sourcesHref, catalogueHref }: { locale: "i
           <p>{it ? "La homepage propone un percorso iniziale attraverso produzione per abitante, età della popolazione, speranza di vita e occupazione. La selezione è una scelta editoriale del progetto e copre solo una parte dei temi disponibili." : "The homepage offers a starting point through output per person, population age, life expectancy and employment. This is an editorial choice by the project and covers only some of the available topics."}</p>
           <p>{it ? "Per questa scelta consideriamo aspetti diversi della vita del Paese, definizioni comprensibili, serie storiche e confronti europei disponibili. Gli indicatori sono scelti manualmente e restano gli stessi quando i valori vengono aggiornati." : "We consider different aspects of life in the country, understandable definitions, historical series and available European comparisons. The indicators are selected manually and stay the same when values are updated."}</p>
           <p>{it ? "Mettere alcuni dati in primo piano orienta l’attenzione. Queste schede offrono una visione parziale, senza rappresentare il peso o l’importanza di ciascun tema. Nel catalogo trovi anche istruzione, ambiente e gli altri ambiti del progetto, con ricerca e filtri per esplorarli." : "Giving some figures more prominence directs attention. These indicators provide a partial view and do not represent the weight or importance of each topic. The catalogue also includes education, the environment and the project’s other topics, with search and filters to explore them."}</p>
-          <a href={catalogueHref}>{it ? "Vedi tutti gli indicatori" : "View all indicators"} <span aria-hidden="true">→</span></a>
+          <AppLink href={catalogueHref}>{it ? "Vedi tutti gli indicatori" : "View all indicators"} <span aria-hidden="true">→</span></AppLink>
         </div>
       </details>
       <details>
@@ -85,7 +86,7 @@ export function MethodGuide({ locale, sourcesHref, catalogueHref }: { locale: "i
             <li>{it ? "Scarica il CSV per lavorare sui valori della serie. Nella pagina della fonte puoi scaricare anche la risposta originale salvata dal progetto, chiamata snapshot. Il collegamento all’API apre i dati correnti della fonte, che possono essere stati rivisti." : "Download the CSV to work with the series. On the source page, you can also download the original response saved by the project, called a snapshot. The API link opens the source’s current data, which may have been revised."}</li>
             <li>{it ? "Quando citi un valore, riporta indicatore, anno, unità, fonte e data di acquisizione. Per riutilizzare i dati, consulta anche le condizioni della fonte." : "When citing a figure, include the indicator, year, unit, source and acquisition date. Check the source’s reuse terms when using the data elsewhere."}</li>
           </ol>
-          <a href={sourcesHref}>{it ? "Fonti, download e registro delle acquisizioni" : "Sources, downloads and acquisition register"} <span aria-hidden="true">→</span></a>
+          <AppLink href={sourcesHref}>{it ? "Fonti, download e registro delle acquisizioni" : "Sources, downloads and acquisition register"} <span aria-hidden="true">→</span></AppLink>
         </div>
       </details>
     </section>

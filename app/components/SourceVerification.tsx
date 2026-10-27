@@ -1,6 +1,6 @@
 "use client";
 
-import { ShareLink } from "./ShareLink";
+import { AppLink, ShareLink } from "./ShareLink";
 import { YearContext, YearSelection } from "./IndicatorCard";
 import { copy, countryNames } from "./dashboard-copy";
 import type { Indicator, Locale } from "./dashboard-types";
@@ -88,7 +88,7 @@ export function SourceVerification({
 
   return (
     <section className="source-verification">
-      <a
+      <AppLink
         className="back-link"
         href={withQuery(
           pageHref(locale, `data/${indicator.id}`),
@@ -97,7 +97,7 @@ export function SourceVerification({
         )}
       >
         <span aria-hidden="true">←</span> {labels.sourceBack}
-      </a>
+      </AppLink>
 
       <header className="source-verification-heading">
         <p className="eyebrow">{labels.sourcePageEyebrow}</p>
@@ -427,12 +427,12 @@ export function SourceVerification({
               {labels.snapshotDownload} (JSON) <span aria-hidden="true">↓</span>
             </a>
           ) : null}
-          <a href={pageHref(locale, "sources")}>
+          <AppLink href={pageHref(locale, "sources")}>
             {locale === "it"
               ? "Tutte le fonti e i download"
               : "All sources and downloads"}{" "}
             <span aria-hidden="true">→</span>
-          </a>
+          </AppLink>
         </div>
         {indicator.source.sha256 ? (
           <p className="source-hash">

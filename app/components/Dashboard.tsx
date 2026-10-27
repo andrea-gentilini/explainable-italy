@@ -7,7 +7,7 @@ import {
   useSyncExternalStore,
   type CSSProperties,
 } from "react";
-import { ShareLink } from "./ShareLink";
+import { AppLink, ShareLink } from "./ShareLink";
 import { createIndicatorSearch } from "./indicator-search.mjs";
 import { copy, sectionColors, topicQuestions } from "./dashboard-copy";
 import type {
@@ -209,19 +209,19 @@ export function Dashboard({
       </a>
 
       <header className="site-header">
-        <a className="brand" href={pageHref(locale)}>
+        <AppLink className="brand" href={pageHref(locale)}>
           <span>
             <strong>Explainable Italy</strong>{" "}
             <small>{labels.subtitle}</small>
           </span>
-        </a>
+        </AppLink>
 
         <nav
           aria-label={
             locale === "it" ? "Navigazione principale" : "Main navigation"
           }
         >
-          <a
+          <AppLink
             href={pageHref(locale, "data")}
             aria-current={
               view === "data" ||
@@ -232,35 +232,35 @@ export function Dashboard({
             }
           >
             {labels.navData}
-          </a>
-          <a
+          </AppLink>
+          <AppLink
             href={pageHref(locale, "method")}
             aria-current={view === "method" ? "page" : undefined}
           >
             {labels.navMethod}
-          </a>
-          <a
+          </AppLink>
+          <AppLink
             href={pageHref(locale, "sources")}
             aria-current={view === "sources" ? "page" : undefined}
           >
             {labels.navSources}
-          </a>
-          <a
+          </AppLink>
+          <AppLink
             href={pageHref(locale, "about")}
             aria-current={view === "about" ? "page" : undefined}
           >
             {labels.navAbout}
-          </a>
-          <a
+          </AppLink>
+          <AppLink
             href={pageHref(locale, "contribute")}
             aria-current={view === "contribute" ? "page" : undefined}
           >
             {labels.navContribute}
-          </a>
+          </AppLink>
         </nav>
 
         <div className="header-actions">
-          <a
+          <AppLink
             className="language-link"
             href={withQuery(
               pageHref(locale === "it" ? "en" : "it", currentPath),
@@ -268,7 +268,7 @@ export function Dashboard({
             )}
           >
             {labels.language}
-          </a>
+          </AppLink>
           <button
             className="theme-toggle"
             type="button"
@@ -311,7 +311,7 @@ export function Dashboard({
                 : ""
             }`}
           >
-            <a
+            <AppLink
               className="back-link"
               href={withQuery(
                 pageHref(locale, "data"),
@@ -327,7 +327,7 @@ export function Dashboard({
                       (section) => section.id === selectedIndicator.section,
                     )?.title[locale] ?? labels.navData,
                   )}
-            </a>
+            </AppLink>
             <IndicatorCard
               indicator={selectedIndicator}
               locale={locale}
@@ -492,7 +492,7 @@ export function Dashboard({
                         <p>{section.description[locale]}</p>
                         <div className="topic-questions">
                           {topicQuestions[section.id].map((question) => (
-                            <a
+                            <AppLink
                               key={question.id}
                               href={
                                 pageHref(locale, `data/${question.id}`) +
@@ -501,7 +501,7 @@ export function Dashboard({
                             >
                               {question.text[locale]}{" "}
                               <span aria-hidden="true">→</span>
-                            </a>
+                            </AppLink>
                           ))}
                         </div>
                         <button
@@ -628,11 +628,17 @@ export function Dashboard({
               : "Project information"
           }
         >
-          <a href={pageHref(locale, "data")}>{labels.navData}</a>
-          <a href={pageHref(locale, "method")}>{labels.navMethod}</a>
-          <a href={pageHref(locale, "sources")}>{labels.navSources}</a>
-          <a href={pageHref(locale, "about")}>{labels.navAbout}</a>
-          <a href={pageHref(locale, "contribute")}>{labels.navContribute}</a>
+          <AppLink href={pageHref(locale, "data")}>{labels.navData}</AppLink>
+          <AppLink href={pageHref(locale, "method")}>
+            {labels.navMethod}
+          </AppLink>
+          <AppLink href={pageHref(locale, "sources")}>
+            {labels.navSources}
+          </AppLink>
+          <AppLink href={pageHref(locale, "about")}>{labels.navAbout}</AppLink>
+          <AppLink href={pageHref(locale, "contribute")}>
+            {labels.navContribute}
+          </AppLink>
         </nav>
         <p>
           {labels.latestUpdate} {formatDate(data.generatedAt, locale)}
