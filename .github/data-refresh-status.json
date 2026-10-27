@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "attemptedAt": "2026-10-21T14:38:28.314Z",
-  "outcome": "success",
-  "runUrl": "https://github.com/andrea-gentilini/explainable-italy/actions/runs/39618383037/attempts/1",
-  "sourceCommit": "0169e004eb2c99704d7ffe661256a86f0cc5b2ae",
-  "repositoryCommit": "0169e004eb2c99704d7ffe661256a86f0cc5b2ae",
-  "proposalUrl": "https://github.com/andrea-gentilini/explainable-italy/pull/6",
+  "attemptedAt": "2026-10-27T10:43:51.153Z",
+  "outcome": "failure",
+  "runUrl": "https://github.com/andrea-gentilini/explainable-italy/actions/runs/40490614068/attempts/1",
+  "sourceCommit": "7301300c822326b0b26e2fe4c377a54585640588",
+  "repositoryCommit": "7301300c822326b0b26e2fe4c377a54585640588",
+  "proposalUrl": null,
   "lastSuccessfulCheck": {
     "checkedAt": "2026-10-21T14:38:28.314Z",
     "sourceCommit": "0169e004eb2c99704d7ffe661256a86f0cc5b2ae",
