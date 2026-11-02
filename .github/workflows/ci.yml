@@ -40,7 +40,7 @@ jobs:
         run: pnpm audit --prod --audit-level=high
       - name: Upload the verified site
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: out
 
