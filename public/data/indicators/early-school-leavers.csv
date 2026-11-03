@@ -22,4 +22,4 @@ year,italy,eu_official,median,countries_in_median,eu_method,italy_status,eu_stat
 2022,11.5,9.6,8.2,27,official_aggregate,,,HR:u|CZ:b|FR:d|SK:b|ES:d,,percent,edat_lfse_14
 2023,10.5,9.6,7.7,27,official_aggregate,,,HR:u|FR:d|LU:u|SI:b|ES:d,,percent,edat_lfse_14
 2024,9.8,9.6,7.9,27,official_aggregate,,,BE:b|BG:b|HR:u|FR:bd|DE:b|EL:b|IE:b|LU:u|ES:d,,percent,edat_lfse_14
-2025,8.2,9.1,7.8,26,official_aggregate,,,HR:u|DK:b|FR:d|ES:d,LU,percent,edat_lfse_14
+2025,8.2,9.1,7.4,27,official_aggregate,,,HR:u|DK:b|FR:d|LU:u|ES:d,,percent,edat_lfse_14
