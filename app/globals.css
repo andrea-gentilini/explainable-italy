@@ -272,19 +272,25 @@ p {
   border-bottom: 1px solid var(--line);
 }
 
-.roadmap h3 {
-  margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 2rem;
-  font-weight: 500;
-}
-
-.roadmap > div p {
-  color: var(--muted);
-}
-
 .roadmap li:nth-child(odd) {
   border-right: 1px solid var(--line);
+}
+
+.roadmap-more {
+  margin: 0;
+  border-top: 1px solid var(--line);
+  padding: 0.85rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 680;
+}
+
+.roadmap-more a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.roadmap-more a:hover {
+  text-decoration: underline;
 }
 
 .contribute-section .contribution-ways {

@@ -224,6 +224,17 @@ export function AboutView({ locale }: { locale: Locale }) {
             <li key={item}>{item}</li>
           ))}
         </ol>
+        <p className="roadmap-more">
+          <a
+            href={`https://github.com/andrea-gentilini/explainable-italy/blob/main/docs/ROADMAP.md#${
+              locale === "it" ? "italiano" : "english"
+            }`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {labels.futureLink} <span aria-hidden="true">↗</span>
+          </a>
+        </p>
       </details>
     </section>
   );

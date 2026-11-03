@@ -18,7 +18,7 @@ Il progetto usa dataset armonizzati diffusi da Eurostat. Per le emissioni di gas
 
 1. codice del dataset
 2. collegamento al Data Browser
-3. collegamento ai metadati
+3. collegamento ai metadati ufficiali (quando pubblicati da Eurostat)
 4. URL esatto usato per il download
 5. data di aggiornamento comunicata dalla fonte
 6. DOI
@@ -63,7 +63,7 @@ I valori ufficiali non vengono cambiati. Gli snapshot normalizzano soltanto gli 
 
 Il valore italiano e l’aggregato UE ufficiale sono osservazioni della fonte. La mediana è un’elaborazione del progetto. La pagina di verifica separa queste operazioni e rende leggibili i valori nazionali utilizzati per ogni anno selezionabile, con la copertura effettiva. Il JSON conserva queste osservazioni per tutta la serie; i CSV, compresi quelli dei singoli indicatori, riportano unità, dataset, copertura e contrassegni.
 
-Per la domanda “dove vanno 100 euro di spesa pubblica” si usa il dataset COFOG con unità `PC_TOT`. Le dieci funzioni principali descrivono la quota percentuale della spesa complessiva delle Amministrazioni pubbliche. Il totale può differire da 100 di pochi decimi a causa dell’arrotondamento della fonte.
+Per la sezione “Come si spendono 100 €?” si usa il dataset COFOG con unità `PC_TOT`. Le dieci funzioni principali descrivono la quota percentuale della spesa complessiva delle Amministrazioni pubbliche. Il totale può differire da 100 di pochi decimi a causa dell’arrotondamento della fonte.
 
 Il valore “vecchiaia” è una sottofunzione della protezione sociale. Non si somma alle dieci funzioni principali. Non coincide con tutta la spesa pensionistica.
 
@@ -127,7 +127,7 @@ The project uses harmonised datasets published by Eurostat. For greenhouse-gas e
 
 1. dataset code
 2. link to the Eurostat Data Browser
-3. link to official metadata
+3. link to official metadata (where published by Eurostat)
 4. exact API URL used for acquisition
 5. dataset update date reported by the source
 6. permanent identifier (DOI)
@@ -172,7 +172,7 @@ Official values are not altered. Snapshots only normalise trailing whitespace fr
 
 The Italian value and the official EU aggregate come directly from the source. The median is calculated by the project. Each verification page separates these steps and lists the national observations used for any selectable year, together with actual country coverage. The processed JSON retains these observations across the full series; the CSV files, including per-indicator CSVs, include units, dataset codes, coverage and quality flags.
 
-For the “How is €100 of public spending allocated?” view, the site uses the COFOG dataset with unit `PC_TOT`. The ten main divisions represent shares of total general government expenditure. Their sum may differ from 100 by a few tenths due to source rounding.
+For the “How is €100 spent?” view, the site uses the COFOG dataset with unit `PC_TOT`. The ten main divisions represent shares of total general government expenditure. Their sum may differ from 100 by a few tenths due to source rounding.
 
 The “old age” figure (`GF1002`) is a sub-function of social protection (`GF10`). It is not added to the ten main divisions, and its scope differs from total pension expenditure measured in ESSPROS.
 

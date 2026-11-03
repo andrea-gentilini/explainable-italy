@@ -14,14 +14,16 @@ La licenza MIT in `LICENSE` riguarda il codice e la documentazione originale di 
 
 I dataset utilizzati sono diffusi da Eurostat. Per ogni dataset, `data/manifest.json` conserva:
 
-1. codice e titolo;
-2. collegamento al Data Browser;
-3. URL esatto della selezione API;
-4. DOI;
-5. data di aggiornamento comunicata dalla fonte;
-6. data di acquisizione del progetto;
-7. impronta SHA256 e dimensione della copia locale;
-8. percorso dello snapshot esatto scaricabile dal sito.
+1. istituzione che diffonde il dato e fonte originaria;
+2. codice e titolo;
+3. collegamento al Data Browser;
+4. collegamento ai metadati ufficiali (quando pubblicati da Eurostat);
+5. URL esatto della selezione API;
+6. DOI;
+7. data di aggiornamento comunicata dalla fonte;
+8. data di acquisizione del progetto;
+9. impronta SHA256 e dimensione della copia locale;
+10. percorso dello snapshot esatto scaricabile dal sito.
 
 Gli snapshot scaricabili sono copie delle selezioni ufficiali conservate dal progetto. I CSV e i JSON elaborati includono i riferimenti al dataset; i CSV dei singoli indicatori mantengono anche l’unità di misura.
 
@@ -33,7 +35,7 @@ Eurostat non è responsabile di traduzioni, sintesi accessibili, mediane, presen
 
 ### European Environment Agency
 
-Per il dataset Eurostat `sdg_13_10` e per l’inventario `env_air_gge`, i metadati indicano come fonte originaria la European Environment Agency (EEA), sulla base degli inventari UNFCCC.
+Per il dataset Eurostat `sdg_13_10` utilizzato dal sito (derivato dall’inventario `env_air_gge`), i metadati ufficiali indicano come fonte originaria la European Environment Agency (EEA), sulla base degli inventari UNFCCC.
 
 Si applicano anche le [condizioni di riuso EEA](https://www.eea.europa.eu/en/legal-notice). La fonte viene attribuita nella scheda, nella pagina di verifica, nella pagina Fonti e nel manifest.
 
@@ -53,14 +55,16 @@ The MIT licence in `LICENSE` applies to Explainable Italy’s original code and 
 
 The datasets used on this site are disseminated by Eurostat. For every dataset, `data/manifest.json` records:
 
-1. dataset code and title;
-2. link to the Eurostat Data Browser;
-3. exact API selection URL;
-4. permanent identifier (DOI);
-5. dataset update date reported by the source;
-6. project acquisition date;
-7. SHA256 checksum and byte size of the local copy;
-8. path to the exact snapshot downloadable from the site.
+1. disseminating institution and original institution;
+2. dataset code and title;
+3. link to the Eurostat Data Browser;
+4. link to official metadata (where published by Eurostat);
+5. exact API selection URL;
+6. permanent identifier (DOI);
+7. dataset update date reported by the source;
+8. project acquisition date;
+9. SHA256 checksum and byte size of the local copy;
+10. path to the exact snapshot downloadable from the site.
 
 The downloadable snapshots are local copies of the official API selections retained by the project for reproducibility. Processed CSV and JSON exports include dataset identifiers, and per-indicator CSVs also include the unit of measure.
 
@@ -72,7 +76,7 @@ Eurostat is not responsible for translations, accessible summaries, medians, pre
 
 ### European Environment Agency
 
-For Eurostat datasets `sdg_13_10` and `env_air_gge`, the official metadata identify the European Environment Agency (EEA), based on UNFCCC inventories, as the original source.
+For the Eurostat dataset `sdg_13_10` used on this site (derived from the `env_air_gge` inventory), the official metadata identify the European Environment Agency (EEA), based on UNFCCC inventories, as the original source.
 
 The [EEA legal notice and reuse terms](https://www.eea.europa.eu/en/legal-notice) also apply. The original source is attributed on the indicator card, on the source verification page, on the Sources page and in `data/manifest.json`.
 

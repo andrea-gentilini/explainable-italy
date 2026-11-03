@@ -235,6 +235,10 @@ test("3.5 orphan social preview assets are removed and anti-FOUC theme script is
     fs.existsSync(path.join(rootDir, "public/social-preview-v2.jpg")),
     "Active public/social-preview-v2.jpg must exist",
   );
+  assert.ok(
+    fs.existsSync(path.join(rootDir, "public/social-preview-en-v2.jpg")),
+    "Active public/social-preview-en-v2.jpg must exist",
+  );
 
   const rootLayout = fs.readFileSync(
     path.join(rootDir, "app/root-layout.tsx"),

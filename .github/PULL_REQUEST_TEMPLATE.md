@@ -8,8 +8,7 @@ Per modifiche ai dati, indica dataset, metadati, unità, anni e controlli manual
 
 ## Controlli / Checks
 
-1. [ ] Ho eseguito `pnpm lint` / Ran `pnpm lint`
-2. [ ] Ho eseguito `pnpm test` / Ran `pnpm test`
-3. [ ] Ho aggiornato italiano e inglese / Updated both Italian and English
-4. [ ] Ho verificato leggibilità e navigazione da tastiera / Verified readability and keyboard navigation
-5. [ ] Ho segnalato dati provvisori, stime o interruzioni di serie / Disclosed provisional data, estimates or series breaks
+1. [ ] Ho eseguito `pnpm check` (lint, validazione dati, build statica e test) / Ran `pnpm check` (lint, data validation, static build and tests)
+2. [ ] Ho aggiornato italiano e inglese / Updated both Italian and English
+3. [ ] Ho verificato leggibilità e navigazione da tastiera / Verified readability and keyboard navigation
+4. [ ] Ho segnalato dati provvisori, stime o interruzioni di serie / Disclosed provisional data, estimates or series breaks

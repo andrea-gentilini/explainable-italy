@@ -150,7 +150,7 @@ for (const locale of locales) {
           `${route}: no analytics beacon when token is unset`,
         );
       }
-      assert.match(rendered.text, locale === "it" ? /Nessun tracciamento/ : /No tracking/, `${route}: privacy statement`);
+      assert.match(rendered.text, locale === "it" ? /Nessun tracciamento personale/ : /No personal tracking/, `${route}: privacy statement`);
     }
     const aboutPage = await page(localizedRoute(locale, "about"));
     assert.match(aboutPage.text, /Cloudflare Web Analytics/, `${locale}: about page discloses Cloudflare Web Analytics`);
@@ -385,6 +385,8 @@ test("canonical, language alternatives and social metadata identify the current 
     const imageUrl = new URL(attribute(image, "content"));
     assert.equal(imageUrl.origin, site.origin, `${route}: preview hosted with the site`);
     assert(!prefix || imageUrl.pathname.startsWith(`${prefix}/`), `${route}: preview retains deployment path`);
+    const expectedPreview = locale === "it" ? "/social-preview-v2.jpg" : "/social-preview-en-v2.jpg";
+    assert.equal(imageUrl.pathname.slice(prefix.length), expectedPreview, `${route}: preview matches page locale`);
     await access(new URL(`out${imageUrl.pathname.slice(prefix.length)}`, projectRoot));
   }
 });

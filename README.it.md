@@ -8,7 +8,7 @@ Explainable Italy rende più facili da leggere, confrontare e verificare i dati 
 
 È un progetto civico indipendente e open source (versione **1.0.0**), non un sito istituzionale ufficiale. Il sito ha l’italiano come lingua predefinita e una versione inglese completa.
 
-![La dashboard di Explainable Italy](docs/images/dashboard.jpg)
+![La dashboard di Explainable Italy](docs/images/dashboard-it.jpg)
 
 ---
 
@@ -53,7 +53,7 @@ Ogni valore pubblicato sul sito può essere scaricato e ricalcolato a partire da
 
 - **CSV del singolo indicatore:** `/data/indicators/<id>.csv` (scaricabile da ogni scheda indicatore e dalla relativa pagina di verifica), con l’intera serie storica di Italia, aggregato UE e mediana, unità di misura, codice dataset, copertura, Paesi mancanti e contrassegni.
 - **Dataset completo in CSV e JSON:** [`public/data/dashboard.csv`](public/data/dashboard.csv) e [`public/data/dashboard.json`](public/data/dashboard.json) (entrambi scaricabili anche dalla [pagina Fonti](https://andrea-gentilini.github.io/explainable-italy/sources/)).
-- **Registro delle fonti (`manifest.json`):** [`data/manifest.json`](data/manifest.json) (pubblicato anche in `/data/manifest.json`), che registra per ciascuno dei 20 dataset codice, titolo, link al Data Browser Eurostat, link ai metadati ufficiali, URL esatto della query API, DOI, data di aggiornamento della fonte, data di acquisizione, dimensione in byte e impronta SHA256.
+- **Registro delle fonti (`manifest.json`):** [`data/manifest.json`](data/manifest.json) (pubblicato anche in `/data/manifest.json`), che registra per ciascuno dei 20 dataset codice, titolo, link al Data Browser Eurostat, link ai metadati ufficiali (quando pubblicati da Eurostat), URL esatto della query API, DOI, data di aggiornamento della fonte, data di acquisizione, dimensione in byte e impronta SHA256.
 - **Snapshot ufficiali grezzi:** [`data/raw/eurostat/`](data/raw/eurostat/) (scaricabili byte per byte da `/data/raw/eurostat/<code>.json`), contenenti le risposte JSON-stat esatte usate per generare il sito. I collegamenti all’API Eurostat corrente sono indicati separatamente perché la fonte può aggiornare i dati nel tempo.
 
 ### Metodologia e condizioni di riuso

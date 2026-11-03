@@ -24,7 +24,7 @@ Explainable Italy makes official statistics about Italy easier to read, compare 
 
 ## For visitors — Explore and read the comparisons
 
-The six themes cover **public spending**, **population**, **work and the economy**, **welfare and health**, **education**, and **environment and energy**. You can search in everyday language, pick any available year, inspect the full historical series as a chart or accessible table, and open each indicator’s verification page to inspect definitions, national observations and source quality flags. Shareable URLs preserve the selected year and search context.
+The six themes cover **public finances**, **population**, **work and economy**, **welfare and health**, **education**, and **environment and energy**. You can search in everyday language, pick any available year, inspect the full historical series as a chart or accessible table, and open each indicator’s verification page to inspect definitions, national observations and source quality flags. Shareable URLs preserve the selected year and search context.
 
 For example, open [life expectancy in 2010](https://andrea-gentilini.github.io/explainable-italy/en/data/life-expectancy/?year=2010) and [verify its source and calculation](https://andrea-gentilini.github.io/explainable-italy/en/data/life-expectancy/source/?year=2010).
 
@@ -53,7 +53,7 @@ Every figure on the site can be traced and reproduced offline:
 
 - **Per-indicator CSV:** `/data/indicators/<id>.csv` (linked on every indicator card and verification page), containing the historical series for Italy, the official EU aggregate and the EU country median, with units, dataset code, coverage, missing countries and quality flags.
 - **Complete dataset in CSV and JSON:** [`public/data/dashboard.csv`](public/data/dashboard.csv) and [`public/data/dashboard.json`](public/data/dashboard.json) (both downloadable from the [Sources page](https://andrea-gentilini.github.io/explainable-italy/en/sources/)).
-- **Source register (`manifest.json`):** [`data/manifest.json`](data/manifest.json) (exported at `/data/manifest.json`), listing for all 20 datasets the exact API query URL, Eurostat Data Browser URL, official metadata URL, permanent DOI, source update date, project acquisition date, byte size and SHA256 checksum.
+- **Source register (`manifest.json`):** [`data/manifest.json`](data/manifest.json) (exported at `/data/manifest.json`), listing for all 20 datasets the exact API query URL, Eurostat Data Browser URL, official metadata URL (where published by Eurostat), permanent DOI, source update date, project acquisition date, byte size and SHA256 checksum.
 - **Exact raw snapshots:** [`data/raw/eurostat/`](data/raw/eurostat/) (exported byte-for-byte at `/data/raw/eurostat/<code>.json`), containing the exact JSON-stat responses used to compute the published edition. Links to the live Eurostat API are kept separate because upstream datasets can be revised after acquisition.
 
 ### Methodology and licensing
@@ -69,7 +69,7 @@ Every figure on the site can be traced and reproduced offline:
 
 ### Run locally
 
-Requires **Node.js 22.13 or newer** and **pnpm 11.9.0**.
+Requires **Node.js 22.13 or newer** (CI runs on **Node.js 24**) and **pnpm 11.9.0**.
 
 ```sh
 git clone https://github.com/andrea-gentilini/explainable-italy.git
@@ -95,8 +95,8 @@ Next.js and React generate a **static export** in `out/`. Search, year selection
 
 | Location | Contents |
 | --- | --- |
-| `app/` | Bilingual routes (`app/(it)/` default Italian, `app/en/` English), UI components and verification views |
-| `scripts/` | Eurostat JSON-stat acquisition, metadata rules, series processing, validation and refresh reporting |
+| `app/` | Bilingual routes (`app/(it)/` default Italian, `app/en/` English), UI components, unified stylesheet (`app/globals.css`) and verification views |
+| `scripts/` | Declarative indicator catalogue (`scripts/indicator-catalog.mjs`), Eurostat JSON-stat acquisition, metadata rules, series processing, validation and refresh reporting |
 | `data/raw/eurostat/` | Committed JSON-stat source snapshots |
 | `data/processed/` & `data/manifest.json` | Processed dashboard data and dataset provenance register |
 | `public/data/` | Publicly downloadable snapshots, `manifest.json`, `dashboard.json`, `dashboard.csv` and per-indicator CSVs |

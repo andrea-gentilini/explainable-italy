@@ -10,10 +10,10 @@ export function pageUrl(locale: Locale, path = "") {
 export function pageMetadata(locale: Locale, path: string, title: string, description?: string): Metadata {
   const fullTitle = title === "Explainable Italy" ? title : `${title} · Explainable Italy`;
   const image = {
-    url: `${siteUrl}/social-preview-v2.jpg`,
+    url: `${siteUrl}/${locale === "it" ? "social-preview-v2.jpg" : "social-preview-en-v2.jpg"}`,
     width: 1536,
     height: 804,
-    alt: locale === "it" ? "Explainable Italy. L’Italia, i dati ufficiali per tutti." : "Explainable Italy. Official data for everyone.",
+    alt: locale === "it" ? "Explainable Italy. L’Italia, i dati ufficiali per tutti." : "Explainable Italy. Italy, official data for everyone.",
   };
   return {
     title: fullTitle,
