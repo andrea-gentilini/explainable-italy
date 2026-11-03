@@ -1,22 +1,22 @@
 {
   "schemaVersion": 1,
-  "attemptedAt": "2026-10-27T16:54:23.831Z",
+  "attemptedAt": "2026-11-03T12:54:37.050Z",
   "outcome": "success",
-  "runUrl": "https://github.com/andrea-gentilini/explainable-italy/actions/runs/40545292836/attempts/1",
-  "sourceCommit": "22d9c796c815ba92d653fd68ee5c6a6850be182d",
-  "repositoryCommit": "22d9c796c815ba92d653fd68ee5c6a6850be182d",
-  "proposalUrl": "https://github.com/andrea-gentilini/explainable-italy/pull/7",
+  "runUrl": "https://github.com/andrea-gentilini/explainable-italy/actions/runs/41639483878/attempts/1",
+  "sourceCommit": "d14680073b7f61de4aa8714f591ca12e3605cb4f",
+  "repositoryCommit": "d14680073b7f61de4aa8714f591ca12e3605cb4f",
+  "proposalUrl": "https://github.com/andrea-gentilini/explainable-italy/pull/14",
   "lastSuccessfulCheck": {
-    "checkedAt": "2026-10-27T16:54:23.831Z",
-    "sourceCommit": "22d9c796c815ba92d653fd68ee5c6a6850be182d",
+    "checkedAt": "2026-11-03T12:54:37.050Z",
+    "sourceCommit": "d14680073b7f61de4aa8714f591ca12e3605cb4f",
     "datasets": {
       "cei_wm011": "8eaceefba9e0862443ac48bd6ded74d579b308b806bd084a28edb29bc782de28",
       "demo_find": "3f9ce58b175956d6200c68c92b3dfb5beda385aac70778817e6df13d3fdc5712",
       "demo_mlexpec": "a5778e1649f0247dc2d737bce15b67893b0453ac67a308c0177bc516e5fc3dc2",
       "demo_pjanind": "2e5cd8463e5099a1f3657f9814f8e9aa6bd0d3e3ac1a426b98660cd9d608f8db",
-      "edat_lfse_03": "7f28090ffd5368179f63402f1d6df514247a0c398110eb20d050d1850d46733b",
-      "edat_lfse_14": "5b0a67e15c03c0501426e22ae8c0138d10f3024f243de832029c198e5effc70b",
-      "edat_lfse_20": "f285a03a00584c80fc5682d2d4341476fd4e643dcd6dc26d7ea4e8b89973a915",
+      "edat_lfse_03": "9e7c66b290ef0f7c312989fbe1789725346f24236142e126ae8985a82cb2aac1",
+      "edat_lfse_14": "176f3ec0de7bfc2bee45d4c29bd80b809a9252bf59bdc73c0850ffa40bd1baab",
+      "edat_lfse_20": "bef91504ae27f5a723d11091d465635c53565a2a33c4614f9af56a3bcbf41579",
       "gov_10a_exp": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
       "gov_10a_main": "28fc4aecbf5386f421e5ad9082616b461b87150c8aaf6071417d3688c835defc",
       "gov_10dd_edpt1": "c0622fd688b49b14faa40a55affaff2f088949471e7cb3f2db67a318e05c8fb4",
@@ -28,7 +28,7 @@
       "sdg_13_10": "77d9b554b057c0535b6fc4417a107f138a7fd5ed42deaa0526577ad1ad930ec3",
       "spr_exp_pens": "db7652d1bfb485b19303f609cbf6ea5423c29cb80625ee8015bc583af6c5221e",
       "tec00118": "08925d78799c3a09a13d22ffe5820f7ad78c101b75dc332adf06e6e66c27d7d9",
-      "trng_lfse_01": "38d9b7a219bb175bfa0e74dba1c5964249bced409536c2e7c95ba02b4615bb25",
+      "trng_lfse_01": "7aac943b69ffbce01399ce9220bcf41bf8896ac52cd43fb5c85a40732204e436",
       "une_rt_a": "4d8cf0cd9086e15f8db3f850d22cef1fc619fce98362d9674c44336a96cbe723"
     }
   }
