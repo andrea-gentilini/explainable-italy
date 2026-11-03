@@ -802,7 +802,7 @@ early-school-leavers,education,2021,12.7,9.7,8,27,official_aggregate,b,b,AT:b|BE
 early-school-leavers,education,2022,11.5,9.6,8.2,27,official_aggregate,,,HR:u|CZ:b|FR:d|SK:b|ES:d,,percent,edat_lfse_14
 early-school-leavers,education,2023,10.5,9.6,7.7,27,official_aggregate,,,HR:u|FR:d|LU:u|SI:b|ES:d,,percent,edat_lfse_14
 early-school-leavers,education,2024,9.8,9.6,7.9,27,official_aggregate,,,BE:b|BG:b|HR:u|FR:bd|DE:b|EL:b|IE:b|LU:u|ES:d,,percent,edat_lfse_14
-early-school-leavers,education,2025,8.2,9.1,7.8,26,official_aggregate,,,HR:u|DK:b|FR:d|ES:d,LU,percent,edat_lfse_14
+early-school-leavers,education,2025,8.2,9.1,7.4,27,official_aggregate,,,HR:u|DK:b|FR:d|LU:u|ES:d,,percent,edat_lfse_14
 adult-learning,education,2002,4.4,5.3,5.3,27,official_aggregate,,,LV:b|LT:b,,percent,trng_lfse_01
 adult-learning,education,2003,4.5,6.4,5.5,26,official_aggregate,,b,BG:b|CY:b|CZ:b|DK:b|EE:b|FI:b|FR:b|DE:b|EL:b|HU:b|LV:b|LU:b|NL:b|PL:b|RO:b|SK:b|SI:b|ES:b,SE,percent,trng_lfse_01
 adult-learning,education,2004,6.3,7.1,6.05,26,official_aggregate,b,,AT:b|BE:b|EL:b|IE:b|IT:b|LT:b|MT:b|PL:b|PT:b,SE,percent,trng_lfse_01
