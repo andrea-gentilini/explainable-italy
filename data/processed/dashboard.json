@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-03T12:53:33.062Z",
+  "generatedAt": "2026-11-10T13:38:01.289Z",
   "methodologyVersion": "1.3.0",
   "comparison": {
     "it": "Quando disponibile, il valore UE è l’aggregato ufficiale Eurostat. Se non esiste un aggregato con lo stesso perimetro, non ne costruiamo uno. La mediana è calcolata ordinando i valori dei Paesi disponibili e prendendo quello centrale; con un numero pari di Paesi è la media dei due valori centrali. Vicino al confronto sono indicati copertura, valori mancanti e contrassegni di qualità.",
@@ -5042,7 +5042,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.133Z",
+        "accessedAt": "2026-11-10T13:38:02.220Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -10012,7 +10012,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.133Z",
+        "accessedAt": "2026-11-10T13:38:02.220Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -14986,7 +14986,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.133Z",
+        "accessedAt": "2026-11-10T13:38:02.220Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -19960,7 +19960,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.133Z",
+        "accessedAt": "2026-11-10T13:38:02.220Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -24934,7 +24934,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.133Z",
+        "accessedAt": "2026-11-10T13:38:02.220Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -29908,7 +29908,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.133Z",
+        "accessedAt": "2026-11-10T13:38:02.220Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -34882,7 +34882,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.133Z",
+        "accessedAt": "2026-11-10T13:38:02.220Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -39856,7 +39856,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.133Z",
+        "accessedAt": "2026-11-10T13:38:02.220Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -44830,7 +44830,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.133Z",
+        "accessedAt": "2026-11-10T13:38:02.220Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -49804,7 +49804,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.133Z",
+        "accessedAt": "2026-11-10T13:38:02.220Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -54717,7 +54717,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_EXP",
         "sourceUpdatedAt": "2026-10-21T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.133Z",
+        "accessedAt": "2026-11-10T13:38:02.220Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_exp.json",
         "sha256": "0016e926b05c83801029ac6133782c776b30a695ec297299848f56b76492e107",
         "bytes": 92323
@@ -59598,7 +59598,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_main_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_MAIN",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.958Z",
+        "accessedAt": "2026-11-10T13:38:02.973Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_main.json",
         "sha256": "28fc4aecbf5386f421e5ad9082616b461b87150c8aaf6071417d3688c835defc",
         "bytes": 54340
@@ -64467,7 +64467,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_main_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_MAIN",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.958Z",
+        "accessedAt": "2026-11-10T13:38:02.973Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_main.json",
         "sha256": "28fc4aecbf5386f421e5ad9082616b461b87150c8aaf6071417d3688c835defc",
         "bytes": 54340
@@ -69331,7 +69331,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_main_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_MAIN",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.958Z",
+        "accessedAt": "2026-11-10T13:38:02.973Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_main.json",
         "sha256": "28fc4aecbf5386f421e5ad9082616b461b87150c8aaf6071417d3688c835defc",
         "bytes": 54340
@@ -74207,7 +74207,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_main_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_MAIN",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.958Z",
+        "accessedAt": "2026-11-10T13:38:02.973Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_main.json",
         "sha256": "28fc4aecbf5386f421e5ad9082616b461b87150c8aaf6071417d3688c835defc",
         "bytes": 54340
@@ -79083,7 +79083,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_main_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_MAIN",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.958Z",
+        "accessedAt": "2026-11-10T13:38:02.973Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_main.json",
         "sha256": "28fc4aecbf5386f421e5ad9082616b461b87150c8aaf6071417d3688c835defc",
         "bytes": 54340
@@ -83959,7 +83959,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_main_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10A_MAIN",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:34.958Z",
+        "accessedAt": "2026-11-10T13:38:02.973Z",
         "snapshotPath": "data/raw/eurostat/gov_10a_main.json",
         "sha256": "28fc4aecbf5386f421e5ad9082616b461b87150c8aaf6071417d3688c835defc",
         "bytes": 54340
@@ -88807,7 +88807,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/gov_10dd_esms.htm",
         "doi": "https://doi.org/10.2908/GOV_10DD_EDPT1",
         "sourceUpdatedAt": "2026-10-21T11:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:35.176Z",
+        "accessedAt": "2026-11-10T13:38:03.239Z",
         "snapshotPath": "data/raw/eurostat/gov_10dd_edpt1.json",
         "sha256": "c0622fd688b49b14faa40a55affaff2f088949471e7cb3f2db67a318e05c8fb4",
         "bytes": 11994
@@ -93804,7 +93804,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/demo_pop_esms.htm",
         "doi": "https://doi.org/10.2908/DEMO_PJANIND",
         "sourceUpdatedAt": "2026-09-25T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:35.365Z",
+        "accessedAt": "2026-11-10T13:38:03.430Z",
         "snapshotPath": "data/raw/eurostat/demo_pjanind.json",
         "sha256": "2e5cd8463e5099a1f3657f9814f8e9aa6bd0d3e3ac1a426b98660cd9d608f8db",
         "bytes": 30736
@@ -98810,7 +98810,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/demo_pop_esms.htm",
         "doi": "https://doi.org/10.2908/DEMO_PJANIND",
         "sourceUpdatedAt": "2026-09-25T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:35.365Z",
+        "accessedAt": "2026-11-10T13:38:03.430Z",
         "snapshotPath": "data/raw/eurostat/demo_pjanind.json",
         "sha256": "2e5cd8463e5099a1f3657f9814f8e9aa6bd0d3e3ac1a426b98660cd9d608f8db",
         "bytes": 30736
@@ -103816,7 +103816,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/demo_pop_esms.htm",
         "doi": "https://doi.org/10.2908/DEMO_PJANIND",
         "sourceUpdatedAt": "2026-09-25T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:35.365Z",
+        "accessedAt": "2026-11-10T13:38:03.430Z",
         "snapshotPath": "data/raw/eurostat/demo_pjanind.json",
         "sha256": "2e5cd8463e5099a1f3657f9814f8e9aa6bd0d3e3ac1a426b98660cd9d608f8db",
         "bytes": 30736
@@ -108634,7 +108634,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/demo_fer_esms.htm",
         "doi": "https://doi.org/10.2908/DEMO_FIND",
         "sourceUpdatedAt": "2026-09-30T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:35.554Z",
+        "accessedAt": "2026-11-10T13:38:03.624Z",
         "snapshotPath": "data/raw/eurostat/demo_find.json",
         "sha256": "3f9ce58b175956d6200c68c92b3dfb5beda385aac70778817e6df13d3fdc5712",
         "bytes": 12034
@@ -113579,7 +113579,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/demo_mor_esms.htm",
         "doi": "https://doi.org/10.2908/DEMO_MLEXPEC",
         "sourceUpdatedAt": "2026-09-25T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:35.736Z",
+        "accessedAt": "2026-11-10T13:38:03.812Z",
         "snapshotPath": "data/raw/eurostat/demo_mlexpec.json",
         "sha256": "a5778e1649f0247dc2d737bce15b67893b0453ac67a308c0177bc516e5fc3dc2",
         "bytes": 12347
@@ -116962,10 +116962,10 @@
         "apiUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/lfsi_emp_a?lang=en&sinceTimePeriod=2000&freq=A&indic_em=EMP_LFS&sex=T&age=Y20-64&unit=PC_POP&geo=AT&geo=BE&geo=BG&geo=HR&geo=CY&geo=CZ&geo=DK&geo=EE&geo=FI&geo=FR&geo=DE&geo=EL&geo=HU&geo=IE&geo=IT&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=PL&geo=PT&geo=RO&geo=SK&geo=SI&geo=ES&geo=SE&geo=EU27_2020",
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/lfsi_esms.htm",
         "doi": "https://doi.org/10.2908/LFSI_EMP_A",
-        "sourceUpdatedAt": "2026-10-26T23:00:00+0100",
-        "accessedAt": "2026-11-03T12:53:35.927Z",
+        "sourceUpdatedAt": "2026-11-06T23:00:00+0100",
+        "accessedAt": "2026-11-10T13:38:04.855Z",
         "snapshotPath": "data/raw/eurostat/lfsi_emp_a.json",
-        "sha256": "fe38b7c9069d4015c19f2d9ca1543fd50c33db1d45468aacdefac647ac3636ae",
+        "sha256": "540927a2e682217de582a1d0b956aa81ad810070653afb2f367b1504325ebe8c",
         "bytes": 10249
       }
     },
@@ -120346,10 +120346,10 @@
         "apiUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/une_rt_a?lang=en&sinceTimePeriod=2000&freq=A&age=Y15-74&unit=PC_ACT&sex=T&geo=AT&geo=BE&geo=BG&geo=HR&geo=CY&geo=CZ&geo=DK&geo=EE&geo=FI&geo=FR&geo=DE&geo=EL&geo=HU&geo=IE&geo=IT&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=PL&geo=PT&geo=RO&geo=SK&geo=SI&geo=ES&geo=SE&geo=EU27_2020",
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/lfsi_esms.htm",
         "doi": "https://doi.org/10.2908/UNE_RT_A",
-        "sourceUpdatedAt": "2026-10-26T23:00:00+0100",
-        "accessedAt": "2026-11-03T12:53:36.130Z",
+        "sourceUpdatedAt": "2026-11-06T23:00:00+0100",
+        "accessedAt": "2026-11-10T13:38:05.816Z",
         "snapshotPath": "data/raw/eurostat/une_rt_a.json",
-        "sha256": "4d8cf0cd9086e15f8db3f850d22cef1fc619fce98362d9674c44336a96cbe723",
+        "sha256": "28e26035b5ad9d5ecf11a5fc1ec3455c6ae130e73621c67408f3404160d86574",
         "bytes": 15545
       }
     },
@@ -123730,10 +123730,10 @@
         "apiUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/une_rt_a?lang=en&sinceTimePeriod=2000&freq=A&age=Y15-24&unit=PC_ACT&sex=T&geo=AT&geo=BE&geo=BG&geo=HR&geo=CY&geo=CZ&geo=DK&geo=EE&geo=FI&geo=FR&geo=DE&geo=EL&geo=HU&geo=IE&geo=IT&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=PL&geo=PT&geo=RO&geo=SK&geo=SI&geo=ES&geo=SE&geo=EU27_2020",
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/lfsi_esms.htm",
         "doi": "https://doi.org/10.2908/UNE_RT_A",
-        "sourceUpdatedAt": "2026-10-26T23:00:00+0100",
-        "accessedAt": "2026-11-03T12:53:36.130Z",
+        "sourceUpdatedAt": "2026-11-06T23:00:00+0100",
+        "accessedAt": "2026-11-10T13:38:05.816Z",
         "snapshotPath": "data/raw/eurostat/une_rt_a.json",
-        "sha256": "4d8cf0cd9086e15f8db3f850d22cef1fc619fce98362d9674c44336a96cbe723",
+        "sha256": "28e26035b5ad9d5ecf11a5fc1ec3455c6ae130e73621c67408f3404160d86574",
         "bytes": 15545
       }
     },
@@ -129089,10 +129089,10 @@
         "apiUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10_pc?lang=en&sinceTimePeriod=2000&freq=A&unit=PC_EU27_2020_HAB_MPPS_CP&na_item=B1GQ&geo=AT&geo=BE&geo=BG&geo=HR&geo=CY&geo=CZ&geo=DK&geo=EE&geo=FI&geo=FR&geo=DE&geo=EL&geo=HU&geo=IE&geo=IT&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=PL&geo=PT&geo=RO&geo=SK&geo=SI&geo=ES&geo=SE&geo=EU27_2020",
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/nama_10_gdp_esms.htm",
         "doi": "https://doi.org/10.2908/NAMA_10_PC",
-        "sourceUpdatedAt": "2026-10-22T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:36.530Z",
+        "sourceUpdatedAt": "2026-11-05T23:00:00+0100",
+        "accessedAt": "2026-11-10T13:38:06.905Z",
         "snapshotPath": "data/raw/eurostat/nama_10_pc.json",
-        "sha256": "544e2afb616fea8f3e564abbaf447bbcccaa25b3fcfe8ba4fb251ac229b9440f",
+        "sha256": "39bea4ffa0ec062c81ce5a3dbedf2ef2a5b686c4b7bc8aecefd0e40c31ca014a",
         "bytes": 21293
       }
     },
@@ -134340,10 +134340,10 @@
         "apiUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10_pc?lang=en&sinceTimePeriod=2000&freq=A&unit=CLV_PCH_PRE_HAB&na_item=B1GQ&geo=AT&geo=BE&geo=BG&geo=HR&geo=CY&geo=CZ&geo=DK&geo=EE&geo=FI&geo=FR&geo=DE&geo=EL&geo=HU&geo=IE&geo=IT&geo=LV&geo=LT&geo=LU&geo=MT&geo=NL&geo=PL&geo=PT&geo=RO&geo=SK&geo=SI&geo=ES&geo=SE&geo=EU27_2020",
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/nama_10_gdp_esms.htm",
         "doi": "https://doi.org/10.2908/NAMA_10_PC",
-        "sourceUpdatedAt": "2026-10-22T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:36.530Z",
+        "sourceUpdatedAt": "2026-11-05T23:00:00+0100",
+        "accessedAt": "2026-11-10T13:38:06.905Z",
         "snapshotPath": "data/raw/eurostat/nama_10_pc.json",
-        "sha256": "544e2afb616fea8f3e564abbaf447bbcccaa25b3fcfe8ba4fb251ac229b9440f",
+        "sha256": "39bea4ffa0ec062c81ce5a3dbedf2ef2a5b686c4b7bc8aecefd0e40c31ca014a",
         "bytes": 21293
       }
     },
@@ -136697,7 +136697,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/prc_hicp_esms.htm",
         "doi": "https://doi.org/10.2908/TEC00118",
         "sourceUpdatedAt": "2026-09-17T11:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:36.714Z",
+        "accessedAt": "2026-11-10T13:38:07.104Z",
         "snapshotPath": "data/raw/eurostat/tec00118.json",
         "sha256": "08925d78799c3a09a13d22ffe5820f7ad78c101b75dc332adf06e6e66c27d7d9",
         "bytes": 8592
@@ -138993,7 +138993,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/ilc_sieusilc.htm",
         "doi": "https://doi.org/10.2908/ILC_PEPS01N",
         "sourceUpdatedAt": "2026-10-20T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:36.904Z",
+        "accessedAt": "2026-11-10T13:38:07.291Z",
         "snapshotPath": "data/raw/eurostat/ilc_peps01n.json",
         "sha256": "fdc3a05a09e4c5d8e3aeab1ee00d0eb262baff6b4c1f16aa3a2d0f7857c9dedc",
         "bytes": 7662
@@ -143960,7 +143960,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/spr_esms.htm",
         "doi": "https://doi.org/10.2908/SPR_EXP_PENS",
         "sourceUpdatedAt": "2026-10-26T23:00:00+0100",
-        "accessedAt": "2026-11-03T12:53:37.092Z",
+        "accessedAt": "2026-11-10T13:38:07.464Z",
         "snapshotPath": "data/raw/eurostat/spr_exp_pens.json",
         "sha256": "db7652d1bfb485b19303f609cbf6ea5423c29cb80625ee8015bc583af6c5221e",
         "bytes": 13742
@@ -147805,7 +147805,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/hlth_hlye_esms.htm",
         "doi": "https://doi.org/10.2908/HLTH_HLYE",
         "sourceUpdatedAt": "2026-07-17T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:37.286Z",
+        "accessedAt": "2026-11-10T13:38:07.663Z",
         "snapshotPath": "data/raw/eurostat/hlth_hlye.json",
         "sha256": "dc6024d54810183eb2a29a08deff479a3c0aeb6dc9470afbb55e59ef15071126",
         "bytes": 10842
@@ -153147,7 +153147,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm",
         "doi": "https://doi.org/10.2908/EDAT_LFSE_03",
         "sourceUpdatedAt": "2026-10-30T23:00:00+0100",
-        "accessedAt": "2026-11-03T12:53:38.252Z",
+        "accessedAt": "2026-11-10T13:38:07.836Z",
         "snapshotPath": "data/raw/eurostat/edat_lfse_03.json",
         "sha256": "9e7c66b290ef0f7c312989fbe1789725346f24236142e126ae8985a82cb2aac1",
         "bytes": 13302
@@ -158424,7 +158424,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm",
         "doi": "https://doi.org/10.2908/EDAT_LFSE_14",
         "sourceUpdatedAt": "2026-10-30T23:00:00+0100",
-        "accessedAt": "2026-11-03T12:53:39.253Z",
+        "accessedAt": "2026-11-10T13:38:08.065Z",
         "snapshotPath": "data/raw/eurostat/edat_lfse_14.json",
         "sha256": "176f3ec0de7bfc2bee45d4c29bd80b809a9252bf59bdc73c0850ffa40bd1baab",
         "bytes": 13615
@@ -163465,7 +163465,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/trng_lfs_4w_esms.htm",
         "doi": "https://doi.org/10.2908/TRNG_LFSE_01",
         "sourceUpdatedAt": "2026-10-30T23:00:00+0100",
-        "accessedAt": "2026-11-03T12:53:40.212Z",
+        "accessedAt": "2026-11-10T13:38:08.272Z",
         "snapshotPath": "data/raw/eurostat/trng_lfse_01.json",
         "sha256": "7aac943b69ffbce01399ce9220bcf41bf8896ac52cd43fb5c85a40732204e436",
         "bytes": 12661
@@ -168570,7 +168570,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/edat1_esms.htm",
         "doi": "https://doi.org/10.2908/EDAT_LFSE_20",
         "sourceUpdatedAt": "2026-10-30T23:00:00+0100",
-        "accessedAt": "2026-11-03T12:53:41.267Z",
+        "accessedAt": "2026-11-10T13:38:08.459Z",
         "snapshotPath": "data/raw/eurostat/edat_lfse_20.json",
         "sha256": "bef91504ae27f5a723d11091d465635c53565a2a33c4614f9af56a3bcbf41579",
         "bytes": 13496
@@ -173120,7 +173120,7 @@
         "metadataUrl": null,
         "doi": "https://doi.org/10.2908/NRG_IND_REN",
         "sourceUpdatedAt": "2026-09-15T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:41.446Z",
+        "accessedAt": "2026-11-10T13:38:08.657Z",
         "snapshotPath": "data/raw/eurostat/nrg_ind_ren.json",
         "sha256": "1aaa28e0eed4ac0d6f4ba2bdf57130aad5f651302a72a8a1f61729d91d91ccbb",
         "bytes": 11644
@@ -178277,7 +178277,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/cei_wm011_esmsip2.htm",
         "doi": "https://doi.org/10.2908/CEI_WM011",
         "sourceUpdatedAt": "2026-10-15T11:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:41.619Z",
+        "accessedAt": "2026-11-10T13:38:08.867Z",
         "snapshotPath": "data/raw/eurostat/cei_wm011.json",
         "sha256": "8eaceefba9e0862443ac48bd6ded74d579b308b806bd084a28edb29bc782de28",
         "bytes": 14224
@@ -182956,7 +182956,7 @@
         "metadataUrl": "https://ec.europa.eu/eurostat/cache/metadata/en/sdg_13_10_esmsip2.htm",
         "doi": "https://doi.org/10.2908/SDG_13_10",
         "sourceUpdatedAt": "2026-04-22T23:00:00+0200",
-        "accessedAt": "2026-11-03T12:53:41.821Z",
+        "accessedAt": "2026-11-10T13:38:09.081Z",
         "snapshotPath": "data/raw/eurostat/sdg_13_10.json",
         "sha256": "77d9b554b057c0535b6fc4417a107f138a7fd5ed42deaa0526577ad1ad930ec3",
         "bytes": 12834
