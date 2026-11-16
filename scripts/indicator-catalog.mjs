@@ -747,8 +747,8 @@ export const datasetSpecs = [
           en: "The share of people aged 20 to 64 who have a job."
         },
         technical: {
-          it: "Quota percentuale (PC_POP) degli occupati residenti tra 20 e 64 anni (EMP_LFS, definizione ILO) divisi per la popolazione della stessa età. Media annua delle rilevazioni trimestrali continue dell’indagine EU Labour Force Survey.",
-          en: "Percentage share (PC_POP) of employed residents aged 20 to 64 (EMP_LFS, ILO definition) divided by the population of the same age. Annual average of the continuous quarterly surveys of the EU Labour Force Survey."
+          it: "Quota percentuale (PC_POP) degli occupati residenti tra 20 e 64 anni (EMP_LFS, definizione ILO) in rapporto alla popolazione della stessa età in famiglie private. Media annua delle rilevazioni trimestrali continue dell’indagine EU Labour Force Survey.",
+          en: "Percentage share (PC_POP) of employed residents aged 20 to 64 (EMP_LFS, ILO definition) as a share of the population of the same age living in private households. Annual average of the continuous quarterly surveys of the EU Labour Force Survey."
         },
         unitKey: "percent",
         precision: 1,
@@ -758,8 +758,8 @@ export const datasetSpecs = [
           it: "Nel {year}, il {value}% dei residenti in Italia tra 20 e 64 anni aveva un lavoro.",
           en: "In {year}, {value}% of Italy’s residents aged 20 to 64 were employed.",
           caution: {
-            it: "Il denominatore è l’intera popolazione residente tra 20 e 64 anni; il valore annuale è la media delle rilevazioni trimestrali sull’occupazione.",
-            en: "The denominator is the entire resident population aged 20 to 64; the annual figure is the average of the quarterly labour force survey waves."
+            it: "La rilevazione riguarda i residenti tra 20 e 64 anni in famiglie private. Il valore annuale è la media delle rilevazioni trimestrali sull’occupazione.",
+            en: "The survey covers residents aged 20 to 64 in private households. The annual figure is the average of the quarterly labour force surveys."
           }
         }
       }
@@ -780,12 +780,12 @@ export const datasetSpecs = [
         selector: { age: "Y15-74" },
         title: { it: "Tasso di disoccupazione", en: "Unemployment rate" },
         plain: {
-          it: "La quota delle persone attive che non ha un lavoro, lo ha cercato nelle quattro settimane precedenti ed è disponibile a iniziare entro due settimane.",
-          en: "The share of the labour force without a job who sought work during the previous four weeks and can start within two weeks."
+          it: "La quota delle persone attive che non ha un lavoro, è disponibile a iniziare entro due settimane e ha cercato attivamente lavoro nelle ultime quattro settimane oppure ha già trovato un impiego che inizierà entro tre mesi.",
+          en: "The share of the labour force without a job who can start within two weeks and either actively sought work in the last four weeks or already found a job starting within three months."
         },
         technical: {
-          it: "Quota percentuale (PC_ACT) dei disoccupati tra 15 e 74 anni secondo la definizione ILO divisi per la forza lavoro della stessa età, calcolata come media annua delle rilevazioni trimestrali continue EU Labour Force Survey. Chi non cerca attivamente lavoro non è contato tra i disoccupati.",
-          en: "Percentage share (PC_ACT) of unemployed people aged 15 to 74 under the ILO definition divided by the labour force of the same age, calculated as the annual average of continuous quarterly EU Labour Force Survey data. People not actively seeking work are not counted as unemployed."
+          it: "Quota percentuale (PC_ACT) dei disoccupati nella forza lavoro tra 15 e 74 anni secondo la definizione ILO, come media annua delle rilevazioni trimestrali EU Labour Force Survey. Dal 2008 in Italia i quindicenni sono classificati fuori dalla forza lavoro.",
+          en: "Percentage share (PC_ACT) of the labour force aged 15 to 74 who are unemployed under the ILO definition, averaged over the quarterly EU Labour Force Survey. Since 2008, Italy has classified 15-year-olds as outside the labour force."
         },
         unitKey: "percent",
         precision: 1,
@@ -794,8 +794,8 @@ export const datasetSpecs = [
           it: "Nel {year}, il {value}% della forza lavoro italiana tra 15 e 74 anni era disoccupato secondo la definizione ILO.",
           en: "In {year}, {value}% of Italy’s labour force aged 15 to 74 was unemployed under the ILO definition.",
           caution: {
-            it: "La forza lavoro comprende occupati e disoccupati. La disoccupazione richiede ricerca attiva e disponibilità a iniziare un lavoro.",
-            en: "The labour force comprises employed and unemployed people. Unemployment requires active job seeking and availability to start work."
+            it: "La forza lavoro comprende occupati e disoccupati.",
+            en: "The labour force comprises employed and unemployed people."
           }
         }
       },
@@ -805,12 +805,12 @@ export const datasetSpecs = [
         selector: { age: "Y15-24" },
         title: { it: "Disoccupazione giovanile", en: "Youth unemployment" },
         plain: {
-          it: "La quota dei giovani attivi tra 15 e 24 anni che non ha un lavoro, lo ha cercato nelle quattro settimane precedenti ed è disponibile a iniziare entro due settimane.",
-          en: "The share of active young people aged 15 to 24 without a job who sought work during the previous four weeks and can start within two weeks."
+          it: "La quota dei giovani attivi tra 15 e 24 anni che non ha un lavoro, è disponibile a iniziare entro due settimane e ha cercato attivamente lavoro nelle ultime quattro settimane oppure ha già trovato un impiego che inizierà entro tre mesi.",
+          en: "The share of active young people aged 15 to 24 without a job who can start within two weeks and either actively sought work in the last four weeks or already found a job starting within three months."
         },
         technical: {
-          it: "Quota percentuale (PC_ACT) dei disoccupati tra 15 e 24 anni secondo la definizione ILO divisi per la forza lavoro della stessa età, come media annua delle rilevazioni trimestrali EU Labour Force Survey. Non è la percentuale di tutti i giovani.",
-          en: "Percentage share (PC_ACT) of unemployed people aged 15 to 24 under the ILO definition divided by the labour force of the same age, as the annual average of quarterly EU Labour Force Survey data. It is not a percentage of all young people."
+          it: "Quota percentuale (PC_ACT) dei disoccupati tra 15 e 24 anni secondo la definizione ILO divisi per la forza lavoro della stessa età, come media annua delle rilevazioni trimestrali EU Labour Force Survey. Dal 2008 in Italia i quindicenni sono classificati fuori dalla forza lavoro.",
+          en: "Percentage share (PC_ACT) of unemployed people aged 15 to 24 under the ILO definition divided by the labour force of the same age, as the annual average of quarterly EU Labour Force Survey data. Since 2008, Italy has classified 15-year-olds as outside the labour force."
         },
         unitKey: "percent",
         precision: 1,
@@ -819,8 +819,8 @@ export const datasetSpecs = [
           it: "Nel {year}, il {value}% della forza lavoro italiana tra 15 e 24 anni era disoccupato secondo la definizione ILO.",
           en: "In {year}, {value}% of Italy’s labour force aged 15 to 24 was unemployed under the ILO definition.",
           caution: {
-            it: "Il denominatore comprende i giovani occupati e quelli che cercano attivamente lavoro e sono disponibili a iniziare.",
-            en: "The denominator comprises employed young people and those actively seeking and available to start work."
+            it: "Il denominatore comprende i giovani occupati e disoccupati della stessa fascia d’età.",
+            en: "The denominator includes employed and unemployed young people in the same age group."
           }
         }
       }
@@ -1081,8 +1081,8 @@ export const datasetSpecs = [
           en: "The share of people aged 25 to 34 who completed university or an equivalent tertiary programme."
         },
         technical: {
-          it: "Quota percentuale (PC) della popolazione tra 25 e 34 anni in famiglie private con livello ISCED 2011 da 5 a 8. Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
-          en: "Percentage share (PC) of the population aged 25 to 34 in private households with ISCED 2011 levels 5 to 8. Annual average of quarterly EU Labour Force Survey data."
+          it: "Quota percentuale (PC) della popolazione tra 25 e 34 anni in famiglie private con un titolo terziario, tra chi ha indicato il titolo di studio. Fino al 2013 si usano i livelli 5–6 di ISCED 1997, dal 2014 i livelli 5–8 di ISCED 2011. Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
+          en: "Percentage share (PC) of the population aged 25 to 34 in private households who completed tertiary education, among those reporting their highest qualification. The series uses ISCED 1997 levels 5–6 through 2013 and ISCED 2011 levels 5–8 from 2014. Annual average of quarterly EU Labour Force Survey data."
         },
         unitKey: "percent",
         precision: 1,
@@ -1092,8 +1092,8 @@ export const datasetSpecs = [
           it: "Nel {year}, il {value}% delle persone in Italia tra 25 e 34 anni aveva completato un percorso di istruzione terziaria, universitario o equivalente.",
           en: "In {year}, {value}% of people in Italy aged 25 to 34 had completed university or an equivalent tertiary programme.",
           caution: {
-            it: "La misura riguarda i residenti tra 25 e 34 anni e comprende lauree, dottorati e diplomi terziari non universitari (livelli ISCED 5–8).",
-            en: "The measure covers residents aged 25 to 34 and includes university degrees, doctorates and short-cycle or vocational tertiary qualifications (ISCED levels 5–8)."
+            it: "La misura riguarda i residenti tra 25 e 34 anni e comprende lauree, dottorati e diplomi terziari non universitari.",
+            en: "The measure covers residents aged 25 to 34 and includes university degrees, doctorates and short-cycle or vocational tertiary qualifications."
           }
         }
       }
@@ -1115,12 +1115,12 @@ export const datasetSpecs = [
         selector: {},
         title: { it: "Abbandono precoce dell’istruzione", en: "Early leaving from education and training" },
         plain: {
-          it: "La quota dei giovani tra 18 e 24 anni con al massimo la scuola media che non studia e non segue formazione.",
-          en: "The share of young people aged 18 to 24 with at most lower secondary education who are not in education or training."
+          it: "La quota dei giovani tra 18 e 24 anni con un livello di istruzione basso che non studia e non segue formazione.",
+          en: "The share of 18- to 24-year-olds with low educational attainment who are not in education or training."
         },
         technical: {
-          it: "Quota percentuale (PC) delle persone tra 18 e 24 anni con al massimo un titolo ISCED 0–2 che non hanno partecipato a istruzione o formazione nelle quattro settimane precedenti l’indagine. Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
-          en: "Percentage share (PC) of people aged 18 to 24 with at most ISCED levels 0–2 who did not participate in education or training during the four weeks before the survey. Annual average of quarterly EU Labour Force Survey data."
+          it: "Quota percentuale (PC) delle persone tra 18 e 24 anni con un titolo ISCED 0–2 che non hanno partecipato a istruzione o formazione nelle quattro settimane precedenti l’indagine. Fino al 2013 la classificazione ISCED 1997 comprendeva anche i percorsi brevi di livello 3C. Dal 2014 si usa ISCED 2011. Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
+          en: "Percentage share (PC) of people aged 18 to 24 with ISCED levels 0–2 who did not participate in education or training in the four weeks before the survey. Through 2013, the ISCED 1997 classification also included short level 3C programmes in this group. ISCED 2011 applies from 2014. Annual average of quarterly EU Labour Force Survey data."
         },
         unitKey: "percent",
         precision: 1,
@@ -1128,9 +1128,14 @@ export const datasetSpecs = [
         reading: {
           it: "Nel {year}, il {value}% delle persone in Italia tra 18 e 24 anni aveva al massimo la scuola media e non aveva partecipato a istruzione o formazione nelle quattro settimane precedenti l’indagine.",
           en: "In {year}, {value}% of people in Italy aged 18 to 24 had at most lower secondary education and had not taken part in education or training in the four weeks before the survey.",
+          historical: {
+            throughYear: 2013,
+            it: "Nel {year}, il {value}% dei 18–24enni in Italia aveva un livello di istruzione basso, inclusi i percorsi brevi ISCED 3C, e non aveva partecipato a istruzione o formazione nelle quattro settimane precedenti l’indagine.",
+            en: "In {year}, {value}% of 18- to 24-year-olds in Italy had low educational attainment, including short ISCED 3C programmes, and had not taken part in education or training in the four weeks before the survey."
+          },
           caution: {
-            it: "Il denominatore è l’intera popolazione residente tra 18 e 24 anni; la misura combina il titolo di studio più alto conseguito e l’assenza di formazione nelle quattro settimane precedenti l’intervista.",
-            en: "The denominator is the entire resident population aged 18 to 24; the measure combines highest educational attainment and non-participation in training during the four weeks before the interview."
+            it: "Il denominatore comprende i 18–24enni in famiglie private con una risposta sia sul titolo di studio sia sulla partecipazione a istruzione o formazione.",
+            en: "The denominator includes 18- to 24-year-olds in private households with a response on both educational attainment and participation in education or training."
           }
         }
       }
@@ -1155,8 +1160,8 @@ export const datasetSpecs = [
           en: "The share of people aged 25 to 64 who took part in education or training during the previous four weeks."
         },
         technical: {
-          it: "Quota percentuale (PC) di partecipazione a istruzione o formazione formale o non formale nelle ultime quattro settimane tra 25 e 64 anni. Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
-          en: "Percentage share (PC) of participation in formal or non-formal education or training during the previous four weeks among people aged 25 to 64. Annual average of quarterly EU Labour Force Survey data."
+          it: "Quota percentuale (PC) di partecipazione a istruzione o formazione formale o non formale nelle ultime quattro settimane tra i 25–64enni in famiglie private che hanno risposto alla domanda sulla partecipazione. Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
+          en: "Percentage share (PC) of participation in formal or non-formal education or training during the previous four weeks among 25- to 64-year-olds in private households with a response on participation. Annual average of quarterly EU Labour Force Survey data."
         },
         unitKey: "percent",
         precision: 1,
@@ -1193,8 +1198,8 @@ export const datasetSpecs = [
           en: "The share of people aged 15 to 29 who are not employed and are not in education or training."
         },
         technical: {
-          it: "Quota percentuale (PC, tasso NEET) tra 15 e 29 anni. Comprende disoccupati e persone fuori dalla forza lavoro (NEMP) che non partecipano a istruzione o formazione formale o non formale (NO_FE_NO_NFE). Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
-          en: "Percentage share (PC, NEET rate) among people aged 15 to 29. It includes unemployed and inactive people (NEMP) not participating in formal or non-formal education or training (NO_FE_NO_NFE). Annual average of quarterly EU Labour Force Survey data."
+          it: "Quota percentuale (PC, tasso NEET) tra 15 e 29 anni. Comprende disoccupati e persone fuori dalla forza lavoro (NEMP) che non hanno partecipato a istruzione o formazione formale o non formale nelle quattro settimane precedenti l’indagine (NO_FE_NO_NFE). Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
+          en: "Percentage share (PC, NEET rate) among people aged 15 to 29. It includes unemployed and inactive people (NEMP) who received no formal or non-formal education or training in the four weeks before the survey (NO_FE_NO_NFE). Annual average of quarterly EU Labour Force Survey data."
         },
         unitKey: "percent",
         precision: 1,
@@ -1203,8 +1208,8 @@ export const datasetSpecs = [
           it: "Nel {year}, il {value}% delle persone in Italia tra 15 e 29 anni non lavorava e non partecipava a istruzione o formazione.",
           en: "In {year}, {value}% of people in Italy aged 15 to 29 were neither employed nor in education or training.",
           caution: {
-            it: "Il denominatore è l’intera popolazione giovanile tra 15 e 29 anni, e non la sola forza lavoro come nel tasso di disoccupazione giovanile.",
-            en: "The denominator is the entire youth population aged 15 to 29, rather than only the labour force as in the youth unemployment rate."
+            it: "Il denominatore comprende i 15–29enni in famiglie private con una risposta sulla partecipazione a istruzione o formazione, anche se fuori dalla forza lavoro.",
+            en: "The denominator includes 15–29-year-olds in private households with a response on education or training, including those outside the labour force."
           }
         }
       }

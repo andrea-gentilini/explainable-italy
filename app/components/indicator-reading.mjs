@@ -23,6 +23,11 @@ export function buildCumulativeIndexSeries(series, requestedBaseYear) {
     return null;
   }
   const sorted = [...series].sort((left, right) => left.year - right.year);
+  // A missing annual rate leaves the change across that interval unknown.
+  if (sorted.some((point, index) =>
+    !Number.isInteger(point.year) || !Number.isFinite(point.italy) || point.italy <= -100 ||
+    (index > 0 && point.year !== sorted[index - 1].year + 1)
+  )) return null;
   const initialBaseYear = sorted[0].year - 1;
   const rawPoints = [
     { year: initialBaseYear, italyRaw: 100, euRaw: 100, status: null, isBaseline: true },
@@ -371,7 +376,10 @@ export function getIndicatorReading(indicator, point, locale) {
         " compared with the previous year.";
     }
   } else if (template) {
-    description = template[locale].replaceAll("{year}", String(point.year)).replaceAll("{value}", value);
+    const text = template.historical && point.year <= template.historical.throughYear
+      ? template.historical[locale]
+      : template[locale];
+    description = text.replaceAll("{year}", String(point.year)).replaceAll("{value}", value);
   } else {
     description = locale === "it"
       ? "Nel " + point.year + ", il valore italiano era " + value + " nell’unità riportata nella scheda."

@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 
 import { euCountries, flattenJsonStat, matchesSelector, isEstimateOrProvisional, buildIndicatorCsv, mergeStatus } from "./data-utils.mjs";
 
+import { datasetSpecs } from "./indicator-catalog.mjs";
 import { metadataStatusOverrides } from "./metadata-rules.mjs";
 
 const rootIndex = process.argv.indexOf("--root");
@@ -109,7 +110,11 @@ const datasetCodes = new Set(
 );
 const indicatorIds = new Set();
 const rawDatasets = new Map(await Promise.all(manifest.datasets.map(async (source) => {
+  const spec = datasetSpecs.find((item) => item.id === source.datasetCode);
+  assert(spec && source.localPath === `data/raw/eurostat/${spec.id}.json`,
+    `${source.datasetCode}: percorso snapshot inatteso`);
   const raw = await readJson(source.localPath);
+  assert(raw.extension?.id?.toLowerCase() === spec.id, `${spec.id}: dataset Eurostat inatteso`);
   return [source.datasetCode, { dataset: raw, records: flattenJsonStat(raw) }];
 })));
 
@@ -162,7 +167,7 @@ for (const indicator of dashboard.indicators) {
   assert(!indicatorIds.has(indicator.id), `ID duplicato: ${indicator.id}`);
   indicatorIds.add(indicator.id);
   assert(sectionIds.has(indicator.section), `${indicator.id}: sezione assente`);
-  assert(indicator.startYear >= 2000, `${indicator.id}: inizio non valido`);
+  assert(indicator.startYear === indicator.series[0]?.year, `${indicator.id}: inizio diverso dal primo anno della serie`);
   assert(indicator.series.length > 0, `${indicator.id}: serie vuota`);
   assert(
     datasetCodes.has(indicator.source.datasetCode),

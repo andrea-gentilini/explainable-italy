@@ -18,9 +18,9 @@ Il progetto è un sito statico: non usa cookie di profilazione, pubblicità o tr
 
 ### Verifica delle dipendenze
 
-Next.js ed `eslint-config-next` sono aggiornati alla versione `16.4.4`, React a `19.3.1`, ESLint a `10.14.0` e TypeScript a `6.0.3`. `pnpm audit --prod` non segnala vulnerabilità note.
+Next.js ed `eslint-config-next` sono fissati alla versione `16.4.6`, che include le [correzioni di sicurezza della 16.4.5](https://github.com/vercel/next.js/releases/tag/v16.4.5). Il sito distribuisce file statici su GitHub Pages. Il workflow esegue l’audit delle dipendenze di produzione a ogni verifica.
 
-L’audit che include i pacchetti di sviluppo segnala [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) (severità moderata) per `minimatch` (`3.1.5` e `10.2.6`), dipendenza indiretta di ESLint e dei relativi plugin. Non fa parte dei file del sito statico esportato. Entrambe le versioni installate sono le più recenti dei rispettivi rami principali (`3.x` e `10.x`), mentre la correzione indicata dall’avviso (`>=11.0.1`) appartiene a una nuova versione maggiore incompatibile non ancora adottata a monte da ESLint e dai suoi plugin. Il controllo lavora esclusivamente sui percorsi del repository e non riceve pattern glob da utenti esterni. Il prossimo aggiornamento delle dipendenze deve ricontrollare questo avviso.
+Per le dipendenze di sviluppo che richiedono `minimatch` 10, il lockfile seleziona la versione corretta `11.0.1`. Le dipendenze che richiedono il ramo 3 mantengono la propria versione. L’intervallo interessato da [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) va dalla 7.0.0 inclusa alla 11.0.1 esclusa.
 
 ---
 
@@ -38,6 +38,6 @@ The project exports a static site: it uses no profiling cookies, advertising or 
 
 ### Dependency audit
 
-Next.js and `eslint-config-next` are pinned at `16.4.4`, React at `19.3.1`, ESLint at `10.14.0` and TypeScript at `6.0.3`. `pnpm audit --prod` reports zero known vulnerabilities.
+Next.js and `eslint-config-next` are pinned to `16.4.6`, which includes the [16.4.5 security fixes](https://github.com/vercel/next.js/releases/tag/v16.4.5). The site serves static files on GitHub Pages. The workflow audits production dependencies on each verification run.
 
-Running an audit that includes development-only packages reports [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) (moderate severity) on `minimatch` (`3.1.5` and `10.2.6`), an indirect dependency of ESLint and its plugins. It is never shipped in the exported static site. Both installed releases are the latest available in their respective major branches (`3.x` and `10.x`), whereas the patched range (`>=11.0.1`) requires an incompatible major upgrade not yet adopted upstream by ESLint and its plugins. Because ESLint only runs against repository paths and never receives untrusted user glob patterns, practical risk is negligible; future dependency updates should re-check this advisory.
+For development dependencies that request `minimatch` 10, the lockfile selects the patched release `11.0.1`. Dependencies that request the 3.x line retain their own version. [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) affects versions from 7.0.0 inclusive to 11.0.1 exclusive.
