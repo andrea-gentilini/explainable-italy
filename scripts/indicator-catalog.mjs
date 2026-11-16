@@ -780,12 +780,12 @@ export const datasetSpecs = [
         selector: { age: "Y15-74" },
         title: { it: "Tasso di disoccupazione", en: "Unemployment rate" },
         plain: {
-          it: "La quota delle persone attive che non ha un lavoro, lo ha cercato nelle quattro settimane precedenti ed è disponibile a iniziare entro due settimane.",
-          en: "The share of the labour force without a job who sought work during the previous four weeks and can start within two weeks."
+          it: "La quota delle persone attive che non ha un lavoro, è disponibile a iniziare entro due settimane e ha cercato attivamente lavoro nelle ultime quattro settimane oppure ha già trovato un impiego che inizierà entro tre mesi.",
+          en: "The share of the labour force without a job who can start within two weeks and either actively sought work in the last four weeks or already found a job starting within three months."
         },
         technical: {
-          it: "Quota percentuale (PC_ACT) dei disoccupati tra 15 e 74 anni secondo la definizione ILO divisi per la forza lavoro della stessa età, calcolata come media annua delle rilevazioni trimestrali continue EU Labour Force Survey. Chi non cerca attivamente lavoro non è contato tra i disoccupati.",
-          en: "Percentage share (PC_ACT) of unemployed people aged 15 to 74 under the ILO definition divided by the labour force of the same age, calculated as the annual average of continuous quarterly EU Labour Force Survey data. People not actively seeking work are not counted as unemployed."
+          it: "Quota percentuale (PC_ACT) dei disoccupati tra 15 e 74 anni secondo la definizione ILO divisi per la forza lavoro della stessa età, calcolata come media annua delle rilevazioni trimestrali continue EU Labour Force Survey.",
+          en: "Percentage share (PC_ACT) of unemployed people aged 15 to 74 under the ILO definition divided by the labour force of the same age, calculated as the annual average of continuous quarterly EU Labour Force Survey data."
         },
         unitKey: "percent",
         precision: 1,
@@ -794,8 +794,8 @@ export const datasetSpecs = [
           it: "Nel {year}, il {value}% della forza lavoro italiana tra 15 e 74 anni era disoccupato secondo la definizione ILO.",
           en: "In {year}, {value}% of Italy’s labour force aged 15 to 74 was unemployed under the ILO definition.",
           caution: {
-            it: "La forza lavoro comprende occupati e disoccupati. La disoccupazione richiede ricerca attiva e disponibilità a iniziare un lavoro.",
-            en: "The labour force comprises employed and unemployed people. Unemployment requires active job seeking and availability to start work."
+            it: "La forza lavoro comprende occupati e disoccupati.",
+            en: "The labour force comprises employed and unemployed people."
           }
         }
       },
@@ -805,8 +805,8 @@ export const datasetSpecs = [
         selector: { age: "Y15-24" },
         title: { it: "Disoccupazione giovanile", en: "Youth unemployment" },
         plain: {
-          it: "La quota dei giovani attivi tra 15 e 24 anni che non ha un lavoro, lo ha cercato nelle quattro settimane precedenti ed è disponibile a iniziare entro due settimane.",
-          en: "The share of active young people aged 15 to 24 without a job who sought work during the previous four weeks and can start within two weeks."
+          it: "La quota dei giovani attivi tra 15 e 24 anni che non ha un lavoro, è disponibile a iniziare entro due settimane e ha cercato attivamente lavoro nelle ultime quattro settimane oppure ha già trovato un impiego che inizierà entro tre mesi.",
+          en: "The share of active young people aged 15 to 24 without a job who can start within two weeks and either actively sought work in the last four weeks or already found a job starting within three months."
         },
         technical: {
           it: "Quota percentuale (PC_ACT) dei disoccupati tra 15 e 24 anni secondo la definizione ILO divisi per la forza lavoro della stessa età, come media annua delle rilevazioni trimestrali EU Labour Force Survey. Non è la percentuale di tutti i giovani.",
@@ -819,8 +819,8 @@ export const datasetSpecs = [
           it: "Nel {year}, il {value}% della forza lavoro italiana tra 15 e 24 anni era disoccupato secondo la definizione ILO.",
           en: "In {year}, {value}% of Italy’s labour force aged 15 to 24 was unemployed under the ILO definition.",
           caution: {
-            it: "Il denominatore comprende i giovani occupati e quelli che cercano attivamente lavoro e sono disponibili a iniziare.",
-            en: "The denominator comprises employed young people and those actively seeking and available to start work."
+            it: "Il denominatore comprende i giovani occupati e disoccupati della stessa fascia d’età.",
+            en: "The denominator includes employed and unemployed young people in the same age group."
           }
         }
       }
@@ -1193,8 +1193,8 @@ export const datasetSpecs = [
           en: "The share of people aged 15 to 29 who are not employed and are not in education or training."
         },
         technical: {
-          it: "Quota percentuale (PC, tasso NEET) tra 15 e 29 anni. Comprende disoccupati e persone fuori dalla forza lavoro (NEMP) che non partecipano a istruzione o formazione formale o non formale (NO_FE_NO_NFE). Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
-          en: "Percentage share (PC, NEET rate) among people aged 15 to 29. It includes unemployed and inactive people (NEMP) not participating in formal or non-formal education or training (NO_FE_NO_NFE). Annual average of quarterly EU Labour Force Survey data."
+          it: "Quota percentuale (PC, tasso NEET) tra 15 e 29 anni. Comprende disoccupati e persone fuori dalla forza lavoro (NEMP) che non hanno partecipato a istruzione o formazione formale o non formale nelle quattro settimane precedenti l’indagine (NO_FE_NO_NFE). Media annua delle rilevazioni trimestrali EU Labour Force Survey.",
+          en: "Percentage share (PC, NEET rate) among people aged 15 to 29. It includes unemployed and inactive people (NEMP) who received no formal or non-formal education or training in the four weeks before the survey (NO_FE_NO_NFE). Annual average of quarterly EU Labour Force Survey data."
         },
         unitKey: "percent",
         precision: 1,
@@ -1203,8 +1203,8 @@ export const datasetSpecs = [
           it: "Nel {year}, il {value}% delle persone in Italia tra 15 e 29 anni non lavorava e non partecipava a istruzione o formazione.",
           en: "In {year}, {value}% of people in Italy aged 15 to 29 were neither employed nor in education or training.",
           caution: {
-            it: "Il denominatore è l’intera popolazione giovanile tra 15 e 29 anni, e non la sola forza lavoro come nel tasso di disoccupazione giovanile.",
-            en: "The denominator is the entire youth population aged 15 to 29, rather than only the labour force as in the youth unemployment rate."
+            it: "Il denominatore comprende i 15–29enni in famiglie private con una risposta sulla partecipazione a istruzione o formazione, anche se fuori dalla forza lavoro.",
+            en: "The denominator includes 15–29-year-olds in private households with a response on education or training, including those outside the labour force."
           }
         }
       }
