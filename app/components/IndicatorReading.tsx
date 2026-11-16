@@ -96,8 +96,8 @@ export function IndicatorReading({ indicator, point, locale }: IndicatorReadingP
           </dl>
           <small>
             {locale === "it"
-              ? "Esempi illustrativi. Il tasso annuo è l’osservazione ufficiale Eurostat; l’indice cumulato nel grafico storico qui sotto è un’elaborazione del progetto ottenuta concatenando i tassi annui ufficiali (arrotondati al decimo di punto; su periodi lunghi può quindi differire di pochi decimi da un indice calcolato sulle serie non arrotondate)."
-              : "Illustrative examples. The annual rate is Eurostat’s official observation; the cumulative index in the historical chart below is a project calculation obtained by chaining the official annual rates (rounded to one decimal place; over long periods it may therefore differ by a few tenths from an index computed on unrounded series)."}
+              ? "Esempi illustrativi. Il tasso annuo è l’osservazione ufficiale Eurostat; l’indice cumulato nel grafico storico qui sotto è un’elaborazione del progetto ottenuta concatenando i tassi annui ufficiali (arrotondati al decimo di punto; gli arrotondamenti possono accumularsi nel tempo)."
+              : "Illustrative examples. The annual rate is Eurostat’s official observation; the cumulative index in the historical chart below is a project calculation obtained by chaining the official annual rates (rounded to one decimal place; rounding differences can accumulate over time)."}
           </small>
         </div>
       ) : null}

@@ -347,7 +347,7 @@ export function Dashboard({
                 oldAge={oldAge}
                 pensionExpenditure={pensionExpenditure}
                 locale={locale}
-                year={String(selectedPoint(selectedIndicator, requestedYear).year)}
+                year={selectedPoint(selectedIndicator, requestedYear).year}
                 query={catalogQuery}
               />
             ) : null}

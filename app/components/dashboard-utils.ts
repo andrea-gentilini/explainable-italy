@@ -171,7 +171,8 @@ export function formatDate(date: string, locale: Locale) {
     year: "numeric",
     month: "long",
     day: "numeric",
-  }).format(new Date(date));
+    timeZone: "UTC",
+  }).format(new Date(`${date.slice(0, 10)}T00:00:00Z`));
 }
 
 export function formatBytes(bytes: number, locale: Locale) {

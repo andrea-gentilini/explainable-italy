@@ -199,6 +199,15 @@ test("buildCumulativeIndexSeries computes chain-linked indices and supports reba
   assert.ok(Math.abs(rebased.points[1].italyIndex - 110) < 1e-9);
 });
 
+test("an annual index cannot chain across a missing calendar year", () => {
+  const series = [
+    { year: 2020, italy: 5, eu: 4 },
+    { year: 2022, italy: 2, eu: 1 },
+  ];
+  assert.equal(buildCumulativeIndexSeries(series), null);
+  assert.equal(buildCumulativeIndexSeries(series, 2022), null);
+});
+
 test("computeComparisonScale and computeTrendScale prevent squashed dots and support focused and zero-anchored scales", () => {
   for (const indicator of dashboard.indicators) {
     const point = indicator.newerEstimate ?? indicator.latest;

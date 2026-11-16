@@ -633,32 +633,19 @@ export function SocialProtectionDetail({
   oldAge: Indicator;
   pensionExpenditure: Indicator;
   locale: Locale;
-  year: string | null;
+  year: number;
   query: string;
 }) {
   const labels = copy[locale];
-  const oldAgePoint = selectedPoint(oldAge, year);
-  const oldAgeComparison = {
-    ...oldAge,
-    latest: oldAgePoint,
-  };
-  const pensionPoint = selectedPoint(pensionExpenditure, year);
-  const pensionComparison = {
-    ...pensionExpenditure,
-    latest: pensionPoint,
-  };
+  const oldAgePoint = oldAge.series.find((point) => point.year === year);
+  const pensionPoint = pensionExpenditure.series.find((point) => point.year === year);
+  const unavailable = locale === "it" ? "Dato non disponibile" : "Data unavailable";
   const oldAgeFilter = labels.oldAgeFilter
-    .replace("{year}", String(oldAgePoint.year))
-    .replace(
-      "{status}",
-      statusDescription(oldAgePoint.status, locale, false),
-    );
+    .replace("{year}", String(year))
+    .replace("{status}", oldAgePoint ? statusDescription(oldAgePoint.status, locale, false) : unavailable);
   const pensionFilter = labels.pensionFilter
-    .replace("{year}", String(pensionPoint.year))
-    .replace(
-      "{status}",
-      statusDescription(pensionPoint.status, locale, false),
-    );
+    .replace("{year}", String(year))
+    .replace("{status}", pensionPoint ? statusDescription(pensionPoint.status, locale, false) : unavailable);
 
   return (
     <section className="social-protection-detail">
@@ -676,17 +663,17 @@ export function SocialProtectionDetail({
               href={withQuery(
                 pageHref(locale, `data/${oldAge.id}`),
                 query,
-                oldAgePoint.year,
+                oldAgePoint?.year,
               )}
             >
               {labels.oldAgeMeasureTitle}
             </AppLink>
           </h3>
           <p className="related-detail-value">
-            {formatEuro(oldAgePoint.italy, locale, 1)}{" "}
+            {oldAgePoint ? formatEuro(oldAgePoint.italy, locale, 1) : unavailable}{" "}
             <small>
-              {locale === "it" ? "su 100" : "out of 100"} · {oldAgePoint.year} ·{" "}
-              {statusDescription(oldAgePoint.status, locale, false)}
+              {oldAgePoint ? (locale === "it" ? "su 100 · " : "out of 100 · ") : ""}{year}
+              {oldAgePoint ? ` · ${statusDescription(oldAgePoint.status, locale, false)}` : ""}
             </small>
           </p>
           <div className="exact-definition">
@@ -705,11 +692,9 @@ export function SocialProtectionDetail({
               {labels.oldAgeOfficialDefinition} <span aria-hidden="true">↗</span>
             </a>
           </div>
-          <ComparisonPlot
-            indicator={oldAgeComparison}
-            point={oldAgePoint}
-            locale={locale}
-          />
+          {oldAgePoint ? (
+            <ComparisonPlot indicator={oldAge} point={oldAgePoint} locale={locale} />
+          ) : null}
           <div className="related-source">
             <span>{labels.selectionUsed}</span>{" "}
             <strong>Eurostat · gov_10a_exp</strong>{" "}
@@ -719,7 +704,7 @@ export function SocialProtectionDetail({
                 href={withQuery(
                   pageHref(locale, `data/${oldAge.id}`),
                   query,
-                  oldAgePoint.year,
+                  oldAgePoint?.year,
                 )}
               >
                 {locale === "it"
@@ -727,15 +712,17 @@ export function SocialProtectionDetail({
                   : "Open the old-age function indicator"}{" "}
                 <span aria-hidden="true">→</span>
               </AppLink>
-              <AppLink
-                href={withQuery(
-                  pageHref(locale, `data/${oldAge.id}/source`),
-                  query,
-                  oldAgePoint.year,
-                )}
-              >
-                {labels.verifyNumber} <span aria-hidden="true">→</span>
-              </AppLink>
+              {oldAgePoint ? (
+                <AppLink
+                  href={withQuery(
+                    pageHref(locale, `data/${oldAge.id}/source`),
+                    query,
+                    oldAgePoint.year,
+                  )}
+                >
+                  {labels.verifyNumber} <span aria-hidden="true">→</span>
+                </AppLink>
+              ) : null}
             </div>
           </div>
         </article>
@@ -749,7 +736,7 @@ export function SocialProtectionDetail({
                   href={withQuery(
                     pageHref(locale, `data/${pensionExpenditure.id}`),
                     query,
-                    pensionPoint.year,
+                    pensionPoint?.year,
                   )}
                 >
                   {labels.pensionMeasureTitle}
@@ -757,15 +744,14 @@ export function SocialProtectionDetail({
               </h3>
             </div>
             <p className="related-detail-value">
-              {formatValue(
+              {pensionPoint ? formatValue(
                 pensionPoint.italy,
                 pensionExpenditure.unitKey,
                 pensionExpenditure.precision,
                 locale,
-              )}{" "}
+              ) : unavailable}{" "}
               <small>
-                {pensionPoint.year} ·{" "}
-                {statusDescription(pensionPoint.status, locale, false)}
+                {year}{pensionPoint ? ` · ${statusDescription(pensionPoint.status, locale, false)}` : ""}
               </small>
             </p>
           </div>
@@ -774,11 +760,9 @@ export function SocialProtectionDetail({
             <h4>{labels.pensionIncludesTitle}</h4>
             <p>{labels.pensionIncludes}</p>
           </div>
-          <ComparisonPlot
-            indicator={pensionComparison}
-            point={pensionPoint}
-            locale={locale}
-          />
+          {pensionPoint ? (
+            <ComparisonPlot indicator={pensionExpenditure} point={pensionPoint} locale={locale} />
+          ) : null}
           <div className="related-source">
             <span>{labels.selectionUsed}</span>{" "}
             <strong>Eurostat · spr_exp_pens · ESSPROS</strong>{" "}
@@ -788,20 +772,22 @@ export function SocialProtectionDetail({
                 href={withQuery(
                   pageHref(locale, `data/${pensionExpenditure.id}`),
                   query,
-                  pensionPoint.year,
+                  pensionPoint?.year,
                 )}
               >
                 {labels.openPensionPage} <span aria-hidden="true">→</span>
               </AppLink>
-              <AppLink
-                href={withQuery(
-                  pageHref(locale, `data/${pensionExpenditure.id}/source`),
-                  query,
-                  pensionPoint.year,
-                )}
-              >
-                {labels.verifyNumber} <span aria-hidden="true">→</span>
-              </AppLink>
+              {pensionPoint ? (
+                <AppLink
+                  href={withQuery(
+                    pageHref(locale, `data/${pensionExpenditure.id}/source`),
+                    query,
+                    pensionPoint.year,
+                  )}
+                >
+                  {labels.verifyNumber} <span aria-hidden="true">→</span>
+                </AppLink>
+              ) : null}
             </div>
           </div>
         </article>

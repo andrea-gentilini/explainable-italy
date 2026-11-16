@@ -24,23 +24,29 @@ jobs:
       NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN: ${{ vars.NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN || secrets.NEXT_PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN }}
       NEXT_TELEMETRY_DISABLED: 1
     steps:
-      - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6
         with:
           version: 11.9.0
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: '24'
           cache: pnpm
       - name: Install locked dependencies
         run: pnpm install --frozen-lockfile
+      - name: Reproduce the committed downloads from the official snapshots
+        run: |
+          node scripts/update-data.mjs --offline
+          git diff --exit-code -- data public/data
       - name: Check code, data and exported pages
         run: pnpm check
       - name: Audit production dependencies
         run: pnpm audit --prod --audit-level=high
       - name: Upload the verified site
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         with:
           path: out
 
@@ -58,7 +64,7 @@ jobs:
     steps:
       - name: Publish verified snapshot
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
 
   cleanup-bot-branch:
     if: >-
@@ -74,9 +80,26 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: write
+      pull-requests: read
     steps:
       - name: Delete closed bot branch
         env:
           GH_TOKEN: ${{ github.token }}
-          BRANCH: ${{ github.event.pull_request.head.ref || 'automation/data-refresh' }}
-        run: gh api -X DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${BRANCH}" || true
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          if [[ -z "$PR_NUMBER" ]]; then
+            PR_NUMBER=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" | jq -r \
+              '.[] | select(.merge_commit_sha == env.GITHUB_SHA and .merged_at != null and .head.ref == "automation/data-refresh") | .number')
+          fi
+          [[ -n "$PR_NUMBER" ]] || exit 0
+          ref=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" | jq -r \
+            'select(.state == "closed" and .user.type == "Bot" and .head.repo.full_name == env.GITHUB_REPOSITORY and .head.ref != "main") | [.head.ref, .head.sha] | @tsv')
+          [[ -n "$ref" ]] || exit 0
+          read -r branch head_sha <<< "$ref"
+          remote="https://github.com/$GITHUB_REPOSITORY.git"
+          refname="refs/heads/$branch"
+          git init -q
+          gh auth setup-git
+          current=$(git ls-remote --heads "$remote" "$refname" | cut -f1)
+          [[ "$current" == "$head_sha" ]] || exit 0
+          git push --force-with-lease="$refname:$head_sha" "$remote" ":$refname"

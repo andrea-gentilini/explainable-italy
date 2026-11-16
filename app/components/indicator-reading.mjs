@@ -23,6 +23,11 @@ export function buildCumulativeIndexSeries(series, requestedBaseYear) {
     return null;
   }
   const sorted = [...series].sort((left, right) => left.year - right.year);
+  // A missing annual rate leaves the change across that interval unknown.
+  if (sorted.some((point, index) =>
+    !Number.isInteger(point.year) || !Number.isFinite(point.italy) || point.italy <= -100 ||
+    (index > 0 && point.year !== sorted[index - 1].year + 1)
+  )) return null;
   const initialBaseYear = sorted[0].year - 1;
   const rawPoints = [
     { year: initialBaseYear, italyRaw: 100, euRaw: 100, status: null, isBaseline: true },
