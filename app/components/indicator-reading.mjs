@@ -376,7 +376,10 @@ export function getIndicatorReading(indicator, point, locale) {
         " compared with the previous year.";
     }
   } else if (template) {
-    description = template[locale].replaceAll("{year}", String(point.year)).replaceAll("{value}", value);
+    const text = template.historical && point.year <= template.historical.throughYear
+      ? template.historical[locale]
+      : template[locale];
+    description = text.replaceAll("{year}", String(point.year)).replaceAll("{value}", value);
   } else {
     description = locale === "it"
       ? "Nel " + point.year + ", il valore italiano era " + value + " nell’unità riportata nella scheda."

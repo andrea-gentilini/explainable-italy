@@ -244,3 +244,11 @@ test("computeComparisonScale and computeTrendScale prevent squashed dots and sup
   assert.equal(lifeScale.focused, true);
   assert.ok(lifeScale.minimum >= 70, "life-expectancy comparison scale focuses on realistic lifespan range");
 });
+
+test("early-leaver readings use the education classification for the selected year", () => {
+  for (const locale of ["it", "en"]) {
+    const observation = { year: 2013, italy: 15, eu: 12 };
+    assert.match(reading("early-school-leavers", observation, locale).description, /3C/);
+    assert.doesNotMatch(reading("early-school-leavers", { ...observation, year: 2014 }, locale).description, /3C/);
+  }
+});
