@@ -21,7 +21,7 @@ year,italy,eu_official,median,countries_in_median,eu_method,italy_status,eu_stat
 2019,46.8,43.7,42.7,27,official_aggregate,b,,IT:b,,years,demo_pjanind
 2020,47.2,43.9,43,27,official_aggregate,,e,RO:e,,years,demo_pjanind
 2021,47.6,44.2,43.3,27,official_aggregate,,bep,PL:b,,years,demo_pjanind
-2022,48,44.4,43.5,27,official_aggregate,,,FR:p|PL:ep|RO:e,,years,demo_pjanind
-2023,48.4,44.5,43.5,27,official_aggregate,,bep,FR:p|DE:b|PL:ep|RO:e,,years,demo_pjanind
+2022,48,44.4,43.5,27,official_aggregate,,bep,FR:p|MT:p|PL:ep|PT:b|RO:e,,years,demo_pjanind
+2023,48.4,44.5,43.5,27,official_aggregate,,bep,DE:b|PL:ep|RO:e,,years,demo_pjanind
 2024,48.7,44.7,43.6,27,official_aggregate,,ep,FR:p|PL:ep|RO:e,,years,demo_pjanind
 2025,49.1,44.9,43.8,27,official_aggregate,,ep,FR:p|PL:ep|RO:e,,years,demo_pjanind
